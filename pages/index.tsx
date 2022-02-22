@@ -1,10 +1,8 @@
-import { Heading } from '@chakra-ui/react'
-import type { NextPage } from 'next'
+import {Heading} from '@chakra-ui/react';
+import type {NextPage} from 'next';
 
 const Home: NextPage = () => {
-  return (
-    <Heading>Hello</Heading>
-  )
-}
+  return <Heading>Hello</Heading>;
+};
 
-export default Home
+export default Home;

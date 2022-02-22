@@ -4,10 +4,10 @@ import Router, {useRouter} from 'next/router';
 import nprogress from 'nprogress';
 import {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
+import Font from '../components/common/Font';
 import {GA_TRACKING_ID, pageview} from '../utils/ga/gtag';
 import theme from '../utils/theme/theme';
 import 'nprogress/nprogress.css';
-import Font from '../components/common/Font'
 
 nprogress.configure({showSpinner: false, speed: 400, minimum: 0.25});
 
@@ -40,8 +40,8 @@ const App = ({Component, pageProps}: AppProps) => {
   return (
     <RecoilRoot>
       <ChakraProvider theme={theme}>
-          <Font />
-              <Component {...pageProps} />
+        <Font />
+        <Component {...pageProps} />
       </ChakraProvider>
     </RecoilRoot>
   );
