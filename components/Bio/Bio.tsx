@@ -24,7 +24,7 @@ const Bio: React.FC<{
       return `${convertLang(area.prefecture)}, ${convertLang(area.country)}`;
     }
 
-    return `${convertLang(area.country)}, ${convertLang(area.prefecture)}`;
+    return convertLang(area.prefecture);
   };
 
   const biographyElement = (bio: BiographyDetail) => {

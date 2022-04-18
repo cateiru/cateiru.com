@@ -9,8 +9,6 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import {IoCaretDown} from 'react-icons/io5';
-import {Area} from '../../utils/config/area';
-import {BiographyDetail} from '../../utils/config/bio';
 import config from '../../utils/config/config';
 import {MultiLang} from '../../utils/config/lang';
 import useLanguage from '../useLanguage';

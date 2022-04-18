@@ -21,6 +21,25 @@ const ProfileText = () => {
               )}歳)`}
         </Text>
       </Center>
+      <Center>
+        {lang === 'en-US' ? (
+          <>
+            <Text>
+              Born in {convertLang(config.birthplace.prefecture)},{' '}
+              {convertLang(config.birthplace.country)} and lives in{' '}
+              {convertLang(config.residence.prefecture)},{' '}
+              {convertLang(config.birthplace.country)}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text as="span" mr=".5rem">
+              {convertLang(config.birthplace.prefecture)}
+            </Text>
+            →<Text ml=".5rem">{convertLang(config.residence.prefecture)}</Text>
+          </>
+        )}
+      </Center>
     </Box>
   );
 };
