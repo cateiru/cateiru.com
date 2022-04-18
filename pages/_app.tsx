@@ -4,6 +4,7 @@ import Router, {useRouter} from 'next/router';
 import nprogress from 'nprogress';
 import {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
+import Base from '../components/common/Base/Base';
 import Font from '../components/common/Font';
 import {GA_TRACKING_ID, pageview} from '../utils/ga/gtag';
 import theme from '../utils/theme/theme';
@@ -41,7 +42,9 @@ const App = ({Component, pageProps}: AppProps) => {
     <RecoilRoot>
       <ChakraProvider theme={theme}>
         <Font />
-        <Component {...pageProps} />
+        <Base>
+          <Component {...pageProps} />
+        </Base>
       </ChakraProvider>
     </RecoilRoot>
   );

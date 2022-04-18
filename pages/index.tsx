@@ -1,8 +1,8 @@
-import {Heading} from '@chakra-ui/react';
 import type {NextPage} from 'next';
+import Index from '../components/Index';
 
 const Home: NextPage = () => {
-  return <Heading>Hello</Heading>;
+  return <Index />;
 };
 
 export default Home;
