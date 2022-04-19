@@ -19,6 +19,7 @@ import useLanguage from '../useLanguage';
 
 const Contact = () => {
   const [useURL, setUseURL] = React.useState(false);
+  const [load, setLoad] = React.useState(false);
 
   const router = useRouter();
   const {
@@ -63,6 +64,7 @@ const Contact = () => {
       };
 
       try {
+        setLoad(true);
         const r = await fetch('/api/form', {
           method: 'POST',
           body: JSON.stringify(sendForm),
@@ -87,6 +89,8 @@ const Contact = () => {
           });
         }
       }
+
+      setLoad(false);
     };
 
     f();
@@ -214,7 +218,7 @@ const Contact = () => {
           </FormControl>
           <Button
             mt={4}
-            isLoading={isSubmitting}
+            isLoading={isSubmitting || load}
             type="submit"
             colorScheme="green"
             width={{base: '100%', md: 'auto'}}
