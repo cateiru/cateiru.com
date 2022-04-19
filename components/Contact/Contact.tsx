@@ -18,10 +18,7 @@ import {Form} from '../../utils/form';
 import useLanguage from '../useLanguage';
 
 const Contact = () => {
-  const [defaultName, setDefaultName] = React.useState('');
-  const [defaultMail, setDefaultMail] = React.useState('');
-  const [defaultSubject, setDefaultSubject] = React.useState('');
-  const [defaultURL, setDefaultURL] = React.useState('');
+  const [useURL, setUseURL] = React.useState(false);
 
   const router = useRouter();
   const {
@@ -29,6 +26,7 @@ const Contact = () => {
     register,
     formState: {errors, isSubmitting},
     reset,
+    setValue,
   } = useForm();
   const [lang, convertLang] = useLanguage();
   const toast = useToast();
@@ -38,16 +36,17 @@ const Contact = () => {
     const query = router.query;
 
     if (typeof query['subject'] === 'string') {
-      setDefaultSubject(query['subject']);
+      setValue('subject', query['subject']);
     }
     if (typeof query['url'] === 'string') {
-      setDefaultURL(decodeURI(query['url']));
+      setUseURL(true);
+      setValue('url', query['url']);
     }
     if (typeof query['name'] === 'string') {
-      setDefaultName(query['name']);
+      setValue('name', query['name']);
     }
     if (typeof query['mail'] === 'string') {
-      setDefaultMail(query['mail']);
+      setValue('email', query['mail']);
     }
   }, [router.isReady, router.query]);
 
@@ -97,7 +96,7 @@ const Contact = () => {
   return (
     <Center minHeight="100vh">
       <Box width={{base: '95%', md: '500px'}} mb="4rem" mt="2rem">
-        {defaultURL.length === 0 && (
+        {!useURL && (
           <Button
             variant="ghost"
             leftIcon={<IoArrowBack size="20px" />}
@@ -121,7 +120,6 @@ const Contact = () => {
               id="name"
               placeholder="name"
               type="text"
-              defaultValue={defaultName}
               {...register('name', {
                 required: convertLang({
                   ja: 'この項目は必須です',
@@ -141,7 +139,6 @@ const Contact = () => {
               id="email"
               placeholder="email"
               type="email"
-              defaultValue={defaultMail}
               {...register('email', {
                 required: convertLang({
                   ja: 'この項目は必須です',
@@ -169,8 +166,7 @@ const Contact = () => {
               id="url"
               placeholder="url"
               type="url"
-              defaultValue={defaultURL}
-              disabled={defaultURL.length !== 0}
+              disabled={useURL}
               {...register('url')}
             />
             <FormErrorMessage>
@@ -185,7 +181,6 @@ const Contact = () => {
               id="subject"
               placeholder="subject"
               type="text"
-              defaultValue={defaultSubject}
               {...register('subject', {
                 required: convertLang({
                   ja: 'この項目は必須です',
