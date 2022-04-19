@@ -169,6 +169,7 @@ const Contact = () => {
               placeholder="url"
               type="url"
               defaultValue={defaultURL}
+              disabled={defaultURL.length !== 0}
               {...register('url')}
             />
             <FormErrorMessage>
