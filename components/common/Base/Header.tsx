@@ -4,7 +4,7 @@ import {IoMoon, IoSunny} from 'react-icons/io5';
 import {useRecoilState} from 'recoil';
 import {langState} from '../../../utils/state/atoms';
 
-const Header = () => {
+const Header = React.memo(() => {
   const {colorMode, toggleColorMode} = useColorMode();
   const [lang, setLang] = useRecoilState(langState);
 
@@ -27,7 +27,14 @@ const Header = () => {
   };
 
   return (
-    <Flex width="100%" justifyContent="end" position="fixed" top={0} left={0}>
+    <Flex
+      width="100%"
+      justifyContent="end"
+      position="fixed"
+      top={0}
+      left={0}
+      zIndex="1000"
+    >
       <IconButton
         aria-label="switch color mode"
         icon={
@@ -52,6 +59,8 @@ const Header = () => {
       />
     </Flex>
   );
-};
+});
+
+Header.displayName = 'Header';
 
 export default Header;
