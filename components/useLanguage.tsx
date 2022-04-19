@@ -8,7 +8,7 @@ const useLanguage = (): [string, (e: MultiLang) => string] => {
 
   const convertLang = React.useCallback(
     (e: MultiLang) => {
-      if (lang === 'ja-JP') {
+      if (lang === 'ja') {
         return e.ja;
       }
       return e.en;

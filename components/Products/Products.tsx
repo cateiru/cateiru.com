@@ -21,7 +21,7 @@ const Products: React.FC<{
 
   const element = (product: Product) => {
     const d = () => {
-      if (lang === 'en-US') {
+      if (lang === 'en') {
         return `${product.createDate.getFullYear()}/${product.createDate.getMonth()}`;
       }
       return `${product.createDate.getFullYear()}年${product.createDate.getMonth()}月`;

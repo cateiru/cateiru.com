@@ -12,7 +12,7 @@ const ProfileText = () => {
       <Center mt="1rem">
         <FaBirthdayCake />
         <Text ml=".2rem">
-          {lang === 'en-US'
+          {lang === 'en'
             ? `${config.birthday.getMonth()}/${config.birthday.getDate()}/${config.birthday.getFullYear()} (Age.${getAge(
                 config.birthday
               )})`
@@ -22,7 +22,7 @@ const ProfileText = () => {
         </Text>
       </Center>
       <Center>
-        {lang === 'en-US' ? (
+        {lang === 'en' ? (
           <>
             <Text>
               Born in {convertLang(config.birthplace.prefecture)},{' '}

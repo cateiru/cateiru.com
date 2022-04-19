@@ -20,7 +20,7 @@ const Bio: React.FC<{
   const [lang, convertLang] = useLanguage();
 
   const area = (area: Area) => {
-    if (lang === 'en-US') {
+    if (lang === 'en') {
       return `${convertLang(area.prefecture)}, ${convertLang(area.country)}`;
     }
 

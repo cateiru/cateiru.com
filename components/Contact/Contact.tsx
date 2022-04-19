@@ -18,6 +18,8 @@ import {Form} from '../../utils/form';
 import useLanguage from '../useLanguage';
 
 const Contact = () => {
+  const [defaultName, setDefaultName] = React.useState('');
+  const [defaultMail, setDefaultMail] = React.useState('');
   const [defaultSubject, setDefaultSubject] = React.useState('');
   const [defaultURL, setDefaultURL] = React.useState('');
 
@@ -39,6 +41,10 @@ const Contact = () => {
       setDefaultSubject(query['subject']);
     } else if (typeof query['url'] === 'string') {
       setDefaultURL(decodeURI(query['url']));
+    } else if (typeof query['name'] === 'string') {
+      setDefaultName(query['name']);
+    } else if (typeof query['mail'] === 'string') {
+      setDefaultMail(query['mail']);
     }
   }, [router.isReady, router.query]);
 
@@ -88,15 +94,17 @@ const Contact = () => {
   return (
     <Center minHeight="100vh">
       <Box width={{base: '95%', md: '500px'}} mb="4rem" mt="2rem">
-        <Button
-          variant="ghost"
-          leftIcon={<IoArrowBack size="20px" />}
-          onClick={() => {
-            router.push('/');
-          }}
-        >
-          {convertLang({ja: '戻る', en: 'back'})}
-        </Button>
+        {defaultURL.length === 0 && (
+          <Button
+            variant="ghost"
+            leftIcon={<IoArrowBack size="20px" />}
+            onClick={() => {
+              router.push('/');
+            }}
+          >
+            {convertLang({ja: '戻る', en: 'back'})}
+          </Button>
+        )}
         <Heading mb="1.2rem" textAlign="center" mt="1.5rem">
           {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
         </Heading>
@@ -109,6 +117,7 @@ const Contact = () => {
               id="name"
               placeholder="name"
               type="text"
+              defaultValue={defaultName}
               {...register('name', {
                 required: convertLang({
                   ja: 'この項目は必須です',
@@ -128,6 +137,7 @@ const Contact = () => {
               id="email"
               placeholder="email"
               type="email"
+              defaultValue={defaultMail}
               {...register('email', {
                 required: convertLang({
                   ja: 'この項目は必須です',

@@ -13,16 +13,17 @@ const Header = React.memo(() => {
       (window.navigator.languages && window.navigator.languages[0]) ||
       window.navigator.language;
 
-    if (lang !== language) {
-      setLang(language);
+    if (/^en\b/.test(language)) {
+      // change english
+      setLang('en');
     }
   }, []);
 
   const toggleLang = () => {
-    if (lang === 'ja-JP') {
-      setLang('en-US');
+    if (lang === 'ja') {
+      setLang('en');
     } else {
-      setLang('ja-JP');
+      setLang('ja');
     }
   };
 
@@ -51,7 +52,7 @@ const Header = React.memo(() => {
       />
       <IconButton
         aria-label="switch color mode"
-        icon={<Text fontSize="20px">{lang === 'en-US' ? '🇯🇵' : '🇺🇸'}</Text>}
+        icon={<Text fontSize="20px">{lang === 'en' ? '🇯🇵' : '🇺🇸'}</Text>}
         onClick={toggleLang}
         variant="ghost"
         my=".5rem"
