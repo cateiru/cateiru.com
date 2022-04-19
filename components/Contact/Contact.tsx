@@ -14,6 +14,7 @@ import {useRouter} from 'next/router';
 import React from 'react';
 import {useForm, FieldValues} from 'react-hook-form';
 import {IoArrowBack} from 'react-icons/io5';
+import {Form} from '../../utils/form';
 import useLanguage from '../useLanguage';
 
 const Contact = () => {
@@ -27,7 +28,7 @@ const Contact = () => {
     formState: {errors, isSubmitting},
     reset,
   } = useForm();
-  const [, convertLang] = useLanguage();
+  const [lang, convertLang] = useLanguage();
   const toast = useToast();
 
   React.useEffect(() => {
@@ -42,13 +43,45 @@ const Contact = () => {
   }, [router.isReady, router.query]);
 
   const onSubmit = (values: FieldValues) => {
-    // TODO: contact
-    toast({
-      status: 'success',
-      title: convertLang({ja: '送信しました', en: 'Submitted.'}),
-    });
+    const f = async () => {
+      const sendForm: Form = {
+        name: values.name,
+        subject: values.subject,
+        mail: values.email,
+        url: values.url,
+        body: values.details,
+        date: new Date().toString(),
+        lang: lang,
+      };
 
-    reset();
+      try {
+        const r = await fetch('/api/form', {
+          method: 'POST',
+          body: JSON.stringify(sendForm),
+          headers: {'Content-Type': 'application/json'},
+        });
+
+        if (r.status !== 200) {
+          throw new Error(r.statusText);
+        }
+
+        toast({
+          status: 'success',
+          title: convertLang({ja: '送信しました', en: 'Submitted.'}),
+        });
+
+        reset();
+      } catch (e) {
+        if (e instanceof Error) {
+          toast({
+            status: 'error',
+            title: e.message,
+          });
+        }
+      }
+    };
+
+    f();
     return () => {};
   };
 
@@ -121,7 +154,7 @@ const Contact = () => {
             <Input
               id="url"
               placeholder="url"
-              type="link"
+              type="url"
               defaultValue={defaultURL}
               {...register('url')}
             />
