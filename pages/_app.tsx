@@ -8,6 +8,7 @@ import Base from '../components/common/Base/Base';
 import Font from '../components/common/Font';
 import {GA_TRACKING_ID, pageview} from '../utils/ga/gtag';
 import theme from '../utils/theme/theme';
+
 import 'nprogress/nprogress.css';
 
 nprogress.configure({showSpinner: false, speed: 400, minimum: 0.25});
