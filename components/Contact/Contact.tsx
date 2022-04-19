@@ -104,6 +104,7 @@ const Contact = () => {
             onClick={() => {
               router.push('/');
             }}
+            zIndex="1001"
           >
             {convertLang({ja: '戻る', en: 'back'})}
           </Button>
