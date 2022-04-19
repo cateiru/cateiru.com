@@ -3,7 +3,7 @@ import React from 'react';
 import Footer from './Footer';
 import Header from './Header';
 
-const Base: React.FC = props => {
+const Base: React.FC<{children: React.ReactNode}> = props => {
   return (
     <Flex flexDirection="column" minHeight="100vh">
       <Box>

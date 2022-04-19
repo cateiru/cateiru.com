@@ -17,7 +17,7 @@ const Social: React.FC<{
   next: () => void;
   r: React.MutableRefObject<HTMLDivElement>;
 }> = ({next, r}) => {
-  const [lang, convertLang] = useLanguage();
+  const [, convertLang] = useLanguage();
 
   const element = (name: MultiLang, link: string, noLink?: boolean) => {
     return (
@@ -38,7 +38,10 @@ const Social: React.FC<{
     );
   };
 
-  const Category: React.FC<{title: MultiLang}> = props => {
+  const Category: React.FC<{
+    title: MultiLang;
+    children: React.ReactNode;
+  }> = props => {
     return (
       <ListItem my="1rem">
         {convertLang(props.title)}

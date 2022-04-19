@@ -6,7 +6,6 @@ import {
   UnorderedList,
   ListItem,
   Link,
-  Img,
 } from '@chakra-ui/react';
 import React from 'react';
 import {IoCaretDown} from 'react-icons/io5';
