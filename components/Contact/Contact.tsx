@@ -39,11 +39,14 @@ const Contact = () => {
 
     if (typeof query['subject'] === 'string') {
       setDefaultSubject(query['subject']);
-    } else if (typeof query['url'] === 'string') {
+    }
+    if (typeof query['url'] === 'string') {
       setDefaultURL(decodeURI(query['url']));
-    } else if (typeof query['name'] === 'string') {
+    }
+    if (typeof query['name'] === 'string') {
       setDefaultName(query['name']);
-    } else if (typeof query['mail'] === 'string') {
+    }
+    if (typeof query['mail'] === 'string') {
       setDefaultMail(query['mail']);
     }
   }, [router.isReady, router.query]);
