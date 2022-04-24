@@ -30,7 +30,7 @@ const Bio: React.FC<{
   const biographyElement = (bio: BiographyDetail) => {
     return (
       <ListItem my=".5rem">
-        <Text as="span" display="inline-block" minW="85px">
+        <Text as="span" display="inline-block" minW="10ch">
           {bio.admission.getFullYear()}&nbsp;-&nbsp;
           {bio.graduation ? bio.graduation.getFullYear() : ''}
         </Text>
@@ -47,7 +47,7 @@ const Bio: React.FC<{
   const workElement = (work: WorksDetail) => {
     return (
       <ListItem my=".5rem" key={work.name.en}>
-        <Text as="span" display="inline-block" minW="85px">
+        <Text as="span" display="inline-block" minW="10ch">
           {work.admission.getFullYear()}&nbsp;-&nbsp;
           {work.graduation ? work.graduation.getFullYear() : ''}
         </Text>
