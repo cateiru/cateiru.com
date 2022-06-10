@@ -5,10 +5,10 @@ import nprogress from 'nprogress';
 import {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import Base from '../components/common/Base/Base';
-import Font from '../components/common/Font';
 import {GA_TRACKING_ID, pageview} from '../utils/ga/gtag';
 import theme from '../utils/theme/theme';
 
+import '@fontsource/noto-sans-jp';
 import 'nprogress/nprogress.css';
 
 nprogress.configure({showSpinner: false, speed: 400, minimum: 0.25});
@@ -42,7 +42,6 @@ const App = ({Component, pageProps}: AppProps) => {
   return (
     <RecoilRoot>
       <ChakraProvider theme={theme}>
-        <Font />
         <Base>
           <Component {...pageProps} />
         </Base>
