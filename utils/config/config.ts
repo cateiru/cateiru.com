@@ -85,15 +85,15 @@ const config: Config = {
   products: [
     {
       name: {
-        en: "find!",
-        ja: "ふぁいんど！"
+        en: 'find!',
+        ja: 'ふぁいんど！',
       },
       createDate: new Date(2022, 5),
-      link: "https://find.cateiru.com",
+      link: 'https://find.cateiru.com',
       description: {
-        en: "Web application to find a meeting partner with ease.",
-        ja: "待ち合わせ相手が楽に見つかるWebアプリ",
-      }
+        en: 'Web application to find a meeting partner with ease.',
+        ja: '待ち合わせ相手が楽に見つかるWebアプリ',
+      },
     },
     {
       name: {

@@ -24,11 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       
-      - name: yarn install
+      - name: Install packages
         run: yarn install
         
-      - name: Run test and linter
-        run: yarn test
+      - name: Lint
+        run: yarn lint
         
       - name: Build
         run: yarn build
