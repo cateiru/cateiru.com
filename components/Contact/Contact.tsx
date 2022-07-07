@@ -17,6 +17,14 @@ import {IoArrowBack} from 'react-icons/io5';
 import {Form} from '../../utils/form';
 import useLanguage from '../useLanguage';
 
+interface FormValue {
+  name: string;
+  subject: string;
+  url?: string;
+  email: string;
+  details: string;
+}
+
 const Contact = () => {
   const [useURL, setUseURL] = React.useState(false);
   const [load, setLoad] = React.useState(false);
@@ -28,7 +36,7 @@ const Contact = () => {
     formState: {errors, isSubmitting},
     reset,
     setValue,
-  } = useForm();
+  } = useForm<FormValue>();
   const [lang, convertLang] = useLanguage();
   const toast = useToast();
 
@@ -116,7 +124,7 @@ const Contact = () => {
           {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={errors.name}>
+          <FormControl isInvalid={Boolean(errors.name)}>
             <FormLabel htmlFor="name">
               {convertLang({ja: 'お名前', en: 'Your Name'})}
             </FormLabel>
@@ -135,7 +143,7 @@ const Contact = () => {
               {errors.name && errors.name.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.email} mt=".5rem">
+          <FormControl isInvalid={Boolean(errors.email)} mt=".5rem">
             <FormLabel htmlFor="email">
               {convertLang({ja: 'メールアドレス', en: 'Email Address'})}
             </FormLabel>
@@ -162,7 +170,7 @@ const Contact = () => {
               {errors.email && errors.email.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.url} mt=".5rem">
+          <FormControl isInvalid={Boolean(errors.url)} mt=".5rem">
             <FormLabel htmlFor="url">
               {convertLang({ja: 'URL（オプション）', en: 'URL (Optional)'})}
             </FormLabel>
@@ -177,7 +185,7 @@ const Contact = () => {
               {errors.url && errors.url.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.subject} mt=".5rem">
+          <FormControl isInvalid={Boolean(errors.subject)} mt=".5rem">
             <FormLabel htmlFor="subject">
               {convertLang({ja: '件名', en: 'Subject'})}
             </FormLabel>
@@ -196,7 +204,7 @@ const Contact = () => {
               {errors.subject && errors.subject.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.details} mt=".5rem">
+          <FormControl isInvalid={Boolean(errors.details)} mt=".5rem">
             <FormLabel htmlFor="details">
               {convertLang({ja: 'お問い合わせ内容', en: 'Inquiry Details'})}
             </FormLabel>
