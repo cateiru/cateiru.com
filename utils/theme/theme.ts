@@ -22,7 +22,8 @@ const theme = extendTheme({
     global: (props: {colorMode: string}) => ({
       // Chrome
       '&::-webkit-scrollbar': {
-        width: '10px',
+        width: '5px',
+        height: '5px',
       },
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: props.colorMode === 'dark' ? 'gray.600' : 'gray.300',

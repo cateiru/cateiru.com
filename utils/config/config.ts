@@ -48,6 +48,33 @@ const config: Config = {
     works: [
       {
         name: {
+          ja: 'ギリア株式会社',
+          en: 'Ghelia Inc.',
+        },
+        area: tokyo,
+        admission: new Date(2019, 7),
+        graduation: new Date(2021, 7),
+        occupation: {
+          en: 'Internship',
+          ja: 'インターンシップ',
+        },
+      },
+      {
+        name: {
+          ja: '株式会社はてな',
+          en: 'Hatena Co., Ltd.',
+        },
+        area: kyoto,
+
+        admission: new Date(2021, 10),
+        graduation: new Date(2023, 3),
+        occupation: {
+          en: 'part-time',
+          ja: 'アルバイト',
+        },
+      },
+      {
+        name: {
           ja: '株式会社はてな',
           en: 'Hatena Co., Ltd.',
         },
@@ -70,7 +97,7 @@ const config: Config = {
     twitter: 'https://twitter.com/cateiru',
     facebook: 'https://www.facebook.com/yuto51942',
     instagram: 'https://www.instagram.com/yuto51942',
-    discord: 'Cateiru#9825',
+    discord: 'Cateiru#0001',
 
     niconico: 'https://www.nicovideo.jp/user/56247011',
 
@@ -83,6 +110,18 @@ const config: Config = {
   },
 
   products: [
+    {
+      name: {
+        en: 'NoraTomo',
+        ja: '野良友',
+      },
+      createDate: new Date(2022, 7),
+      link: 'https://noratomo.tdu.app',
+      description: {
+        en: "A web service that solves the problem of finding a restaurant you want to go to but don't have the courage to go alone...",
+        ja: '行きたいお店があるけど一人で行く勇気がない…そんな悩みを解決するWebサービス',
+      },
+    },
     {
       name: {
         en: 'find!',
