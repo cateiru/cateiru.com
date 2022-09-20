@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/cateiru/cateir.com/ent/biography"
 	"github.com/cateiru/cateir.com/ent/predicate"
 	"github.com/cateiru/cateir.com/ent/user"
 
@@ -37,13 +38,23 @@ const (
 // BiographyMutation represents an operation that mutates the Biography nodes in the graph.
 type BiographyMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Biography, error)
-	predicates    []predicate.Biography
+	op             Op
+	typ            string
+	id             *uint32
+	user_id        *uint32
+	adduser_id     *int32
+	is_public      *bool
+	location_id    *uint32
+	addlocation_id *int32
+	position       *string
+	join           *time.Time
+	leave          *time.Time
+	created        *time.Time
+	modified       *time.Time
+	clearedFields  map[string]struct{}
+	done           bool
+	oldValue       func(context.Context) (*Biography, error)
+	predicates     []predicate.Biography
 }
 
 var _ ent.Mutation = (*BiographyMutation)(nil)
@@ -66,7 +77,7 @@ func newBiographyMutation(c config, op Op, opts ...biographyOption) *BiographyMu
 }
 
 // withBiographyID sets the ID field of the mutation.
-func withBiographyID(id int) biographyOption {
+func withBiographyID(id uint32) biographyOption {
 	return func(m *BiographyMutation) {
 		var (
 			err   error
@@ -116,9 +127,15 @@ func (m BiographyMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Biography entities.
+func (m *BiographyMutation) SetID(id uint32) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *BiographyMutation) ID() (id int, exists bool) {
+func (m *BiographyMutation) ID() (id uint32, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -129,12 +146,12 @@ func (m *BiographyMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *BiographyMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *BiographyMutation) IDs(ctx context.Context) ([]uint32, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uint32{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -142,6 +159,334 @@ func (m *BiographyMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetUserID sets the "user_id" field.
+func (m *BiographyMutation) SetUserID(u uint32) {
+	m.user_id = &u
+	m.adduser_id = nil
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *BiographyMutation) UserID() (r uint32, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldUserID(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// AddUserID adds u to the "user_id" field.
+func (m *BiographyMutation) AddUserID(u int32) {
+	if m.adduser_id != nil {
+		*m.adduser_id += u
+	} else {
+		m.adduser_id = &u
+	}
+}
+
+// AddedUserID returns the value that was added to the "user_id" field in this mutation.
+func (m *BiographyMutation) AddedUserID() (r int32, exists bool) {
+	v := m.adduser_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *BiographyMutation) ResetUserID() {
+	m.user_id = nil
+	m.adduser_id = nil
+}
+
+// SetIsPublic sets the "is_public" field.
+func (m *BiographyMutation) SetIsPublic(b bool) {
+	m.is_public = &b
+}
+
+// IsPublic returns the value of the "is_public" field in the mutation.
+func (m *BiographyMutation) IsPublic() (r bool, exists bool) {
+	v := m.is_public
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsPublic returns the old "is_public" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldIsPublic(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsPublic is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsPublic requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsPublic: %w", err)
+	}
+	return oldValue.IsPublic, nil
+}
+
+// ResetIsPublic resets all changes to the "is_public" field.
+func (m *BiographyMutation) ResetIsPublic() {
+	m.is_public = nil
+}
+
+// SetLocationID sets the "location_id" field.
+func (m *BiographyMutation) SetLocationID(u uint32) {
+	m.location_id = &u
+	m.addlocation_id = nil
+}
+
+// LocationID returns the value of the "location_id" field in the mutation.
+func (m *BiographyMutation) LocationID() (r uint32, exists bool) {
+	v := m.location_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocationID returns the old "location_id" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldLocationID(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocationID: %w", err)
+	}
+	return oldValue.LocationID, nil
+}
+
+// AddLocationID adds u to the "location_id" field.
+func (m *BiographyMutation) AddLocationID(u int32) {
+	if m.addlocation_id != nil {
+		*m.addlocation_id += u
+	} else {
+		m.addlocation_id = &u
+	}
+}
+
+// AddedLocationID returns the value that was added to the "location_id" field in this mutation.
+func (m *BiographyMutation) AddedLocationID() (r int32, exists bool) {
+	v := m.addlocation_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetLocationID resets all changes to the "location_id" field.
+func (m *BiographyMutation) ResetLocationID() {
+	m.location_id = nil
+	m.addlocation_id = nil
+}
+
+// SetPosition sets the "position" field.
+func (m *BiographyMutation) SetPosition(s string) {
+	m.position = &s
+}
+
+// Position returns the value of the "position" field in the mutation.
+func (m *BiographyMutation) Position() (r string, exists bool) {
+	v := m.position
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPosition returns the old "position" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldPosition(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPosition is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPosition requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
+	}
+	return oldValue.Position, nil
+}
+
+// ResetPosition resets all changes to the "position" field.
+func (m *BiographyMutation) ResetPosition() {
+	m.position = nil
+}
+
+// SetJoin sets the "join" field.
+func (m *BiographyMutation) SetJoin(t time.Time) {
+	m.join = &t
+}
+
+// Join returns the value of the "join" field in the mutation.
+func (m *BiographyMutation) Join() (r time.Time, exists bool) {
+	v := m.join
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldJoin returns the old "join" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldJoin(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldJoin is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldJoin requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldJoin: %w", err)
+	}
+	return oldValue.Join, nil
+}
+
+// ResetJoin resets all changes to the "join" field.
+func (m *BiographyMutation) ResetJoin() {
+	m.join = nil
+}
+
+// SetLeave sets the "leave" field.
+func (m *BiographyMutation) SetLeave(t time.Time) {
+	m.leave = &t
+}
+
+// Leave returns the value of the "leave" field in the mutation.
+func (m *BiographyMutation) Leave() (r time.Time, exists bool) {
+	v := m.leave
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLeave returns the old "leave" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldLeave(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLeave is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLeave requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLeave: %w", err)
+	}
+	return oldValue.Leave, nil
+}
+
+// ResetLeave resets all changes to the "leave" field.
+func (m *BiographyMutation) ResetLeave() {
+	m.leave = nil
+}
+
+// SetCreated sets the "created" field.
+func (m *BiographyMutation) SetCreated(t time.Time) {
+	m.created = &t
+}
+
+// Created returns the value of the "created" field in the mutation.
+func (m *BiographyMutation) Created() (r time.Time, exists bool) {
+	v := m.created
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreated returns the old "created" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldCreated(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreated is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreated requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreated: %w", err)
+	}
+	return oldValue.Created, nil
+}
+
+// ResetCreated resets all changes to the "created" field.
+func (m *BiographyMutation) ResetCreated() {
+	m.created = nil
+}
+
+// SetModified sets the "modified" field.
+func (m *BiographyMutation) SetModified(t time.Time) {
+	m.modified = &t
+}
+
+// Modified returns the value of the "modified" field in the mutation.
+func (m *BiographyMutation) Modified() (r time.Time, exists bool) {
+	v := m.modified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModified returns the old "modified" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldModified(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModified: %w", err)
+	}
+	return oldValue.Modified, nil
+}
+
+// ResetModified resets all changes to the "modified" field.
+func (m *BiographyMutation) ResetModified() {
+	m.modified = nil
 }
 
 // Where appends a list predicates to the BiographyMutation builder.
@@ -163,7 +508,31 @@ func (m *BiographyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BiographyMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 8)
+	if m.user_id != nil {
+		fields = append(fields, biography.FieldUserID)
+	}
+	if m.is_public != nil {
+		fields = append(fields, biography.FieldIsPublic)
+	}
+	if m.location_id != nil {
+		fields = append(fields, biography.FieldLocationID)
+	}
+	if m.position != nil {
+		fields = append(fields, biography.FieldPosition)
+	}
+	if m.join != nil {
+		fields = append(fields, biography.FieldJoin)
+	}
+	if m.leave != nil {
+		fields = append(fields, biography.FieldLeave)
+	}
+	if m.created != nil {
+		fields = append(fields, biography.FieldCreated)
+	}
+	if m.modified != nil {
+		fields = append(fields, biography.FieldModified)
+	}
 	return fields
 }
 
@@ -171,6 +540,24 @@ func (m *BiographyMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *BiographyMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case biography.FieldUserID:
+		return m.UserID()
+	case biography.FieldIsPublic:
+		return m.IsPublic()
+	case biography.FieldLocationID:
+		return m.LocationID()
+	case biography.FieldPosition:
+		return m.Position()
+	case biography.FieldJoin:
+		return m.Join()
+	case biography.FieldLeave:
+		return m.Leave()
+	case biography.FieldCreated:
+		return m.Created()
+	case biography.FieldModified:
+		return m.Modified()
+	}
 	return nil, false
 }
 
@@ -178,6 +565,24 @@ func (m *BiographyMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *BiographyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case biography.FieldUserID:
+		return m.OldUserID(ctx)
+	case biography.FieldIsPublic:
+		return m.OldIsPublic(ctx)
+	case biography.FieldLocationID:
+		return m.OldLocationID(ctx)
+	case biography.FieldPosition:
+		return m.OldPosition(ctx)
+	case biography.FieldJoin:
+		return m.OldJoin(ctx)
+	case biography.FieldLeave:
+		return m.OldLeave(ctx)
+	case biography.FieldCreated:
+		return m.OldCreated(ctx)
+	case biography.FieldModified:
+		return m.OldModified(ctx)
+	}
 	return nil, fmt.Errorf("unknown Biography field %s", name)
 }
 
@@ -186,6 +591,62 @@ func (m *BiographyMutation) OldField(ctx context.Context, name string) (ent.Valu
 // type.
 func (m *BiographyMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case biography.FieldUserID:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case biography.FieldIsPublic:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsPublic(v)
+		return nil
+	case biography.FieldLocationID:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocationID(v)
+		return nil
+	case biography.FieldPosition:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPosition(v)
+		return nil
+	case biography.FieldJoin:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetJoin(v)
+		return nil
+	case biography.FieldLeave:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLeave(v)
+		return nil
+	case biography.FieldCreated:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreated(v)
+		return nil
+	case biography.FieldModified:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModified(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Biography field %s", name)
 }
@@ -193,13 +654,26 @@ func (m *BiographyMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *BiographyMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.adduser_id != nil {
+		fields = append(fields, biography.FieldUserID)
+	}
+	if m.addlocation_id != nil {
+		fields = append(fields, biography.FieldLocationID)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *BiographyMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case biography.FieldUserID:
+		return m.AddedUserID()
+	case biography.FieldLocationID:
+		return m.AddedLocationID()
+	}
 	return nil, false
 }
 
@@ -207,6 +681,22 @@ func (m *BiographyMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *BiographyMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case biography.FieldUserID:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserID(v)
+		return nil
+	case biography.FieldLocationID:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLocationID(v)
+		return nil
+	}
 	return fmt.Errorf("unknown Biography numeric field %s", name)
 }
 
@@ -232,6 +722,32 @@ func (m *BiographyMutation) ClearField(name string) error {
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *BiographyMutation) ResetField(name string) error {
+	switch name {
+	case biography.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case biography.FieldIsPublic:
+		m.ResetIsPublic()
+		return nil
+	case biography.FieldLocationID:
+		m.ResetLocationID()
+		return nil
+	case biography.FieldPosition:
+		m.ResetPosition()
+		return nil
+	case biography.FieldJoin:
+		m.ResetJoin()
+		return nil
+	case biography.FieldLeave:
+		m.ResetLeave()
+		return nil
+	case biography.FieldCreated:
+		m.ResetCreated()
+		return nil
+	case biography.FieldModified:
+		m.ResetModified()
+		return nil
+	}
 	return fmt.Errorf("unknown Biography field %s", name)
 }
 

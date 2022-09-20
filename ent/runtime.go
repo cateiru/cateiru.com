@@ -5,6 +5,7 @@ package ent
 import (
 	"time"
 
+	"github.com/cateiru/cateir.com/ent/biography"
 	"github.com/cateiru/cateir.com/ent/schema"
 	"github.com/cateiru/cateir.com/ent/user"
 )
@@ -13,6 +14,22 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	biographyFields := schema.Biography{}.Fields()
+	_ = biographyFields
+	// biographyDescIsPublic is the schema descriptor for is_public field.
+	biographyDescIsPublic := biographyFields[2].Descriptor()
+	// biography.DefaultIsPublic holds the default value on creation for the is_public field.
+	biography.DefaultIsPublic = biographyDescIsPublic.Default.(bool)
+	// biographyDescCreated is the schema descriptor for created field.
+	biographyDescCreated := biographyFields[7].Descriptor()
+	// biography.DefaultCreated holds the default value on creation for the created field.
+	biography.DefaultCreated = biographyDescCreated.Default.(func() time.Time)
+	// biographyDescModified is the schema descriptor for modified field.
+	biographyDescModified := biographyFields[8].Descriptor()
+	// biography.DefaultModified holds the default value on creation for the modified field.
+	biography.DefaultModified = biographyDescModified.Default.(func() time.Time)
+	// biography.UpdateDefaultModified holds the default value on update for the modified field.
+	biography.UpdateDefaultModified = biographyDescModified.UpdateDefault.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescCreated is the schema descriptor for created field.

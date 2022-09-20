@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,84 @@ type BiographyCreate struct {
 	hooks    []Hook
 }
 
+// SetUserID sets the "user_id" field.
+func (bc *BiographyCreate) SetUserID(u uint32) *BiographyCreate {
+	bc.mutation.SetUserID(u)
+	return bc
+}
+
+// SetIsPublic sets the "is_public" field.
+func (bc *BiographyCreate) SetIsPublic(b bool) *BiographyCreate {
+	bc.mutation.SetIsPublic(b)
+	return bc
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (bc *BiographyCreate) SetNillableIsPublic(b *bool) *BiographyCreate {
+	if b != nil {
+		bc.SetIsPublic(*b)
+	}
+	return bc
+}
+
+// SetLocationID sets the "location_id" field.
+func (bc *BiographyCreate) SetLocationID(u uint32) *BiographyCreate {
+	bc.mutation.SetLocationID(u)
+	return bc
+}
+
+// SetPosition sets the "position" field.
+func (bc *BiographyCreate) SetPosition(s string) *BiographyCreate {
+	bc.mutation.SetPosition(s)
+	return bc
+}
+
+// SetJoin sets the "join" field.
+func (bc *BiographyCreate) SetJoin(t time.Time) *BiographyCreate {
+	bc.mutation.SetJoin(t)
+	return bc
+}
+
+// SetLeave sets the "leave" field.
+func (bc *BiographyCreate) SetLeave(t time.Time) *BiographyCreate {
+	bc.mutation.SetLeave(t)
+	return bc
+}
+
+// SetCreated sets the "created" field.
+func (bc *BiographyCreate) SetCreated(t time.Time) *BiographyCreate {
+	bc.mutation.SetCreated(t)
+	return bc
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (bc *BiographyCreate) SetNillableCreated(t *time.Time) *BiographyCreate {
+	if t != nil {
+		bc.SetCreated(*t)
+	}
+	return bc
+}
+
+// SetModified sets the "modified" field.
+func (bc *BiographyCreate) SetModified(t time.Time) *BiographyCreate {
+	bc.mutation.SetModified(t)
+	return bc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (bc *BiographyCreate) SetNillableModified(t *time.Time) *BiographyCreate {
+	if t != nil {
+		bc.SetModified(*t)
+	}
+	return bc
+}
+
+// SetID sets the "id" field.
+func (bc *BiographyCreate) SetID(u uint32) *BiographyCreate {
+	bc.mutation.SetID(u)
+	return bc
+}
+
 // Mutation returns the BiographyMutation object of the builder.
 func (bc *BiographyCreate) Mutation() *BiographyMutation {
 	return bc.mutation
@@ -29,6 +109,7 @@ func (bc *BiographyCreate) Save(ctx context.Context) (*Biography, error) {
 		err  error
 		node *Biography
 	)
+	bc.defaults()
 	if len(bc.hooks) == 0 {
 		if err = bc.check(); err != nil {
 			return nil, err
@@ -92,8 +173,48 @@ func (bc *BiographyCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (bc *BiographyCreate) defaults() {
+	if _, ok := bc.mutation.IsPublic(); !ok {
+		v := biography.DefaultIsPublic
+		bc.mutation.SetIsPublic(v)
+	}
+	if _, ok := bc.mutation.Created(); !ok {
+		v := biography.DefaultCreated()
+		bc.mutation.SetCreated(v)
+	}
+	if _, ok := bc.mutation.Modified(); !ok {
+		v := biography.DefaultModified()
+		bc.mutation.SetModified(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (bc *BiographyCreate) check() error {
+	if _, ok := bc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Biography.user_id"`)}
+	}
+	if _, ok := bc.mutation.IsPublic(); !ok {
+		return &ValidationError{Name: "is_public", err: errors.New(`ent: missing required field "Biography.is_public"`)}
+	}
+	if _, ok := bc.mutation.LocationID(); !ok {
+		return &ValidationError{Name: "location_id", err: errors.New(`ent: missing required field "Biography.location_id"`)}
+	}
+	if _, ok := bc.mutation.Position(); !ok {
+		return &ValidationError{Name: "position", err: errors.New(`ent: missing required field "Biography.position"`)}
+	}
+	if _, ok := bc.mutation.Join(); !ok {
+		return &ValidationError{Name: "join", err: errors.New(`ent: missing required field "Biography.join"`)}
+	}
+	if _, ok := bc.mutation.Leave(); !ok {
+		return &ValidationError{Name: "leave", err: errors.New(`ent: missing required field "Biography.leave"`)}
+	}
+	if _, ok := bc.mutation.Created(); !ok {
+		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Biography.created"`)}
+	}
+	if _, ok := bc.mutation.Modified(); !ok {
+		return &ValidationError{Name: "modified", err: errors.New(`ent: missing required field "Biography.modified"`)}
+	}
 	return nil
 }
 
@@ -105,8 +226,10 @@ func (bc *BiographyCreate) sqlSave(ctx context.Context) (*Biography, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint32(id)
+	}
 	return _node, nil
 }
 
@@ -116,11 +239,79 @@ func (bc *BiographyCreate) createSpec() (*Biography, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: biography.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: biography.FieldID,
 			},
 		}
 	)
+	if id, ok := bc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := bc.mutation.UserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: biography.FieldUserID,
+		})
+		_node.UserID = value
+	}
+	if value, ok := bc.mutation.IsPublic(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: biography.FieldIsPublic,
+		})
+		_node.IsPublic = value
+	}
+	if value, ok := bc.mutation.LocationID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: biography.FieldLocationID,
+		})
+		_node.LocationID = value
+	}
+	if value, ok := bc.mutation.Position(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: biography.FieldPosition,
+		})
+		_node.Position = value
+	}
+	if value, ok := bc.mutation.Join(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: biography.FieldJoin,
+		})
+		_node.Join = value
+	}
+	if value, ok := bc.mutation.Leave(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: biography.FieldLeave,
+		})
+		_node.Leave = value
+	}
+	if value, ok := bc.mutation.Created(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: biography.FieldCreated,
+		})
+		_node.Created = value
+	}
+	if value, ok := bc.mutation.Modified(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: biography.FieldModified,
+		})
+		_node.Modified = value
+	}
 	return _node, _spec
 }
 
@@ -138,6 +329,7 @@ func (bcb *BiographyCreateBulk) Save(ctx context.Context) ([]*Biography, error) 
 	for i := range bcb.builders {
 		func(i int, root context.Context) {
 			builder := bcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*BiographyMutation)
 				if !ok {
@@ -164,9 +356,9 @@ func (bcb *BiographyCreateBulk) Save(ctx context.Context) ([]*Biography, error) 
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = uint32(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

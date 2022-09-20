@@ -10,13 +10,33 @@ import (
 var (
 	// BiographiesColumns holds the columns for the "biographies" table.
 	BiographiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "user_id", Type: field.TypeUint32},
+		{Name: "is_public", Type: field.TypeBool, Default: false},
+		{Name: "location_id", Type: field.TypeUint32},
+		{Name: "position", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "date"}},
+		{Name: "join", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
+		{Name: "leave", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// BiographiesTable holds the schema information for the "biographies" table.
 	BiographiesTable = &schema.Table{
 		Name:       "biographies",
 		Columns:    BiographiesColumns,
 		PrimaryKey: []*schema.Column{BiographiesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "biography_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{BiographiesColumns[1]},
+			},
+			{
+				Name:    "biography_user_id_join",
+				Unique:  false,
+				Columns: []*schema.Column{BiographiesColumns[1], BiographiesColumns[5]},
+			},
+		},
 	}
 	// CategoriesColumns holds the columns for the "categories" table.
 	CategoriesColumns = []*schema.Column{

@@ -211,7 +211,7 @@ func (c *BiographyClient) UpdateOne(b *Biography) *BiographyUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *BiographyClient) UpdateOneID(id int) *BiographyUpdateOne {
+func (c *BiographyClient) UpdateOneID(id uint32) *BiographyUpdateOne {
 	mutation := newBiographyMutation(c.config, OpUpdateOne, withBiographyID(id))
 	return &BiographyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -228,7 +228,7 @@ func (c *BiographyClient) DeleteOne(b *Biography) *BiographyDeleteOne {
 }
 
 // DeleteOne returns a builder for deleting the given entity by its id.
-func (c *BiographyClient) DeleteOneID(id int) *BiographyDeleteOne {
+func (c *BiographyClient) DeleteOneID(id uint32) *BiographyDeleteOne {
 	builder := c.Delete().Where(biography.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -243,12 +243,12 @@ func (c *BiographyClient) Query() *BiographyQuery {
 }
 
 // Get returns a Biography entity by its id.
-func (c *BiographyClient) Get(ctx context.Context, id int) (*Biography, error) {
+func (c *BiographyClient) Get(ctx context.Context, id uint32) (*Biography, error) {
 	return c.Query().Where(biography.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *BiographyClient) GetX(ctx context.Context, id int) *Biography {
+func (c *BiographyClient) GetX(ctx context.Context, id uint32) *Biography {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

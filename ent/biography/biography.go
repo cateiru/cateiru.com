@@ -2,11 +2,31 @@
 
 package biography
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the biography type in the database.
 	Label = "biography"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldUserID holds the string denoting the user_id field in the database.
+	FieldUserID = "user_id"
+	// FieldIsPublic holds the string denoting the is_public field in the database.
+	FieldIsPublic = "is_public"
+	// FieldLocationID holds the string denoting the location_id field in the database.
+	FieldLocationID = "location_id"
+	// FieldPosition holds the string denoting the position field in the database.
+	FieldPosition = "position"
+	// FieldJoin holds the string denoting the join field in the database.
+	FieldJoin = "join"
+	// FieldLeave holds the string denoting the leave field in the database.
+	FieldLeave = "leave"
+	// FieldCreated holds the string denoting the created field in the database.
+	FieldCreated = "created"
+	// FieldModified holds the string denoting the modified field in the database.
+	FieldModified = "modified"
 	// Table holds the table name of the biography in the database.
 	Table = "biographies"
 )
@@ -14,6 +34,14 @@ const (
 // Columns holds all SQL columns for biography fields.
 var Columns = []string{
 	FieldID,
+	FieldUserID,
+	FieldIsPublic,
+	FieldLocationID,
+	FieldPosition,
+	FieldJoin,
+	FieldLeave,
+	FieldCreated,
+	FieldModified,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -25,3 +53,14 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultIsPublic holds the default value on creation for the "is_public" field.
+	DefaultIsPublic bool
+	// DefaultCreated holds the default value on creation for the "created" field.
+	DefaultCreated func() time.Time
+	// DefaultModified holds the default value on creation for the "modified" field.
+	DefaultModified func() time.Time
+	// UpdateDefaultModified holds the default value on update for the "modified" field.
+	UpdateDefaultModified func() time.Time
+)

@@ -83,8 +83,8 @@ func (bq *BiographyQuery) FirstX(ctx context.Context) *Biography {
 
 // FirstID returns the first Biography ID from the query.
 // Returns a *NotFoundError when no Biography ID was found.
-func (bq *BiographyQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (bq *BiographyQuery) FirstID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = bq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (bq *BiographyQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (bq *BiographyQuery) FirstIDX(ctx context.Context) int {
+func (bq *BiographyQuery) FirstIDX(ctx context.Context) uint32 {
 	id, err := bq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (bq *BiographyQuery) OnlyX(ctx context.Context) *Biography {
 // OnlyID is like Only, but returns the only Biography ID in the query.
 // Returns a *NotSingularError when more than one Biography ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (bq *BiographyQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (bq *BiographyQuery) OnlyID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = bq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (bq *BiographyQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (bq *BiographyQuery) OnlyIDX(ctx context.Context) int {
+func (bq *BiographyQuery) OnlyIDX(ctx context.Context) uint32 {
 	id, err := bq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (bq *BiographyQuery) AllX(ctx context.Context) []*Biography {
 }
 
 // IDs executes the query and returns a list of Biography IDs.
-func (bq *BiographyQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (bq *BiographyQuery) IDs(ctx context.Context) ([]uint32, error) {
+	var ids []uint32
 	if err := bq.Select(biography.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (bq *BiographyQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (bq *BiographyQuery) IDsX(ctx context.Context) []int {
+func (bq *BiographyQuery) IDsX(ctx context.Context) []uint32 {
 	ids, err := bq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +249,18 @@ func (bq *BiographyQuery) Clone() *BiographyQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		UserID uint32 `json:"user_id,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Biography.Query().
+//		GroupBy(biography.FieldUserID).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (bq *BiographyQuery) GroupBy(field string, fields ...string) *BiographyGroupBy {
 	grbuild := &BiographyGroupBy{config: bq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (bq *BiographyQuery) GroupBy(field string, fields ...string) *BiographyGrou
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		UserID uint32 `json:"user_id,omitempty"`
+//	}
+//
+//	client.Biography.Query().
+//		Select(biography.FieldUserID).
+//		Scan(ctx, &v)
 func (bq *BiographyQuery) Select(fields ...string) *BiographySelect {
 	bq.fields = append(bq.fields, fields...)
 	selbuild := &BiographySelect{BiographyQuery: bq}
@@ -337,7 +359,7 @@ func (bq *BiographyQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   biography.Table,
 			Columns: biography.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: biography.FieldID,
 			},
 		},
