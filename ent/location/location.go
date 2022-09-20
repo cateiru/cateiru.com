@@ -2,11 +2,25 @@
 
 package location
 
+import (
+	"fmt"
+)
+
 const (
 	// Label holds the string label denoting the location type in the database.
 	Label = "location"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldNameJa holds the string denoting the name_ja field in the database.
+	FieldNameJa = "name_ja"
+	// FieldAddress holds the string denoting the address field in the database.
+	FieldAddress = "address"
+	// FieldAddressJa holds the string denoting the address_ja field in the database.
+	FieldAddressJa = "address_ja"
 	// Table holds the table name of the location in the database.
 	Table = "locations"
 )
@@ -14,6 +28,11 @@ const (
 // Columns holds all SQL columns for location fields.
 var Columns = []string{
 	FieldID,
+	FieldType,
+	FieldName,
+	FieldNameJa,
+	FieldAddress,
+	FieldAddressJa,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -24,4 +43,27 @@ func ValidColumn(column string) bool {
 		}
 	}
 	return false
+}
+
+// Type defines the type for the "type" enum field.
+type Type string
+
+// Type values.
+const (
+	TypeUniv Type = "univ"
+	TypeCorp Type = "corp"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeUniv, TypeCorp:
+		return nil
+	default:
+		return fmt.Errorf("location: invalid enum value for type field: %q", _type)
+	}
 }

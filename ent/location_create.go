@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -16,6 +17,42 @@ type LocationCreate struct {
 	config
 	mutation *LocationMutation
 	hooks    []Hook
+}
+
+// SetType sets the "type" field.
+func (lc *LocationCreate) SetType(l location.Type) *LocationCreate {
+	lc.mutation.SetType(l)
+	return lc
+}
+
+// SetName sets the "name" field.
+func (lc *LocationCreate) SetName(s string) *LocationCreate {
+	lc.mutation.SetName(s)
+	return lc
+}
+
+// SetNameJa sets the "name_ja" field.
+func (lc *LocationCreate) SetNameJa(s string) *LocationCreate {
+	lc.mutation.SetNameJa(s)
+	return lc
+}
+
+// SetAddress sets the "address" field.
+func (lc *LocationCreate) SetAddress(s string) *LocationCreate {
+	lc.mutation.SetAddress(s)
+	return lc
+}
+
+// SetAddressJa sets the "address_ja" field.
+func (lc *LocationCreate) SetAddressJa(s string) *LocationCreate {
+	lc.mutation.SetAddressJa(s)
+	return lc
+}
+
+// SetID sets the "id" field.
+func (lc *LocationCreate) SetID(u uint32) *LocationCreate {
+	lc.mutation.SetID(u)
+	return lc
 }
 
 // Mutation returns the LocationMutation object of the builder.
@@ -94,6 +131,26 @@ func (lc *LocationCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (lc *LocationCreate) check() error {
+	if _, ok := lc.mutation.GetType(); !ok {
+		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Location.type"`)}
+	}
+	if v, ok := lc.mutation.GetType(); ok {
+		if err := location.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Location.type": %w`, err)}
+		}
+	}
+	if _, ok := lc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Location.name"`)}
+	}
+	if _, ok := lc.mutation.NameJa(); !ok {
+		return &ValidationError{Name: "name_ja", err: errors.New(`ent: missing required field "Location.name_ja"`)}
+	}
+	if _, ok := lc.mutation.Address(); !ok {
+		return &ValidationError{Name: "address", err: errors.New(`ent: missing required field "Location.address"`)}
+	}
+	if _, ok := lc.mutation.AddressJa(); !ok {
+		return &ValidationError{Name: "address_ja", err: errors.New(`ent: missing required field "Location.address_ja"`)}
+	}
 	return nil
 }
 
@@ -105,8 +162,10 @@ func (lc *LocationCreate) sqlSave(ctx context.Context) (*Location, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint32(id)
+	}
 	return _node, nil
 }
 
@@ -116,11 +175,55 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: location.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: location.FieldID,
 			},
 		}
 	)
+	if id, ok := lc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := lc.mutation.GetType(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: location.FieldType,
+		})
+		_node.Type = value
+	}
+	if value, ok := lc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldName,
+		})
+		_node.Name = value
+	}
+	if value, ok := lc.mutation.NameJa(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldNameJa,
+		})
+		_node.NameJa = value
+	}
+	if value, ok := lc.mutation.Address(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldAddress,
+		})
+		_node.Address = value
+	}
+	if value, ok := lc.mutation.AddressJa(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldAddressJa,
+		})
+		_node.AddressJa = value
+	}
 	return _node, _spec
 }
 
@@ -164,9 +267,9 @@ func (lcb *LocationCreateBulk) Save(ctx context.Context) ([]*Location, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = uint32(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

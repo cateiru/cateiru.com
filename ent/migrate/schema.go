@@ -70,7 +70,12 @@ var (
 	}
 	// LocationsColumns holds the columns for the "locations" table.
 	LocationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"univ", "corp"}},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "name_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "address", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "address_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 	}
 	// LocationsTable holds the schema information for the "locations" table.
 	LocationsTable = &schema.Table{

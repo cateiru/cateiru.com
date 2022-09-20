@@ -12,9 +12,19 @@ import (
 
 // Location is the model entity for the Location schema.
 type Location struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uint32 `json:"id,omitempty"`
+	// Type holds the value of the "type" field.
+	Type location.Type `json:"type,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// NameJa holds the value of the "name_ja" field.
+	NameJa string `json:"name_ja,omitempty"`
+	// Address holds the value of the "address" field.
+	Address string `json:"address,omitempty"`
+	// AddressJa holds the value of the "address_ja" field.
+	AddressJa string `json:"address_ja,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,6 +34,8 @@ func (*Location) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case location.FieldID:
 			values[i] = new(sql.NullInt64)
+		case location.FieldType, location.FieldName, location.FieldNameJa, location.FieldAddress, location.FieldAddressJa:
+			values[i] = new(sql.NullString)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Location", columns[i])
 		}
@@ -44,7 +56,37 @@ func (l *Location) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			l.ID = int(value.Int64)
+			l.ID = uint32(value.Int64)
+		case location.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				l.Type = location.Type(value.String)
+			}
+		case location.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				l.Name = value.String
+			}
+		case location.FieldNameJa:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name_ja", values[i])
+			} else if value.Valid {
+				l.NameJa = value.String
+			}
+		case location.FieldAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address", values[i])
+			} else if value.Valid {
+				l.Address = value.String
+			}
+		case location.FieldAddressJa:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address_ja", values[i])
+			} else if value.Valid {
+				l.AddressJa = value.String
+			}
 		}
 	}
 	return nil
@@ -72,7 +114,21 @@ func (l *Location) Unwrap() *Location {
 func (l *Location) String() string {
 	var builder strings.Builder
 	builder.WriteString("Location(")
-	builder.WriteString(fmt.Sprintf("id=%v", l.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", l.ID))
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", l.Type))
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(l.Name)
+	builder.WriteString(", ")
+	builder.WriteString("name_ja=")
+	builder.WriteString(l.NameJa)
+	builder.WriteString(", ")
+	builder.WriteString("address=")
+	builder.WriteString(l.Address)
+	builder.WriteString(", ")
+	builder.WriteString("address_ja=")
+	builder.WriteString(l.AddressJa)
 	builder.WriteByte(')')
 	return builder.String()
 }

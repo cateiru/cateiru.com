@@ -8,28 +8,28 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Location {
+func ID(id uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Location {
+func IDEQ(id uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Location {
+func IDNEQ(id uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldID), id))
 	})
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Location {
+func IDIn(ids ...uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -40,7 +40,7 @@ func IDIn(ids ...int) predicate.Location {
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Location {
+func IDNotIn(ids ...uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -51,30 +51,490 @@ func IDNotIn(ids ...int) predicate.Location {
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Location {
+func IDGT(id uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldID), id))
 	})
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Location {
+func IDGTE(id uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldID), id))
 	})
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Location {
+func IDLT(id uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldID), id))
 	})
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Location {
+func IDLTE(id uint32) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldID), id))
+	})
+}
+
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldName), v))
+	})
+}
+
+// NameJa applies equality check predicate on the "name_ja" field. It's identical to NameJaEQ.
+func NameJa(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldNameJa), v))
+	})
+}
+
+// Address applies equality check predicate on the "address" field. It's identical to AddressEQ.
+func Address(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAddress), v))
+	})
+}
+
+// AddressJa applies equality check predicate on the "address_ja" field. It's identical to AddressJaEQ.
+func AddressJa(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAddressJa), v))
+	})
+}
+
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v Type) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldType), v))
+	})
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v Type) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldType), v))
+	})
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...Type) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldType), v...))
+	})
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...Type) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldType), v...))
+	})
+}
+
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldName), v))
+	})
+}
+
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldName), v))
+	})
+}
+
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldName), v...))
+	})
+}
+
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldName), v...))
+	})
+}
+
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldName), v))
+	})
+}
+
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldName), v))
+	})
+}
+
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldName), v))
+	})
+}
+
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldName), v))
+	})
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldName), v))
+	})
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldName), v))
+	})
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldName), v))
+	})
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldName), v))
+	})
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldName), v))
+	})
+}
+
+// NameJaEQ applies the EQ predicate on the "name_ja" field.
+func NameJaEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaNEQ applies the NEQ predicate on the "name_ja" field.
+func NameJaNEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaIn applies the In predicate on the "name_ja" field.
+func NameJaIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldNameJa), v...))
+	})
+}
+
+// NameJaNotIn applies the NotIn predicate on the "name_ja" field.
+func NameJaNotIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldNameJa), v...))
+	})
+}
+
+// NameJaGT applies the GT predicate on the "name_ja" field.
+func NameJaGT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaGTE applies the GTE predicate on the "name_ja" field.
+func NameJaGTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaLT applies the LT predicate on the "name_ja" field.
+func NameJaLT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaLTE applies the LTE predicate on the "name_ja" field.
+func NameJaLTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaContains applies the Contains predicate on the "name_ja" field.
+func NameJaContains(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaHasPrefix applies the HasPrefix predicate on the "name_ja" field.
+func NameJaHasPrefix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaHasSuffix applies the HasSuffix predicate on the "name_ja" field.
+func NameJaHasSuffix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaEqualFold applies the EqualFold predicate on the "name_ja" field.
+func NameJaEqualFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldNameJa), v))
+	})
+}
+
+// NameJaContainsFold applies the ContainsFold predicate on the "name_ja" field.
+func NameJaContainsFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldNameJa), v))
+	})
+}
+
+// AddressEQ applies the EQ predicate on the "address" field.
+func AddressEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAddress), v))
+	})
+}
+
+// AddressNEQ applies the NEQ predicate on the "address" field.
+func AddressNEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAddress), v))
+	})
+}
+
+// AddressIn applies the In predicate on the "address" field.
+func AddressIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldAddress), v...))
+	})
+}
+
+// AddressNotIn applies the NotIn predicate on the "address" field.
+func AddressNotIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldAddress), v...))
+	})
+}
+
+// AddressGT applies the GT predicate on the "address" field.
+func AddressGT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAddress), v))
+	})
+}
+
+// AddressGTE applies the GTE predicate on the "address" field.
+func AddressGTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAddress), v))
+	})
+}
+
+// AddressLT applies the LT predicate on the "address" field.
+func AddressLT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAddress), v))
+	})
+}
+
+// AddressLTE applies the LTE predicate on the "address" field.
+func AddressLTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAddress), v))
+	})
+}
+
+// AddressContains applies the Contains predicate on the "address" field.
+func AddressContains(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldAddress), v))
+	})
+}
+
+// AddressHasPrefix applies the HasPrefix predicate on the "address" field.
+func AddressHasPrefix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldAddress), v))
+	})
+}
+
+// AddressHasSuffix applies the HasSuffix predicate on the "address" field.
+func AddressHasSuffix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldAddress), v))
+	})
+}
+
+// AddressEqualFold applies the EqualFold predicate on the "address" field.
+func AddressEqualFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldAddress), v))
+	})
+}
+
+// AddressContainsFold applies the ContainsFold predicate on the "address" field.
+func AddressContainsFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldAddress), v))
+	})
+}
+
+// AddressJaEQ applies the EQ predicate on the "address_ja" field.
+func AddressJaEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaNEQ applies the NEQ predicate on the "address_ja" field.
+func AddressJaNEQ(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaIn applies the In predicate on the "address_ja" field.
+func AddressJaIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldAddressJa), v...))
+	})
+}
+
+// AddressJaNotIn applies the NotIn predicate on the "address_ja" field.
+func AddressJaNotIn(vs ...string) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldAddressJa), v...))
+	})
+}
+
+// AddressJaGT applies the GT predicate on the "address_ja" field.
+func AddressJaGT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaGTE applies the GTE predicate on the "address_ja" field.
+func AddressJaGTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaLT applies the LT predicate on the "address_ja" field.
+func AddressJaLT(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaLTE applies the LTE predicate on the "address_ja" field.
+func AddressJaLTE(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaContains applies the Contains predicate on the "address_ja" field.
+func AddressJaContains(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaHasPrefix applies the HasPrefix predicate on the "address_ja" field.
+func AddressJaHasPrefix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaHasSuffix applies the HasSuffix predicate on the "address_ja" field.
+func AddressJaHasSuffix(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaEqualFold applies the EqualFold predicate on the "address_ja" field.
+func AddressJaEqualFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldAddressJa), v))
+	})
+}
+
+// AddressJaContainsFold applies the ContainsFold predicate on the "address_ja" field.
+func AddressJaContainsFold(v string) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldAddressJa), v))
 	})
 }
 

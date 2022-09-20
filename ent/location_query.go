@@ -83,8 +83,8 @@ func (lq *LocationQuery) FirstX(ctx context.Context) *Location {
 
 // FirstID returns the first Location ID from the query.
 // Returns a *NotFoundError when no Location ID was found.
-func (lq *LocationQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (lq *LocationQuery) FirstID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = lq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (lq *LocationQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (lq *LocationQuery) FirstIDX(ctx context.Context) int {
+func (lq *LocationQuery) FirstIDX(ctx context.Context) uint32 {
 	id, err := lq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (lq *LocationQuery) OnlyX(ctx context.Context) *Location {
 // OnlyID is like Only, but returns the only Location ID in the query.
 // Returns a *NotSingularError when more than one Location ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (lq *LocationQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (lq *LocationQuery) OnlyID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = lq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (lq *LocationQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (lq *LocationQuery) OnlyIDX(ctx context.Context) int {
+func (lq *LocationQuery) OnlyIDX(ctx context.Context) uint32 {
 	id, err := lq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (lq *LocationQuery) AllX(ctx context.Context) []*Location {
 }
 
 // IDs executes the query and returns a list of Location IDs.
-func (lq *LocationQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (lq *LocationQuery) IDs(ctx context.Context) ([]uint32, error) {
+	var ids []uint32
 	if err := lq.Select(location.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (lq *LocationQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (lq *LocationQuery) IDsX(ctx context.Context) []int {
+func (lq *LocationQuery) IDsX(ctx context.Context) []uint32 {
 	ids, err := lq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +249,18 @@ func (lq *LocationQuery) Clone() *LocationQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Type location.Type `json:"type,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Location.Query().
+//		GroupBy(location.FieldType).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (lq *LocationQuery) GroupBy(field string, fields ...string) *LocationGroupBy {
 	grbuild := &LocationGroupBy{config: lq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (lq *LocationQuery) GroupBy(field string, fields ...string) *LocationGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Type location.Type `json:"type,omitempty"`
+//	}
+//
+//	client.Location.Query().
+//		Select(location.FieldType).
+//		Scan(ctx, &v)
 func (lq *LocationQuery) Select(fields ...string) *LocationSelect {
 	lq.fields = append(lq.fields, fields...)
 	selbuild := &LocationSelect{LocationQuery: lq}
@@ -337,7 +359,7 @@ func (lq *LocationQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   location.Table,
 			Columns: location.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: location.FieldID,
 			},
 		},

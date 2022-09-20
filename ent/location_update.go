@@ -27,6 +27,36 @@ func (lu *LocationUpdate) Where(ps ...predicate.Location) *LocationUpdate {
 	return lu
 }
 
+// SetType sets the "type" field.
+func (lu *LocationUpdate) SetType(l location.Type) *LocationUpdate {
+	lu.mutation.SetType(l)
+	return lu
+}
+
+// SetName sets the "name" field.
+func (lu *LocationUpdate) SetName(s string) *LocationUpdate {
+	lu.mutation.SetName(s)
+	return lu
+}
+
+// SetNameJa sets the "name_ja" field.
+func (lu *LocationUpdate) SetNameJa(s string) *LocationUpdate {
+	lu.mutation.SetNameJa(s)
+	return lu
+}
+
+// SetAddress sets the "address" field.
+func (lu *LocationUpdate) SetAddress(s string) *LocationUpdate {
+	lu.mutation.SetAddress(s)
+	return lu
+}
+
+// SetAddressJa sets the "address_ja" field.
+func (lu *LocationUpdate) SetAddressJa(s string) *LocationUpdate {
+	lu.mutation.SetAddressJa(s)
+	return lu
+}
+
 // Mutation returns the LocationMutation object of the builder.
 func (lu *LocationUpdate) Mutation() *LocationMutation {
 	return lu.mutation
@@ -39,12 +69,18 @@ func (lu *LocationUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(lu.hooks) == 0 {
+		if err = lu.check(); err != nil {
+			return 0, err
+		}
 		affected, err = lu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*LocationMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = lu.check(); err != nil {
+				return 0, err
 			}
 			lu.mutation = mutation
 			affected, err = lu.sqlSave(ctx)
@@ -86,13 +122,23 @@ func (lu *LocationUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (lu *LocationUpdate) check() error {
+	if v, ok := lu.mutation.GetType(); ok {
+		if err := location.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Location.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   location.Table,
 			Columns: location.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: location.FieldID,
 			},
 		},
@@ -103,6 +149,41 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := lu.mutation.GetType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: location.FieldType,
+		})
+	}
+	if value, ok := lu.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldName,
+		})
+	}
+	if value, ok := lu.mutation.NameJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldNameJa,
+		})
+	}
+	if value, ok := lu.mutation.Address(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldAddress,
+		})
+	}
+	if value, ok := lu.mutation.AddressJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldAddressJa,
+		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -121,6 +202,36 @@ type LocationUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *LocationMutation
+}
+
+// SetType sets the "type" field.
+func (luo *LocationUpdateOne) SetType(l location.Type) *LocationUpdateOne {
+	luo.mutation.SetType(l)
+	return luo
+}
+
+// SetName sets the "name" field.
+func (luo *LocationUpdateOne) SetName(s string) *LocationUpdateOne {
+	luo.mutation.SetName(s)
+	return luo
+}
+
+// SetNameJa sets the "name_ja" field.
+func (luo *LocationUpdateOne) SetNameJa(s string) *LocationUpdateOne {
+	luo.mutation.SetNameJa(s)
+	return luo
+}
+
+// SetAddress sets the "address" field.
+func (luo *LocationUpdateOne) SetAddress(s string) *LocationUpdateOne {
+	luo.mutation.SetAddress(s)
+	return luo
+}
+
+// SetAddressJa sets the "address_ja" field.
+func (luo *LocationUpdateOne) SetAddressJa(s string) *LocationUpdateOne {
+	luo.mutation.SetAddressJa(s)
+	return luo
 }
 
 // Mutation returns the LocationMutation object of the builder.
@@ -142,12 +253,18 @@ func (luo *LocationUpdateOne) Save(ctx context.Context) (*Location, error) {
 		node *Location
 	)
 	if len(luo.hooks) == 0 {
+		if err = luo.check(); err != nil {
+			return nil, err
+		}
 		node, err = luo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*LocationMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = luo.check(); err != nil {
+				return nil, err
 			}
 			luo.mutation = mutation
 			node, err = luo.sqlSave(ctx)
@@ -195,13 +312,23 @@ func (luo *LocationUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (luo *LocationUpdateOne) check() error {
+	if v, ok := luo.mutation.GetType(); ok {
+		if err := location.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Location.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   location.Table,
 			Columns: location.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: location.FieldID,
 			},
 		},
@@ -229,6 +356,41 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := luo.mutation.GetType(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: location.FieldType,
+		})
+	}
+	if value, ok := luo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldName,
+		})
+	}
+	if value, ok := luo.mutation.NameJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldNameJa,
+		})
+	}
+	if value, ok := luo.mutation.Address(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldAddress,
+		})
+	}
+	if value, ok := luo.mutation.AddressJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: location.FieldAddressJa,
+		})
 	}
 	_node = &Location{config: luo.config}
 	_spec.Assign = _node.assignValues

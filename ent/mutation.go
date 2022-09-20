@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cateiru/cateir.com/ent/biography"
+	"github.com/cateiru/cateir.com/ent/location"
 	"github.com/cateiru/cateir.com/ent/predicate"
 	"github.com/cateiru/cateir.com/ent/user"
 
@@ -1551,7 +1552,12 @@ type LocationMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uint32
+	_type         *location.Type
+	name          *string
+	name_ja       *string
+	address       *string
+	address_ja    *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Location, error)
@@ -1578,7 +1584,7 @@ func newLocationMutation(c config, op Op, opts ...locationOption) *LocationMutat
 }
 
 // withLocationID sets the ID field of the mutation.
-func withLocationID(id int) locationOption {
+func withLocationID(id uint32) locationOption {
 	return func(m *LocationMutation) {
 		var (
 			err   error
@@ -1628,9 +1634,15 @@ func (m LocationMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Location entities.
+func (m *LocationMutation) SetID(id uint32) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *LocationMutation) ID() (id int, exists bool) {
+func (m *LocationMutation) ID() (id uint32, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1641,12 +1653,12 @@ func (m *LocationMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *LocationMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *LocationMutation) IDs(ctx context.Context) ([]uint32, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uint32{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -1654,6 +1666,186 @@ func (m *LocationMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetType sets the "type" field.
+func (m *LocationMutation) SetType(l location.Type) {
+	m._type = &l
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *LocationMutation) GetType() (r location.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldType(ctx context.Context) (v location.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *LocationMutation) ResetType() {
+	m._type = nil
+}
+
+// SetName sets the "name" field.
+func (m *LocationMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *LocationMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *LocationMutation) ResetName() {
+	m.name = nil
+}
+
+// SetNameJa sets the "name_ja" field.
+func (m *LocationMutation) SetNameJa(s string) {
+	m.name_ja = &s
+}
+
+// NameJa returns the value of the "name_ja" field in the mutation.
+func (m *LocationMutation) NameJa() (r string, exists bool) {
+	v := m.name_ja
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNameJa returns the old "name_ja" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldNameJa(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNameJa is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNameJa requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNameJa: %w", err)
+	}
+	return oldValue.NameJa, nil
+}
+
+// ResetNameJa resets all changes to the "name_ja" field.
+func (m *LocationMutation) ResetNameJa() {
+	m.name_ja = nil
+}
+
+// SetAddress sets the "address" field.
+func (m *LocationMutation) SetAddress(s string) {
+	m.address = &s
+}
+
+// Address returns the value of the "address" field in the mutation.
+func (m *LocationMutation) Address() (r string, exists bool) {
+	v := m.address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddress returns the old "address" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddress: %w", err)
+	}
+	return oldValue.Address, nil
+}
+
+// ResetAddress resets all changes to the "address" field.
+func (m *LocationMutation) ResetAddress() {
+	m.address = nil
+}
+
+// SetAddressJa sets the "address_ja" field.
+func (m *LocationMutation) SetAddressJa(s string) {
+	m.address_ja = &s
+}
+
+// AddressJa returns the value of the "address_ja" field in the mutation.
+func (m *LocationMutation) AddressJa() (r string, exists bool) {
+	v := m.address_ja
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddressJa returns the old "address_ja" field's value of the Location entity.
+// If the Location object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LocationMutation) OldAddressJa(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddressJa is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddressJa requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddressJa: %w", err)
+	}
+	return oldValue.AddressJa, nil
+}
+
+// ResetAddressJa resets all changes to the "address_ja" field.
+func (m *LocationMutation) ResetAddressJa() {
+	m.address_ja = nil
 }
 
 // Where appends a list predicates to the LocationMutation builder.
@@ -1675,7 +1867,22 @@ func (m *LocationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LocationMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 5)
+	if m._type != nil {
+		fields = append(fields, location.FieldType)
+	}
+	if m.name != nil {
+		fields = append(fields, location.FieldName)
+	}
+	if m.name_ja != nil {
+		fields = append(fields, location.FieldNameJa)
+	}
+	if m.address != nil {
+		fields = append(fields, location.FieldAddress)
+	}
+	if m.address_ja != nil {
+		fields = append(fields, location.FieldAddressJa)
+	}
 	return fields
 }
 
@@ -1683,6 +1890,18 @@ func (m *LocationMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *LocationMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case location.FieldType:
+		return m.GetType()
+	case location.FieldName:
+		return m.Name()
+	case location.FieldNameJa:
+		return m.NameJa()
+	case location.FieldAddress:
+		return m.Address()
+	case location.FieldAddressJa:
+		return m.AddressJa()
+	}
 	return nil, false
 }
 
@@ -1690,6 +1909,18 @@ func (m *LocationMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *LocationMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case location.FieldType:
+		return m.OldType(ctx)
+	case location.FieldName:
+		return m.OldName(ctx)
+	case location.FieldNameJa:
+		return m.OldNameJa(ctx)
+	case location.FieldAddress:
+		return m.OldAddress(ctx)
+	case location.FieldAddressJa:
+		return m.OldAddressJa(ctx)
+	}
 	return nil, fmt.Errorf("unknown Location field %s", name)
 }
 
@@ -1698,6 +1929,41 @@ func (m *LocationMutation) OldField(ctx context.Context, name string) (ent.Value
 // type.
 func (m *LocationMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case location.FieldType:
+		v, ok := value.(location.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case location.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case location.FieldNameJa:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNameJa(v)
+		return nil
+	case location.FieldAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddress(v)
+		return nil
+	case location.FieldAddressJa:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddressJa(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Location field %s", name)
 }
@@ -1719,6 +1985,8 @@ func (m *LocationMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *LocationMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Location numeric field %s", name)
 }
 
@@ -1744,6 +2012,23 @@ func (m *LocationMutation) ClearField(name string) error {
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *LocationMutation) ResetField(name string) error {
+	switch name {
+	case location.FieldType:
+		m.ResetType()
+		return nil
+	case location.FieldName:
+		m.ResetName()
+		return nil
+	case location.FieldNameJa:
+		m.ResetNameJa()
+		return nil
+	case location.FieldAddress:
+		m.ResetAddress()
+		return nil
+	case location.FieldAddressJa:
+		m.ResetAddressJa()
+		return nil
+	}
 	return fmt.Errorf("unknown Location field %s", name)
 }
 
