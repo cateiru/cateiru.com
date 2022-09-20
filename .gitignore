@@ -41,5 +41,7 @@ yarn-error.log*
 
 # ----- custom config
 
-db/data/**
-!db/data/.gitkeep
+_db/data/**
+!_db/data/.gitkeep
+
+schema.sql
