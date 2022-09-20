@@ -1,0 +1,16 @@
+components/**
+pages/**
+public/**
+utils/**
+.eslintignore
+.eslintrc.json
+.github/**
+next/**
+.gitignore
+.prettierrc.js
+db/**
+next-ent.d.ts
+next.config.js
+package.json
+tsconfig.json
+yarn.lock
