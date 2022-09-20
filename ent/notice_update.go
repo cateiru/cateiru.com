@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,86 @@ func (nu *NoticeUpdate) Where(ps ...predicate.Notice) *NoticeUpdate {
 	return nu
 }
 
+// SetDiscordWebhook sets the "discord_webhook" field.
+func (nu *NoticeUpdate) SetDiscordWebhook(s string) *NoticeUpdate {
+	nu.mutation.SetDiscordWebhook(s)
+	return nu
+}
+
+// SetNillableDiscordWebhook sets the "discord_webhook" field if the given value is not nil.
+func (nu *NoticeUpdate) SetNillableDiscordWebhook(s *string) *NoticeUpdate {
+	if s != nil {
+		nu.SetDiscordWebhook(*s)
+	}
+	return nu
+}
+
+// ClearDiscordWebhook clears the value of the "discord_webhook" field.
+func (nu *NoticeUpdate) ClearDiscordWebhook() *NoticeUpdate {
+	nu.mutation.ClearDiscordWebhook()
+	return nu
+}
+
+// SetSlackWebhook sets the "slack_webhook" field.
+func (nu *NoticeUpdate) SetSlackWebhook(s string) *NoticeUpdate {
+	nu.mutation.SetSlackWebhook(s)
+	return nu
+}
+
+// SetNillableSlackWebhook sets the "slack_webhook" field if the given value is not nil.
+func (nu *NoticeUpdate) SetNillableSlackWebhook(s *string) *NoticeUpdate {
+	if s != nil {
+		nu.SetSlackWebhook(*s)
+	}
+	return nu
+}
+
+// ClearSlackWebhook clears the value of the "slack_webhook" field.
+func (nu *NoticeUpdate) ClearSlackWebhook() *NoticeUpdate {
+	nu.mutation.ClearSlackWebhook()
+	return nu
+}
+
+// SetMail sets the "mail" field.
+func (nu *NoticeUpdate) SetMail(s string) *NoticeUpdate {
+	nu.mutation.SetMail(s)
+	return nu
+}
+
+// SetNillableMail sets the "mail" field if the given value is not nil.
+func (nu *NoticeUpdate) SetNillableMail(s *string) *NoticeUpdate {
+	if s != nil {
+		nu.SetMail(*s)
+	}
+	return nu
+}
+
+// ClearMail clears the value of the "mail" field.
+func (nu *NoticeUpdate) ClearMail() *NoticeUpdate {
+	nu.mutation.ClearMail()
+	return nu
+}
+
+// SetCreated sets the "created" field.
+func (nu *NoticeUpdate) SetCreated(t time.Time) *NoticeUpdate {
+	nu.mutation.SetCreated(t)
+	return nu
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (nu *NoticeUpdate) SetNillableCreated(t *time.Time) *NoticeUpdate {
+	if t != nil {
+		nu.SetCreated(*t)
+	}
+	return nu
+}
+
+// SetModified sets the "modified" field.
+func (nu *NoticeUpdate) SetModified(t time.Time) *NoticeUpdate {
+	nu.mutation.SetModified(t)
+	return nu
+}
+
 // Mutation returns the NoticeMutation object of the builder.
 func (nu *NoticeUpdate) Mutation() *NoticeMutation {
 	return nu.mutation
@@ -38,6 +119,7 @@ func (nu *NoticeUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	nu.defaults()
 	if len(nu.hooks) == 0 {
 		affected, err = nu.sqlSave(ctx)
 	} else {
@@ -86,13 +168,21 @@ func (nu *NoticeUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (nu *NoticeUpdate) defaults() {
+	if _, ok := nu.mutation.Modified(); !ok {
+		v := notice.UpdateDefaultModified()
+		nu.mutation.SetModified(v)
+	}
+}
+
 func (nu *NoticeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   notice.Table,
 			Columns: notice.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: notice.FieldID,
 			},
 		},
@@ -103,6 +193,59 @@ func (nu *NoticeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := nu.mutation.DiscordWebhook(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notice.FieldDiscordWebhook,
+		})
+	}
+	if nu.mutation.DiscordWebhookCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notice.FieldDiscordWebhook,
+		})
+	}
+	if value, ok := nu.mutation.SlackWebhook(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notice.FieldSlackWebhook,
+		})
+	}
+	if nu.mutation.SlackWebhookCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notice.FieldSlackWebhook,
+		})
+	}
+	if value, ok := nu.mutation.Mail(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notice.FieldMail,
+		})
+	}
+	if nu.mutation.MailCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notice.FieldMail,
+		})
+	}
+	if value, ok := nu.mutation.Created(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: notice.FieldCreated,
+		})
+	}
+	if value, ok := nu.mutation.Modified(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: notice.FieldModified,
+		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -123,6 +266,86 @@ type NoticeUpdateOne struct {
 	mutation *NoticeMutation
 }
 
+// SetDiscordWebhook sets the "discord_webhook" field.
+func (nuo *NoticeUpdateOne) SetDiscordWebhook(s string) *NoticeUpdateOne {
+	nuo.mutation.SetDiscordWebhook(s)
+	return nuo
+}
+
+// SetNillableDiscordWebhook sets the "discord_webhook" field if the given value is not nil.
+func (nuo *NoticeUpdateOne) SetNillableDiscordWebhook(s *string) *NoticeUpdateOne {
+	if s != nil {
+		nuo.SetDiscordWebhook(*s)
+	}
+	return nuo
+}
+
+// ClearDiscordWebhook clears the value of the "discord_webhook" field.
+func (nuo *NoticeUpdateOne) ClearDiscordWebhook() *NoticeUpdateOne {
+	nuo.mutation.ClearDiscordWebhook()
+	return nuo
+}
+
+// SetSlackWebhook sets the "slack_webhook" field.
+func (nuo *NoticeUpdateOne) SetSlackWebhook(s string) *NoticeUpdateOne {
+	nuo.mutation.SetSlackWebhook(s)
+	return nuo
+}
+
+// SetNillableSlackWebhook sets the "slack_webhook" field if the given value is not nil.
+func (nuo *NoticeUpdateOne) SetNillableSlackWebhook(s *string) *NoticeUpdateOne {
+	if s != nil {
+		nuo.SetSlackWebhook(*s)
+	}
+	return nuo
+}
+
+// ClearSlackWebhook clears the value of the "slack_webhook" field.
+func (nuo *NoticeUpdateOne) ClearSlackWebhook() *NoticeUpdateOne {
+	nuo.mutation.ClearSlackWebhook()
+	return nuo
+}
+
+// SetMail sets the "mail" field.
+func (nuo *NoticeUpdateOne) SetMail(s string) *NoticeUpdateOne {
+	nuo.mutation.SetMail(s)
+	return nuo
+}
+
+// SetNillableMail sets the "mail" field if the given value is not nil.
+func (nuo *NoticeUpdateOne) SetNillableMail(s *string) *NoticeUpdateOne {
+	if s != nil {
+		nuo.SetMail(*s)
+	}
+	return nuo
+}
+
+// ClearMail clears the value of the "mail" field.
+func (nuo *NoticeUpdateOne) ClearMail() *NoticeUpdateOne {
+	nuo.mutation.ClearMail()
+	return nuo
+}
+
+// SetCreated sets the "created" field.
+func (nuo *NoticeUpdateOne) SetCreated(t time.Time) *NoticeUpdateOne {
+	nuo.mutation.SetCreated(t)
+	return nuo
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (nuo *NoticeUpdateOne) SetNillableCreated(t *time.Time) *NoticeUpdateOne {
+	if t != nil {
+		nuo.SetCreated(*t)
+	}
+	return nuo
+}
+
+// SetModified sets the "modified" field.
+func (nuo *NoticeUpdateOne) SetModified(t time.Time) *NoticeUpdateOne {
+	nuo.mutation.SetModified(t)
+	return nuo
+}
+
 // Mutation returns the NoticeMutation object of the builder.
 func (nuo *NoticeUpdateOne) Mutation() *NoticeMutation {
 	return nuo.mutation
@@ -141,6 +364,7 @@ func (nuo *NoticeUpdateOne) Save(ctx context.Context) (*Notice, error) {
 		err  error
 		node *Notice
 	)
+	nuo.defaults()
 	if len(nuo.hooks) == 0 {
 		node, err = nuo.sqlSave(ctx)
 	} else {
@@ -195,13 +419,21 @@ func (nuo *NoticeUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (nuo *NoticeUpdateOne) defaults() {
+	if _, ok := nuo.mutation.Modified(); !ok {
+		v := notice.UpdateDefaultModified()
+		nuo.mutation.SetModified(v)
+	}
+}
+
 func (nuo *NoticeUpdateOne) sqlSave(ctx context.Context) (_node *Notice, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   notice.Table,
 			Columns: notice.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: notice.FieldID,
 			},
 		},
@@ -229,6 +461,59 @@ func (nuo *NoticeUpdateOne) sqlSave(ctx context.Context) (_node *Notice, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := nuo.mutation.DiscordWebhook(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notice.FieldDiscordWebhook,
+		})
+	}
+	if nuo.mutation.DiscordWebhookCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notice.FieldDiscordWebhook,
+		})
+	}
+	if value, ok := nuo.mutation.SlackWebhook(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notice.FieldSlackWebhook,
+		})
+	}
+	if nuo.mutation.SlackWebhookCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notice.FieldSlackWebhook,
+		})
+	}
+	if value, ok := nuo.mutation.Mail(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notice.FieldMail,
+		})
+	}
+	if nuo.mutation.MailCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notice.FieldMail,
+		})
+	}
+	if value, ok := nuo.mutation.Created(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: notice.FieldCreated,
+		})
+	}
+	if value, ok := nuo.mutation.Modified(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: notice.FieldModified,
+		})
 	}
 	_node = &Notice{config: nuo.config}
 	_spec.Assign = _node.assignValues

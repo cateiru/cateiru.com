@@ -3,33 +3,35 @@
 package notice
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateir.com/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Notice {
+func ID(id uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Notice {
+func IDEQ(id uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Notice {
+func IDNEQ(id uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldID), id))
 	})
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Notice {
+func IDIn(ids ...uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -40,7 +42,7 @@ func IDIn(ids ...int) predicate.Notice {
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Notice {
+func IDNotIn(ids ...uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -51,30 +53,532 @@ func IDNotIn(ids ...int) predicate.Notice {
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Notice {
+func IDGT(id uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldID), id))
 	})
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Notice {
+func IDGTE(id uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldID), id))
 	})
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Notice {
+func IDLT(id uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldID), id))
 	})
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Notice {
+func IDLTE(id uint32) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldID), id))
+	})
+}
+
+// DiscordWebhook applies equality check predicate on the "discord_webhook" field. It's identical to DiscordWebhookEQ.
+func DiscordWebhook(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// SlackWebhook applies equality check predicate on the "slack_webhook" field. It's identical to SlackWebhookEQ.
+func SlackWebhook(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// Mail applies equality check predicate on the "mail" field. It's identical to MailEQ.
+func Mail(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldMail), v))
+	})
+}
+
+// Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
+func Created(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreated), v))
+	})
+}
+
+// Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
+func Modified(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldModified), v))
+	})
+}
+
+// DiscordWebhookEQ applies the EQ predicate on the "discord_webhook" field.
+func DiscordWebhookEQ(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookNEQ applies the NEQ predicate on the "discord_webhook" field.
+func DiscordWebhookNEQ(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookIn applies the In predicate on the "discord_webhook" field.
+func DiscordWebhookIn(vs ...string) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldDiscordWebhook), v...))
+	})
+}
+
+// DiscordWebhookNotIn applies the NotIn predicate on the "discord_webhook" field.
+func DiscordWebhookNotIn(vs ...string) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldDiscordWebhook), v...))
+	})
+}
+
+// DiscordWebhookGT applies the GT predicate on the "discord_webhook" field.
+func DiscordWebhookGT(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookGTE applies the GTE predicate on the "discord_webhook" field.
+func DiscordWebhookGTE(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookLT applies the LT predicate on the "discord_webhook" field.
+func DiscordWebhookLT(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookLTE applies the LTE predicate on the "discord_webhook" field.
+func DiscordWebhookLTE(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookContains applies the Contains predicate on the "discord_webhook" field.
+func DiscordWebhookContains(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookHasPrefix applies the HasPrefix predicate on the "discord_webhook" field.
+func DiscordWebhookHasPrefix(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookHasSuffix applies the HasSuffix predicate on the "discord_webhook" field.
+func DiscordWebhookHasSuffix(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookIsNil applies the IsNil predicate on the "discord_webhook" field.
+func DiscordWebhookIsNil() predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldDiscordWebhook)))
+	})
+}
+
+// DiscordWebhookNotNil applies the NotNil predicate on the "discord_webhook" field.
+func DiscordWebhookNotNil() predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldDiscordWebhook)))
+	})
+}
+
+// DiscordWebhookEqualFold applies the EqualFold predicate on the "discord_webhook" field.
+func DiscordWebhookEqualFold(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// DiscordWebhookContainsFold applies the ContainsFold predicate on the "discord_webhook" field.
+func DiscordWebhookContainsFold(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldDiscordWebhook), v))
+	})
+}
+
+// SlackWebhookEQ applies the EQ predicate on the "slack_webhook" field.
+func SlackWebhookEQ(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookNEQ applies the NEQ predicate on the "slack_webhook" field.
+func SlackWebhookNEQ(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookIn applies the In predicate on the "slack_webhook" field.
+func SlackWebhookIn(vs ...string) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldSlackWebhook), v...))
+	})
+}
+
+// SlackWebhookNotIn applies the NotIn predicate on the "slack_webhook" field.
+func SlackWebhookNotIn(vs ...string) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldSlackWebhook), v...))
+	})
+}
+
+// SlackWebhookGT applies the GT predicate on the "slack_webhook" field.
+func SlackWebhookGT(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookGTE applies the GTE predicate on the "slack_webhook" field.
+func SlackWebhookGTE(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookLT applies the LT predicate on the "slack_webhook" field.
+func SlackWebhookLT(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookLTE applies the LTE predicate on the "slack_webhook" field.
+func SlackWebhookLTE(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookContains applies the Contains predicate on the "slack_webhook" field.
+func SlackWebhookContains(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookHasPrefix applies the HasPrefix predicate on the "slack_webhook" field.
+func SlackWebhookHasPrefix(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookHasSuffix applies the HasSuffix predicate on the "slack_webhook" field.
+func SlackWebhookHasSuffix(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookIsNil applies the IsNil predicate on the "slack_webhook" field.
+func SlackWebhookIsNil() predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSlackWebhook)))
+	})
+}
+
+// SlackWebhookNotNil applies the NotNil predicate on the "slack_webhook" field.
+func SlackWebhookNotNil() predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSlackWebhook)))
+	})
+}
+
+// SlackWebhookEqualFold applies the EqualFold predicate on the "slack_webhook" field.
+func SlackWebhookEqualFold(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// SlackWebhookContainsFold applies the ContainsFold predicate on the "slack_webhook" field.
+func SlackWebhookContainsFold(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSlackWebhook), v))
+	})
+}
+
+// MailEQ applies the EQ predicate on the "mail" field.
+func MailEQ(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldMail), v))
+	})
+}
+
+// MailNEQ applies the NEQ predicate on the "mail" field.
+func MailNEQ(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldMail), v))
+	})
+}
+
+// MailIn applies the In predicate on the "mail" field.
+func MailIn(vs ...string) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldMail), v...))
+	})
+}
+
+// MailNotIn applies the NotIn predicate on the "mail" field.
+func MailNotIn(vs ...string) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldMail), v...))
+	})
+}
+
+// MailGT applies the GT predicate on the "mail" field.
+func MailGT(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldMail), v))
+	})
+}
+
+// MailGTE applies the GTE predicate on the "mail" field.
+func MailGTE(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldMail), v))
+	})
+}
+
+// MailLT applies the LT predicate on the "mail" field.
+func MailLT(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldMail), v))
+	})
+}
+
+// MailLTE applies the LTE predicate on the "mail" field.
+func MailLTE(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldMail), v))
+	})
+}
+
+// MailContains applies the Contains predicate on the "mail" field.
+func MailContains(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldMail), v))
+	})
+}
+
+// MailHasPrefix applies the HasPrefix predicate on the "mail" field.
+func MailHasPrefix(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldMail), v))
+	})
+}
+
+// MailHasSuffix applies the HasSuffix predicate on the "mail" field.
+func MailHasSuffix(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldMail), v))
+	})
+}
+
+// MailIsNil applies the IsNil predicate on the "mail" field.
+func MailIsNil() predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldMail)))
+	})
+}
+
+// MailNotNil applies the NotNil predicate on the "mail" field.
+func MailNotNil() predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldMail)))
+	})
+}
+
+// MailEqualFold applies the EqualFold predicate on the "mail" field.
+func MailEqualFold(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldMail), v))
+	})
+}
+
+// MailContainsFold applies the ContainsFold predicate on the "mail" field.
+func MailContainsFold(v string) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldMail), v))
+	})
+}
+
+// CreatedEQ applies the EQ predicate on the "created" field.
+func CreatedEQ(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedNEQ applies the NEQ predicate on the "created" field.
+func CreatedNEQ(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedIn applies the In predicate on the "created" field.
+func CreatedIn(vs ...time.Time) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCreated), v...))
+	})
+}
+
+// CreatedNotIn applies the NotIn predicate on the "created" field.
+func CreatedNotIn(vs ...time.Time) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCreated), v...))
+	})
+}
+
+// CreatedGT applies the GT predicate on the "created" field.
+func CreatedGT(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedGTE applies the GTE predicate on the "created" field.
+func CreatedGTE(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedLT applies the LT predicate on the "created" field.
+func CreatedLT(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedLTE applies the LTE predicate on the "created" field.
+func CreatedLTE(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCreated), v))
+	})
+}
+
+// ModifiedEQ applies the EQ predicate on the "modified" field.
+func ModifiedEQ(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedNEQ applies the NEQ predicate on the "modified" field.
+func ModifiedNEQ(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedIn applies the In predicate on the "modified" field.
+func ModifiedIn(vs ...time.Time) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldModified), v...))
+	})
+}
+
+// ModifiedNotIn applies the NotIn predicate on the "modified" field.
+func ModifiedNotIn(vs ...time.Time) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldModified), v...))
+	})
+}
+
+// ModifiedGT applies the GT predicate on the "modified" field.
+func ModifiedGT(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedGTE applies the GTE predicate on the "modified" field.
+func ModifiedGTE(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedLT applies the LT predicate on the "modified" field.
+func ModifiedLT(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedLTE applies the LTE predicate on the "modified" field.
+func ModifiedLTE(v time.Time) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldModified), v))
 	})
 }
 

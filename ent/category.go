@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateir.com/ent/category"
@@ -12,9 +13,19 @@ import (
 
 // Category is the model entity for the Category schema.
 type Category struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uint32 `json:"id,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// NameJa holds the value of the "name_ja" field.
+	NameJa string `json:"name_ja,omitempty"`
+	// Emoji holds the value of the "emoji" field.
+	Emoji string `json:"emoji,omitempty"`
+	// Created holds the value of the "created" field.
+	Created time.Time `json:"created,omitempty"`
+	// Modified holds the value of the "modified" field.
+	Modified time.Time `json:"modified,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,6 +35,10 @@ func (*Category) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case category.FieldID:
 			values[i] = new(sql.NullInt64)
+		case category.FieldName, category.FieldNameJa, category.FieldEmoji:
+			values[i] = new(sql.NullString)
+		case category.FieldCreated, category.FieldModified:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Category", columns[i])
 		}
@@ -44,7 +59,37 @@ func (c *Category) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			c.ID = int(value.Int64)
+			c.ID = uint32(value.Int64)
+		case category.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				c.Name = value.String
+			}
+		case category.FieldNameJa:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name_ja", values[i])
+			} else if value.Valid {
+				c.NameJa = value.String
+			}
+		case category.FieldEmoji:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field emoji", values[i])
+			} else if value.Valid {
+				c.Emoji = value.String
+			}
+		case category.FieldCreated:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created", values[i])
+			} else if value.Valid {
+				c.Created = value.Time
+			}
+		case category.FieldModified:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field modified", values[i])
+			} else if value.Valid {
+				c.Modified = value.Time
+			}
 		}
 	}
 	return nil
@@ -72,7 +117,21 @@ func (c *Category) Unwrap() *Category {
 func (c *Category) String() string {
 	var builder strings.Builder
 	builder.WriteString("Category(")
-	builder.WriteString(fmt.Sprintf("id=%v", c.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString("name=")
+	builder.WriteString(c.Name)
+	builder.WriteString(", ")
+	builder.WriteString("name_ja=")
+	builder.WriteString(c.NameJa)
+	builder.WriteString(", ")
+	builder.WriteString("emoji=")
+	builder.WriteString(c.Emoji)
+	builder.WriteString(", ")
+	builder.WriteString("created=")
+	builder.WriteString(c.Created.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("modified=")
+	builder.WriteString(c.Modified.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

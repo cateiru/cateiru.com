@@ -83,8 +83,8 @@ func (nq *NoticeQuery) FirstX(ctx context.Context) *Notice {
 
 // FirstID returns the first Notice ID from the query.
 // Returns a *NotFoundError when no Notice ID was found.
-func (nq *NoticeQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (nq *NoticeQuery) FirstID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = nq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (nq *NoticeQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (nq *NoticeQuery) FirstIDX(ctx context.Context) int {
+func (nq *NoticeQuery) FirstIDX(ctx context.Context) uint32 {
 	id, err := nq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (nq *NoticeQuery) OnlyX(ctx context.Context) *Notice {
 // OnlyID is like Only, but returns the only Notice ID in the query.
 // Returns a *NotSingularError when more than one Notice ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (nq *NoticeQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (nq *NoticeQuery) OnlyID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = nq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (nq *NoticeQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (nq *NoticeQuery) OnlyIDX(ctx context.Context) int {
+func (nq *NoticeQuery) OnlyIDX(ctx context.Context) uint32 {
 	id, err := nq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (nq *NoticeQuery) AllX(ctx context.Context) []*Notice {
 }
 
 // IDs executes the query and returns a list of Notice IDs.
-func (nq *NoticeQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (nq *NoticeQuery) IDs(ctx context.Context) ([]uint32, error) {
+	var ids []uint32
 	if err := nq.Select(notice.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (nq *NoticeQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (nq *NoticeQuery) IDsX(ctx context.Context) []int {
+func (nq *NoticeQuery) IDsX(ctx context.Context) []uint32 {
 	ids, err := nq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +249,18 @@ func (nq *NoticeQuery) Clone() *NoticeQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		DiscordWebhook string `json:"discord_webhook,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Notice.Query().
+//		GroupBy(notice.FieldDiscordWebhook).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (nq *NoticeQuery) GroupBy(field string, fields ...string) *NoticeGroupBy {
 	grbuild := &NoticeGroupBy{config: nq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (nq *NoticeQuery) GroupBy(field string, fields ...string) *NoticeGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		DiscordWebhook string `json:"discord_webhook,omitempty"`
+//	}
+//
+//	client.Notice.Query().
+//		Select(notice.FieldDiscordWebhook).
+//		Scan(ctx, &v)
 func (nq *NoticeQuery) Select(fields ...string) *NoticeSelect {
 	nq.fields = append(nq.fields, fields...)
 	selbuild := &NoticeSelect{NoticeQuery: nq}
@@ -337,7 +359,7 @@ func (nq *NoticeQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   notice.Table,
 			Columns: notice.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: notice.FieldID,
 			},
 		},

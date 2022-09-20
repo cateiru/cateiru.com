@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,58 @@ type CategoryCreate struct {
 	hooks    []Hook
 }
 
+// SetName sets the "name" field.
+func (cc *CategoryCreate) SetName(s string) *CategoryCreate {
+	cc.mutation.SetName(s)
+	return cc
+}
+
+// SetNameJa sets the "name_ja" field.
+func (cc *CategoryCreate) SetNameJa(s string) *CategoryCreate {
+	cc.mutation.SetNameJa(s)
+	return cc
+}
+
+// SetEmoji sets the "emoji" field.
+func (cc *CategoryCreate) SetEmoji(s string) *CategoryCreate {
+	cc.mutation.SetEmoji(s)
+	return cc
+}
+
+// SetCreated sets the "created" field.
+func (cc *CategoryCreate) SetCreated(t time.Time) *CategoryCreate {
+	cc.mutation.SetCreated(t)
+	return cc
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (cc *CategoryCreate) SetNillableCreated(t *time.Time) *CategoryCreate {
+	if t != nil {
+		cc.SetCreated(*t)
+	}
+	return cc
+}
+
+// SetModified sets the "modified" field.
+func (cc *CategoryCreate) SetModified(t time.Time) *CategoryCreate {
+	cc.mutation.SetModified(t)
+	return cc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (cc *CategoryCreate) SetNillableModified(t *time.Time) *CategoryCreate {
+	if t != nil {
+		cc.SetModified(*t)
+	}
+	return cc
+}
+
+// SetID sets the "id" field.
+func (cc *CategoryCreate) SetID(u uint32) *CategoryCreate {
+	cc.mutation.SetID(u)
+	return cc
+}
+
 // Mutation returns the CategoryMutation object of the builder.
 func (cc *CategoryCreate) Mutation() *CategoryMutation {
 	return cc.mutation
@@ -29,6 +83,7 @@ func (cc *CategoryCreate) Save(ctx context.Context) (*Category, error) {
 		err  error
 		node *Category
 	)
+	cc.defaults()
 	if len(cc.hooks) == 0 {
 		if err = cc.check(); err != nil {
 			return nil, err
@@ -92,8 +147,35 @@ func (cc *CategoryCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (cc *CategoryCreate) defaults() {
+	if _, ok := cc.mutation.Created(); !ok {
+		v := category.DefaultCreated()
+		cc.mutation.SetCreated(v)
+	}
+	if _, ok := cc.mutation.Modified(); !ok {
+		v := category.DefaultModified()
+		cc.mutation.SetModified(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (cc *CategoryCreate) check() error {
+	if _, ok := cc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Category.name"`)}
+	}
+	if _, ok := cc.mutation.NameJa(); !ok {
+		return &ValidationError{Name: "name_ja", err: errors.New(`ent: missing required field "Category.name_ja"`)}
+	}
+	if _, ok := cc.mutation.Emoji(); !ok {
+		return &ValidationError{Name: "emoji", err: errors.New(`ent: missing required field "Category.emoji"`)}
+	}
+	if _, ok := cc.mutation.Created(); !ok {
+		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Category.created"`)}
+	}
+	if _, ok := cc.mutation.Modified(); !ok {
+		return &ValidationError{Name: "modified", err: errors.New(`ent: missing required field "Category.modified"`)}
+	}
 	return nil
 }
 
@@ -105,8 +187,10 @@ func (cc *CategoryCreate) sqlSave(ctx context.Context) (*Category, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint32(id)
+	}
 	return _node, nil
 }
 
@@ -116,11 +200,55 @@ func (cc *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: category.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: category.FieldID,
 			},
 		}
 	)
+	if id, ok := cc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := cc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: category.FieldName,
+		})
+		_node.Name = value
+	}
+	if value, ok := cc.mutation.NameJa(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: category.FieldNameJa,
+		})
+		_node.NameJa = value
+	}
+	if value, ok := cc.mutation.Emoji(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: category.FieldEmoji,
+		})
+		_node.Emoji = value
+	}
+	if value, ok := cc.mutation.Created(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: category.FieldCreated,
+		})
+		_node.Created = value
+	}
+	if value, ok := cc.mutation.Modified(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: category.FieldModified,
+		})
+		_node.Modified = value
+	}
 	return _node, _spec
 }
 
@@ -138,6 +266,7 @@ func (ccb *CategoryCreateBulk) Save(ctx context.Context) ([]*Category, error) {
 	for i := range ccb.builders {
 		func(i int, root context.Context) {
 			builder := ccb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CategoryMutation)
 				if !ok {
@@ -164,9 +293,9 @@ func (ccb *CategoryCreateBulk) Save(ctx context.Context) ([]*Category, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = uint32(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

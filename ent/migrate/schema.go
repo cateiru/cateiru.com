@@ -40,7 +40,12 @@ var (
 	}
 	// CategoriesColumns holds the columns for the "categories" table.
 	CategoriesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "name_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "emoji", Type: field.TypeString, Size: 1, SchemaType: map[string]string{"mysql": "char(1)"}},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// CategoriesTable holds the schema information for the "categories" table.
 	CategoriesTable = &schema.Table{
@@ -50,23 +55,56 @@ var (
 	}
 	// ContactsColumns holds the columns for the "contacts" table.
 	ContactsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "to_user_id", Type: field.TypeUint32},
+		{Name: "title", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "detail", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "mail", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "category", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "ip", Type: field.TypeString, Size: 16},
+		{Name: "device_name", Type: field.TypeString, Size: 31},
+		{Name: "os", Type: field.TypeString, Size: 15},
+		{Name: "browser_name", Type: field.TypeString, Size: 15},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// ContactsTable holds the schema information for the "contacts" table.
 	ContactsTable = &schema.Table{
 		Name:       "contacts",
 		Columns:    ContactsColumns,
 		PrimaryKey: []*schema.Column{ContactsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "contact_to_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{ContactsColumns[1]},
+			},
+		},
 	}
 	// LinksColumns holds the columns for the "links" table.
 	LinksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "user_id", Type: field.TypeUint32},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "name_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "site_url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "favicon_url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "category_id", Type: field.TypeUint32},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// LinksTable holds the schema information for the "links" table.
 	LinksTable = &schema.Table{
 		Name:       "links",
 		Columns:    LinksColumns,
 		PrimaryKey: []*schema.Column{LinksColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "link_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{LinksColumns[1]},
+			},
+		},
 	}
 	// LocationsColumns holds the columns for the "locations" table.
 	LocationsColumns = []*schema.Column{
@@ -76,6 +114,8 @@ var (
 		{Name: "name_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "address", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "address_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// LocationsTable holds the schema information for the "locations" table.
 	LocationsTable = &schema.Table{
@@ -85,7 +125,12 @@ var (
 	}
 	// NoticesColumns holds the columns for the "notices" table.
 	NoticesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "discord_webhook", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "slack_webhook", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "mail", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// NoticesTable holds the schema information for the "notices" table.
 	NoticesTable = &schema.Table{
@@ -95,13 +140,35 @@ var (
 	}
 	// ProductsColumns holds the columns for the "products" table.
 	ProductsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "user_id", Type: field.TypeUint32},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "name_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "detail", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "detail_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "site_url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "github_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "dev_time", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// ProductsTable holds the schema information for the "products" table.
 	ProductsTable = &schema.Table{
 		Name:       "products",
 		Columns:    ProductsColumns,
 		PrimaryKey: []*schema.Column{ProductsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "product_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{ProductsColumns[1]},
+			},
+			{
+				Name:    "product_user_id_dev_time",
+				Unique:  false,
+				Columns: []*schema.Column{ProductsColumns[1], ProductsColumns[8]},
+			},
+		},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{

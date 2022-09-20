@@ -83,8 +83,8 @@ func (pq *ProductQuery) FirstX(ctx context.Context) *Product {
 
 // FirstID returns the first Product ID from the query.
 // Returns a *NotFoundError when no Product ID was found.
-func (pq *ProductQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (pq *ProductQuery) FirstID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = pq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (pq *ProductQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (pq *ProductQuery) FirstIDX(ctx context.Context) int {
+func (pq *ProductQuery) FirstIDX(ctx context.Context) uint32 {
 	id, err := pq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (pq *ProductQuery) OnlyX(ctx context.Context) *Product {
 // OnlyID is like Only, but returns the only Product ID in the query.
 // Returns a *NotSingularError when more than one Product ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (pq *ProductQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (pq *ProductQuery) OnlyID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = pq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (pq *ProductQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (pq *ProductQuery) OnlyIDX(ctx context.Context) int {
+func (pq *ProductQuery) OnlyIDX(ctx context.Context) uint32 {
 	id, err := pq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (pq *ProductQuery) AllX(ctx context.Context) []*Product {
 }
 
 // IDs executes the query and returns a list of Product IDs.
-func (pq *ProductQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (pq *ProductQuery) IDs(ctx context.Context) ([]uint32, error) {
+	var ids []uint32
 	if err := pq.Select(product.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (pq *ProductQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (pq *ProductQuery) IDsX(ctx context.Context) []int {
+func (pq *ProductQuery) IDsX(ctx context.Context) []uint32 {
 	ids, err := pq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +249,18 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		UserID uint32 `json:"user_id,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Product.Query().
+//		GroupBy(product.FieldUserID).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (pq *ProductQuery) GroupBy(field string, fields ...string) *ProductGroupBy {
 	grbuild := &ProductGroupBy{config: pq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (pq *ProductQuery) GroupBy(field string, fields ...string) *ProductGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		UserID uint32 `json:"user_id,omitempty"`
+//	}
+//
+//	client.Product.Query().
+//		Select(product.FieldUserID).
+//		Scan(ctx, &v)
 func (pq *ProductQuery) Select(fields ...string) *ProductSelect {
 	pq.fields = append(pq.fields, fields...)
 	selbuild := &ProductSelect{ProductQuery: pq}
@@ -337,7 +359,7 @@ func (pq *ProductQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   product.Table,
 			Columns: product.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: product.FieldID,
 			},
 		},

@@ -6,6 +6,12 @@ import (
 	"time"
 
 	"github.com/cateiru/cateir.com/ent/biography"
+	"github.com/cateiru/cateir.com/ent/category"
+	"github.com/cateiru/cateir.com/ent/contact"
+	"github.com/cateiru/cateir.com/ent/link"
+	"github.com/cateiru/cateir.com/ent/location"
+	"github.com/cateiru/cateir.com/ent/notice"
+	"github.com/cateiru/cateir.com/ent/product"
 	"github.com/cateiru/cateir.com/ent/schema"
 	"github.com/cateiru/cateir.com/ent/user"
 )
@@ -30,6 +36,78 @@ func init() {
 	biography.DefaultModified = biographyDescModified.Default.(func() time.Time)
 	// biography.UpdateDefaultModified holds the default value on update for the modified field.
 	biography.UpdateDefaultModified = biographyDescModified.UpdateDefault.(func() time.Time)
+	categoryFields := schema.Category{}.Fields()
+	_ = categoryFields
+	// categoryDescCreated is the schema descriptor for created field.
+	categoryDescCreated := categoryFields[4].Descriptor()
+	// category.DefaultCreated holds the default value on creation for the created field.
+	category.DefaultCreated = categoryDescCreated.Default.(func() time.Time)
+	// categoryDescModified is the schema descriptor for modified field.
+	categoryDescModified := categoryFields[5].Descriptor()
+	// category.DefaultModified holds the default value on creation for the modified field.
+	category.DefaultModified = categoryDescModified.Default.(func() time.Time)
+	// category.UpdateDefaultModified holds the default value on update for the modified field.
+	category.UpdateDefaultModified = categoryDescModified.UpdateDefault.(func() time.Time)
+	contactFields := schema.Contact{}.Fields()
+	_ = contactFields
+	// contactDescCreated is the schema descriptor for created field.
+	contactDescCreated := contactFields[10].Descriptor()
+	// contact.DefaultCreated holds the default value on creation for the created field.
+	contact.DefaultCreated = contactDescCreated.Default.(func() time.Time)
+	// contactDescModified is the schema descriptor for modified field.
+	contactDescModified := contactFields[11].Descriptor()
+	// contact.DefaultModified holds the default value on creation for the modified field.
+	contact.DefaultModified = contactDescModified.Default.(func() time.Time)
+	// contact.UpdateDefaultModified holds the default value on update for the modified field.
+	contact.UpdateDefaultModified = contactDescModified.UpdateDefault.(func() time.Time)
+	linkFields := schema.Link{}.Fields()
+	_ = linkFields
+	// linkDescCreated is the schema descriptor for created field.
+	linkDescCreated := linkFields[7].Descriptor()
+	// link.DefaultCreated holds the default value on creation for the created field.
+	link.DefaultCreated = linkDescCreated.Default.(func() time.Time)
+	// linkDescModified is the schema descriptor for modified field.
+	linkDescModified := linkFields[8].Descriptor()
+	// link.DefaultModified holds the default value on creation for the modified field.
+	link.DefaultModified = linkDescModified.Default.(func() time.Time)
+	// link.UpdateDefaultModified holds the default value on update for the modified field.
+	link.UpdateDefaultModified = linkDescModified.UpdateDefault.(func() time.Time)
+	locationFields := schema.Location{}.Fields()
+	_ = locationFields
+	// locationDescCreated is the schema descriptor for created field.
+	locationDescCreated := locationFields[6].Descriptor()
+	// location.DefaultCreated holds the default value on creation for the created field.
+	location.DefaultCreated = locationDescCreated.Default.(func() time.Time)
+	// locationDescModified is the schema descriptor for modified field.
+	locationDescModified := locationFields[7].Descriptor()
+	// location.DefaultModified holds the default value on creation for the modified field.
+	location.DefaultModified = locationDescModified.Default.(func() time.Time)
+	// location.UpdateDefaultModified holds the default value on update for the modified field.
+	location.UpdateDefaultModified = locationDescModified.UpdateDefault.(func() time.Time)
+	noticeFields := schema.Notice{}.Fields()
+	_ = noticeFields
+	// noticeDescCreated is the schema descriptor for created field.
+	noticeDescCreated := noticeFields[4].Descriptor()
+	// notice.DefaultCreated holds the default value on creation for the created field.
+	notice.DefaultCreated = noticeDescCreated.Default.(func() time.Time)
+	// noticeDescModified is the schema descriptor for modified field.
+	noticeDescModified := noticeFields[5].Descriptor()
+	// notice.DefaultModified holds the default value on creation for the modified field.
+	notice.DefaultModified = noticeDescModified.Default.(func() time.Time)
+	// notice.UpdateDefaultModified holds the default value on update for the modified field.
+	notice.UpdateDefaultModified = noticeDescModified.UpdateDefault.(func() time.Time)
+	productFields := schema.Product{}.Fields()
+	_ = productFields
+	// productDescCreated is the schema descriptor for created field.
+	productDescCreated := productFields[9].Descriptor()
+	// product.DefaultCreated holds the default value on creation for the created field.
+	product.DefaultCreated = productDescCreated.Default.(func() time.Time)
+	// productDescModified is the schema descriptor for modified field.
+	productDescModified := productFields[10].Descriptor()
+	// product.DefaultModified holds the default value on creation for the modified field.
+	product.DefaultModified = productDescModified.Default.(func() time.Time)
+	// product.UpdateDefaultModified holds the default value on update for the modified field.
+	product.UpdateDefaultModified = productDescModified.UpdateDefault.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescCreated is the schema descriptor for created field.

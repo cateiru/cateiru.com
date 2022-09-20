@@ -4,6 +4,7 @@ package location
 
 import (
 	"fmt"
+	"time"
 )
 
 const (
@@ -21,6 +22,10 @@ const (
 	FieldAddress = "address"
 	// FieldAddressJa holds the string denoting the address_ja field in the database.
 	FieldAddressJa = "address_ja"
+	// FieldCreated holds the string denoting the created field in the database.
+	FieldCreated = "created"
+	// FieldModified holds the string denoting the modified field in the database.
+	FieldModified = "modified"
 	// Table holds the table name of the location in the database.
 	Table = "locations"
 )
@@ -33,6 +38,8 @@ var Columns = []string{
 	FieldNameJa,
 	FieldAddress,
 	FieldAddressJa,
+	FieldCreated,
+	FieldModified,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -44,6 +51,15 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultCreated holds the default value on creation for the "created" field.
+	DefaultCreated func() time.Time
+	// DefaultModified holds the default value on creation for the "modified" field.
+	DefaultModified func() time.Time
+	// UpdateDefaultModified holds the default value on update for the "modified" field.
+	UpdateDefaultModified func() time.Time
+)
 
 // Type defines the type for the "type" enum field.
 type Type string

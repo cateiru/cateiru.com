@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,96 @@ type ProductCreate struct {
 	hooks    []Hook
 }
 
+// SetUserID sets the "user_id" field.
+func (pc *ProductCreate) SetUserID(u uint32) *ProductCreate {
+	pc.mutation.SetUserID(u)
+	return pc
+}
+
+// SetName sets the "name" field.
+func (pc *ProductCreate) SetName(s string) *ProductCreate {
+	pc.mutation.SetName(s)
+	return pc
+}
+
+// SetNameJa sets the "name_ja" field.
+func (pc *ProductCreate) SetNameJa(s string) *ProductCreate {
+	pc.mutation.SetNameJa(s)
+	return pc
+}
+
+// SetDetail sets the "detail" field.
+func (pc *ProductCreate) SetDetail(s string) *ProductCreate {
+	pc.mutation.SetDetail(s)
+	return pc
+}
+
+// SetDetailJa sets the "detail_ja" field.
+func (pc *ProductCreate) SetDetailJa(s string) *ProductCreate {
+	pc.mutation.SetDetailJa(s)
+	return pc
+}
+
+// SetSiteURL sets the "site_url" field.
+func (pc *ProductCreate) SetSiteURL(s string) *ProductCreate {
+	pc.mutation.SetSiteURL(s)
+	return pc
+}
+
+// SetGithubURL sets the "github_url" field.
+func (pc *ProductCreate) SetGithubURL(s string) *ProductCreate {
+	pc.mutation.SetGithubURL(s)
+	return pc
+}
+
+// SetNillableGithubURL sets the "github_url" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableGithubURL(s *string) *ProductCreate {
+	if s != nil {
+		pc.SetGithubURL(*s)
+	}
+	return pc
+}
+
+// SetDevTime sets the "dev_time" field.
+func (pc *ProductCreate) SetDevTime(t time.Time) *ProductCreate {
+	pc.mutation.SetDevTime(t)
+	return pc
+}
+
+// SetCreated sets the "created" field.
+func (pc *ProductCreate) SetCreated(t time.Time) *ProductCreate {
+	pc.mutation.SetCreated(t)
+	return pc
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableCreated(t *time.Time) *ProductCreate {
+	if t != nil {
+		pc.SetCreated(*t)
+	}
+	return pc
+}
+
+// SetModified sets the "modified" field.
+func (pc *ProductCreate) SetModified(t time.Time) *ProductCreate {
+	pc.mutation.SetModified(t)
+	return pc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableModified(t *time.Time) *ProductCreate {
+	if t != nil {
+		pc.SetModified(*t)
+	}
+	return pc
+}
+
+// SetID sets the "id" field.
+func (pc *ProductCreate) SetID(u uint32) *ProductCreate {
+	pc.mutation.SetID(u)
+	return pc
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pc *ProductCreate) Mutation() *ProductMutation {
 	return pc.mutation
@@ -29,6 +121,7 @@ func (pc *ProductCreate) Save(ctx context.Context) (*Product, error) {
 		err  error
 		node *Product
 	)
+	pc.defaults()
 	if len(pc.hooks) == 0 {
 		if err = pc.check(); err != nil {
 			return nil, err
@@ -92,8 +185,47 @@ func (pc *ProductCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *ProductCreate) defaults() {
+	if _, ok := pc.mutation.Created(); !ok {
+		v := product.DefaultCreated()
+		pc.mutation.SetCreated(v)
+	}
+	if _, ok := pc.mutation.Modified(); !ok {
+		v := product.DefaultModified()
+		pc.mutation.SetModified(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProductCreate) check() error {
+	if _, ok := pc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Product.user_id"`)}
+	}
+	if _, ok := pc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Product.name"`)}
+	}
+	if _, ok := pc.mutation.NameJa(); !ok {
+		return &ValidationError{Name: "name_ja", err: errors.New(`ent: missing required field "Product.name_ja"`)}
+	}
+	if _, ok := pc.mutation.Detail(); !ok {
+		return &ValidationError{Name: "detail", err: errors.New(`ent: missing required field "Product.detail"`)}
+	}
+	if _, ok := pc.mutation.DetailJa(); !ok {
+		return &ValidationError{Name: "detail_ja", err: errors.New(`ent: missing required field "Product.detail_ja"`)}
+	}
+	if _, ok := pc.mutation.SiteURL(); !ok {
+		return &ValidationError{Name: "site_url", err: errors.New(`ent: missing required field "Product.site_url"`)}
+	}
+	if _, ok := pc.mutation.DevTime(); !ok {
+		return &ValidationError{Name: "dev_time", err: errors.New(`ent: missing required field "Product.dev_time"`)}
+	}
+	if _, ok := pc.mutation.Created(); !ok {
+		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Product.created"`)}
+	}
+	if _, ok := pc.mutation.Modified(); !ok {
+		return &ValidationError{Name: "modified", err: errors.New(`ent: missing required field "Product.modified"`)}
+	}
 	return nil
 }
 
@@ -105,8 +237,10 @@ func (pc *ProductCreate) sqlSave(ctx context.Context) (*Product, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint32(id)
+	}
 	return _node, nil
 }
 
@@ -116,11 +250,95 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: product.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: product.FieldID,
 			},
 		}
 	)
+	if id, ok := pc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := pc.mutation.UserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: product.FieldUserID,
+		})
+		_node.UserID = value
+	}
+	if value, ok := pc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldName,
+		})
+		_node.Name = value
+	}
+	if value, ok := pc.mutation.NameJa(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldNameJa,
+		})
+		_node.NameJa = value
+	}
+	if value, ok := pc.mutation.Detail(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldDetail,
+		})
+		_node.Detail = value
+	}
+	if value, ok := pc.mutation.DetailJa(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldDetailJa,
+		})
+		_node.DetailJa = value
+	}
+	if value, ok := pc.mutation.SiteURL(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldSiteURL,
+		})
+		_node.SiteURL = value
+	}
+	if value, ok := pc.mutation.GithubURL(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldGithubURL,
+		})
+		_node.GithubURL = value
+	}
+	if value, ok := pc.mutation.DevTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: product.FieldDevTime,
+		})
+		_node.DevTime = value
+	}
+	if value, ok := pc.mutation.Created(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: product.FieldCreated,
+		})
+		_node.Created = value
+	}
+	if value, ok := pc.mutation.Modified(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: product.FieldModified,
+		})
+		_node.Modified = value
+	}
 	return _node, _spec
 }
 
@@ -138,6 +356,7 @@ func (pcb *ProductCreateBulk) Save(ctx context.Context) ([]*Product, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProductMutation)
 				if !ok {
@@ -164,9 +383,9 @@ func (pcb *ProductCreateBulk) Save(ctx context.Context) ([]*Product, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = uint32(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

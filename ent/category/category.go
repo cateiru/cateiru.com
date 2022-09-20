@@ -2,11 +2,25 @@
 
 package category
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the category type in the database.
 	Label = "category"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldNameJa holds the string denoting the name_ja field in the database.
+	FieldNameJa = "name_ja"
+	// FieldEmoji holds the string denoting the emoji field in the database.
+	FieldEmoji = "emoji"
+	// FieldCreated holds the string denoting the created field in the database.
+	FieldCreated = "created"
+	// FieldModified holds the string denoting the modified field in the database.
+	FieldModified = "modified"
 	// Table holds the table name of the category in the database.
 	Table = "categories"
 )
@@ -14,6 +28,11 @@ const (
 // Columns holds all SQL columns for category fields.
 var Columns = []string{
 	FieldID,
+	FieldName,
+	FieldNameJa,
+	FieldEmoji,
+	FieldCreated,
+	FieldModified,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -25,3 +44,12 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultCreated holds the default value on creation for the "created" field.
+	DefaultCreated func() time.Time
+	// DefaultModified holds the default value on creation for the "modified" field.
+	DefaultModified func() time.Time
+	// UpdateDefaultModified holds the default value on update for the "modified" field.
+	UpdateDefaultModified func() time.Time
+)

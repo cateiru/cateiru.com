@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -57,6 +58,26 @@ func (lu *LocationUpdate) SetAddressJa(s string) *LocationUpdate {
 	return lu
 }
 
+// SetCreated sets the "created" field.
+func (lu *LocationUpdate) SetCreated(t time.Time) *LocationUpdate {
+	lu.mutation.SetCreated(t)
+	return lu
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (lu *LocationUpdate) SetNillableCreated(t *time.Time) *LocationUpdate {
+	if t != nil {
+		lu.SetCreated(*t)
+	}
+	return lu
+}
+
+// SetModified sets the "modified" field.
+func (lu *LocationUpdate) SetModified(t time.Time) *LocationUpdate {
+	lu.mutation.SetModified(t)
+	return lu
+}
+
 // Mutation returns the LocationMutation object of the builder.
 func (lu *LocationUpdate) Mutation() *LocationMutation {
 	return lu.mutation
@@ -68,6 +89,7 @@ func (lu *LocationUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	lu.defaults()
 	if len(lu.hooks) == 0 {
 		if err = lu.check(); err != nil {
 			return 0, err
@@ -119,6 +141,14 @@ func (lu *LocationUpdate) Exec(ctx context.Context) error {
 func (lu *LocationUpdate) ExecX(ctx context.Context) {
 	if err := lu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (lu *LocationUpdate) defaults() {
+	if _, ok := lu.mutation.Modified(); !ok {
+		v := location.UpdateDefaultModified()
+		lu.mutation.SetModified(v)
 	}
 }
 
@@ -185,6 +215,20 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: location.FieldAddressJa,
 		})
 	}
+	if value, ok := lu.mutation.Created(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: location.FieldCreated,
+		})
+	}
+	if value, ok := lu.mutation.Modified(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: location.FieldModified,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{location.Label}
@@ -234,6 +278,26 @@ func (luo *LocationUpdateOne) SetAddressJa(s string) *LocationUpdateOne {
 	return luo
 }
 
+// SetCreated sets the "created" field.
+func (luo *LocationUpdateOne) SetCreated(t time.Time) *LocationUpdateOne {
+	luo.mutation.SetCreated(t)
+	return luo
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (luo *LocationUpdateOne) SetNillableCreated(t *time.Time) *LocationUpdateOne {
+	if t != nil {
+		luo.SetCreated(*t)
+	}
+	return luo
+}
+
+// SetModified sets the "modified" field.
+func (luo *LocationUpdateOne) SetModified(t time.Time) *LocationUpdateOne {
+	luo.mutation.SetModified(t)
+	return luo
+}
+
 // Mutation returns the LocationMutation object of the builder.
 func (luo *LocationUpdateOne) Mutation() *LocationMutation {
 	return luo.mutation
@@ -252,6 +316,7 @@ func (luo *LocationUpdateOne) Save(ctx context.Context) (*Location, error) {
 		err  error
 		node *Location
 	)
+	luo.defaults()
 	if len(luo.hooks) == 0 {
 		if err = luo.check(); err != nil {
 			return nil, err
@@ -309,6 +374,14 @@ func (luo *LocationUpdateOne) Exec(ctx context.Context) error {
 func (luo *LocationUpdateOne) ExecX(ctx context.Context) {
 	if err := luo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (luo *LocationUpdateOne) defaults() {
+	if _, ok := luo.mutation.Modified(); !ok {
+		v := location.UpdateDefaultModified()
+		luo.mutation.SetModified(v)
 	}
 }
 
@@ -390,6 +463,20 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 			Type:   field.TypeString,
 			Value:  value,
 			Column: location.FieldAddressJa,
+		})
+	}
+	if value, ok := luo.mutation.Created(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: location.FieldCreated,
+		})
+	}
+	if value, ok := luo.mutation.Modified(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: location.FieldModified,
 		})
 	}
 	_node = &Location{config: luo.config}

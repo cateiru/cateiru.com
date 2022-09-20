@@ -1,8 +1,11 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/field"
 )
 
@@ -39,6 +42,28 @@ func (Location) Fields() []ent.Field {
 		field.String("address_ja").SchemaType(map[string]string{
 			dialect.MySQL: "text",
 		}),
+
+		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+		field.Time("created").
+			SchemaType(map[string]string{
+				dialect.MySQL: "datetime",
+			}).
+			Default(time.Now).
+			Annotations(entsql.Annotation{
+				Default: "CURRENT_TIMESTAMP",
+			}),
+
+		// `modified` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+		field.Time("modified").
+			SchemaType(map[string]string{
+				dialect.MySQL: "datetime",
+			}).
+			Default(time.Now).
+			UpdateDefault(time.Now).
+			Annotations(entsql.Annotation{
+				// FIXME: If DDL is available, use it. ref.https://github.com/ent/ent/issues/558
+				Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+			}),
 	}
 }
 

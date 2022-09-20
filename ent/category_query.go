@@ -83,8 +83,8 @@ func (cq *CategoryQuery) FirstX(ctx context.Context) *Category {
 
 // FirstID returns the first Category ID from the query.
 // Returns a *NotFoundError when no Category ID was found.
-func (cq *CategoryQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (cq *CategoryQuery) FirstID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = cq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (cq *CategoryQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cq *CategoryQuery) FirstIDX(ctx context.Context) int {
+func (cq *CategoryQuery) FirstIDX(ctx context.Context) uint32 {
 	id, err := cq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (cq *CategoryQuery) OnlyX(ctx context.Context) *Category {
 // OnlyID is like Only, but returns the only Category ID in the query.
 // Returns a *NotSingularError when more than one Category ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (cq *CategoryQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (cq *CategoryQuery) OnlyID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = cq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (cq *CategoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cq *CategoryQuery) OnlyIDX(ctx context.Context) int {
+func (cq *CategoryQuery) OnlyIDX(ctx context.Context) uint32 {
 	id, err := cq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (cq *CategoryQuery) AllX(ctx context.Context) []*Category {
 }
 
 // IDs executes the query and returns a list of Category IDs.
-func (cq *CategoryQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (cq *CategoryQuery) IDs(ctx context.Context) ([]uint32, error) {
+	var ids []uint32
 	if err := cq.Select(category.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (cq *CategoryQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cq *CategoryQuery) IDsX(ctx context.Context) []int {
+func (cq *CategoryQuery) IDsX(ctx context.Context) []uint32 {
 	ids, err := cq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +249,18 @@ func (cq *CategoryQuery) Clone() *CategoryQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Category.Query().
+//		GroupBy(category.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (cq *CategoryQuery) GroupBy(field string, fields ...string) *CategoryGroupBy {
 	grbuild := &CategoryGroupBy{config: cq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (cq *CategoryQuery) GroupBy(field string, fields ...string) *CategoryGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Category.Query().
+//		Select(category.FieldName).
+//		Scan(ctx, &v)
 func (cq *CategoryQuery) Select(fields ...string) *CategorySelect {
 	cq.fields = append(cq.fields, fields...)
 	selbuild := &CategorySelect{CategoryQuery: cq}
@@ -337,7 +359,7 @@ func (cq *CategoryQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   category.Table,
 			Columns: category.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: category.FieldID,
 			},
 		},

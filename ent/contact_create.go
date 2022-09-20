@@ -4,7 +4,9 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,94 @@ type ContactCreate struct {
 	hooks    []Hook
 }
 
+// SetToUserID sets the "to_user_id" field.
+func (cc *ContactCreate) SetToUserID(u uint32) *ContactCreate {
+	cc.mutation.SetToUserID(u)
+	return cc
+}
+
+// SetTitle sets the "title" field.
+func (cc *ContactCreate) SetTitle(s string) *ContactCreate {
+	cc.mutation.SetTitle(s)
+	return cc
+}
+
+// SetDetail sets the "detail" field.
+func (cc *ContactCreate) SetDetail(s string) *ContactCreate {
+	cc.mutation.SetDetail(s)
+	return cc
+}
+
+// SetMail sets the "mail" field.
+func (cc *ContactCreate) SetMail(s string) *ContactCreate {
+	cc.mutation.SetMail(s)
+	return cc
+}
+
+// SetCategory sets the "category" field.
+func (cc *ContactCreate) SetCategory(s string) *ContactCreate {
+	cc.mutation.SetCategory(s)
+	return cc
+}
+
+// SetIP sets the "ip" field.
+func (cc *ContactCreate) SetIP(s string) *ContactCreate {
+	cc.mutation.SetIP(s)
+	return cc
+}
+
+// SetDeviceName sets the "device_name" field.
+func (cc *ContactCreate) SetDeviceName(s string) *ContactCreate {
+	cc.mutation.SetDeviceName(s)
+	return cc
+}
+
+// SetOs sets the "os" field.
+func (cc *ContactCreate) SetOs(s string) *ContactCreate {
+	cc.mutation.SetOs(s)
+	return cc
+}
+
+// SetBrowserName sets the "browser_name" field.
+func (cc *ContactCreate) SetBrowserName(s string) *ContactCreate {
+	cc.mutation.SetBrowserName(s)
+	return cc
+}
+
+// SetCreated sets the "created" field.
+func (cc *ContactCreate) SetCreated(t time.Time) *ContactCreate {
+	cc.mutation.SetCreated(t)
+	return cc
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableCreated(t *time.Time) *ContactCreate {
+	if t != nil {
+		cc.SetCreated(*t)
+	}
+	return cc
+}
+
+// SetModified sets the "modified" field.
+func (cc *ContactCreate) SetModified(t time.Time) *ContactCreate {
+	cc.mutation.SetModified(t)
+	return cc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableModified(t *time.Time) *ContactCreate {
+	if t != nil {
+		cc.SetModified(*t)
+	}
+	return cc
+}
+
+// SetID sets the "id" field.
+func (cc *ContactCreate) SetID(u uint32) *ContactCreate {
+	cc.mutation.SetID(u)
+	return cc
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (cc *ContactCreate) Mutation() *ContactMutation {
 	return cc.mutation
@@ -29,6 +119,7 @@ func (cc *ContactCreate) Save(ctx context.Context) (*Contact, error) {
 		err  error
 		node *Contact
 	)
+	cc.defaults()
 	if len(cc.hooks) == 0 {
 		if err = cc.check(); err != nil {
 			return nil, err
@@ -92,8 +183,53 @@ func (cc *ContactCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (cc *ContactCreate) defaults() {
+	if _, ok := cc.mutation.Created(); !ok {
+		v := contact.DefaultCreated()
+		cc.mutation.SetCreated(v)
+	}
+	if _, ok := cc.mutation.Modified(); !ok {
+		v := contact.DefaultModified()
+		cc.mutation.SetModified(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (cc *ContactCreate) check() error {
+	if _, ok := cc.mutation.ToUserID(); !ok {
+		return &ValidationError{Name: "to_user_id", err: errors.New(`ent: missing required field "Contact.to_user_id"`)}
+	}
+	if _, ok := cc.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Contact.title"`)}
+	}
+	if _, ok := cc.mutation.Detail(); !ok {
+		return &ValidationError{Name: "detail", err: errors.New(`ent: missing required field "Contact.detail"`)}
+	}
+	if _, ok := cc.mutation.Mail(); !ok {
+		return &ValidationError{Name: "mail", err: errors.New(`ent: missing required field "Contact.mail"`)}
+	}
+	if _, ok := cc.mutation.Category(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`ent: missing required field "Contact.category"`)}
+	}
+	if _, ok := cc.mutation.IP(); !ok {
+		return &ValidationError{Name: "ip", err: errors.New(`ent: missing required field "Contact.ip"`)}
+	}
+	if _, ok := cc.mutation.DeviceName(); !ok {
+		return &ValidationError{Name: "device_name", err: errors.New(`ent: missing required field "Contact.device_name"`)}
+	}
+	if _, ok := cc.mutation.Os(); !ok {
+		return &ValidationError{Name: "os", err: errors.New(`ent: missing required field "Contact.os"`)}
+	}
+	if _, ok := cc.mutation.BrowserName(); !ok {
+		return &ValidationError{Name: "browser_name", err: errors.New(`ent: missing required field "Contact.browser_name"`)}
+	}
+	if _, ok := cc.mutation.Created(); !ok {
+		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Contact.created"`)}
+	}
+	if _, ok := cc.mutation.Modified(); !ok {
+		return &ValidationError{Name: "modified", err: errors.New(`ent: missing required field "Contact.modified"`)}
+	}
 	return nil
 }
 
@@ -105,8 +241,10 @@ func (cc *ContactCreate) sqlSave(ctx context.Context) (*Contact, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint32(id)
+	}
 	return _node, nil
 }
 
@@ -116,11 +254,103 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: contact.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: contact.FieldID,
 			},
 		}
 	)
+	if id, ok := cc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := cc.mutation.ToUserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: contact.FieldToUserID,
+		})
+		_node.ToUserID = value
+	}
+	if value, ok := cc.mutation.Title(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldTitle,
+		})
+		_node.Title = value
+	}
+	if value, ok := cc.mutation.Detail(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldDetail,
+		})
+		_node.Detail = value
+	}
+	if value, ok := cc.mutation.Mail(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldMail,
+		})
+		_node.Mail = value
+	}
+	if value, ok := cc.mutation.Category(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCategory,
+		})
+		_node.Category = value
+	}
+	if value, ok := cc.mutation.IP(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldIP,
+		})
+		_node.IP = value
+	}
+	if value, ok := cc.mutation.DeviceName(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldDeviceName,
+		})
+		_node.DeviceName = value
+	}
+	if value, ok := cc.mutation.Os(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldOs,
+		})
+		_node.Os = value
+	}
+	if value, ok := cc.mutation.BrowserName(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldBrowserName,
+		})
+		_node.BrowserName = value
+	}
+	if value, ok := cc.mutation.Created(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: contact.FieldCreated,
+		})
+		_node.Created = value
+	}
+	if value, ok := cc.mutation.Modified(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: contact.FieldModified,
+		})
+		_node.Modified = value
+	}
 	return _node, _spec
 }
 
@@ -138,6 +368,7 @@ func (ccb *ContactCreateBulk) Save(ctx context.Context) ([]*Contact, error) {
 	for i := range ccb.builders {
 		func(i int, root context.Context) {
 			builder := ccb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ContactMutation)
 				if !ok {
@@ -164,9 +395,9 @@ func (ccb *ContactCreateBulk) Save(ctx context.Context) ([]*Contact, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = uint32(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

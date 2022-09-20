@@ -25,7 +25,8 @@ func (Biography) Fields() []ent.Field {
 		field.Uint32("user_id"),
 
 		// `is_public` BOOLEAN NOT NULL DEFAULT 0
-		field.Bool("is_public").Default(false),
+		field.Bool("is_public").
+			Default(false),
 
 		// `location_id` INT UNSIGNED NOT NULL
 		field.Uint32("location_id"),
@@ -37,14 +38,16 @@ func (Biography) Fields() []ent.Field {
 			}),
 
 		// `join` DATE NOT NULL
-		field.Time("join").SchemaType(map[string]string{
-			dialect.MySQL: "date",
-		}),
+		field.Time("join").
+			SchemaType(map[string]string{
+				dialect.MySQL: "date",
+			}),
 
 		// `leave` DATE NOT NULL
-		field.Time("leave").SchemaType(map[string]string{
-			dialect.MySQL: "date",
-		}),
+		field.Time("leave").
+			SchemaType(map[string]string{
+				dialect.MySQL: "date",
+			}),
 
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 		field.Time("created").

@@ -83,8 +83,8 @@ func (lq *LinkQuery) FirstX(ctx context.Context) *Link {
 
 // FirstID returns the first Link ID from the query.
 // Returns a *NotFoundError when no Link ID was found.
-func (lq *LinkQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (lq *LinkQuery) FirstID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = lq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (lq *LinkQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (lq *LinkQuery) FirstIDX(ctx context.Context) int {
+func (lq *LinkQuery) FirstIDX(ctx context.Context) uint32 {
 	id, err := lq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (lq *LinkQuery) OnlyX(ctx context.Context) *Link {
 // OnlyID is like Only, but returns the only Link ID in the query.
 // Returns a *NotSingularError when more than one Link ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (lq *LinkQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (lq *LinkQuery) OnlyID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = lq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (lq *LinkQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (lq *LinkQuery) OnlyIDX(ctx context.Context) int {
+func (lq *LinkQuery) OnlyIDX(ctx context.Context) uint32 {
 	id, err := lq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (lq *LinkQuery) AllX(ctx context.Context) []*Link {
 }
 
 // IDs executes the query and returns a list of Link IDs.
-func (lq *LinkQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (lq *LinkQuery) IDs(ctx context.Context) ([]uint32, error) {
+	var ids []uint32
 	if err := lq.Select(link.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (lq *LinkQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (lq *LinkQuery) IDsX(ctx context.Context) []int {
+func (lq *LinkQuery) IDsX(ctx context.Context) []uint32 {
 	ids, err := lq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -249,6 +249,18 @@ func (lq *LinkQuery) Clone() *LinkQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		UserID uint32 `json:"user_id,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Link.Query().
+//		GroupBy(link.FieldUserID).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (lq *LinkQuery) GroupBy(field string, fields ...string) *LinkGroupBy {
 	grbuild := &LinkGroupBy{config: lq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (lq *LinkQuery) GroupBy(field string, fields ...string) *LinkGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		UserID uint32 `json:"user_id,omitempty"`
+//	}
+//
+//	client.Link.Query().
+//		Select(link.FieldUserID).
+//		Scan(ctx, &v)
 func (lq *LinkQuery) Select(fields ...string) *LinkSelect {
 	lq.fields = append(lq.fields, fields...)
 	selbuild := &LinkSelect{LinkQuery: lq}
@@ -337,7 +359,7 @@ func (lq *LinkQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   link.Table,
 			Columns: link.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: link.FieldID,
 			},
 		},

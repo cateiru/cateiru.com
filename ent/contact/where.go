@@ -3,33 +3,35 @@
 package contact
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateir.com/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Contact {
+func ID(id uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Contact {
+func IDEQ(id uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldID), id))
 	})
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Contact {
+func IDNEQ(id uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldID), id))
 	})
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Contact {
+func IDIn(ids ...uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -40,7 +42,7 @@ func IDIn(ids ...int) predicate.Contact {
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Contact {
+func IDNotIn(ids ...uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		v := make([]interface{}, len(ids))
 		for i := range v {
@@ -51,30 +53,1091 @@ func IDNotIn(ids ...int) predicate.Contact {
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Contact {
+func IDGT(id uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldID), id))
 	})
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Contact {
+func IDGTE(id uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldID), id))
 	})
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Contact {
+func IDLT(id uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldID), id))
 	})
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Contact {
+func IDLTE(id uint32) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldID), id))
+	})
+}
+
+// ToUserID applies equality check predicate on the "to_user_id" field. It's identical to ToUserIDEQ.
+func ToUserID(v uint32) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldToUserID), v))
+	})
+}
+
+// Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
+func Title(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTitle), v))
+	})
+}
+
+// Detail applies equality check predicate on the "detail" field. It's identical to DetailEQ.
+func Detail(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDetail), v))
+	})
+}
+
+// Mail applies equality check predicate on the "mail" field. It's identical to MailEQ.
+func Mail(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldMail), v))
+	})
+}
+
+// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
+func Category(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCategory), v))
+	})
+}
+
+// IP applies equality check predicate on the "ip" field. It's identical to IPEQ.
+func IP(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldIP), v))
+	})
+}
+
+// DeviceName applies equality check predicate on the "device_name" field. It's identical to DeviceNameEQ.
+func DeviceName(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDeviceName), v))
+	})
+}
+
+// Os applies equality check predicate on the "os" field. It's identical to OsEQ.
+func Os(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldOs), v))
+	})
+}
+
+// BrowserName applies equality check predicate on the "browser_name" field. It's identical to BrowserNameEQ.
+func BrowserName(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBrowserName), v))
+	})
+}
+
+// Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
+func Created(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreated), v))
+	})
+}
+
+// Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
+func Modified(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldModified), v))
+	})
+}
+
+// ToUserIDEQ applies the EQ predicate on the "to_user_id" field.
+func ToUserIDEQ(v uint32) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldToUserID), v))
+	})
+}
+
+// ToUserIDNEQ applies the NEQ predicate on the "to_user_id" field.
+func ToUserIDNEQ(v uint32) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldToUserID), v))
+	})
+}
+
+// ToUserIDIn applies the In predicate on the "to_user_id" field.
+func ToUserIDIn(vs ...uint32) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldToUserID), v...))
+	})
+}
+
+// ToUserIDNotIn applies the NotIn predicate on the "to_user_id" field.
+func ToUserIDNotIn(vs ...uint32) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldToUserID), v...))
+	})
+}
+
+// ToUserIDGT applies the GT predicate on the "to_user_id" field.
+func ToUserIDGT(v uint32) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldToUserID), v))
+	})
+}
+
+// ToUserIDGTE applies the GTE predicate on the "to_user_id" field.
+func ToUserIDGTE(v uint32) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldToUserID), v))
+	})
+}
+
+// ToUserIDLT applies the LT predicate on the "to_user_id" field.
+func ToUserIDLT(v uint32) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldToUserID), v))
+	})
+}
+
+// ToUserIDLTE applies the LTE predicate on the "to_user_id" field.
+func ToUserIDLTE(v uint32) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldToUserID), v))
+	})
+}
+
+// TitleEQ applies the EQ predicate on the "title" field.
+func TitleEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTitle), v))
+	})
+}
+
+// TitleNEQ applies the NEQ predicate on the "title" field.
+func TitleNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldTitle), v))
+	})
+}
+
+// TitleIn applies the In predicate on the "title" field.
+func TitleIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldTitle), v...))
+	})
+}
+
+// TitleNotIn applies the NotIn predicate on the "title" field.
+func TitleNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldTitle), v...))
+	})
+}
+
+// TitleGT applies the GT predicate on the "title" field.
+func TitleGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldTitle), v))
+	})
+}
+
+// TitleGTE applies the GTE predicate on the "title" field.
+func TitleGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldTitle), v))
+	})
+}
+
+// TitleLT applies the LT predicate on the "title" field.
+func TitleLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldTitle), v))
+	})
+}
+
+// TitleLTE applies the LTE predicate on the "title" field.
+func TitleLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldTitle), v))
+	})
+}
+
+// TitleContains applies the Contains predicate on the "title" field.
+func TitleContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldTitle), v))
+	})
+}
+
+// TitleHasPrefix applies the HasPrefix predicate on the "title" field.
+func TitleHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldTitle), v))
+	})
+}
+
+// TitleHasSuffix applies the HasSuffix predicate on the "title" field.
+func TitleHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldTitle), v))
+	})
+}
+
+// TitleEqualFold applies the EqualFold predicate on the "title" field.
+func TitleEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldTitle), v))
+	})
+}
+
+// TitleContainsFold applies the ContainsFold predicate on the "title" field.
+func TitleContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldTitle), v))
+	})
+}
+
+// DetailEQ applies the EQ predicate on the "detail" field.
+func DetailEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDetail), v))
+	})
+}
+
+// DetailNEQ applies the NEQ predicate on the "detail" field.
+func DetailNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDetail), v))
+	})
+}
+
+// DetailIn applies the In predicate on the "detail" field.
+func DetailIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldDetail), v...))
+	})
+}
+
+// DetailNotIn applies the NotIn predicate on the "detail" field.
+func DetailNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldDetail), v...))
+	})
+}
+
+// DetailGT applies the GT predicate on the "detail" field.
+func DetailGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDetail), v))
+	})
+}
+
+// DetailGTE applies the GTE predicate on the "detail" field.
+func DetailGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDetail), v))
+	})
+}
+
+// DetailLT applies the LT predicate on the "detail" field.
+func DetailLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDetail), v))
+	})
+}
+
+// DetailLTE applies the LTE predicate on the "detail" field.
+func DetailLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDetail), v))
+	})
+}
+
+// DetailContains applies the Contains predicate on the "detail" field.
+func DetailContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldDetail), v))
+	})
+}
+
+// DetailHasPrefix applies the HasPrefix predicate on the "detail" field.
+func DetailHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldDetail), v))
+	})
+}
+
+// DetailHasSuffix applies the HasSuffix predicate on the "detail" field.
+func DetailHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldDetail), v))
+	})
+}
+
+// DetailEqualFold applies the EqualFold predicate on the "detail" field.
+func DetailEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldDetail), v))
+	})
+}
+
+// DetailContainsFold applies the ContainsFold predicate on the "detail" field.
+func DetailContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldDetail), v))
+	})
+}
+
+// MailEQ applies the EQ predicate on the "mail" field.
+func MailEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldMail), v))
+	})
+}
+
+// MailNEQ applies the NEQ predicate on the "mail" field.
+func MailNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldMail), v))
+	})
+}
+
+// MailIn applies the In predicate on the "mail" field.
+func MailIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldMail), v...))
+	})
+}
+
+// MailNotIn applies the NotIn predicate on the "mail" field.
+func MailNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldMail), v...))
+	})
+}
+
+// MailGT applies the GT predicate on the "mail" field.
+func MailGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldMail), v))
+	})
+}
+
+// MailGTE applies the GTE predicate on the "mail" field.
+func MailGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldMail), v))
+	})
+}
+
+// MailLT applies the LT predicate on the "mail" field.
+func MailLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldMail), v))
+	})
+}
+
+// MailLTE applies the LTE predicate on the "mail" field.
+func MailLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldMail), v))
+	})
+}
+
+// MailContains applies the Contains predicate on the "mail" field.
+func MailContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldMail), v))
+	})
+}
+
+// MailHasPrefix applies the HasPrefix predicate on the "mail" field.
+func MailHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldMail), v))
+	})
+}
+
+// MailHasSuffix applies the HasSuffix predicate on the "mail" field.
+func MailHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldMail), v))
+	})
+}
+
+// MailEqualFold applies the EqualFold predicate on the "mail" field.
+func MailEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldMail), v))
+	})
+}
+
+// MailContainsFold applies the ContainsFold predicate on the "mail" field.
+func MailContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldMail), v))
+	})
+}
+
+// CategoryEQ applies the EQ predicate on the "category" field.
+func CategoryEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryNEQ applies the NEQ predicate on the "category" field.
+func CategoryNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryIn applies the In predicate on the "category" field.
+func CategoryIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCategory), v...))
+	})
+}
+
+// CategoryNotIn applies the NotIn predicate on the "category" field.
+func CategoryNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCategory), v...))
+	})
+}
+
+// CategoryGT applies the GT predicate on the "category" field.
+func CategoryGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryGTE applies the GTE predicate on the "category" field.
+func CategoryGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryLT applies the LT predicate on the "category" field.
+func CategoryLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryLTE applies the LTE predicate on the "category" field.
+func CategoryLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryContains applies the Contains predicate on the "category" field.
+func CategoryContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
+func CategoryHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
+func CategoryHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryEqualFold applies the EqualFold predicate on the "category" field.
+func CategoryEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldCategory), v))
+	})
+}
+
+// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
+func CategoryContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldCategory), v))
+	})
+}
+
+// IPEQ applies the EQ predicate on the "ip" field.
+func IPEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldIP), v))
+	})
+}
+
+// IPNEQ applies the NEQ predicate on the "ip" field.
+func IPNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldIP), v))
+	})
+}
+
+// IPIn applies the In predicate on the "ip" field.
+func IPIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldIP), v...))
+	})
+}
+
+// IPNotIn applies the NotIn predicate on the "ip" field.
+func IPNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldIP), v...))
+	})
+}
+
+// IPGT applies the GT predicate on the "ip" field.
+func IPGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldIP), v))
+	})
+}
+
+// IPGTE applies the GTE predicate on the "ip" field.
+func IPGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldIP), v))
+	})
+}
+
+// IPLT applies the LT predicate on the "ip" field.
+func IPLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldIP), v))
+	})
+}
+
+// IPLTE applies the LTE predicate on the "ip" field.
+func IPLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldIP), v))
+	})
+}
+
+// IPContains applies the Contains predicate on the "ip" field.
+func IPContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldIP), v))
+	})
+}
+
+// IPHasPrefix applies the HasPrefix predicate on the "ip" field.
+func IPHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldIP), v))
+	})
+}
+
+// IPHasSuffix applies the HasSuffix predicate on the "ip" field.
+func IPHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldIP), v))
+	})
+}
+
+// IPEqualFold applies the EqualFold predicate on the "ip" field.
+func IPEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldIP), v))
+	})
+}
+
+// IPContainsFold applies the ContainsFold predicate on the "ip" field.
+func IPContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldIP), v))
+	})
+}
+
+// DeviceNameEQ applies the EQ predicate on the "device_name" field.
+func DeviceNameEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameNEQ applies the NEQ predicate on the "device_name" field.
+func DeviceNameNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameIn applies the In predicate on the "device_name" field.
+func DeviceNameIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldDeviceName), v...))
+	})
+}
+
+// DeviceNameNotIn applies the NotIn predicate on the "device_name" field.
+func DeviceNameNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldDeviceName), v...))
+	})
+}
+
+// DeviceNameGT applies the GT predicate on the "device_name" field.
+func DeviceNameGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameGTE applies the GTE predicate on the "device_name" field.
+func DeviceNameGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameLT applies the LT predicate on the "device_name" field.
+func DeviceNameLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameLTE applies the LTE predicate on the "device_name" field.
+func DeviceNameLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameContains applies the Contains predicate on the "device_name" field.
+func DeviceNameContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameHasPrefix applies the HasPrefix predicate on the "device_name" field.
+func DeviceNameHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameHasSuffix applies the HasSuffix predicate on the "device_name" field.
+func DeviceNameHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameEqualFold applies the EqualFold predicate on the "device_name" field.
+func DeviceNameEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldDeviceName), v))
+	})
+}
+
+// DeviceNameContainsFold applies the ContainsFold predicate on the "device_name" field.
+func DeviceNameContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldDeviceName), v))
+	})
+}
+
+// OsEQ applies the EQ predicate on the "os" field.
+func OsEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldOs), v))
+	})
+}
+
+// OsNEQ applies the NEQ predicate on the "os" field.
+func OsNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldOs), v))
+	})
+}
+
+// OsIn applies the In predicate on the "os" field.
+func OsIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldOs), v...))
+	})
+}
+
+// OsNotIn applies the NotIn predicate on the "os" field.
+func OsNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldOs), v...))
+	})
+}
+
+// OsGT applies the GT predicate on the "os" field.
+func OsGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldOs), v))
+	})
+}
+
+// OsGTE applies the GTE predicate on the "os" field.
+func OsGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldOs), v))
+	})
+}
+
+// OsLT applies the LT predicate on the "os" field.
+func OsLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldOs), v))
+	})
+}
+
+// OsLTE applies the LTE predicate on the "os" field.
+func OsLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldOs), v))
+	})
+}
+
+// OsContains applies the Contains predicate on the "os" field.
+func OsContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldOs), v))
+	})
+}
+
+// OsHasPrefix applies the HasPrefix predicate on the "os" field.
+func OsHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldOs), v))
+	})
+}
+
+// OsHasSuffix applies the HasSuffix predicate on the "os" field.
+func OsHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldOs), v))
+	})
+}
+
+// OsEqualFold applies the EqualFold predicate on the "os" field.
+func OsEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldOs), v))
+	})
+}
+
+// OsContainsFold applies the ContainsFold predicate on the "os" field.
+func OsContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldOs), v))
+	})
+}
+
+// BrowserNameEQ applies the EQ predicate on the "browser_name" field.
+func BrowserNameEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameNEQ applies the NEQ predicate on the "browser_name" field.
+func BrowserNameNEQ(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameIn applies the In predicate on the "browser_name" field.
+func BrowserNameIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldBrowserName), v...))
+	})
+}
+
+// BrowserNameNotIn applies the NotIn predicate on the "browser_name" field.
+func BrowserNameNotIn(vs ...string) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldBrowserName), v...))
+	})
+}
+
+// BrowserNameGT applies the GT predicate on the "browser_name" field.
+func BrowserNameGT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameGTE applies the GTE predicate on the "browser_name" field.
+func BrowserNameGTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameLT applies the LT predicate on the "browser_name" field.
+func BrowserNameLT(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameLTE applies the LTE predicate on the "browser_name" field.
+func BrowserNameLTE(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameContains applies the Contains predicate on the "browser_name" field.
+func BrowserNameContains(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameHasPrefix applies the HasPrefix predicate on the "browser_name" field.
+func BrowserNameHasPrefix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameHasSuffix applies the HasSuffix predicate on the "browser_name" field.
+func BrowserNameHasSuffix(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameEqualFold applies the EqualFold predicate on the "browser_name" field.
+func BrowserNameEqualFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldBrowserName), v))
+	})
+}
+
+// BrowserNameContainsFold applies the ContainsFold predicate on the "browser_name" field.
+func BrowserNameContainsFold(v string) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldBrowserName), v))
+	})
+}
+
+// CreatedEQ applies the EQ predicate on the "created" field.
+func CreatedEQ(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedNEQ applies the NEQ predicate on the "created" field.
+func CreatedNEQ(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedIn applies the In predicate on the "created" field.
+func CreatedIn(vs ...time.Time) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCreated), v...))
+	})
+}
+
+// CreatedNotIn applies the NotIn predicate on the "created" field.
+func CreatedNotIn(vs ...time.Time) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCreated), v...))
+	})
+}
+
+// CreatedGT applies the GT predicate on the "created" field.
+func CreatedGT(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedGTE applies the GTE predicate on the "created" field.
+func CreatedGTE(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedLT applies the LT predicate on the "created" field.
+func CreatedLT(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedLTE applies the LTE predicate on the "created" field.
+func CreatedLTE(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCreated), v))
+	})
+}
+
+// ModifiedEQ applies the EQ predicate on the "modified" field.
+func ModifiedEQ(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedNEQ applies the NEQ predicate on the "modified" field.
+func ModifiedNEQ(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedIn applies the In predicate on the "modified" field.
+func ModifiedIn(vs ...time.Time) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldModified), v...))
+	})
+}
+
+// ModifiedNotIn applies the NotIn predicate on the "modified" field.
+func ModifiedNotIn(vs ...time.Time) predicate.Contact {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldModified), v...))
+	})
+}
+
+// ModifiedGT applies the GT predicate on the "modified" field.
+func ModifiedGT(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedGTE applies the GTE predicate on the "modified" field.
+func ModifiedGTE(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedLT applies the LT predicate on the "modified" field.
+func ModifiedLT(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedLTE applies the LTE predicate on the "modified" field.
+func ModifiedLTE(v time.Time) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldModified), v))
 	})
 }
 

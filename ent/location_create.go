@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -49,6 +50,34 @@ func (lc *LocationCreate) SetAddressJa(s string) *LocationCreate {
 	return lc
 }
 
+// SetCreated sets the "created" field.
+func (lc *LocationCreate) SetCreated(t time.Time) *LocationCreate {
+	lc.mutation.SetCreated(t)
+	return lc
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (lc *LocationCreate) SetNillableCreated(t *time.Time) *LocationCreate {
+	if t != nil {
+		lc.SetCreated(*t)
+	}
+	return lc
+}
+
+// SetModified sets the "modified" field.
+func (lc *LocationCreate) SetModified(t time.Time) *LocationCreate {
+	lc.mutation.SetModified(t)
+	return lc
+}
+
+// SetNillableModified sets the "modified" field if the given value is not nil.
+func (lc *LocationCreate) SetNillableModified(t *time.Time) *LocationCreate {
+	if t != nil {
+		lc.SetModified(*t)
+	}
+	return lc
+}
+
 // SetID sets the "id" field.
 func (lc *LocationCreate) SetID(u uint32) *LocationCreate {
 	lc.mutation.SetID(u)
@@ -66,6 +95,7 @@ func (lc *LocationCreate) Save(ctx context.Context) (*Location, error) {
 		err  error
 		node *Location
 	)
+	lc.defaults()
 	if len(lc.hooks) == 0 {
 		if err = lc.check(); err != nil {
 			return nil, err
@@ -129,6 +159,18 @@ func (lc *LocationCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lc *LocationCreate) defaults() {
+	if _, ok := lc.mutation.Created(); !ok {
+		v := location.DefaultCreated()
+		lc.mutation.SetCreated(v)
+	}
+	if _, ok := lc.mutation.Modified(); !ok {
+		v := location.DefaultModified()
+		lc.mutation.SetModified(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (lc *LocationCreate) check() error {
 	if _, ok := lc.mutation.GetType(); !ok {
@@ -150,6 +192,12 @@ func (lc *LocationCreate) check() error {
 	}
 	if _, ok := lc.mutation.AddressJa(); !ok {
 		return &ValidationError{Name: "address_ja", err: errors.New(`ent: missing required field "Location.address_ja"`)}
+	}
+	if _, ok := lc.mutation.Created(); !ok {
+		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Location.created"`)}
+	}
+	if _, ok := lc.mutation.Modified(); !ok {
+		return &ValidationError{Name: "modified", err: errors.New(`ent: missing required field "Location.modified"`)}
 	}
 	return nil
 }
@@ -224,6 +272,22 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 		})
 		_node.AddressJa = value
 	}
+	if value, ok := lc.mutation.Created(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: location.FieldCreated,
+		})
+		_node.Created = value
+	}
+	if value, ok := lc.mutation.Modified(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: location.FieldModified,
+		})
+		_node.Modified = value
+	}
 	return _node, _spec
 }
 
@@ -241,6 +305,7 @@ func (lcb *LocationCreateBulk) Save(ctx context.Context) ([]*Location, error) {
 	for i := range lcb.builders {
 		func(i int, root context.Context) {
 			builder := lcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*LocationMutation)
 				if !ok {

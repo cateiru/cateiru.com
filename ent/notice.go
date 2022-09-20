@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateir.com/ent/notice"
@@ -12,9 +13,19 @@ import (
 
 // Notice is the model entity for the Notice schema.
 type Notice struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uint32 `json:"id,omitempty"`
+	// DiscordWebhook holds the value of the "discord_webhook" field.
+	DiscordWebhook string `json:"discord_webhook,omitempty"`
+	// SlackWebhook holds the value of the "slack_webhook" field.
+	SlackWebhook string `json:"slack_webhook,omitempty"`
+	// Mail holds the value of the "mail" field.
+	Mail string `json:"mail,omitempty"`
+	// Created holds the value of the "created" field.
+	Created time.Time `json:"created,omitempty"`
+	// Modified holds the value of the "modified" field.
+	Modified time.Time `json:"modified,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,6 +35,10 @@ func (*Notice) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case notice.FieldID:
 			values[i] = new(sql.NullInt64)
+		case notice.FieldDiscordWebhook, notice.FieldSlackWebhook, notice.FieldMail:
+			values[i] = new(sql.NullString)
+		case notice.FieldCreated, notice.FieldModified:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Notice", columns[i])
 		}
@@ -44,7 +59,37 @@ func (n *Notice) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			n.ID = int(value.Int64)
+			n.ID = uint32(value.Int64)
+		case notice.FieldDiscordWebhook:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field discord_webhook", values[i])
+			} else if value.Valid {
+				n.DiscordWebhook = value.String
+			}
+		case notice.FieldSlackWebhook:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field slack_webhook", values[i])
+			} else if value.Valid {
+				n.SlackWebhook = value.String
+			}
+		case notice.FieldMail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mail", values[i])
+			} else if value.Valid {
+				n.Mail = value.String
+			}
+		case notice.FieldCreated:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created", values[i])
+			} else if value.Valid {
+				n.Created = value.Time
+			}
+		case notice.FieldModified:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field modified", values[i])
+			} else if value.Valid {
+				n.Modified = value.Time
+			}
 		}
 	}
 	return nil
@@ -72,7 +117,21 @@ func (n *Notice) Unwrap() *Notice {
 func (n *Notice) String() string {
 	var builder strings.Builder
 	builder.WriteString("Notice(")
-	builder.WriteString(fmt.Sprintf("id=%v", n.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", n.ID))
+	builder.WriteString("discord_webhook=")
+	builder.WriteString(n.DiscordWebhook)
+	builder.WriteString(", ")
+	builder.WriteString("slack_webhook=")
+	builder.WriteString(n.SlackWebhook)
+	builder.WriteString(", ")
+	builder.WriteString("mail=")
+	builder.WriteString(n.Mail)
+	builder.WriteString(", ")
+	builder.WriteString("created=")
+	builder.WriteString(n.Created.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("modified=")
+	builder.WriteString(n.Modified.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

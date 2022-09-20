@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateir.com/ent/location"
@@ -25,6 +26,10 @@ type Location struct {
 	Address string `json:"address,omitempty"`
 	// AddressJa holds the value of the "address_ja" field.
 	AddressJa string `json:"address_ja,omitempty"`
+	// Created holds the value of the "created" field.
+	Created time.Time `json:"created,omitempty"`
+	// Modified holds the value of the "modified" field.
+	Modified time.Time `json:"modified,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -36,6 +41,8 @@ func (*Location) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case location.FieldType, location.FieldName, location.FieldNameJa, location.FieldAddress, location.FieldAddressJa:
 			values[i] = new(sql.NullString)
+		case location.FieldCreated, location.FieldModified:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Location", columns[i])
 		}
@@ -87,6 +94,18 @@ func (l *Location) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				l.AddressJa = value.String
 			}
+		case location.FieldCreated:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created", values[i])
+			} else if value.Valid {
+				l.Created = value.Time
+			}
+		case location.FieldModified:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field modified", values[i])
+			} else if value.Valid {
+				l.Modified = value.Time
+			}
 		}
 	}
 	return nil
@@ -129,6 +148,12 @@ func (l *Location) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("address_ja=")
 	builder.WriteString(l.AddressJa)
+	builder.WriteString(", ")
+	builder.WriteString("created=")
+	builder.WriteString(l.Created.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("modified=")
+	builder.WriteString(l.Modified.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

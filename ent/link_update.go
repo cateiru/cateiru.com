@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,76 @@ func (lu *LinkUpdate) Where(ps ...predicate.Link) *LinkUpdate {
 	return lu
 }
 
+// SetUserID sets the "user_id" field.
+func (lu *LinkUpdate) SetUserID(u uint32) *LinkUpdate {
+	lu.mutation.ResetUserID()
+	lu.mutation.SetUserID(u)
+	return lu
+}
+
+// AddUserID adds u to the "user_id" field.
+func (lu *LinkUpdate) AddUserID(u int32) *LinkUpdate {
+	lu.mutation.AddUserID(u)
+	return lu
+}
+
+// SetName sets the "name" field.
+func (lu *LinkUpdate) SetName(s string) *LinkUpdate {
+	lu.mutation.SetName(s)
+	return lu
+}
+
+// SetNameJa sets the "name_ja" field.
+func (lu *LinkUpdate) SetNameJa(s string) *LinkUpdate {
+	lu.mutation.SetNameJa(s)
+	return lu
+}
+
+// SetSiteURL sets the "site_url" field.
+func (lu *LinkUpdate) SetSiteURL(s string) *LinkUpdate {
+	lu.mutation.SetSiteURL(s)
+	return lu
+}
+
+// SetFaviconURL sets the "favicon_url" field.
+func (lu *LinkUpdate) SetFaviconURL(s string) *LinkUpdate {
+	lu.mutation.SetFaviconURL(s)
+	return lu
+}
+
+// SetCategoryID sets the "category_id" field.
+func (lu *LinkUpdate) SetCategoryID(u uint32) *LinkUpdate {
+	lu.mutation.ResetCategoryID()
+	lu.mutation.SetCategoryID(u)
+	return lu
+}
+
+// AddCategoryID adds u to the "category_id" field.
+func (lu *LinkUpdate) AddCategoryID(u int32) *LinkUpdate {
+	lu.mutation.AddCategoryID(u)
+	return lu
+}
+
+// SetCreated sets the "created" field.
+func (lu *LinkUpdate) SetCreated(t time.Time) *LinkUpdate {
+	lu.mutation.SetCreated(t)
+	return lu
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (lu *LinkUpdate) SetNillableCreated(t *time.Time) *LinkUpdate {
+	if t != nil {
+		lu.SetCreated(*t)
+	}
+	return lu
+}
+
+// SetModified sets the "modified" field.
+func (lu *LinkUpdate) SetModified(t time.Time) *LinkUpdate {
+	lu.mutation.SetModified(t)
+	return lu
+}
+
 // Mutation returns the LinkMutation object of the builder.
 func (lu *LinkUpdate) Mutation() *LinkMutation {
 	return lu.mutation
@@ -38,6 +109,7 @@ func (lu *LinkUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	lu.defaults()
 	if len(lu.hooks) == 0 {
 		affected, err = lu.sqlSave(ctx)
 	} else {
@@ -86,13 +158,21 @@ func (lu *LinkUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (lu *LinkUpdate) defaults() {
+	if _, ok := lu.mutation.Modified(); !ok {
+		v := link.UpdateDefaultModified()
+		lu.mutation.SetModified(v)
+	}
+}
+
 func (lu *LinkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   link.Table,
 			Columns: link.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: link.FieldID,
 			},
 		},
@@ -103,6 +183,76 @@ func (lu *LinkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := lu.mutation.UserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldUserID,
+		})
+	}
+	if value, ok := lu.mutation.AddedUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldUserID,
+		})
+	}
+	if value, ok := lu.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldName,
+		})
+	}
+	if value, ok := lu.mutation.NameJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldNameJa,
+		})
+	}
+	if value, ok := lu.mutation.SiteURL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldSiteURL,
+		})
+	}
+	if value, ok := lu.mutation.FaviconURL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldFaviconURL,
+		})
+	}
+	if value, ok := lu.mutation.CategoryID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldCategoryID,
+		})
+	}
+	if value, ok := lu.mutation.AddedCategoryID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldCategoryID,
+		})
+	}
+	if value, ok := lu.mutation.Created(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: link.FieldCreated,
+		})
+	}
+	if value, ok := lu.mutation.Modified(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: link.FieldModified,
+		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, lu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -123,6 +273,76 @@ type LinkUpdateOne struct {
 	mutation *LinkMutation
 }
 
+// SetUserID sets the "user_id" field.
+func (luo *LinkUpdateOne) SetUserID(u uint32) *LinkUpdateOne {
+	luo.mutation.ResetUserID()
+	luo.mutation.SetUserID(u)
+	return luo
+}
+
+// AddUserID adds u to the "user_id" field.
+func (luo *LinkUpdateOne) AddUserID(u int32) *LinkUpdateOne {
+	luo.mutation.AddUserID(u)
+	return luo
+}
+
+// SetName sets the "name" field.
+func (luo *LinkUpdateOne) SetName(s string) *LinkUpdateOne {
+	luo.mutation.SetName(s)
+	return luo
+}
+
+// SetNameJa sets the "name_ja" field.
+func (luo *LinkUpdateOne) SetNameJa(s string) *LinkUpdateOne {
+	luo.mutation.SetNameJa(s)
+	return luo
+}
+
+// SetSiteURL sets the "site_url" field.
+func (luo *LinkUpdateOne) SetSiteURL(s string) *LinkUpdateOne {
+	luo.mutation.SetSiteURL(s)
+	return luo
+}
+
+// SetFaviconURL sets the "favicon_url" field.
+func (luo *LinkUpdateOne) SetFaviconURL(s string) *LinkUpdateOne {
+	luo.mutation.SetFaviconURL(s)
+	return luo
+}
+
+// SetCategoryID sets the "category_id" field.
+func (luo *LinkUpdateOne) SetCategoryID(u uint32) *LinkUpdateOne {
+	luo.mutation.ResetCategoryID()
+	luo.mutation.SetCategoryID(u)
+	return luo
+}
+
+// AddCategoryID adds u to the "category_id" field.
+func (luo *LinkUpdateOne) AddCategoryID(u int32) *LinkUpdateOne {
+	luo.mutation.AddCategoryID(u)
+	return luo
+}
+
+// SetCreated sets the "created" field.
+func (luo *LinkUpdateOne) SetCreated(t time.Time) *LinkUpdateOne {
+	luo.mutation.SetCreated(t)
+	return luo
+}
+
+// SetNillableCreated sets the "created" field if the given value is not nil.
+func (luo *LinkUpdateOne) SetNillableCreated(t *time.Time) *LinkUpdateOne {
+	if t != nil {
+		luo.SetCreated(*t)
+	}
+	return luo
+}
+
+// SetModified sets the "modified" field.
+func (luo *LinkUpdateOne) SetModified(t time.Time) *LinkUpdateOne {
+	luo.mutation.SetModified(t)
+	return luo
+}
+
 // Mutation returns the LinkMutation object of the builder.
 func (luo *LinkUpdateOne) Mutation() *LinkMutation {
 	return luo.mutation
@@ -141,6 +361,7 @@ func (luo *LinkUpdateOne) Save(ctx context.Context) (*Link, error) {
 		err  error
 		node *Link
 	)
+	luo.defaults()
 	if len(luo.hooks) == 0 {
 		node, err = luo.sqlSave(ctx)
 	} else {
@@ -195,13 +416,21 @@ func (luo *LinkUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (luo *LinkUpdateOne) defaults() {
+	if _, ok := luo.mutation.Modified(); !ok {
+		v := link.UpdateDefaultModified()
+		luo.mutation.SetModified(v)
+	}
+}
+
 func (luo *LinkUpdateOne) sqlSave(ctx context.Context) (_node *Link, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   link.Table,
 			Columns: link.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: link.FieldID,
 			},
 		},
@@ -229,6 +458,76 @@ func (luo *LinkUpdateOne) sqlSave(ctx context.Context) (_node *Link, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := luo.mutation.UserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldUserID,
+		})
+	}
+	if value, ok := luo.mutation.AddedUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldUserID,
+		})
+	}
+	if value, ok := luo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldName,
+		})
+	}
+	if value, ok := luo.mutation.NameJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldNameJa,
+		})
+	}
+	if value, ok := luo.mutation.SiteURL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldSiteURL,
+		})
+	}
+	if value, ok := luo.mutation.FaviconURL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: link.FieldFaviconURL,
+		})
+	}
+	if value, ok := luo.mutation.CategoryID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldCategoryID,
+		})
+	}
+	if value, ok := luo.mutation.AddedCategoryID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: link.FieldCategoryID,
+		})
+	}
+	if value, ok := luo.mutation.Created(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: link.FieldCreated,
+		})
+	}
+	if value, ok := luo.mutation.Modified(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: link.FieldModified,
+		})
 	}
 	_node = &Link{config: luo.config}
 	_spec.Assign = _node.assignValues

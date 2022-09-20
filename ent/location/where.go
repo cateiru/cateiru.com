@@ -3,6 +3,8 @@
 package location
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateir.com/ent/predicate"
 )
@@ -103,6 +105,20 @@ func Address(v string) predicate.Location {
 func AddressJa(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAddressJa), v))
+	})
+}
+
+// Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
+func Created(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreated), v))
+	})
+}
+
+// Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
+func Modified(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldModified), v))
 	})
 }
 
@@ -535,6 +551,134 @@ func AddressJaEqualFold(v string) predicate.Location {
 func AddressJaContainsFold(v string) predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldAddressJa), v))
+	})
+}
+
+// CreatedEQ applies the EQ predicate on the "created" field.
+func CreatedEQ(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedNEQ applies the NEQ predicate on the "created" field.
+func CreatedNEQ(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedIn applies the In predicate on the "created" field.
+func CreatedIn(vs ...time.Time) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCreated), v...))
+	})
+}
+
+// CreatedNotIn applies the NotIn predicate on the "created" field.
+func CreatedNotIn(vs ...time.Time) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCreated), v...))
+	})
+}
+
+// CreatedGT applies the GT predicate on the "created" field.
+func CreatedGT(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedGTE applies the GTE predicate on the "created" field.
+func CreatedGTE(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedLT applies the LT predicate on the "created" field.
+func CreatedLT(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCreated), v))
+	})
+}
+
+// CreatedLTE applies the LTE predicate on the "created" field.
+func CreatedLTE(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCreated), v))
+	})
+}
+
+// ModifiedEQ applies the EQ predicate on the "modified" field.
+func ModifiedEQ(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedNEQ applies the NEQ predicate on the "modified" field.
+func ModifiedNEQ(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedIn applies the In predicate on the "modified" field.
+func ModifiedIn(vs ...time.Time) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldModified), v...))
+	})
+}
+
+// ModifiedNotIn applies the NotIn predicate on the "modified" field.
+func ModifiedNotIn(vs ...time.Time) predicate.Location {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldModified), v...))
+	})
+}
+
+// ModifiedGT applies the GT predicate on the "modified" field.
+func ModifiedGT(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedGTE applies the GTE predicate on the "modified" field.
+func ModifiedGTE(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedLT applies the LT predicate on the "modified" field.
+func ModifiedLT(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldModified), v))
+	})
+}
+
+// ModifiedLTE applies the LTE predicate on the "modified" field.
+func ModifiedLTE(v time.Time) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldModified), v))
 	})
 }
 
