@@ -9,6 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/cateiru/cateiru.com/src"
+	"github.com/cateiru/cateiru.com/src/config"
 )
 
 func init() {
@@ -54,7 +55,21 @@ func export(ctx context.Context) {
 	}
 }
 
+// Migrations
+//
+// Usage:
+// go run ./scripts/main migration [mode]
+//
+// mode: Config mode. `test`, `local` or `prod`
+// If no mode is set, it will migrate the `test` table by default.
 func migration(ctx context.Context) {
+	mode := flag.Arg(1)
+	if len(mode) != 0 {
+		// Overwrite config
+		config.Mode = mode
+		config.Init()
+	}
+
 	db, err := src.NewConnectMySQL()
 	if err != nil {
 		log.Fatalf("failed connecting to mysql: %v", err)
