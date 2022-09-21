@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"log"
 	"os"
 
@@ -11,6 +10,10 @@ import (
 
 	"github.com/cateiru/cateiru.com/src"
 )
+
+func init() {
+	src.Init()
+}
 
 func main() {
 	flag.Parse()
@@ -20,25 +23,25 @@ func main() {
 		log.Fatalln("No option")
 	}
 
+	ctx := context.Background()
+
 	switch option {
 	case "export":
-		export()
+		export(ctx)
 	case "migration":
-		migration()
+		migration(ctx)
 	default:
 		log.Fatalln("invalid option")
 	}
 }
 
 // Export SQL Schema.
-func export() {
+func export(ctx context.Context) {
 	db, err := src.NewEmptySQL()
 	if err != nil {
 		log.Fatalf("failed connecting to mysql: %v", err)
 	}
 	defer db.Close()
-
-	ctx := context.Background()
 
 	f, err := os.Create("schema.sql")
 	if err != nil {
@@ -51,6 +54,14 @@ func export() {
 	}
 }
 
-func migration() {
-	fmt.Println("OK")
+func migration(ctx context.Context) {
+	db, err := src.NewConnectMySQL()
+	if err != nil {
+		log.Fatalf("failed connecting to mysql: %v", err)
+	}
+	defer db.Close()
+
+	if err := db.Client.Schema.Create(ctx); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
 }
