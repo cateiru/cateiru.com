@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"log"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -21,7 +20,7 @@ func main() {
 	option := flag.Arg(0)
 
 	if len(option) == 0 {
-		log.Fatalln("No option")
+		src.Sugar.Fatalln("no options err")
 	}
 
 	ctx := context.Background()
@@ -32,7 +31,7 @@ func main() {
 	case "migration":
 		migration(ctx)
 	default:
-		log.Fatalln("invalid option")
+		src.Sugar.Fatalln("invalid option")
 	}
 }
 
@@ -40,18 +39,18 @@ func main() {
 func export(ctx context.Context) {
 	db, err := src.NewEmptySQL()
 	if err != nil {
-		log.Fatalf("failed connecting to mysql: %v", err)
+		src.Sugar.Fatalf("failed connecting to mysql: %v", err)
 	}
 	defer db.Close()
 
 	f, err := os.Create("schema.sql")
 	if err != nil {
-		log.Fatalf("create migrate file: %v", err)
+		src.Sugar.Fatalf("create migrate file: %v", err)
 	}
 	defer f.Close()
 
 	if err := db.WriteSchema(ctx, f); err != nil {
-		log.Fatalf("write sql failed. %v", err)
+		src.Sugar.Fatalf("write sql failed. %v", err)
 	}
 }
 
@@ -72,11 +71,11 @@ func migration(ctx context.Context) {
 
 	db, err := src.NewConnectMySQL()
 	if err != nil {
-		log.Fatalf("failed connecting to mysql: %v", err)
+		src.Sugar.Fatalf("failed connecting to mysql: %v", err)
 	}
 	defer db.Close()
 
 	if err := db.Client.Schema.Create(ctx); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
+		src.Sugar.Fatalf("failed creating schema resources: %v", err)
 	}
 }

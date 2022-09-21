@@ -8,6 +8,7 @@ import (
 // Initialize Server
 func Init() {
 	config.Init()
+	InitLogging(config.Config.Mode)
 }
 
 // Start API Server

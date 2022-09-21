@@ -4,11 +4,9 @@
 
 [edit schema using ent](./ent/schema)
 
-## Go inside the SQL
+## Scripts
 
-```bash
-./scripts/sql.sh
-```
+[see here](./docs/scripts.md)
 
 ## LICENSE
 
