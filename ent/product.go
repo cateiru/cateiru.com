@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/product"
+	"github.com/cateiru/cateiru.com/ent/product"
 )
 
 // Product is the model entity for the Product schema.

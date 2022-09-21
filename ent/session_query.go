@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/predicate"
-	"github.com/cateiru/cateir.com/ent/session"
+	"github.com/cateiru/cateiru.com/ent/predicate"
+	"github.com/cateiru/cateiru.com/ent/session"
 	"github.com/google/uuid"
 )
 

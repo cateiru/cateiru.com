@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/contact"
+	"github.com/cateiru/cateiru.com/ent/contact"
 )
 
 // Contact is the model entity for the Contact schema.

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/notice"
+	"github.com/cateiru/cateiru.com/ent/notice"
 )
 
 // Notice is the model entity for the Notice schema.

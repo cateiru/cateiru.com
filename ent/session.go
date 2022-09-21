@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/session"
+	"github.com/cateiru/cateiru.com/ent/session"
 	"github.com/google/uuid"
 )
 

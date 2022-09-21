@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/link"
+	"github.com/cateiru/cateiru.com/ent/link"
 )
 
 // Link is the model entity for the Link schema.

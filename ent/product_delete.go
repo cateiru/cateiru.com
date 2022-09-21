@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/predicate"
-	"github.com/cateiru/cateir.com/ent/product"
+	"github.com/cateiru/cateiru.com/ent/predicate"
+	"github.com/cateiru/cateiru.com/ent/product"
 )
 
 // ProductDelete is the builder for deleting a Product entity.

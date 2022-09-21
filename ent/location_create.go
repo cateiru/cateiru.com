@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/location"
+	"github.com/cateiru/cateiru.com/ent/location"
 )
 
 // LocationCreate is the builder for creating a Location entity.

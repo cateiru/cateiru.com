@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/cateiru/cateir.com/ent"
+	"github.com/cateiru/cateiru.com/ent"
 	// required by schema hooks.
-	_ "github.com/cateiru/cateir.com/ent/runtime"
+	_ "github.com/cateiru/cateiru.com/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/cateiru/cateir.com/ent/migrate"
+	"github.com/cateiru/cateiru.com/ent/migrate"
 )
 
 type (

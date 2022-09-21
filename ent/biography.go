@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/biography"
+	"github.com/cateiru/cateiru.com/ent/biography"
 )
 
 // Biography is the model entity for the Biography schema.

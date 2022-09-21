@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/location"
+	"github.com/cateiru/cateiru.com/ent/location"
 )
 
 // Location is the model entity for the Location schema.

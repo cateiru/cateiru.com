@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/biography"
-	"github.com/cateiru/cateir.com/ent/predicate"
+	"github.com/cateiru/cateiru.com/ent/biography"
+	"github.com/cateiru/cateiru.com/ent/predicate"
 )
 
 // BiographyQuery is the builder for querying Biography entities.

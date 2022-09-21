@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/link"
+	"github.com/cateiru/cateiru.com/ent/link"
 )
 
 // LinkCreate is the builder for creating a Link entity.

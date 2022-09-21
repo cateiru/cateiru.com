@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/cateiru/cateir.com/ent"
+	"github.com/cateiru/cateiru.com/ent"
 )
 
 // The BiographyFunc type is an adapter to allow the use of ordinary

@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/location"
-	"github.com/cateiru/cateir.com/ent/predicate"
+	"github.com/cateiru/cateiru.com/ent/location"
+	"github.com/cateiru/cateiru.com/ent/predicate"
 )
 
 // LocationQuery is the builder for querying Location entities.

@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/contact"
+	"github.com/cateiru/cateiru.com/ent/contact"
 )
 
 // ContactCreate is the builder for creating a Contact entity.

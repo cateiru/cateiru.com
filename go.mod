@@ -1,4 +1,4 @@
-module github.com/cateiru/cateir.com
+module github.com/cateiru/cateiru.com
 
 go 1.19
 

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cateiru/cateir.com/ent/category"
+	"github.com/cateiru/cateiru.com/ent/category"
 )
 
 // Category is the model entity for the Category schema.

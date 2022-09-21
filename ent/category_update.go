@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/cateiru/cateir.com/ent/category"
-	"github.com/cateiru/cateir.com/ent/predicate"
+	"github.com/cateiru/cateiru.com/ent/category"
+	"github.com/cateiru/cateiru.com/ent/predicate"
 )
 
 // CategoryUpdate is the builder for updating Category entities.
