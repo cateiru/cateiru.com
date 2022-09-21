@@ -3,5 +3,7 @@ package envs
 type ConfigDefs struct {
 	Mode string // Run mode. `local`, `test` or `prod`
 
-	DBConfig string // DB Connect config
+	// DB Connect config
+	// like to `<user>:<pass>@tcp(<host>:<port>)/<database>?parseTime=True`
+	DBConfig string
 }
