@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/cateiru/cateir.com/ent"
+	"github.com/cateiru/cateiru.com/src"
 )
 
 func main() {
@@ -32,11 +32,11 @@ func main() {
 
 // Export SQL Schema.
 func export() {
-	client, err := ent.Open("mysql", "docker:docker@tcp(localhost:3306)/cateiru")
+	db, err := src.NewEmptySQL()
 	if err != nil {
 		log.Fatalf("failed connecting to mysql: %v", err)
 	}
-	defer client.Close()
+	defer db.Close()
 
 	ctx := context.Background()
 
@@ -45,8 +45,9 @@ func export() {
 		log.Fatalf("create migrate file: %v", err)
 	}
 	defer f.Close()
-	if err := client.Schema.WriteTo(ctx, f); err != nil {
-		log.Fatalf("failed printing schema changes: %v", err)
+
+	if err := db.WriteSchema(ctx, f); err != nil {
+		log.Fatalf("write sql failed. %v", err)
 	}
 }
 
