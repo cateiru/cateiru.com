@@ -13,7 +13,9 @@ import (
 	"github.com/cateiru/cateir.com/ent/notice"
 	"github.com/cateiru/cateir.com/ent/product"
 	"github.com/cateiru/cateir.com/ent/schema"
+	"github.com/cateiru/cateir.com/ent/session"
 	"github.com/cateiru/cateir.com/ent/user"
+	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -108,6 +110,16 @@ func init() {
 	product.DefaultModified = productDescModified.Default.(func() time.Time)
 	// product.UpdateDefaultModified holds the default value on update for the modified field.
 	product.UpdateDefaultModified = productDescModified.UpdateDefault.(func() time.Time)
+	sessionFields := schema.Session{}.Fields()
+	_ = sessionFields
+	// sessionDescCreated is the schema descriptor for created field.
+	sessionDescCreated := sessionFields[2].Descriptor()
+	// session.DefaultCreated holds the default value on creation for the created field.
+	session.DefaultCreated = sessionDescCreated.Default.(func() time.Time)
+	// sessionDescID is the schema descriptor for id field.
+	sessionDescID := sessionFields[0].Descriptor()
+	// session.DefaultID holds the default value on creation for the id field.
+	session.DefaultID = sessionDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescCreated is the schema descriptor for created field.

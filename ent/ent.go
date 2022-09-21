@@ -17,6 +17,7 @@ import (
 	"github.com/cateiru/cateir.com/ent/location"
 	"github.com/cateiru/cateir.com/ent/notice"
 	"github.com/cateiru/cateir.com/ent/product"
+	"github.com/cateiru/cateir.com/ent/session"
 	"github.com/cateiru/cateir.com/ent/user"
 )
 
@@ -45,6 +46,7 @@ func columnChecker(table string) func(string) error {
 		location.Table:  location.ValidColumn,
 		notice.Table:    notice.ValidColumn,
 		product.Table:   product.ValidColumn,
+		session.Table:   session.ValidColumn,
 		user.Table:      user.ValidColumn,
 	}
 	check, ok := checks[table]

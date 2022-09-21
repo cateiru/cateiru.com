@@ -26,6 +26,8 @@ type Tx struct {
 	Notice *NoticeClient
 	// Product is the client for interacting with the Product builders.
 	Product *ProductClient
+	// Session is the client for interacting with the Session builders.
+	Session *SessionClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -170,6 +172,7 @@ func (tx *Tx) init() {
 	tx.Location = NewLocationClient(tx.config)
 	tx.Notice = NewNoticeClient(tx.config)
 	tx.Product = NewProductClient(tx.config)
+	tx.Session = NewSessionClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 

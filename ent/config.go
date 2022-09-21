@@ -31,6 +31,7 @@ type hooks struct {
 	Location  []ent.Hook
 	Notice    []ent.Hook
 	Product   []ent.Hook
+	Session   []ent.Hook
 	User      []ent.Hook
 }
 
