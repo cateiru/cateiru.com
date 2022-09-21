@@ -4,6 +4,8 @@ import (
 	"context"
 	"io"
 
+	_ "github.com/go-sql-driver/mysql"
+
 	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/src/config"
 )

@@ -5,8 +5,6 @@ import (
 	"flag"
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
 )
