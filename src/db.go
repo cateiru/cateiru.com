@@ -29,7 +29,7 @@ func NewConnectMySQL() (*DB, error) {
 
 // Connect `empty` table
 func NewEmptySQL() (*DB, error) {
-	client, err := ent.Open("mysql", "docker:docker@tcp(localhost:3306)/empty?parseTime=True")
+	client, err := ent.Open("mysql", "docker:docker@tcp(localhost:3306)/em?parseTime=True")
 	if err != nil {
 		return nil, err
 	}

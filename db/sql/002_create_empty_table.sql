@@ -1,4 +1,4 @@
 -- SQL SchemaをExportするための空のテーブルを作成
-CREATE DATABASE IF NOT EXISTS `empty`;
+CREATE DATABASE IF NOT EXISTS `em`;
 
-GRANT ALL ON empty.* TO `docker` @`%`;
+GRANT ALL ON em.* TO `docker` @`%`;
