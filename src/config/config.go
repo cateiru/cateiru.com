@@ -4,17 +4,10 @@ import (
 	"github.com/cateiru/cateiru.com/src/config/envs"
 )
 
-// Set this variable at build time.
-//
-// Example:
-//
-//	go build  -ldflags="-X config.Mode=prod"
-var Mode string = ""
-
 var Config *envs.ConfigDefs = nil
 
-func Init() {
-	switch Mode {
+func Init(mode string) {
+	switch mode {
 	case "test":
 		Config = &envs.TestConfig
 	case "local":

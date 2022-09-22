@@ -13,7 +13,7 @@ func TestConfigInit(t *testing.T) {
 		require.Nil(t, config.Config)
 
 		// Initialize config
-		config.Init()
+		config.Init("test")
 
 		// Set a config
 		require.NotNil(t, config.Config)
@@ -23,8 +23,7 @@ func TestConfigInit(t *testing.T) {
 	})
 
 	t.Run("change mode local", func(t *testing.T) {
-		config.Mode = "local"
-		config.Init()
+		config.Init("local")
 
 		require.NotNil(t, config.Config)
 		require.Equal(t, config.Config.Mode, "local")

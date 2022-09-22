@@ -1,4 +1,5 @@
-FROM golang:alpine as builder
+# Go version 1.19.1
+FROM golang:alpine3.16 as builder
 
 WORKDIR /go/src
 
@@ -12,7 +13,7 @@ ARG GOOS=linux
 ARG GOARCH=amd64
 RUN go build \
     -o /go/bin/main \
-    -ldflags '-s -w'
+    -ldflags '-s -w -X main.mode=prod'
 
 FROM scratch as runner
 

@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	src.Init()
+	src.Init("local")
 }
 
 func main() {
@@ -63,8 +63,7 @@ func migration(ctx context.Context) {
 	mode := flag.Arg(1)
 	if len(mode) != 0 {
 		// Overwrite config
-		config.Mode = mode
-		config.Init()
+		config.Init(mode)
 	}
 
 	db, err := src.NewConnectMySQL()

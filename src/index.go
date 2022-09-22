@@ -6,9 +6,9 @@ import (
 )
 
 // Initialize Server
-func Init() {
-	config.Init()
-	InitLogging(config.Config.Mode)
+func Init(mode string) {
+	config.Init(mode)
+	InitLogging(mode)
 }
 
 // Start API Server
