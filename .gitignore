@@ -45,3 +45,4 @@ db/.data/**
 !db/.data/.gitkeep
 
 schema.sql
+migration_diff.sql

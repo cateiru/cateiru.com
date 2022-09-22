@@ -2,77 +2,138 @@ package main
 
 import (
 	"context"
-	"flag"
+	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
+	"github.com/jessevdk/go-flags"
+	"github.com/joho/godotenv"
 )
+
+type Export struct {
+}
+
+type Migration struct {
+	Mode string `short:"m" long:"mode" default:"local"`
+	Env  string `short:"e" long:"env"`
+}
+
+type Options struct {
+}
+
+var opts Options
+var export Export
+var migration Migration
 
 func init() {
 	src.Init("local")
 }
 
 func main() {
-	flag.Parse()
-	option := flag.Arg(0)
+	parser := flags.NewParser(&opts, flags.Default)
+	parser.Name = "go run ./script/main.go"
 
-	if len(option) == 0 {
-		src.Sugar.Fatalln("no options err")
-	}
+	parser.AddCommand("export", "export sql schema", "", &export)
+	parser.AddCommand("migration", "sql migration", "", &migration)
 
-	ctx := context.Background()
-
-	switch option {
-	case "export":
-		export(ctx)
-	case "migration":
-		migration(ctx)
-	default:
-		src.Sugar.Fatalln("invalid option")
+	_, err := parser.Parse()
+	if err != nil {
+		return
 	}
 }
 
 // Export SQL Schema.
-func export(ctx context.Context) {
+func (cmd *Export) Execute(args []string) error {
+	ctx := context.Background()
+
 	db, err := src.NewEmptySQL()
 	if err != nil {
-		src.Sugar.Fatalf("failed connecting to mysql: %v", err)
+		return err
 	}
 	defer db.Close()
 
 	f, err := os.Create("schema.sql")
 	if err != nil {
-		src.Sugar.Fatalf("create migrate file: %v", err)
+		return err
 	}
 	defer f.Close()
 
 	if err := db.WriteSchema(ctx, f); err != nil {
-		src.Sugar.Fatalf("write sql failed. %v", err)
+		return err
 	}
+
+	src.Sugar.Infoln("Success export SQL schema.sql")
+
+	return nil
 }
 
-// Migrations
-//
-// Usage:
-// go run ./scripts/main migration [mode]
-//
-// mode: Config mode. `test`, `local` or `prod`
-// If no mode is set, it will migrate the `test` table by default.
-func migration(ctx context.Context) {
-	mode := flag.Arg(1)
-	if len(mode) != 0 {
-		// Overwrite config
-		config.Init(mode)
+// migration
+func (cmd *Migration) Execute(args []string) error {
+	ctx := context.Background()
+
+	// Overwrite config
+	config.Init(cmd.Mode)
+
+	if cmd.Mode == "prod" && cmd.Env != "" {
+		return cmd.migrationProd(ctx, cmd.Env)
 	}
 
 	db, err := src.NewConnectMySQL()
 	if err != nil {
-		src.Sugar.Fatalf("failed connecting to mysql: %v", err)
+		return err
 	}
 	defer db.Close()
 
 	if err := db.Client.Schema.Create(ctx); err != nil {
-		src.Sugar.Fatalf("failed creating schema resources: %v", err)
+		return err
 	}
+
+	src.Sugar.Infof("Success migration! DATABASE: %s\n", config.Config.DBConfig)
+
+	return nil
+}
+
+func (cmd *Migration) migrationProd(ctx context.Context, envPath string) error {
+	if !filepath.IsAbs(envPath) {
+		p, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		envAbsPath := filepath.Join(p, envPath)
+
+		if _, err := os.Stat(envPath); err != nil {
+			return err
+		}
+
+		envPath = envAbsPath
+	}
+
+	if err := godotenv.Load(envPath); err != nil {
+		return err
+	}
+
+	config.Config.DBConfig = fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/%s?parseTime=True", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"), "cateirucom")
+
+	db, err := src.NewConnectMySQL()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	f, err := os.Create("migration_diff.sql")
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if err := db.WriteSchema(ctx, f); err != nil {
+		return err
+	}
+
+	src.Sugar.Infof("Success migration prod!\n")
+
+	return nil
 }
