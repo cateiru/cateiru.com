@@ -9,9 +9,6 @@ import (
 
 func TestConfigInit(t *testing.T) {
 	t.Run("created config", func(t *testing.T) {
-		// No set config
-		require.Nil(t, config.Config)
-
 		// Initialize config
 		config.Init("test")
 

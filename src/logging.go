@@ -22,7 +22,7 @@ func InitLogging(mode string) {
 		logConfig = zap.NewProductionConfig()
 		logConfig.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	default:
-		panic("invalid config mode")
+		return
 	}
 
 	logger, err := logConfig.Build()
