@@ -149,6 +149,7 @@ var (
 		{Name: "site_url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "github_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "dev_time", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
+		{Name: "thumbnail", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}

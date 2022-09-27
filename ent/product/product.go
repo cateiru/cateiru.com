@@ -27,6 +27,8 @@ const (
 	FieldGithubURL = "github_url"
 	// FieldDevTime holds the string denoting the dev_time field in the database.
 	FieldDevTime = "dev_time"
+	// FieldThumbnail holds the string denoting the thumbnail field in the database.
+	FieldThumbnail = "thumbnail"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -46,6 +48,7 @@ var Columns = []string{
 	FieldSiteURL,
 	FieldGithubURL,
 	FieldDevTime,
+	FieldThumbnail,
 	FieldCreated,
 	FieldModified,
 }

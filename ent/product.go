@@ -32,6 +32,8 @@ type Product struct {
 	GithubURL string `json:"github_url,omitempty"`
 	// DevTime holds the value of the "dev_time" field.
 	DevTime time.Time `json:"dev_time,omitempty"`
+	// Thumbnail holds the value of the "thumbnail" field.
+	Thumbnail string `json:"thumbnail,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -45,7 +47,7 @@ func (*Product) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case product.FieldID, product.FieldUserID:
 			values[i] = new(sql.NullInt64)
-		case product.FieldName, product.FieldNameJa, product.FieldDetail, product.FieldDetailJa, product.FieldSiteURL, product.FieldGithubURL:
+		case product.FieldName, product.FieldNameJa, product.FieldDetail, product.FieldDetailJa, product.FieldSiteURL, product.FieldGithubURL, product.FieldThumbnail:
 			values[i] = new(sql.NullString)
 		case product.FieldDevTime, product.FieldCreated, product.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -118,6 +120,12 @@ func (pr *Product) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				pr.DevTime = value.Time
 			}
+		case product.FieldThumbnail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field thumbnail", values[i])
+			} else if value.Valid {
+				pr.Thumbnail = value.String
+			}
 		case product.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created", values[i])
@@ -181,6 +189,9 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dev_time=")
 	builder.WriteString(pr.DevTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("thumbnail=")
+	builder.WriteString(pr.Thumbnail)
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(pr.Created.Format(time.ANSIC))

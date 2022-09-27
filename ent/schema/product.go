@@ -67,6 +67,13 @@ func (Product) Fields() []ent.Field {
 				dialect.MySQL: "date",
 			}),
 
+		// `thumbnail` TEXT
+		field.String("thumbnail").
+			Optional().
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}),
+
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 		field.Time("created").
 			SchemaType(map[string]string{

@@ -101,11 +101,11 @@ func init() {
 	productFields := schema.Product{}.Fields()
 	_ = productFields
 	// productDescCreated is the schema descriptor for created field.
-	productDescCreated := productFields[9].Descriptor()
+	productDescCreated := productFields[10].Descriptor()
 	// product.DefaultCreated holds the default value on creation for the created field.
 	product.DefaultCreated = productDescCreated.Default.(func() time.Time)
 	// productDescModified is the schema descriptor for modified field.
-	productDescModified := productFields[10].Descriptor()
+	productDescModified := productFields[11].Descriptor()
 	// product.DefaultModified holds the default value on creation for the modified field.
 	product.DefaultModified = productDescModified.Default.(func() time.Time)
 	// product.UpdateDefaultModified holds the default value on update for the modified field.

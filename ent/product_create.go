@@ -76,6 +76,20 @@ func (pc *ProductCreate) SetDevTime(t time.Time) *ProductCreate {
 	return pc
 }
 
+// SetThumbnail sets the "thumbnail" field.
+func (pc *ProductCreate) SetThumbnail(s string) *ProductCreate {
+	pc.mutation.SetThumbnail(s)
+	return pc
+}
+
+// SetNillableThumbnail sets the "thumbnail" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableThumbnail(s *string) *ProductCreate {
+	if s != nil {
+		pc.SetThumbnail(*s)
+	}
+	return pc
+}
+
 // SetCreated sets the "created" field.
 func (pc *ProductCreate) SetCreated(t time.Time) *ProductCreate {
 	pc.mutation.SetCreated(t)
@@ -322,6 +336,14 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 			Column: product.FieldDevTime,
 		})
 		_node.DevTime = value
+	}
+	if value, ok := pc.mutation.Thumbnail(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldThumbnail,
+		})
+		_node.Thumbnail = value
 	}
 	if value, ok := pc.mutation.Created(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

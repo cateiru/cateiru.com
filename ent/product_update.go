@@ -97,6 +97,26 @@ func (pu *ProductUpdate) SetDevTime(t time.Time) *ProductUpdate {
 	return pu
 }
 
+// SetThumbnail sets the "thumbnail" field.
+func (pu *ProductUpdate) SetThumbnail(s string) *ProductUpdate {
+	pu.mutation.SetThumbnail(s)
+	return pu
+}
+
+// SetNillableThumbnail sets the "thumbnail" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableThumbnail(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetThumbnail(*s)
+	}
+	return pu
+}
+
+// ClearThumbnail clears the value of the "thumbnail" field.
+func (pu *ProductUpdate) ClearThumbnail() *ProductUpdate {
+	pu.mutation.ClearThumbnail()
+	return pu
+}
+
 // SetCreated sets the "created" field.
 func (pu *ProductUpdate) SetCreated(t time.Time) *ProductUpdate {
 	pu.mutation.SetCreated(t)
@@ -272,6 +292,19 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: product.FieldDevTime,
 		})
 	}
+	if value, ok := pu.mutation.Thumbnail(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldThumbnail,
+		})
+	}
+	if pu.mutation.ThumbnailCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: product.FieldThumbnail,
+		})
+	}
 	if value, ok := pu.mutation.Created(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -371,6 +404,26 @@ func (puo *ProductUpdateOne) ClearGithubURL() *ProductUpdateOne {
 // SetDevTime sets the "dev_time" field.
 func (puo *ProductUpdateOne) SetDevTime(t time.Time) *ProductUpdateOne {
 	puo.mutation.SetDevTime(t)
+	return puo
+}
+
+// SetThumbnail sets the "thumbnail" field.
+func (puo *ProductUpdateOne) SetThumbnail(s string) *ProductUpdateOne {
+	puo.mutation.SetThumbnail(s)
+	return puo
+}
+
+// SetNillableThumbnail sets the "thumbnail" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableThumbnail(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetThumbnail(*s)
+	}
+	return puo
+}
+
+// ClearThumbnail clears the value of the "thumbnail" field.
+func (puo *ProductUpdateOne) ClearThumbnail() *ProductUpdateOne {
+	puo.mutation.ClearThumbnail()
 	return puo
 }
 
@@ -577,6 +630,19 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: product.FieldDevTime,
+		})
+	}
+	if value, ok := puo.mutation.Thumbnail(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldThumbnail,
+		})
+	}
+	if puo.mutation.ThumbnailCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: product.FieldThumbnail,
 		})
 	}
 	if value, ok := puo.mutation.Created(); ok {

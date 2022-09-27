@@ -4247,6 +4247,7 @@ type ProductMutation struct {
 	site_url      *string
 	github_url    *string
 	dev_time      *time.Time
+	thumbnail     *string
 	created       *time.Time
 	modified      *time.Time
 	clearedFields map[string]struct{}
@@ -4680,6 +4681,55 @@ func (m *ProductMutation) ResetDevTime() {
 	m.dev_time = nil
 }
 
+// SetThumbnail sets the "thumbnail" field.
+func (m *ProductMutation) SetThumbnail(s string) {
+	m.thumbnail = &s
+}
+
+// Thumbnail returns the value of the "thumbnail" field in the mutation.
+func (m *ProductMutation) Thumbnail() (r string, exists bool) {
+	v := m.thumbnail
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldThumbnail returns the old "thumbnail" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldThumbnail(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldThumbnail is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldThumbnail requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldThumbnail: %w", err)
+	}
+	return oldValue.Thumbnail, nil
+}
+
+// ClearThumbnail clears the value of the "thumbnail" field.
+func (m *ProductMutation) ClearThumbnail() {
+	m.thumbnail = nil
+	m.clearedFields[product.FieldThumbnail] = struct{}{}
+}
+
+// ThumbnailCleared returns if the "thumbnail" field was cleared in this mutation.
+func (m *ProductMutation) ThumbnailCleared() bool {
+	_, ok := m.clearedFields[product.FieldThumbnail]
+	return ok
+}
+
+// ResetThumbnail resets all changes to the "thumbnail" field.
+func (m *ProductMutation) ResetThumbnail() {
+	m.thumbnail = nil
+	delete(m.clearedFields, product.FieldThumbnail)
+}
+
 // SetCreated sets the "created" field.
 func (m *ProductMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -4771,7 +4821,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.user_id != nil {
 		fields = append(fields, product.FieldUserID)
 	}
@@ -4795,6 +4845,9 @@ func (m *ProductMutation) Fields() []string {
 	}
 	if m.dev_time != nil {
 		fields = append(fields, product.FieldDevTime)
+	}
+	if m.thumbnail != nil {
+		fields = append(fields, product.FieldThumbnail)
 	}
 	if m.created != nil {
 		fields = append(fields, product.FieldCreated)
@@ -4826,6 +4879,8 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.GithubURL()
 	case product.FieldDevTime:
 		return m.DevTime()
+	case product.FieldThumbnail:
+		return m.Thumbnail()
 	case product.FieldCreated:
 		return m.Created()
 	case product.FieldModified:
@@ -4855,6 +4910,8 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldGithubURL(ctx)
 	case product.FieldDevTime:
 		return m.OldDevTime(ctx)
+	case product.FieldThumbnail:
+		return m.OldThumbnail(ctx)
 	case product.FieldCreated:
 		return m.OldCreated(ctx)
 	case product.FieldModified:
@@ -4924,6 +4981,13 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDevTime(v)
 		return nil
+	case product.FieldThumbnail:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetThumbnail(v)
+		return nil
 	case product.FieldCreated:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -4986,6 +5050,9 @@ func (m *ProductMutation) ClearedFields() []string {
 	if m.FieldCleared(product.FieldGithubURL) {
 		fields = append(fields, product.FieldGithubURL)
 	}
+	if m.FieldCleared(product.FieldThumbnail) {
+		fields = append(fields, product.FieldThumbnail)
+	}
 	return fields
 }
 
@@ -5002,6 +5069,9 @@ func (m *ProductMutation) ClearField(name string) error {
 	switch name {
 	case product.FieldGithubURL:
 		m.ClearGithubURL()
+		return nil
+	case product.FieldThumbnail:
+		m.ClearThumbnail()
 		return nil
 	}
 	return fmt.Errorf("unknown Product nullable field %s", name)
@@ -5034,6 +5104,9 @@ func (m *ProductMutation) ResetField(name string) error {
 		return nil
 	case product.FieldDevTime:
 		m.ResetDevTime()
+		return nil
+	case product.FieldThumbnail:
+		m.ResetThumbnail()
 		return nil
 	case product.FieldCreated:
 		m.ResetCreated()
