@@ -8,6 +8,7 @@ import (
 
 	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
+	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/jessevdk/go-flags"
 	"github.com/joho/godotenv"
 )
@@ -48,7 +49,7 @@ func main() {
 func (cmd *Export) Execute(args []string) error {
 	ctx := context.Background()
 
-	db, err := src.NewEmptySQL()
+	db, err := db.NewEmptySQL()
 	if err != nil {
 		return err
 	}
@@ -80,7 +81,7 @@ func (cmd *Migration) Execute(args []string) error {
 		return cmd.migrationProd(ctx, cmd.Env)
 	}
 
-	db, err := src.NewConnectMySQL()
+	db, err := db.NewConnectMySQL()
 	if err != nil {
 		return err
 	}
@@ -117,7 +118,7 @@ func (cmd *Migration) migrationProd(ctx context.Context, envPath string) error {
 
 	config.Config.DBConfig = fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/%s?parseTime=True", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"), "cateirucom")
 
-	db, err := src.NewConnectMySQL()
+	db, err := db.NewConnectMySQL()
 	if err != nil {
 		return err
 	}
