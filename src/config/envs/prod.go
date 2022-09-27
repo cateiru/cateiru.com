@@ -1,11 +1,46 @@
 package envs
 
-import "os"
+import (
+	"net/http"
+	"net/url"
+	"os"
+	"time"
+
+	"github.com/go-sql-driver/mysql"
+)
 
 var ProdConfig = ConfigDefs{
 	Mode: "prod",
 
-	DBConfig: os.Getenv("DB_CONFIG"),
+	ApiDomain: url.URL{
+		Host: "cateiru.com",
+	},
+	PageDomain: url.URL{
+		Host: "api.cateiru.com",
+	},
+
+	DBConfig: mysql.Config{
+		DBName:    "cateirucom",
+		User:      os.Getenv("DB_USER"),
+		Passwd:    os.Getenv("DB_PASSWORD"),
+		Addr:      "localhost:3306",
+		Net:       "tcp",
+		ParseTime: true,
+	},
 
 	SessionCookieName: "cateirucom-session",
+	DBSessionTime:     time.Hour * 5,
+	SessionCookieConfig: http.Cookie{
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
+	},
+	SessionConfirmationCookieName: "cateirusso-issession",
+	SessionConfirmationCookieConfig: http.Cookie{
+		HttpOnly: false,
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
+	},
 }
