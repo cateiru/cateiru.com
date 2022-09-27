@@ -19,7 +19,7 @@ type DB struct {
 //
 // Use MySQL.
 func NewConnectMySQL() (*DB, error) {
-	client, err := ent.Open("mysql", config.Config.DBConfig)
+	client, err := ent.Open("mysql", config.Config.DBConfig.FormatDSN())
 	if err != nil {
 		return nil, err
 	}
