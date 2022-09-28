@@ -12,10 +12,12 @@ var LocalConfig = ConfigDefs{
 	Mode: "local",
 
 	ApiDomain: url.URL{
-		Host: "localhost:8080",
+		Host:   "localhost:8080",
+		Scheme: "http",
 	},
 	PageDomain: url.URL{
-		Host: "localhost:3000",
+		Host:   "localhost:3000",
+		Scheme: "http",
 	},
 
 	// This config is docker-cmpose MySQL connection.
