@@ -4,11 +4,12 @@ go 1.19
 
 require (
 	entgo.io/ent v0.11.2
+	github.com/cateiru/cateiru-sso/pkg/go v0.0.0-20220928234848-f28940e76bfa
+	github.com/cateiru/go-http-easy-test v1.1.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/joho/godotenv v1.4.0
-	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.9.0
 	github.com/stretchr/testify v1.8.0
 	go.uber.org/zap v1.23.0
@@ -18,9 +19,9 @@ require (
 	ariga.io/atlas v0.7.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/cateiru/go-http-easy-test v1.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/hashicorp/hcl/v2 v2.14.0 // indirect
 	github.com/labstack/gommon v0.3.1 // indirect

@@ -44,4 +44,12 @@ var TestConfig = ConfigDefs{
 		SameSite: http.SameSiteStrictMode,
 		Path:     "/",
 	},
+
+	SSOTokenSecret: "2974d92793c53756ec347fe2a8246fd9f91a2dde291147f081292907cc20b385",
+	SSORedirectURI: url.URL{
+		Host:   "localhost:8080",
+		Scheme: "http",
+		Path:   "/login",
+	},
+	SSOClientID: "e962e6d0db161d59ae5110736ae8ac",
 }

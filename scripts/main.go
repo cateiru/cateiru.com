@@ -8,6 +8,7 @@ import (
 	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
+	"github.com/cateiru/cateiru.com/src/logging"
 	"github.com/go-sql-driver/mysql"
 	"github.com/jessevdk/go-flags"
 	"github.com/joho/godotenv"
@@ -65,7 +66,7 @@ func (cmd *Export) Execute(args []string) error {
 		return err
 	}
 
-	src.Sugar.Infoln("Success export SQL schema.sql")
+	logging.Sugar.Infoln("Success export SQL schema.sql")
 
 	return nil
 }
@@ -91,7 +92,7 @@ func (cmd *Migration) Execute(args []string) error {
 		return err
 	}
 
-	src.Sugar.Infof("Success migration! DATABASE: %s\n", config.Config.DBConfig)
+	logging.Sugar.Infof("Success migration! DATABASE: %s\n", config.Config.DBConfig)
 
 	return nil
 }
@@ -141,7 +142,7 @@ func (cmd *Migration) migrationProd(ctx context.Context, envPath string) error {
 		return err
 	}
 
-	src.Sugar.Infof("Success migration prod!\n")
+	logging.Sugar.Infof("Success migration prod!\n")
 
 	return nil
 }

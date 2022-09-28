@@ -24,4 +24,9 @@ type ConfigDefs struct {
 	// Name and domain is overwrite other config.
 	SessionCookieConfig             http.Cookie
 	SessionConfirmationCookieConfig http.Cookie
+
+	// CateiruSSO config
+	SSOTokenSecret string
+	SSORedirectURI url.URL
+	SSOClientID    string
 }

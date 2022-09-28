@@ -9,7 +9,7 @@ import (
 // Example:
 //
 //	go build  -ldflags="-X main.mode=prod"
-var mode string = ""
+var mode string = "local"
 
 func init() {
 	src.Init(mode)

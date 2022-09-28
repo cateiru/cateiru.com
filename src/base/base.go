@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/cateiru/cateiru.com/ent"
-	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/google/uuid"
@@ -108,8 +107,7 @@ func (c *Base) getSessionToken(e echo.Context) (uuid.UUID, error) {
 
 	u, err := uuid.Parse(token)
 	if err != nil {
-		src.Sugar.Error(err)
-		return uuid.UUID{}, echo.ErrForbidden
+		return uuid.UUID{}, echo.NewHTTPError(http.StatusForbidden, "failed parse session token uuid")
 	}
 
 	return u, nil
@@ -123,8 +121,7 @@ func (c *Base) sessionLogin(ctx context.Context, client ent.Client, sessionToken
 	}
 
 	if session == nil {
-		src.Sugar.Error(err)
-		return nil, echo.ErrForbidden
+		return nil, echo.NewHTTPError(http.StatusForbidden, "session token is empty")
 	}
 
 	user, err := client.User.Get(ctx, session.UserID)

@@ -45,4 +45,12 @@ var ProdConfig = ConfigDefs{
 		SameSite: http.SameSiteStrictMode,
 		Path:     "/",
 	},
+
+	SSOTokenSecret: "",
+	SSORedirectURI: url.URL{
+		Host:   "localhost:8080",
+		Scheme: "http",
+		Path:   "/login",
+	},
+	SSOClientID: "",
 }

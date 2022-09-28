@@ -8,4 +8,7 @@ import (
 // API Routes
 func Routes(e *echo.Echo) {
 	e.GET("/", handler.RootHandler)
+
+	e.GET("/login", handler.LoginHandler)
+	e.GET("/login/url", handler.LoginURLHandler)
 }

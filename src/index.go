@@ -2,13 +2,14 @@ package src
 
 import (
 	"github.com/cateiru/cateiru.com/src/config"
+	"github.com/cateiru/cateiru.com/src/logging"
 	"github.com/labstack/echo/v4"
 )
 
 // Initialize Server
 func Init(mode string) {
 	config.Init(mode)
-	InitLogging(mode)
+	logging.InitLogging(mode)
 }
 
 // Start API Server
