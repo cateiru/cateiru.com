@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
+	"github.com/go-sql-driver/mysql"
 	"github.com/jessevdk/go-flags"
 	"github.com/joho/godotenv"
 )
@@ -116,7 +116,14 @@ func (cmd *Migration) migrationProd(ctx context.Context, envPath string) error {
 		return err
 	}
 
-	config.Config.DBConfig = fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/%s?parseTime=True", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"), "cateirucom")
+	config.Config.DBConfig = mysql.Config{
+		DBName:    "cateirucom",
+		User:      os.Getenv("MYSQL_USER"),
+		Passwd:    os.Getenv("MYSQL_PASSWORD"),
+		Addr:      "127.0.0.1:3306",
+		Net:       "tcp",
+		ParseTime: true,
+	}
 
 	db, err := db.NewConnectMySQL()
 	if err != nil {

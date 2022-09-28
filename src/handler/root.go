@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"github.com/cateiru/cateiru.com/src/base"
+	"github.com/labstack/echo/v4"
 )
 
-func RootHandler(base *base.Base) error {
-	return base.E.String(http.StatusOK, "Hello World")
+func RootHandler(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello World")
 }

@@ -4,7 +4,7 @@ import (
 	"github.com/cateiru/cateiru.com/src/config/envs"
 )
 
-var Config *envs.ConfigDefs = nil
+var Config *envs.ConfigDefs = &envs.TestConfig
 
 func Init(mode string) {
 	switch mode {
