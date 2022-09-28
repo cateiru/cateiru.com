@@ -18,6 +18,26 @@ func NewTestTool(db *db.DB) *TestTool {
 	}
 }
 
+// Create test tool
+//
+// Usage:
+//
+//	tool, err := test.NewTestToolDB()
+//	require.NoError(t, err)
+//	defer tool.Close()
+func NewTestToolDB() (*TestTool, error) {
+	dbOp, err := db.NewConnectMySQL()
+	if err != nil {
+		return nil, err
+	}
+
+	return NewTestTool(dbOp), nil
+}
+
+func (c *TestTool) Close() {
+	c.DB.Close()
+}
+
 func (c *TestTool) NewUser(ctx context.Context) (*TestUser, error) {
 	user, err := NewUser()
 	if err != nil {

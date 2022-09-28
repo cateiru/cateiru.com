@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/cateiru/cateiru.com/ent"
+	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/google/uuid"
@@ -31,6 +32,10 @@ func NewBase(e echo.Context) (*Base, error) {
 		DB:   db,
 		User: nil,
 	}, nil
+}
+
+func (c *Base) Close() {
+	c.DB.Close()
 }
 
 // Require session
@@ -101,8 +106,9 @@ func (c *Base) getSessionToken(e echo.Context) (uuid.UUID, error) {
 	}
 	token := tokenCookie.Value
 
-	u, err := uuid.FromBytes([]byte(token))
+	u, err := uuid.Parse(token)
 	if err != nil {
+		src.Sugar.Error(err)
 		return uuid.UUID{}, echo.ErrForbidden
 	}
 
@@ -117,6 +123,7 @@ func (c *Base) sessionLogin(ctx context.Context, client ent.Client, sessionToken
 	}
 
 	if session == nil {
+		src.Sugar.Error(err)
 		return nil, echo.ErrForbidden
 	}
 
