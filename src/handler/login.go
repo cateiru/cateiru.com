@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/cateiru/cateiru-sso/pkg/go/sso"
@@ -19,6 +20,7 @@ func LoginHandler(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	defer base.Close()
 
 	code := c.QueryParams().Get("code")
 	if code == "" {
@@ -36,18 +38,34 @@ func LoginHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "failed valid JWT token")
 	}
 
-	user, err := base.DB.Client.User.Create().
+	// Check role
+	roles := strings.Split(claims.Role, " ")
+	findAdmin := false
+	for _, role := range roles {
+		if role == "admin" {
+			findAdmin = true
+		}
+	}
+	if !findAdmin {
+		return echo.NewHTTPError(http.StatusForbidden, "you do not have access")
+	}
+
+	userConf := base.DB.Client.User.Create().
 		SetGivenName(claims.GivenName).
 		SetFamilyName(claims.FamilyName).
-		SetUserID(claims.Name).
+		SetUserID(claims.NickName).
 		SetMail(claims.Email).
 		SetBirthDate(time.Now()).
 		SetGivenNameJa(claims.GivenName).
 		SetFamilyNameJa(claims.FamilyName).
 		SetLocation("").
-		SetLocationJa("").
-		Save(ctx)
+		SetLocationJa("")
 
+	if claims.Picture != "" {
+		userConf = userConf.SetAvatarURL(claims.Picture)
+	}
+
+	user, err := userConf.Save(ctx)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
 	}

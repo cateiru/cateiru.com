@@ -23,6 +23,7 @@ type TestUser struct {
 	FamilyNameJa string
 	Location     string
 	LocationJa   string
+	AvatarURL    string
 
 	User    *ent.User
 	Session *ent.Session
@@ -44,6 +45,7 @@ func NewUser() (*TestUser, error) {
 		FamilyNameJa: "あああ",
 		Location:     "hogehoge",
 		LocationJa:   "ほげほげ",
+		AvatarURL:    fmt.Sprintf("https://%s.cateiru.com", userId),
 
 		User:    nil,
 		Session: nil,
