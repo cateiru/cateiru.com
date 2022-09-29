@@ -82,6 +82,12 @@ func (uu *UserUpdate) SetLocationJa(s string) *UserUpdate {
 	return uu
 }
 
+// SetAvatarURL sets the "avatar_url" field.
+func (uu *UserUpdate) SetAvatarURL(s string) *UserUpdate {
+	uu.mutation.SetAvatarURL(s)
+	return uu
+}
+
 // SetCreated sets the "created" field.
 func (uu *UserUpdate) SetCreated(t time.Time) *UserUpdate {
 	uu.mutation.SetCreated(t)
@@ -115,12 +121,18 @@ func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
 	)
 	uu.defaults()
 	if len(uu.hooks) == 0 {
+		if err = uu.check(); err != nil {
+			return 0, err
+		}
 		affected, err = uu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*UserMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = uu.check(); err != nil {
+				return 0, err
 			}
 			uu.mutation = mutation
 			affected, err = uu.sqlSave(ctx)
@@ -168,6 +180,16 @@ func (uu *UserUpdate) defaults() {
 		v := user.UpdateDefaultModified()
 		uu.mutation.SetModified(v)
 	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (uu *UserUpdate) check() error {
+	if v, ok := uu.mutation.AvatarURL(); ok {
+		if err := user.AvatarURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_url", err: fmt.Errorf(`ent: validator failed for field "User.avatar_url": %w`, err)}
+		}
+	}
+	return nil
 }
 
 func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -249,6 +271,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldLocationJa,
+		})
+	}
+	if value, ok := uu.mutation.AvatarURL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldAvatarURL,
 		})
 	}
 	if value, ok := uu.mutation.Created(); ok {
@@ -338,6 +367,12 @@ func (uuo *UserUpdateOne) SetLocationJa(s string) *UserUpdateOne {
 	return uuo
 }
 
+// SetAvatarURL sets the "avatar_url" field.
+func (uuo *UserUpdateOne) SetAvatarURL(s string) *UserUpdateOne {
+	uuo.mutation.SetAvatarURL(s)
+	return uuo
+}
+
 // SetCreated sets the "created" field.
 func (uuo *UserUpdateOne) SetCreated(t time.Time) *UserUpdateOne {
 	uuo.mutation.SetCreated(t)
@@ -378,12 +413,18 @@ func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
 	)
 	uuo.defaults()
 	if len(uuo.hooks) == 0 {
+		if err = uuo.check(); err != nil {
+			return nil, err
+		}
 		node, err = uuo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*UserMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = uuo.check(); err != nil {
+				return nil, err
 			}
 			uuo.mutation = mutation
 			node, err = uuo.sqlSave(ctx)
@@ -437,6 +478,16 @@ func (uuo *UserUpdateOne) defaults() {
 		v := user.UpdateDefaultModified()
 		uuo.mutation.SetModified(v)
 	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (uuo *UserUpdateOne) check() error {
+	if v, ok := uuo.mutation.AvatarURL(); ok {
+		if err := user.AvatarURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_url", err: fmt.Errorf(`ent: validator failed for field "User.avatar_url": %w`, err)}
+		}
+	}
+	return nil
 }
 
 func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
@@ -535,6 +586,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldLocationJa,
+		})
+	}
+	if value, ok := uuo.mutation.AvatarURL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldAvatarURL,
 		})
 	}
 	if value, ok := uuo.mutation.Created(); ok {

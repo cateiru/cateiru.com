@@ -5642,6 +5642,7 @@ type UserMutation struct {
 	birth_date     *time.Time
 	location       *string
 	location_ja    *string
+	avatar_url     *string
 	created        *time.Time
 	modified       *time.Time
 	clearedFields  map[string]struct{}
@@ -6078,6 +6079,42 @@ func (m *UserMutation) ResetLocationJa() {
 	m.location_ja = nil
 }
 
+// SetAvatarURL sets the "avatar_url" field.
+func (m *UserMutation) SetAvatarURL(s string) {
+	m.avatar_url = &s
+}
+
+// AvatarURL returns the value of the "avatar_url" field in the mutation.
+func (m *UserMutation) AvatarURL() (r string, exists bool) {
+	v := m.avatar_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAvatarURL returns the old "avatar_url" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldAvatarURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAvatarURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAvatarURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAvatarURL: %w", err)
+	}
+	return oldValue.AvatarURL, nil
+}
+
+// ResetAvatarURL resets all changes to the "avatar_url" field.
+func (m *UserMutation) ResetAvatarURL() {
+	m.avatar_url = nil
+}
+
 // SetCreated sets the "created" field.
 func (m *UserMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -6169,7 +6206,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.given_name != nil {
 		fields = append(fields, user.FieldGivenName)
 	}
@@ -6196,6 +6233,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.location_ja != nil {
 		fields = append(fields, user.FieldLocationJa)
+	}
+	if m.avatar_url != nil {
+		fields = append(fields, user.FieldAvatarURL)
 	}
 	if m.created != nil {
 		fields = append(fields, user.FieldCreated)
@@ -6229,6 +6269,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Location()
 	case user.FieldLocationJa:
 		return m.LocationJa()
+	case user.FieldAvatarURL:
+		return m.AvatarURL()
 	case user.FieldCreated:
 		return m.Created()
 	case user.FieldModified:
@@ -6260,6 +6302,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldLocation(ctx)
 	case user.FieldLocationJa:
 		return m.OldLocationJa(ctx)
+	case user.FieldAvatarURL:
+		return m.OldAvatarURL(ctx)
 	case user.FieldCreated:
 		return m.OldCreated(ctx)
 	case user.FieldModified:
@@ -6335,6 +6379,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocationJa(v)
+		return nil
+	case user.FieldAvatarURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAvatarURL(v)
 		return nil
 	case user.FieldCreated:
 		v, ok := value.(time.Time)
@@ -6425,6 +6476,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldLocationJa:
 		m.ResetLocationJa()
+		return nil
+	case user.FieldAvatarURL:
+		m.ResetAvatarURL()
 		return nil
 	case user.FieldCreated:
 		m.ResetCreated()

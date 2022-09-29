@@ -122,12 +122,16 @@ func init() {
 	session.DefaultID = sessionDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescAvatarURL is the schema descriptor for avatar_url field.
+	userDescAvatarURL := userFields[10].Descriptor()
+	// user.AvatarURLValidator is a validator for the "avatar_url" field. It is called by the builders before save.
+	user.AvatarURLValidator = userDescAvatarURL.Validators[0].(func(string) error)
 	// userDescCreated is the schema descriptor for created field.
-	userDescCreated := userFields[10].Descriptor()
+	userDescCreated := userFields[11].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 	// userDescModified is the schema descriptor for modified field.
-	userDescModified := userFields[11].Descriptor()
+	userDescModified := userFields[12].Descriptor()
 	// user.DefaultModified holds the default value on creation for the modified field.
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.

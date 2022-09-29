@@ -74,6 +74,12 @@ func (uc *UserCreate) SetLocationJa(s string) *UserCreate {
 	return uc
 }
 
+// SetAvatarURL sets the "avatar_url" field.
+func (uc *UserCreate) SetAvatarURL(s string) *UserCreate {
+	uc.mutation.SetAvatarURL(s)
+	return uc
+}
+
 // SetCreated sets the "created" field.
 func (uc *UserCreate) SetCreated(t time.Time) *UserCreate {
 	uc.mutation.SetCreated(t)
@@ -224,6 +230,14 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.LocationJa(); !ok {
 		return &ValidationError{Name: "location_ja", err: errors.New(`ent: missing required field "User.location_ja"`)}
 	}
+	if _, ok := uc.mutation.AvatarURL(); !ok {
+		return &ValidationError{Name: "avatar_url", err: errors.New(`ent: missing required field "User.avatar_url"`)}
+	}
+	if v, ok := uc.mutation.AvatarURL(); ok {
+		if err := user.AvatarURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_url", err: fmt.Errorf(`ent: validator failed for field "User.avatar_url": %w`, err)}
+		}
+	}
 	if _, ok := uc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "User.created"`)}
 	}
@@ -334,6 +348,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldLocationJa,
 		})
 		_node.LocationJa = value
+	}
+	if value, ok := uc.mutation.AvatarURL(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldAvatarURL,
+		})
+		_node.AvatarURL = value
 	}
 	if value, ok := uc.mutation.Created(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

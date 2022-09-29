@@ -72,6 +72,11 @@ func (User) Fields() []ent.Field {
 			dialect.MySQL: "text",
 		}),
 
+		// `avatar_url` TEXT
+		field.Text("avatar_url").SchemaType(map[string]string{
+			dialect.MySQL: "text",
+		}).NotEmpty(),
+
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 		field.Time("created").
 			SchemaType(map[string]string{

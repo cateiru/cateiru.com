@@ -34,6 +34,8 @@ type User struct {
 	Location string `json:"location,omitempty"`
 	// LocationJa holds the value of the "location_ja" field.
 	LocationJa string `json:"location_ja,omitempty"`
+	// AvatarURL holds the value of the "avatar_url" field.
+	AvatarURL string `json:"avatar_url,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -47,7 +49,7 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldGivenName, user.FieldFamilyName, user.FieldGivenNameJa, user.FieldFamilyNameJa, user.FieldUserID, user.FieldMail, user.FieldLocation, user.FieldLocationJa:
+		case user.FieldGivenName, user.FieldFamilyName, user.FieldGivenNameJa, user.FieldFamilyNameJa, user.FieldUserID, user.FieldMail, user.FieldLocation, user.FieldLocationJa, user.FieldAvatarURL:
 			values[i] = new(sql.NullString)
 		case user.FieldBirthDate, user.FieldCreated, user.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -126,6 +128,12 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				u.LocationJa = value.String
 			}
+		case user.FieldAvatarURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_url", values[i])
+			} else if value.Valid {
+				u.AvatarURL = value.String
+			}
 		case user.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created", values[i])
@@ -192,6 +200,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("location_ja=")
 	builder.WriteString(u.LocationJa)
+	builder.WriteString(", ")
+	builder.WriteString("avatar_url=")
+	builder.WriteString(u.AvatarURL)
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(u.Created.Format(time.ANSIC))

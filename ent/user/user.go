@@ -29,6 +29,8 @@ const (
 	FieldLocation = "location"
 	// FieldLocationJa holds the string denoting the location_ja field in the database.
 	FieldLocationJa = "location_ja"
+	// FieldAvatarURL holds the string denoting the avatar_url field in the database.
+	FieldAvatarURL = "avatar_url"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -49,6 +51,7 @@ var Columns = []string{
 	FieldBirthDate,
 	FieldLocation,
 	FieldLocationJa,
+	FieldAvatarURL,
 	FieldCreated,
 	FieldModified,
 }
@@ -64,6 +67,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// AvatarURLValidator is a validator for the "avatar_url" field. It is called by the builders before save.
+	AvatarURLValidator func(string) error
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
