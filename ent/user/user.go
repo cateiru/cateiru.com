@@ -67,8 +67,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// AvatarURLValidator is a validator for the "avatar_url" field. It is called by the builders before save.
-	AvatarURLValidator func(string) error
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.
