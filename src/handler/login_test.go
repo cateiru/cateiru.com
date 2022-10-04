@@ -440,3 +440,22 @@ func TestLoginNoAdminUser(t *testing.T) {
 		require.Error(t, err)
 	})
 }
+
+func TestCheckAdminRole(t *testing.T) {
+	codes := map[string]bool{
+		"admin":                         true,
+		"admin test":                    true,
+		"local test":                    false,
+		"local":                         false,
+		"local hogehoge user admin nya": true,
+	}
+
+	for roles, check := range codes {
+		err := handler.CheckAdminRole(roles)
+		if check {
+			require.NoError(t, err)
+		} else {
+			require.Error(t, err)
+		}
+	}
+}
