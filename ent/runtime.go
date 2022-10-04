@@ -123,11 +123,11 @@ func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescCreated is the schema descriptor for created field.
-	userDescCreated := userFields[11].Descriptor()
+	userDescCreated := userFields[12].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 	// userDescModified is the schema descriptor for modified field.
-	userDescModified := userFields[12].Descriptor()
+	userDescModified := userFields[13].Descriptor()
 	// user.DefaultModified holds the default value on creation for the modified field.
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.

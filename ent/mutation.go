@@ -5642,6 +5642,7 @@ type UserMutation struct {
 	birth_date     *time.Time
 	location       *string
 	location_ja    *string
+	sso_token      *string
 	avatar_url     *string
 	created        *time.Time
 	modified       *time.Time
@@ -6079,6 +6080,42 @@ func (m *UserMutation) ResetLocationJa() {
 	m.location_ja = nil
 }
 
+// SetSSOToken sets the "sso_token" field.
+func (m *UserMutation) SetSSOToken(s string) {
+	m.sso_token = &s
+}
+
+// SSOToken returns the value of the "sso_token" field in the mutation.
+func (m *UserMutation) SSOToken() (r string, exists bool) {
+	v := m.sso_token
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSSOToken returns the old "sso_token" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldSSOToken(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSSOToken is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSSOToken requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSSOToken: %w", err)
+	}
+	return oldValue.SSOToken, nil
+}
+
+// ResetSSOToken resets all changes to the "sso_token" field.
+func (m *UserMutation) ResetSSOToken() {
+	m.sso_token = nil
+}
+
 // SetAvatarURL sets the "avatar_url" field.
 func (m *UserMutation) SetAvatarURL(s string) {
 	m.avatar_url = &s
@@ -6219,7 +6256,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.given_name != nil {
 		fields = append(fields, user.FieldGivenName)
 	}
@@ -6246,6 +6283,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.location_ja != nil {
 		fields = append(fields, user.FieldLocationJa)
+	}
+	if m.sso_token != nil {
+		fields = append(fields, user.FieldSSOToken)
 	}
 	if m.avatar_url != nil {
 		fields = append(fields, user.FieldAvatarURL)
@@ -6282,6 +6322,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Location()
 	case user.FieldLocationJa:
 		return m.LocationJa()
+	case user.FieldSSOToken:
+		return m.SSOToken()
 	case user.FieldAvatarURL:
 		return m.AvatarURL()
 	case user.FieldCreated:
@@ -6315,6 +6357,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldLocation(ctx)
 	case user.FieldLocationJa:
 		return m.OldLocationJa(ctx)
+	case user.FieldSSOToken:
+		return m.OldSSOToken(ctx)
 	case user.FieldAvatarURL:
 		return m.OldAvatarURL(ctx)
 	case user.FieldCreated:
@@ -6392,6 +6436,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLocationJa(v)
+		return nil
+	case user.FieldSSOToken:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSSOToken(v)
 		return nil
 	case user.FieldAvatarURL:
 		v, ok := value.(string)
@@ -6498,6 +6549,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldLocationJa:
 		m.ResetLocationJa()
+		return nil
+	case user.FieldSSOToken:
+		m.ResetSSOToken()
 		return nil
 	case user.FieldAvatarURL:
 		m.ResetAvatarURL()

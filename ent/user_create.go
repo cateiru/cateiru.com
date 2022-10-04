@@ -74,6 +74,12 @@ func (uc *UserCreate) SetLocationJa(s string) *UserCreate {
 	return uc
 }
 
+// SetSSOToken sets the "sso_token" field.
+func (uc *UserCreate) SetSSOToken(s string) *UserCreate {
+	uc.mutation.SetSSOToken(s)
+	return uc
+}
+
 // SetAvatarURL sets the "avatar_url" field.
 func (uc *UserCreate) SetAvatarURL(s string) *UserCreate {
 	uc.mutation.SetAvatarURL(s)
@@ -238,6 +244,9 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.LocationJa(); !ok {
 		return &ValidationError{Name: "location_ja", err: errors.New(`ent: missing required field "User.location_ja"`)}
 	}
+	if _, ok := uc.mutation.SSOToken(); !ok {
+		return &ValidationError{Name: "sso_token", err: errors.New(`ent: missing required field "User.sso_token"`)}
+	}
 	if _, ok := uc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "User.created"`)}
 	}
@@ -348,6 +357,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldLocationJa,
 		})
 		_node.LocationJa = value
+	}
+	if value, ok := uc.mutation.SSOToken(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldSSOToken,
+		})
+		_node.SSOToken = value
 	}
 	if value, ok := uc.mutation.AvatarURL(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

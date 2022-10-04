@@ -82,6 +82,12 @@ func (uu *UserUpdate) SetLocationJa(s string) *UserUpdate {
 	return uu
 }
 
+// SetSSOToken sets the "sso_token" field.
+func (uu *UserUpdate) SetSSOToken(s string) *UserUpdate {
+	uu.mutation.SetSSOToken(s)
+	return uu
+}
+
 // SetAvatarURL sets the "avatar_url" field.
 func (uu *UserUpdate) SetAvatarURL(s string) *UserUpdate {
 	uu.mutation.SetAvatarURL(s)
@@ -271,6 +277,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldLocationJa,
 		})
 	}
+	if value, ok := uu.mutation.SSOToken(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldSSOToken,
+		})
+	}
 	if value, ok := uu.mutation.AvatarURL(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -368,6 +381,12 @@ func (uuo *UserUpdateOne) SetLocation(s string) *UserUpdateOne {
 // SetLocationJa sets the "location_ja" field.
 func (uuo *UserUpdateOne) SetLocationJa(s string) *UserUpdateOne {
 	uuo.mutation.SetLocationJa(s)
+	return uuo
+}
+
+// SetSSOToken sets the "sso_token" field.
+func (uuo *UserUpdateOne) SetSSOToken(s string) *UserUpdateOne {
+	uuo.mutation.SetSSOToken(s)
 	return uuo
 }
 
@@ -588,6 +607,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldLocationJa,
+		})
+	}
+	if value, ok := uuo.mutation.SSOToken(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldSSOToken,
 		})
 	}
 	if value, ok := uuo.mutation.AvatarURL(); ok {

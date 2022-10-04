@@ -143,6 +143,13 @@ func LocationJa(v string) predicate.User {
 	})
 }
 
+// SSOToken applies equality check predicate on the "sso_token" field. It's identical to SSOTokenEQ.
+func SSOToken(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSSOToken), v))
+	})
+}
+
 // AvatarURL applies equality check predicate on the "avatar_url" field. It's identical to AvatarURLEQ.
 func AvatarURL(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
@@ -1017,6 +1024,105 @@ func LocationJaEqualFold(v string) predicate.User {
 func LocationJaContainsFold(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldLocationJa), v))
+	})
+}
+
+// SSOTokenEQ applies the EQ predicate on the "sso_token" field.
+func SSOTokenEQ(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenNEQ applies the NEQ predicate on the "sso_token" field.
+func SSOTokenNEQ(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenIn applies the In predicate on the "sso_token" field.
+func SSOTokenIn(vs ...string) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldSSOToken), v...))
+	})
+}
+
+// SSOTokenNotIn applies the NotIn predicate on the "sso_token" field.
+func SSOTokenNotIn(vs ...string) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldSSOToken), v...))
+	})
+}
+
+// SSOTokenGT applies the GT predicate on the "sso_token" field.
+func SSOTokenGT(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenGTE applies the GTE predicate on the "sso_token" field.
+func SSOTokenGTE(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenLT applies the LT predicate on the "sso_token" field.
+func SSOTokenLT(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenLTE applies the LTE predicate on the "sso_token" field.
+func SSOTokenLTE(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenContains applies the Contains predicate on the "sso_token" field.
+func SSOTokenContains(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenHasPrefix applies the HasPrefix predicate on the "sso_token" field.
+func SSOTokenHasPrefix(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenHasSuffix applies the HasSuffix predicate on the "sso_token" field.
+func SSOTokenHasSuffix(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenEqualFold applies the EqualFold predicate on the "sso_token" field.
+func SSOTokenEqualFold(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSSOToken), v))
+	})
+}
+
+// SSOTokenContainsFold applies the ContainsFold predicate on the "sso_token" field.
+func SSOTokenContainsFold(v string) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSSOToken), v))
 	})
 }
 

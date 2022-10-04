@@ -29,6 +29,8 @@ const (
 	FieldLocation = "location"
 	// FieldLocationJa holds the string denoting the location_ja field in the database.
 	FieldLocationJa = "location_ja"
+	// FieldSSOToken holds the string denoting the sso_token field in the database.
+	FieldSSOToken = "sso_token"
 	// FieldAvatarURL holds the string denoting the avatar_url field in the database.
 	FieldAvatarURL = "avatar_url"
 	// FieldCreated holds the string denoting the created field in the database.
@@ -51,6 +53,7 @@ var Columns = []string{
 	FieldBirthDate,
 	FieldLocation,
 	FieldLocationJa,
+	FieldSSOToken,
 	FieldAvatarURL,
 	FieldCreated,
 	FieldModified,

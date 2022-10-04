@@ -72,6 +72,12 @@ func (User) Fields() []ent.Field {
 			dialect.MySQL: "text",
 		}),
 
+		// `sso_token` TEXT NOT NULL
+		field.Text("sso_token").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}),
+
 		// `avatar_url` TEXT
 		field.Text("avatar_url").
 			Optional().
