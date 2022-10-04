@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/cateiru/cateiru-sso/pkg/go/sso"
+	"github.com/cateiru/cateiru.com/ent"
+	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/cateiru/cateiru.com/src/base"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/logging"
@@ -44,33 +46,49 @@ func LoginHandler(c echo.Context) error {
 	for _, role := range roles {
 		if role == "admin" {
 			findAdmin = true
+			break
 		}
 	}
 	if !findAdmin {
 		return echo.NewHTTPError(http.StatusForbidden, "you do not have access")
 	}
 
-	userConf := base.DB.Client.User.Create().
-		SetGivenName(claims.GivenName).
-		SetFamilyName(claims.FamilyName).
-		SetUserID(claims.NickName).
-		SetMail(claims.Email).
-		SetBirthDate(time.Now()).
-		SetGivenNameJa(claims.GivenName).
-		SetFamilyNameJa(claims.FamilyName).
-		SetLocation("").
-		SetLocationJa("")
-
-	if claims.Picture != "" {
-		userConf = userConf.SetAvatarURL(claims.Picture)
-	}
-
-	user, err := userConf.Save(ctx)
+	existUser, err := base.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).Exist(ctx)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
+		return err
 	}
 
-	if err := base.Login(ctx, user); err != nil {
+	var u *ent.User
+
+	if existUser {
+		u, err = base.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).First(ctx)
+		if err != nil {
+			return err
+		}
+	} else {
+		userConf := base.DB.Client.User.Create().
+			SetGivenName(claims.GivenName).
+			SetFamilyName(claims.FamilyName).
+			SetUserID(claims.NickName).
+			SetMail(claims.Email).
+			SetBirthDate(time.Now()).
+			SetGivenNameJa(claims.GivenName).
+			SetFamilyNameJa(claims.FamilyName).
+			SetLocation("").
+			SetSSOToken(claims.ID).
+			SetLocationJa("")
+
+		if claims.Picture != "" {
+			userConf = userConf.SetAvatarURL(claims.Picture)
+		}
+
+		u, err = userConf.Save(ctx)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
+		}
+	}
+
+	if err := base.Login(ctx, u); err != nil {
 		return err
 	}
 

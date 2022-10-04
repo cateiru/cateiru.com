@@ -24,6 +24,7 @@ type TestUser struct {
 	Location     string
 	LocationJa   string
 	AvatarURL    string
+	SSOToken     string
 
 	User    *ent.User
 	Session *ent.Session
@@ -46,6 +47,7 @@ func NewUser() (*TestUser, error) {
 		Location:     "hogehoge",
 		LocationJa:   "ほげほげ",
 		AvatarURL:    fmt.Sprintf("https://%s.cateiru.com", userId),
+		SSOToken:     userId,
 
 		User:    nil,
 		Session: nil,
@@ -64,6 +66,7 @@ func (c *TestUser) CreateDB(ctx context.Context, db *db.DB) error {
 		SetFamilyNameJa(c.FamilyNameJa).
 		SetLocation(c.Location).
 		SetLocationJa(c.LocationJa).
+		SetSSOToken(c.SSOToken).
 		Save(ctx)
 
 	if err != nil {

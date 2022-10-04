@@ -99,6 +99,7 @@ func TestLoginHandler(t *testing.T) {
 		Email:      testUser.Mail,
 		Picture:    testUser.AvatarURL,
 
+		ID:   testUser.SSOToken,
 		Role: "admin",
 
 		Iat:      time.Now().Unix(),
@@ -115,6 +116,7 @@ func TestLoginHandler(t *testing.T) {
 	idToken, err := token.SignedString(signKey)
 	require.NoError(t, err)
 
+	// mock
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
@@ -199,9 +201,145 @@ func TestLoginHandler(t *testing.T) {
 		require.Len(t, users, 1)
 		dbInsertedUser := users[0]
 
-		t.Log(dbInsertedUser)
+		require.Equal(t, dbInsertedUser.FamilyName, testUser.FamilyName)
+		require.Equal(t, dbInsertedUser.UserID, testUser.UserId)
+	})
+}
+
+func TestLoginAlreadyExistUser(t *testing.T) {
+	test.Init()
+
+	code := "abc123"
+	redirect := config.Config.SSORedirectURI.String()
+
+	testUser, err := test.NewUser()
+	require.NoError(t, err)
+
+	claims := sso.Claims{
+		StandardClaims: jwt.StandardClaims{
+			Issuer:    "test",
+			Subject:   "hoge",
+			Audience:  "nya",
+			ExpiresAt: time.Now().Add(time.Minute * 10).Unix(),
+		},
+
+		Name:       testUser.FamilyName,
+		GivenName:  testUser.GivenName,
+		FamilyName: testUser.FamilyName,
+		NickName:   testUser.UserId,
+		Email:      testUser.Mail,
+		Picture:    testUser.AvatarURL,
+
+		ID:   testUser.SSOToken,
+		Role: "admin",
+
+		Iat:      time.Now().Unix(),
+		AuthTime: time.Now().Unix(),
+
+		PreferredUserName: "test",
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+
+	signKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(JWT_PRIVATE_KEY))
+	require.NoError(t, err)
+
+	idToken, err := token.SignedString(signKey)
+	require.NoError(t, err)
+
+	// mock
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	key := sso.PublicKey{
+		Pkcs8: JWT_PUBLIC_PKCS8_KEY,
+	}
+	body, err := json.Marshal(key)
+	require.NoError(t, err)
+
+	httpmock.RegisterResponder("GET", "https://api.sso.cateiru.com/v1/oauth/jwt/key",
+		httpmock.NewStringResponder(200, string(body)),
+	)
+
+	successResp := sso.TokenResponse{
+		AccessToken:  "hogehoge",
+		TokenType:    "Bearer",
+		RefreshToken: "hugahuga",
+		ExpiresIn:    3600,
+		IDToken:      idToken,
+	}
+
+	httpmock.RegisterResponder("GET", fmt.Sprintf(
+		"https://api.sso.cateiru.com/v1/oauth/token?grant_type=authorization_code&code=%s&redirect_uri=%s",
+		url.QueryEscape(code), url.QueryEscape(redirect),
+	),
+		func(req *http.Request) (*http.Response, error) {
+			secret := strings.Split(req.Header.Get("Authorization"), " ")
+			if secret[1] != config.Config.SSOTokenSecret {
+				return httpmock.NewStringResponse(403, ""), nil
+			}
+
+			resp, err := httpmock.NewJsonResponse(200, successResp)
+			if err != nil {
+				return httpmock.NewStringResponse(500, ""), nil
+			}
+
+			return resp, nil
+		},
+	)
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		base, err := test.NewTestToolDB()
+		require.NoError(t, err)
+		defer base.Close()
+
+		// Insert DB
+		testUser.CreateDB(ctx, base.DB)
+
+		m, err := mock.NewGet("", fmt.Sprintf("/login?code=%s", code))
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = handler.LoginHandler(e)
+		require.NoError(t, err)
+
+		cookies := m.W.Result().Cookies()
+
+		sessionToken := ""
+		for _, cookie := range cookies {
+			if cookie.Name == config.Config.SessionCookieName {
+				sessionToken = cookie.Value
+			}
+		}
+		require.NotEqual(t, sessionToken, "")
+
+		// SELECT * FROM `users` WHERE users.id = (SELECT user_id FROM `sessions` WHERE session_token = ?)
+		users, err := base.DB.Client.User.Query().Where(func(s *sql.Selector) {
+			t := sql.Table(session.Table)
+			s.Where(
+				sql.EQ(
+					s.C(user.FieldID),
+					sql.Select(
+						t.C(session.FieldUserID),
+					).From(t).Where(sql.EQ(
+						t.C(session.FieldID),
+						sessionToken,
+					)),
+				),
+			)
+		}).All(ctx)
+		require.NoError(t, err)
+		require.Len(t, users, 1)
+		dbInsertedUser := users[0]
 
 		require.Equal(t, dbInsertedUser.FamilyName, testUser.FamilyName)
 		require.Equal(t, dbInsertedUser.UserID, testUser.UserId)
+
+		user2, err := base.DB.Client.User.Query().Where(user.SSOToken(testUser.SSOToken)).Count(ctx)
+		require.NoError(t, err)
+		require.Equal(t, user2, 1)
 	})
 }
