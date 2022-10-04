@@ -29,28 +29,14 @@ func LoginHandler(c echo.Context) error {
 		return echo.ErrBadRequest
 	}
 
-	token, err := sso.GetToken(code, config.Config.SSORedirectURI.String(), config.Config.SSOTokenSecret)
+	claims, err := GetClaims(code)
 	if err != nil {
-		logging.Sugar.Error(err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "failed get token from CateiruSSO")
-	}
-
-	claims, err := sso.ValidateIDToken(token.IDToken)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "failed valid JWT token")
+		return err
 	}
 
 	// Check role
-	roles := strings.Split(claims.Role, " ")
-	findAdmin := false
-	for _, role := range roles {
-		if role == "admin" {
-			findAdmin = true
-			break
-		}
-	}
-	if !findAdmin {
-		return echo.NewHTTPError(http.StatusForbidden, "you do not have access")
+	if err := CheckAdminRole(claims.Role); err != nil {
+		return err
 	}
 
 	existUser, err := base.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).Exist(ctx)
@@ -66,25 +52,9 @@ func LoginHandler(c echo.Context) error {
 			return err
 		}
 	} else {
-		userConf := base.DB.Client.User.Create().
-			SetGivenName(claims.GivenName).
-			SetFamilyName(claims.FamilyName).
-			SetUserID(claims.NickName).
-			SetMail(claims.Email).
-			SetBirthDate(time.Now()).
-			SetGivenNameJa(claims.GivenName).
-			SetFamilyNameJa(claims.FamilyName).
-			SetLocation("").
-			SetSSOToken(claims.ID).
-			SetLocationJa("")
-
-		if claims.Picture != "" {
-			userConf = userConf.SetAvatarURL(claims.Picture)
-		}
-
-		u, err = userConf.Save(ctx)
+		u, err = CreateUser(ctx, base, claims)
 		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
+			return err
 		}
 	}
 
@@ -95,4 +65,62 @@ func LoginHandler(c echo.Context) error {
 	redirectURL := url.URL{}
 
 	return c.Redirect(http.StatusMovedPermanently, redirectURL.String())
+}
+
+// Get Claims from sso code via CateiruSSO
+func GetClaims(code string) (*sso.Claims, error) {
+	token, err := sso.GetToken(code, config.Config.SSORedirectURI.String(), config.Config.SSOTokenSecret)
+	if err != nil {
+		logging.Sugar.Error(err)
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, "failed get token from CateiruSSO")
+	}
+
+	claims, err := sso.ValidateIDToken(token.IDToken)
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusBadRequest, "failed valid JWT token")
+	}
+
+	return claims, nil
+}
+
+// Check exists `admin` role in CateiruSSO received claims.
+func CheckAdminRole(rolesStr string) error {
+	roles := strings.Split(rolesStr, " ")
+	findAdmin := false
+	for _, role := range roles {
+		if role == "admin" {
+			findAdmin = true
+			break
+		}
+	}
+	if !findAdmin {
+		return echo.NewHTTPError(http.StatusForbidden, "you do not have access")
+	}
+	return nil
+}
+
+// Create New User from SSO Claims
+func CreateUser(ctx context.Context, base *base.Base, claims *sso.Claims) (*ent.User, error) {
+	userConf := base.DB.Client.User.Create().
+		SetGivenName(claims.GivenName).
+		SetFamilyName(claims.FamilyName).
+		SetUserID(claims.NickName).
+		SetMail(claims.Email).
+		SetBirthDate(time.Now()).
+		SetGivenNameJa(claims.GivenName).
+		SetFamilyNameJa(claims.FamilyName).
+		SetLocation("").
+		SetSSOToken(claims.ID).
+		SetLocationJa("")
+
+	if claims.Picture != "" {
+		userConf = userConf.SetAvatarURL(claims.Picture)
+	}
+
+	u, err := userConf.Save(ctx)
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
+	}
+
+	return u, nil
 }
