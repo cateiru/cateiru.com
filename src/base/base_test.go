@@ -9,6 +9,7 @@ import (
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
 
@@ -104,5 +105,44 @@ func TestBase(t *testing.T) {
 		cookies := m.W.Result().Cookies()
 
 		require.Len(t, cookies, 2)
+	})
+
+	t.Run("logout", func(t *testing.T) {
+		ctx := context.Background()
+		tool, err := test.NewTestToolDB()
+		require.NoError(t, err)
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		m, err := mock.NewMock("", http.MethodGet, "/")
+		require.NoError(t, err)
+
+		u.HandlerSession(ctx, tool.DB, m)
+
+		e := m.Echo()
+		handler := func(e echo.Context) error {
+			base, err := base.NewBase(e)
+			if err != nil {
+				return err
+			}
+			defer base.Close()
+
+			return base.Logout(ctx)
+		}
+		err = handler(e)
+		require.NoError(t, err)
+
+		m.Ok(t)
+		cookies := m.W.Result().Cookies()
+		require.Len(t, cookies, 2)
+
+		c := new(http.Cookie)
+		for _, cookie := range cookies {
+			if cookie.Name == config.Config.SessionCookieName {
+				c = cookie
+			}
+		}
+		require.NotNil(t, c)
+		require.Equal(t, c.MaxAge, 0)
 	})
 }

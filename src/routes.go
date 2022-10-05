@@ -11,4 +11,9 @@ func Routes(e *echo.Echo) {
 
 	e.GET("/login", handler.LoginHandler)
 	e.GET("/login/url", handler.LoginURLHandler)
+
+	e.GET("/logout", handler.LogoutHandler)
+
+	// Login Page
+	e.GET("/user/me", handler.MeHandler)
 }

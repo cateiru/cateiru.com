@@ -2,6 +2,7 @@ package base
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -39,7 +40,7 @@ func (c *Base) Close() {
 
 // Require session
 func (c *Base) Session(ctx context.Context) error {
-	token, err := c.getSessionToken(c.E)
+	token, err := c.getSessionToken()
 	if err != nil {
 		return err
 	}
@@ -94,14 +95,35 @@ func (c *Base) Login(ctx context.Context, u *ent.User) error {
 	return nil
 }
 
+// Logout
+func (c *Base) Logout(ctx context.Context) error {
+	tokenCookie, err := c.E.Cookie(config.Config.SessionCookieName)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("failed login: %v", err))
+	}
+	tokenCookie.Expires = time.Now()
+	tokenCookie.MaxAge = 0
+	c.E.SetCookie(tokenCookie)
+
+	checkCookie, err := c.E.Cookie(config.Config.SessionConfirmationCookieName)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("failed login: %v", err))
+	}
+	checkCookie.Expires = time.Now()
+	checkCookie.MaxAge = 0
+	c.E.SetCookie(checkCookie)
+
+	return nil
+}
+
 // Get Session token from Cookies
 // Cookie session token name is defined `SessionCookieName` in config
 //
 // If don't get values or invalid value, return 403 error.
-func (c *Base) getSessionToken(e echo.Context) (uuid.UUID, error) {
-	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
+func (c *Base) getSessionToken() (uuid.UUID, error) {
+	tokenCookie, err := c.E.Cookie(config.Config.SessionCookieName)
 	if err != nil {
-		return uuid.UUID{}, err
+		return uuid.UUID{}, echo.NewHTTPError(http.StatusBadRequest, "cookie is not found")
 	}
 	token := tokenCookie.Value
 

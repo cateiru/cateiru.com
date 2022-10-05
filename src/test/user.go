@@ -5,11 +5,13 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
+	"github.com/cateiru/go-http-easy-test/handler/mock"
 	"github.com/google/uuid"
 )
 
@@ -74,6 +76,25 @@ func (c *TestUser) CreateDB(ctx context.Context, db *db.DB) error {
 	}
 
 	c.User = u
+	return nil
+}
+
+func (c *TestUser) HandlerSession(ctx context.Context, db *db.DB, m *mock.MockHandler) error {
+	sessionToken, err := c.CreateSession(ctx, db)
+	if err != nil {
+		return err
+	}
+
+	sessionCookie := &http.Cookie{
+		Name:  config.Config.SessionCookieName,
+		Value: sessionToken.String(),
+	}
+	checkCookie := &http.Cookie{
+		Name:  config.Config.SessionConfirmationCookieName,
+		Value: "true",
+	}
+	m.Cookie([]*http.Cookie{sessionCookie, checkCookie})
+
 	return nil
 }
 
