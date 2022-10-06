@@ -62,7 +62,11 @@ func LoginHandler(c echo.Context) error {
 		return err
 	}
 
-	redirectURL := url.URL{}
+	// TODO
+	redirectURL := url.URL{
+		Host:   config.Config.PageDomain.Host,
+		Scheme: config.Config.PageDomain.Scheme,
+	}
 
 	return c.Redirect(http.StatusMovedPermanently, redirectURL.String())
 }
