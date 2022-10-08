@@ -47,6 +47,13 @@ func (c *TestTool) NewUser(ctx context.Context) (*TestUser, error) {
 	return user, nil
 }
 
+func (c *TestTool) ClearUser(ctx context.Context) error {
+	if _, err := c.DB.Client.User.Delete().Exec(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Returns list of user ids
 func (c *TestTool) GetUserIds() []uint32 {
 	ids := []uint32{}

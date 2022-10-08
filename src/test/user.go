@@ -118,6 +118,10 @@ func (c *TestUser) CreateSession(ctx context.Context, db *db.DB) (uuid.UUID, err
 	return s.ID, nil
 }
 
+func (c *TestUser) SelectStatus(ctx context.Context, s bool) error {
+	return c.User.Update().SetSelected(s).Exec(ctx)
+}
+
 func MakeRandomStr(digit uint32) (string, error) {
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 

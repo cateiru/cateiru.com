@@ -16,4 +16,10 @@ func Routes(e *echo.Echo, handler *handler.Handler) {
 
 	// Login Page
 	e.GET("/user/me", handler.MeHandler)
+
+	// update my profile
+	e.PUT("/user", handler.UpdateUserHandler)
+
+	// Public endpoints
+	e.GET("/public/profile", handler.PublicProfileHandler)
 }
