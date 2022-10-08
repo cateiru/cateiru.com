@@ -121,7 +121,8 @@ func TestBase(t *testing.T) {
 				return err
 			}
 
-			return base.Logout(ctx, e)
+			base.Logout(ctx, e)
+			return nil
 		}
 		err = handler(e)
 		require.NoError(t, err)

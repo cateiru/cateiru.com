@@ -2,7 +2,6 @@ package base
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -34,6 +33,7 @@ func (c *Base) Session(ctx context.Context, e echo.Context) error {
 	}
 	u, err := c.sessionLogin(ctx, *c.DB.Client, token)
 	if err != nil {
+		c.Logout(ctx, e)
 		return err
 	}
 
@@ -84,24 +84,20 @@ func (c *Base) Login(ctx context.Context, e echo.Context, u *ent.User) error {
 }
 
 // Logout
-func (c *Base) Logout(ctx context.Context, e echo.Context) error {
+func (c *Base) Logout(ctx context.Context, e echo.Context) {
 	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("failed login: %v", err))
+	if err == nil {
+		tokenCookie.Expires = time.Now()
+		tokenCookie.MaxAge = 0
+		e.SetCookie(tokenCookie)
 	}
-	tokenCookie.Expires = time.Now()
-	tokenCookie.MaxAge = 0
-	e.SetCookie(tokenCookie)
 
 	checkCookie, err := e.Cookie(config.Config.SessionConfirmationCookieName)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("failed login: %v", err))
+	if err == nil {
+		checkCookie.Expires = time.Now()
+		checkCookie.MaxAge = 0
+		e.SetCookie(checkCookie)
 	}
-	checkCookie.Expires = time.Now()
-	checkCookie.MaxAge = 0
-	e.SetCookie(checkCookie)
-
-	return nil
 }
 
 // Get Session token from Cookies
