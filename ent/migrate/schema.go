@@ -205,6 +205,7 @@ var (
 		{Name: "location_ja", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "sso_token", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "avatar_url", Type: field.TypeString, Nullable: true, Size: 2147483647, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "selected", Type: field.TypeBool, Default: false},
 		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}

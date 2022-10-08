@@ -157,6 +157,13 @@ func AvatarURL(v string) predicate.User {
 	})
 }
 
+// Selected applies equality check predicate on the "selected" field. It's identical to SelectedEQ.
+func Selected(v bool) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelected), v))
+	})
+}
+
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
@@ -1236,6 +1243,20 @@ func AvatarURLEqualFold(v string) predicate.User {
 func AvatarURLContainsFold(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldAvatarURL), v))
+	})
+}
+
+// SelectedEQ applies the EQ predicate on the "selected" field.
+func SelectedEQ(v bool) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelected), v))
+	})
+}
+
+// SelectedNEQ applies the NEQ predicate on the "selected" field.
+func SelectedNEQ(v bool) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSelected), v))
 	})
 }
 

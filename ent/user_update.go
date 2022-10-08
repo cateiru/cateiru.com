@@ -108,6 +108,20 @@ func (uu *UserUpdate) ClearAvatarURL() *UserUpdate {
 	return uu
 }
 
+// SetSelected sets the "selected" field.
+func (uu *UserUpdate) SetSelected(b bool) *UserUpdate {
+	uu.mutation.SetSelected(b)
+	return uu
+}
+
+// SetNillableSelected sets the "selected" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableSelected(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetSelected(*b)
+	}
+	return uu
+}
+
 // SetCreated sets the "created" field.
 func (uu *UserUpdate) SetCreated(t time.Time) *UserUpdate {
 	uu.mutation.SetCreated(t)
@@ -297,6 +311,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldAvatarURL,
 		})
 	}
+	if value, ok := uu.mutation.Selected(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldSelected,
+		})
+	}
 	if value, ok := uu.mutation.Created(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -407,6 +428,20 @@ func (uuo *UserUpdateOne) SetNillableAvatarURL(s *string) *UserUpdateOne {
 // ClearAvatarURL clears the value of the "avatar_url" field.
 func (uuo *UserUpdateOne) ClearAvatarURL() *UserUpdateOne {
 	uuo.mutation.ClearAvatarURL()
+	return uuo
+}
+
+// SetSelected sets the "selected" field.
+func (uuo *UserUpdateOne) SetSelected(b bool) *UserUpdateOne {
+	uuo.mutation.SetSelected(b)
+	return uuo
+}
+
+// SetNillableSelected sets the "selected" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableSelected(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetSelected(*b)
+	}
 	return uuo
 }
 
@@ -627,6 +662,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Column: user.FieldAvatarURL,
+		})
+	}
+	if value, ok := uuo.mutation.Selected(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldSelected,
 		})
 	}
 	if value, ok := uuo.mutation.Created(); ok {

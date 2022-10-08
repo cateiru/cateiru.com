@@ -85,6 +85,10 @@ func (User) Fields() []ent.Field {
 				dialect.MySQL: "text",
 			}),
 
+		// `selected` BOOL NOT NULL DEFAULT 0
+		field.Bool("selected").
+			Default(false),
+
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 		field.Time("created").
 			SchemaType(map[string]string{

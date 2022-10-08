@@ -33,6 +33,8 @@ const (
 	FieldSSOToken = "sso_token"
 	// FieldAvatarURL holds the string denoting the avatar_url field in the database.
 	FieldAvatarURL = "avatar_url"
+	// FieldSelected holds the string denoting the selected field in the database.
+	FieldSelected = "selected"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -55,6 +57,7 @@ var Columns = []string{
 	FieldLocationJa,
 	FieldSSOToken,
 	FieldAvatarURL,
+	FieldSelected,
 	FieldCreated,
 	FieldModified,
 }
@@ -70,6 +73,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultSelected holds the default value on creation for the "selected" field.
+	DefaultSelected bool
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 	// DefaultModified holds the default value on creation for the "modified" field.

@@ -5644,6 +5644,7 @@ type UserMutation struct {
 	location_ja    *string
 	sso_token      *string
 	avatar_url     *string
+	selected       *bool
 	created        *time.Time
 	modified       *time.Time
 	clearedFields  map[string]struct{}
@@ -6165,6 +6166,42 @@ func (m *UserMutation) ResetAvatarURL() {
 	delete(m.clearedFields, user.FieldAvatarURL)
 }
 
+// SetSelected sets the "selected" field.
+func (m *UserMutation) SetSelected(b bool) {
+	m.selected = &b
+}
+
+// Selected returns the value of the "selected" field in the mutation.
+func (m *UserMutation) Selected() (r bool, exists bool) {
+	v := m.selected
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSelected returns the old "selected" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldSelected(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSelected is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSelected requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSelected: %w", err)
+	}
+	return oldValue.Selected, nil
+}
+
+// ResetSelected resets all changes to the "selected" field.
+func (m *UserMutation) ResetSelected() {
+	m.selected = nil
+}
+
 // SetCreated sets the "created" field.
 func (m *UserMutation) SetCreated(t time.Time) {
 	m.created = &t
@@ -6256,7 +6293,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.given_name != nil {
 		fields = append(fields, user.FieldGivenName)
 	}
@@ -6289,6 +6326,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.avatar_url != nil {
 		fields = append(fields, user.FieldAvatarURL)
+	}
+	if m.selected != nil {
+		fields = append(fields, user.FieldSelected)
 	}
 	if m.created != nil {
 		fields = append(fields, user.FieldCreated)
@@ -6326,6 +6366,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.SSOToken()
 	case user.FieldAvatarURL:
 		return m.AvatarURL()
+	case user.FieldSelected:
+		return m.Selected()
 	case user.FieldCreated:
 		return m.Created()
 	case user.FieldModified:
@@ -6361,6 +6403,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldSSOToken(ctx)
 	case user.FieldAvatarURL:
 		return m.OldAvatarURL(ctx)
+	case user.FieldSelected:
+		return m.OldSelected(ctx)
 	case user.FieldCreated:
 		return m.OldCreated(ctx)
 	case user.FieldModified:
@@ -6450,6 +6494,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAvatarURL(v)
+		return nil
+	case user.FieldSelected:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSelected(v)
 		return nil
 	case user.FieldCreated:
 		v, ok := value.(time.Time)
@@ -6555,6 +6606,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldAvatarURL:
 		m.ResetAvatarURL()
+		return nil
+	case user.FieldSelected:
+		m.ResetSelected()
 		return nil
 	case user.FieldCreated:
 		m.ResetCreated()

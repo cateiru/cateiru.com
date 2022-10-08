@@ -38,6 +38,8 @@ type User struct {
 	SSOToken string `json:"sso_token,omitempty"`
 	// AvatarURL holds the value of the "avatar_url" field.
 	AvatarURL string `json:"avatar_url,omitempty"`
+	// Selected holds the value of the "selected" field.
+	Selected bool `json:"selected,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -49,6 +51,8 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case user.FieldSelected:
+			values[i] = new(sql.NullBool)
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
 		case user.FieldGivenName, user.FieldFamilyName, user.FieldGivenNameJa, user.FieldFamilyNameJa, user.FieldUserID, user.FieldMail, user.FieldLocation, user.FieldLocationJa, user.FieldSSOToken, user.FieldAvatarURL:
@@ -142,6 +146,12 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				u.AvatarURL = value.String
 			}
+		case user.FieldSelected:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field selected", values[i])
+			} else if value.Valid {
+				u.Selected = value.Bool
+			}
 		case user.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created", values[i])
@@ -214,6 +224,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("avatar_url=")
 	builder.WriteString(u.AvatarURL)
+	builder.WriteString(", ")
+	builder.WriteString("selected=")
+	builder.WriteString(fmt.Sprintf("%v", u.Selected))
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(u.Created.Format(time.ANSIC))

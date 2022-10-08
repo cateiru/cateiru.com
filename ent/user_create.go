@@ -94,6 +94,20 @@ func (uc *UserCreate) SetNillableAvatarURL(s *string) *UserCreate {
 	return uc
 }
 
+// SetSelected sets the "selected" field.
+func (uc *UserCreate) SetSelected(b bool) *UserCreate {
+	uc.mutation.SetSelected(b)
+	return uc
+}
+
+// SetNillableSelected sets the "selected" field if the given value is not nil.
+func (uc *UserCreate) SetNillableSelected(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetSelected(*b)
+	}
+	return uc
+}
+
 // SetCreated sets the "created" field.
 func (uc *UserCreate) SetCreated(t time.Time) *UserCreate {
 	uc.mutation.SetCreated(t)
@@ -205,6 +219,10 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.Selected(); !ok {
+		v := user.DefaultSelected
+		uc.mutation.SetSelected(v)
+	}
 	if _, ok := uc.mutation.Created(); !ok {
 		v := user.DefaultCreated()
 		uc.mutation.SetCreated(v)
@@ -246,6 +264,9 @@ func (uc *UserCreate) check() error {
 	}
 	if _, ok := uc.mutation.SSOToken(); !ok {
 		return &ValidationError{Name: "sso_token", err: errors.New(`ent: missing required field "User.sso_token"`)}
+	}
+	if _, ok := uc.mutation.Selected(); !ok {
+		return &ValidationError{Name: "selected", err: errors.New(`ent: missing required field "User.selected"`)}
 	}
 	if _, ok := uc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "User.created"`)}
@@ -373,6 +394,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldAvatarURL,
 		})
 		_node.AvatarURL = value
+	}
+	if value, ok := uc.mutation.Selected(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: user.FieldSelected,
+		})
+		_node.Selected = value
 	}
 	if value, ok := uc.mutation.Created(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

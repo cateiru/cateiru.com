@@ -122,12 +122,16 @@ func init() {
 	session.DefaultID = sessionDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescSelected is the schema descriptor for selected field.
+	userDescSelected := userFields[12].Descriptor()
+	// user.DefaultSelected holds the default value on creation for the selected field.
+	user.DefaultSelected = userDescSelected.Default.(bool)
 	// userDescCreated is the schema descriptor for created field.
-	userDescCreated := userFields[12].Descriptor()
+	userDescCreated := userFields[13].Descriptor()
 	// user.DefaultCreated holds the default value on creation for the created field.
 	user.DefaultCreated = userDescCreated.Default.(func() time.Time)
 	// userDescModified is the schema descriptor for modified field.
-	userDescModified := userFields[13].Descriptor()
+	userDescModified := userFields[14].Descriptor()
 	// user.DefaultModified holds the default value on creation for the modified field.
 	user.DefaultModified = userDescModified.Default.(func() time.Time)
 	// user.UpdateDefaultModified holds the default value on update for the modified field.
