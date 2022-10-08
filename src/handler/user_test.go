@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/contents"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
@@ -19,9 +18,13 @@ func TestMeHandler(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
-		tool, err := test.NewTestToolDB()
+
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
 
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
@@ -33,23 +36,26 @@ func TestMeHandler(t *testing.T) {
 
 		e := m.Echo()
 
-		err = handler.MeHandler(e)
+		err = h.MeHandler(e)
 		require.NoError(t, err)
 
 		m.Ok(t)
 	})
 
 	t.Run("no login", func(t *testing.T) {
-		tool, err := test.NewTestToolDB()
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
 
 		m, err := mock.NewGet("", "/user/me")
 		require.NoError(t, err)
 
 		e := m.Echo()
 
-		err = handler.MeHandler(e)
+		err = h.MeHandler(e)
 		require.Error(t, err)
 	})
 }
@@ -59,7 +65,8 @@ func TestUpdateUserHandler(t *testing.T) {
 
 	t.Run("all changes", func(t *testing.T) {
 		ctx := context.Background()
-		tool, err := test.NewTestToolDB()
+
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
 
@@ -84,8 +91,11 @@ func TestUpdateUserHandler(t *testing.T) {
 
 		u.HandlerSession(ctx, tool.DB, m)
 
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
 		e := m.Echo()
-		err = handler.UpdateUserHandler(e)
+		err = h.UpdateUserHandler(e)
 		require.NoError(t, err)
 
 		updatedUser, err := tool.DB.Client.User.Get(ctx, u.User.ID)
@@ -104,7 +114,7 @@ func TestUpdateUserHandler(t *testing.T) {
 
 	t.Run("one change", func(t *testing.T) {
 		ctx := context.Background()
-		tool, err := test.NewTestToolDB()
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
 
@@ -119,8 +129,11 @@ func TestUpdateUserHandler(t *testing.T) {
 
 		u.HandlerSession(ctx, tool.DB, m)
 
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
 		e := m.Echo()
-		err = handler.UpdateUserHandler(e)
+		err = h.UpdateUserHandler(e)
 		require.NoError(t, err)
 
 		updatedUser, err := tool.DB.Client.User.Get(ctx, u.User.ID)
@@ -139,7 +152,8 @@ func TestUpdateUserHandler(t *testing.T) {
 
 	t.Run("no changes", func(t *testing.T) {
 		ctx := context.Background()
-		tool, err := test.NewTestToolDB()
+
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
 
@@ -153,8 +167,11 @@ func TestUpdateUserHandler(t *testing.T) {
 
 		u.HandlerSession(ctx, tool.DB, m)
 
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
 		e := m.Echo()
-		err = handler.UpdateUserHandler(e)
+		err = h.UpdateUserHandler(e)
 		require.Error(t, err)
 	})
 }

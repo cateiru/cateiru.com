@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/cateiru/cateiru.com/src/config"
-	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
 	"github.com/stretchr/testify/require"
@@ -18,8 +17,15 @@ func TestRootHandler(t *testing.T) {
 		m, err := mock.NewMock("", http.MethodGet, "/")
 		require.NoError(t, err)
 
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
 		c := m.Echo()
-		err = handler.RootHandler(c)
+		err = h.RootHandler(c)
 		require.NoError(t, err)
 
 		m.Status(t, http.StatusMovedPermanently)

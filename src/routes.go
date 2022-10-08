@@ -6,7 +6,7 @@ import (
 )
 
 // API Routes
-func Routes(e *echo.Echo) {
+func Routes(e *echo.Echo, handler *handler.Handler) {
 	e.GET("/", handler.RootHandler)
 
 	e.GET("/login", handler.LoginHandler)

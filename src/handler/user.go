@@ -5,34 +5,25 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cateiru/cateiru.com/src/base"
 	"github.com/labstack/echo/v4"
 )
 
-func MeHandler(e echo.Context) error {
+func (h Handler) MeHandler(e echo.Context) error {
 	ctx := context.Background()
-	base, err := base.NewBase(e)
-	if err != nil {
-		return err
-	}
-	defer base.Close()
 
-	if err := base.Session(ctx); err != nil {
+	if err := h.Base.Session(ctx, e); err != nil {
 		return err
 	}
 
-	return e.JSON(http.StatusOK, base.User)
+	return e.JSON(http.StatusOK, h.Base.User)
 }
 
-func UpdateUserHandler(e echo.Context) error {
+func (h Handler) UpdateUserHandler(e echo.Context) error {
 	ctx := context.Background()
-	base, err := base.NewBase(e)
-	if err != nil {
+
+	if err := h.Base.Session(ctx, e); err != nil {
 		return err
 	}
-	defer base.Close()
-
-	base.Session(ctx)
 
 	familyName := e.FormValue("family_name")
 	givenName := e.FormValue("given_name")
@@ -44,7 +35,7 @@ func UpdateUserHandler(e echo.Context) error {
 	location := e.FormValue("location")
 	locationJa := e.FormValue("location_ja")
 
-	u := base.DB.Client.User.Update()
+	u := h.DB.Client.User.Update()
 	changeFlag := false
 
 	if familyName != "" {
@@ -86,7 +77,7 @@ func UpdateUserHandler(e echo.Context) error {
 		return echo.ErrBadRequest
 	}
 
-	err = u.Exec(ctx)
+	err := u.Exec(ctx)
 	if err != nil {
 		return err
 	}

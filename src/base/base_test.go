@@ -17,24 +17,21 @@ func TestBase(t *testing.T) {
 	test.Init()
 
 	t.Run("create base", func(t *testing.T) {
-		m, err := mock.NewMock("", http.MethodGet, "/")
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
+		defer tool.Close()
 
-		c := m.Echo()
-
-		base, err := base.NewBase(c)
+		base, err := base.NewBase(tool.DB)
 		require.NoError(t, err)
 
 		db := base.DB
 		require.NotEmpty(t, db)
-		e := base.E
-		require.NotEmpty(t, e)
 	})
 
 	t.Run("session", func(t *testing.T) {
 		ctx := context.Background()
 
-		tool, err := test.NewTestToolDB()
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
 
@@ -55,11 +52,10 @@ func TestBase(t *testing.T) {
 			m.Cookie([]*http.Cookie{sessionCookie})
 
 			c := m.Echo()
-			b, err := base.NewBase(c)
+			b, err := base.NewBase(tool.DB)
 			require.NoError(t, err)
-			defer b.Close()
 
-			err = b.Session(ctx)
+			err = b.Session(ctx, c)
 			require.NoError(t, err)
 			require.NotNil(t, b.User)
 		})
@@ -69,11 +65,10 @@ func TestBase(t *testing.T) {
 			require.NoError(t, err)
 
 			c := m.Echo()
-			b, err := base.NewBase(c)
+			b, err := base.NewBase(tool.DB)
 			require.NoError(t, err)
-			defer b.Close()
 
-			err = b.Session(ctx)
+			err = b.Session(ctx, c)
 			require.Error(t, err)
 			require.Nil(t, b.User)
 		})
@@ -82,22 +77,22 @@ func TestBase(t *testing.T) {
 	t.Run("login", func(t *testing.T) {
 		ctx := context.Background()
 
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
 		m, err := mock.NewMock("", http.MethodGet, "/")
 		require.NoError(t, err)
 
 		c := m.Echo()
-		b, err := base.NewBase(c)
-		require.NoError(t, err)
-		defer b.Close()
-
-		tool := test.NewTestTool(b.DB)
-		u, err := tool.NewUser(ctx)
+		b, err := base.NewBase(tool.DB)
 		require.NoError(t, err)
 
-		err = b.Login(ctx, u.User)
+		err = b.Login(ctx, c, u.User)
 		require.NoError(t, err)
 
-		err = b.E.String(http.StatusOK, "")
+		err = c.String(http.StatusOK, "")
 		require.NoError(t, err)
 
 		m.Ok(t)
@@ -109,7 +104,7 @@ func TestBase(t *testing.T) {
 
 	t.Run("logout", func(t *testing.T) {
 		ctx := context.Background()
-		tool, err := test.NewTestToolDB()
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
@@ -121,13 +116,12 @@ func TestBase(t *testing.T) {
 
 		e := m.Echo()
 		handler := func(e echo.Context) error {
-			base, err := base.NewBase(e)
+			base, err := base.NewBase(tool.DB)
 			if err != nil {
 				return err
 			}
-			defer base.Close()
 
-			return base.Logout(ctx)
+			return base.Logout(ctx, e)
 		}
 		err = handler(e)
 		require.NoError(t, err)

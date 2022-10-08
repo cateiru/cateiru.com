@@ -3,17 +3,15 @@ package handler
 import (
 	"context"
 
-	"github.com/cateiru/cateiru.com/src/base"
 	"github.com/labstack/echo/v4"
 )
 
-func LogoutHandler(e echo.Context) error {
+func (h Handler) LogoutHandler(e echo.Context) error {
 	ctx := context.Background()
-	base, err := base.NewBase(e)
-	if err != nil {
+
+	if err := h.Session(ctx, e); err != nil {
 		return err
 	}
-	defer base.Close()
 
-	return base.Logout(ctx)
+	return h.Base.Logout(ctx, e)
 }

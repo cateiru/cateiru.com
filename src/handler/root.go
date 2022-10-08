@@ -7,6 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func RootHandler(c echo.Context) error {
+func (h Handler) RootHandler(c echo.Context) error {
 	return c.Redirect(http.StatusMovedPermanently, config.Config.PageDomain.String())
 }

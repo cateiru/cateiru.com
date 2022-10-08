@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/cateiru/cateiru.com/src/db"
+	"github.com/cateiru/cateiru.com/src/handler"
 )
 
 type TestTool struct {
@@ -12,26 +13,19 @@ type TestTool struct {
 	Users []*TestUser
 }
 
-func NewTestTool(db *db.DB) *TestTool {
-	return &TestTool{
-		DB: db,
-	}
-}
-
 // Create test tool
 //
-// Usage:
-//
-//	tool, err := test.NewTestToolDB()
-//	require.NoError(t, err)
 //	defer tool.Close()
-func NewTestToolDB() (*TestTool, error) {
-	dbOp, err := db.NewConnectMySQL()
+func NewTestTool() (*TestTool, error) {
+	db, err := db.NewConnectMySQL()
 	if err != nil {
 		return nil, err
 	}
 
-	return NewTestTool(dbOp), nil
+	return &TestTool{
+		DB:    db,
+		Users: []*TestUser{},
+	}, nil
 }
 
 func (c *TestTool) Close() {
@@ -62,4 +56,8 @@ func (c *TestTool) GetUserIds() []uint32 {
 	}
 
 	return ids
+}
+
+func (c *TestTool) Handler() (*handler.Handler, error) {
+	return handler.NewHandler(c.DB)
 }

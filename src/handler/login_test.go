@@ -160,16 +160,19 @@ func TestLoginHandler(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 
-		base, err := test.NewTestToolDB()
+		base, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer base.Close()
 
 		m, err := mock.NewGet("", fmt.Sprintf("/login?code=%s", code))
 		require.NoError(t, err)
 
+		h, err := base.Handler()
+		require.NoError(t, err)
+
 		e := m.Echo()
 
-		err = handler.LoginHandler(e)
+		err = h.LoginHandler(e)
 		require.NoError(t, err)
 
 		cookies := m.W.Result().Cookies()
@@ -291,7 +294,7 @@ func TestLoginAlreadyExistUser(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 
-		base, err := test.NewTestToolDB()
+		base, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer base.Close()
 
@@ -301,9 +304,12 @@ func TestLoginAlreadyExistUser(t *testing.T) {
 		m, err := mock.NewGet("", fmt.Sprintf("/login?code=%s", code))
 		require.NoError(t, err)
 
+		h, err := base.Handler()
+		require.NoError(t, err)
+
 		e := m.Echo()
 
-		err = handler.LoginHandler(e)
+		err = h.LoginHandler(e)
 		require.NoError(t, err)
 
 		cookies := m.W.Result().Cookies()
@@ -427,16 +433,19 @@ func TestLoginNoAdminUser(t *testing.T) {
 	)
 
 	t.Run("success", func(t *testing.T) {
-		base, err := test.NewTestToolDB()
+		base, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer base.Close()
 
 		m, err := mock.NewGet("", fmt.Sprintf("/login?code=%s", code))
 		require.NoError(t, err)
 
+		h, err := base.Handler()
+		require.NoError(t, err)
+
 		e := m.Echo()
 
-		err = handler.LoginHandler(e)
+		err = h.LoginHandler(e)
 		require.Error(t, err)
 	})
 }

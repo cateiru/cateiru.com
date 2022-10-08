@@ -16,13 +16,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func LoginHandler(c echo.Context) error {
+func (h Handler) LoginHandler(c echo.Context) error {
 	ctx := context.Background()
-	base, err := base.NewBase(c)
-	if err != nil {
-		return err
-	}
-	defer base.Close()
 
 	code := c.QueryParams().Get("code")
 	if code == "" {
@@ -39,7 +34,7 @@ func LoginHandler(c echo.Context) error {
 		return err
 	}
 
-	existUser, err := base.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).Exist(ctx)
+	existUser, err := h.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).Exist(ctx)
 	if err != nil {
 		return err
 	}
@@ -47,18 +42,18 @@ func LoginHandler(c echo.Context) error {
 	var u *ent.User
 
 	if existUser {
-		u, err = base.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).First(ctx)
+		u, err = h.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).First(ctx)
 		if err != nil {
 			return err
 		}
 	} else {
-		u, err = CreateUser(ctx, base, claims)
+		u, err = CreateUser(ctx, h.Base, claims)
 		if err != nil {
 			return err
 		}
 	}
 
-	if err := base.Login(ctx, u); err != nil {
+	if err := h.Base.Login(ctx, c, u); err != nil {
 		return err
 	}
 

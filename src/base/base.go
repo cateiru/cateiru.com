@@ -14,33 +14,21 @@ import (
 )
 
 type Base struct {
-	E  echo.Context
-	DB *db.DB
-
+	DB   *db.DB
 	User *ent.User
 }
 
 // Create a Base objects
-func NewBase(e echo.Context) (*Base, error) {
-	db, err := db.NewConnectMySQL()
-	if err != nil {
-		return nil, err
-	}
-
+func NewBase(db *db.DB) (*Base, error) {
 	return &Base{
-		E:    e,
 		DB:   db,
 		User: nil,
 	}, nil
 }
 
-func (c *Base) Close() {
-	c.DB.Close()
-}
-
 // Require session
-func (c *Base) Session(ctx context.Context) error {
-	token, err := c.getSessionToken()
+func (c *Base) Session(ctx context.Context, e echo.Context) error {
+	token, err := c.getSessionToken(e)
 	if err != nil {
 		return err
 	}
@@ -54,7 +42,7 @@ func (c *Base) Session(ctx context.Context) error {
 	return nil
 }
 
-func (c *Base) Login(ctx context.Context, u *ent.User) error {
+func (c *Base) Login(ctx context.Context, e echo.Context, u *ent.User) error {
 	session, err := c.DB.Client.Session.
 		Create().
 		SetUserID(u.ID).
@@ -75,7 +63,7 @@ func (c *Base) Login(ctx context.Context, u *ent.User) error {
 		SameSite: config.Config.SessionCookieConfig.SameSite,
 		Path:     config.Config.SessionCookieConfig.Path,
 	}
-	c.E.SetCookie(sessionCookie)
+	e.SetCookie(sessionCookie)
 
 	confirmCookie := &http.Cookie{
 		Name:   config.Config.SessionConfirmationCookieName,
@@ -88,7 +76,7 @@ func (c *Base) Login(ctx context.Context, u *ent.User) error {
 		SameSite: config.Config.SessionConfirmationCookieConfig.SameSite,
 		Path:     config.Config.SessionConfirmationCookieConfig.Path,
 	}
-	c.E.SetCookie(confirmCookie)
+	e.SetCookie(confirmCookie)
 
 	c.User = u
 
@@ -96,22 +84,22 @@ func (c *Base) Login(ctx context.Context, u *ent.User) error {
 }
 
 // Logout
-func (c *Base) Logout(ctx context.Context) error {
-	tokenCookie, err := c.E.Cookie(config.Config.SessionCookieName)
+func (c *Base) Logout(ctx context.Context, e echo.Context) error {
+	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("failed login: %v", err))
 	}
 	tokenCookie.Expires = time.Now()
 	tokenCookie.MaxAge = 0
-	c.E.SetCookie(tokenCookie)
+	e.SetCookie(tokenCookie)
 
-	checkCookie, err := c.E.Cookie(config.Config.SessionConfirmationCookieName)
+	checkCookie, err := e.Cookie(config.Config.SessionConfirmationCookieName)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("failed login: %v", err))
 	}
 	checkCookie.Expires = time.Now()
 	checkCookie.MaxAge = 0
-	c.E.SetCookie(checkCookie)
+	e.SetCookie(checkCookie)
 
 	return nil
 }
@@ -120,8 +108,8 @@ func (c *Base) Logout(ctx context.Context) error {
 // Cookie session token name is defined `SessionCookieName` in config
 //
 // If don't get values or invalid value, return 403 error.
-func (c *Base) getSessionToken() (uuid.UUID, error) {
-	tokenCookie, err := c.E.Cookie(config.Config.SessionCookieName)
+func (c *Base) getSessionToken(e echo.Context) (uuid.UUID, error) {
+	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
 	if err != nil {
 		return uuid.UUID{}, echo.NewHTTPError(http.StatusBadRequest, "cookie is not found")
 	}

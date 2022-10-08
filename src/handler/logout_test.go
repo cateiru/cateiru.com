@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/cateiru/cateiru.com/src/config"
-	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
 	"github.com/stretchr/testify/require"
@@ -17,7 +16,7 @@ func TestLogout(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
-		tool, err := test.NewTestToolDB()
+		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
 
@@ -29,8 +28,11 @@ func TestLogout(t *testing.T) {
 
 		u.HandlerSession(ctx, tool.DB, m)
 
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
 		e := m.Echo()
-		err = handler.LogoutHandler(e)
+		err = h.LogoutHandler(e)
 		require.NoError(t, err)
 
 		m.Ok(t)
