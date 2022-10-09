@@ -6,34 +6,72 @@ import (
 	"time"
 
 	"github.com/cateiru/cateiru.com/ent"
+	"github.com/cateiru/cateiru.com/ent/biography"
+	"github.com/cateiru/cateiru.com/ent/link"
+	"github.com/cateiru/cateiru.com/ent/location"
+	"github.com/cateiru/cateiru.com/ent/product"
 	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/labstack/echo/v4"
 )
 
-type PublicUser struct {
-	// GivenName holds the value of the "given_name" field.
-	GivenName string `json:"given_name,omitempty"`
-	// FamilyName holds the value of the "family_name" field.
-	FamilyName string `json:"family_name,omitempty"`
-	// GivenNameJa holds the value of the "given_name_ja" field.
-	GivenNameJa string `json:"given_name_ja,omitempty"`
-	// FamilyNameJa holds the value of the "family_name_ja" field.
-	FamilyNameJa string `json:"family_name_ja,omitempty"`
-	// UserID holds the value of the "user_id" field.
-	UserID string `json:"user_id,omitempty"`
-	// BirthDate holds the value of the "birth_date" field.
-	BirthDate time.Time `json:"birth_date,omitempty"`
-	// Location holds the value of the "location" field.
-	Location string `json:"location,omitempty"`
-	// LocationJa holds the value of the "location_ja" field.
-	LocationJa string `json:"location_ja,omitempty"`
-	// AvatarURL holds the value of the "avatar_url" field.
-	AvatarURL string `json:"avatar_url,omitempty"`
+type Public struct {
+	// User data
+	GivenName    string    `json:"given_name,omitempty"`
+	FamilyName   string    `json:"family_name,omitempty"`
+	GivenNameJa  string    `json:"given_name_ja,omitempty"`
+	FamilyNameJa string    `json:"family_name_ja,omitempty"`
+	UserID       string    `json:"user_id,omitempty"`
+	BirthDate    time.Time `json:"birth_date,omitempty"`
+	Location     string    `json:"location,omitempty"`
+	LocationJa   string    `json:"location_ja,omitempty"`
+	AvatarURL    string    `json:"avatar_url,omitempty"`
+	Created      time.Time `json:"created,omitempty"`
+	Modified     time.Time `json:"modified,omitempty"`
 
-	// Created holds the value of the "created" field.
-	Created time.Time `json:"created,omitempty"`
-	// Modified holds the value of the "modified" field.
-	Modified time.Time `json:"modified,omitempty"`
+	Biographies []PublicBioGraphy
+	Products    []PublicShortProduct
+	Links       []PublicLink
+}
+
+type PublicBioGraphy struct {
+	Position string    `json:"position,omitempty"`
+	Join     time.Time `json:"join,omitempty"`
+	Leave    time.Time `json:"leave,omitempty"`
+
+	PublicLocation
+}
+
+type PublicLocation struct {
+	Type      location.Type `json:"type,omitempty"`
+	Name      string        `json:"name,omitempty"`
+	NameJa    string        `json:"name_ja,omitempty"`
+	Address   string        `json:"address,omitempty"`
+	AddressJa string        `json:"address_ja,omitempty"`
+}
+
+type PublicShortProduct struct {
+	ID        uint32    `json:"id,omitempty"`
+	Name      string    `json:"name,omitempty"`
+	NameJa    string    `json:"name_ja,omitempty"`
+	Detail    string    `json:"detail,omitempty"`
+	DetailJa  string    `json:"detail_ja,omitempty"`
+	DevTime   time.Time `json:"dev_time,omitempty"`
+	Thumbnail string    `json:"thumbnail,omitempty"`
+}
+
+type PublicLink struct {
+	Name       string `json:"name,omitempty"`
+	NameJa     string `json:"name_ja,omitempty"`
+	SiteURL    string `json:"site_url,omitempty"`
+	FaviconURL string `json:"favicon_url,omitempty"`
+
+	PublicCategory
+}
+
+type PublicCategory struct {
+	CategoryName   string `json:"category_name,omitempty"`
+	CategoryNameJa string `json:"category_name_ja,omitempty"`
+	Emoji          string `json:"emoji,omitempty"`
 }
 
 func (h Handler) PublicProfileHandler(e echo.Context) error {
@@ -44,7 +82,97 @@ func (h Handler) PublicProfileHandler(e echo.Context) error {
 		return echo.ErrNotFound
 	}
 
-	publicUser := PublicUser{
+	// Get Biography
+	bios, err := h.DB.Client.Biography.Query().Where(biography.UserID(u.ID)).All(ctx)
+	if err != nil {
+		return err
+	}
+	var locationMap map[uint32]*ent.Location
+	publicBios := make([]PublicBioGraphy, len(bios))
+	for i, bio := range bios {
+		var loc *ent.Location
+		if locationMap[bio.LocationID] != nil {
+			loc = locationMap[bio.LocationID]
+		} else {
+			loc, err = h.DB.Client.Location.Get(ctx, bio.LocationID)
+			if err != nil {
+				return err
+			}
+		}
+		publicBios[i] = PublicBioGraphy{
+			Position: bio.Position,
+			Join:     bio.Join,
+			Leave:    bio.Leave,
+
+			PublicLocation: PublicLocation{
+				Type:      loc.Type,
+				Name:      loc.Name,
+				NameJa:    loc.NameJa,
+				Address:   loc.Address,
+				AddressJa: loc.AddressJa,
+			},
+		}
+	}
+
+	// Get Products
+	prods, err := h.DB.Client.Product.
+		Query().
+		Where(product.UserID(u.ID)).
+		Order(ent.Asc(product.FieldDevTime)).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	publicProds := make([]PublicShortProduct, len(prods))
+	for i, prod := range prods {
+		publicProds[i] = PublicShortProduct{
+			ID:        prod.ID,
+			Name:      prod.Name,
+			NameJa:    prod.NameJa,
+			Detail:    prod.Detail,
+			DetailJa:  prod.DetailJa,
+			DevTime:   prod.DevTime,
+			Thumbnail: prod.Thumbnail,
+		}
+	}
+
+	// Get Links
+	links, err := h.DB.Client.Link.
+		Query().
+		Where(link.UserID(u.ID)).
+		Order(ent.Asc(link.FieldCategoryID)).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+	var categoryMap map[uint32]*ent.Category
+	publicLinks := make([]PublicLink, len(links))
+	for i, l := range links {
+		var category *ent.Category
+		if categoryMap[l.CategoryID] != nil {
+			category = categoryMap[l.CategoryID]
+		} else {
+			category, err = h.DB.Client.Category.Get(ctx, l.CategoryID)
+			if err != nil {
+				return err
+			}
+		}
+		publicLinks[i] = PublicLink{
+			Name:       l.Name,
+			NameJa:     l.NameJa,
+			SiteURL:    l.SiteURL,
+			FaviconURL: l.FaviconURL,
+
+			PublicCategory: PublicCategory{
+				CategoryName:   category.Name,
+				CategoryNameJa: category.NameJa,
+				Emoji:          category.Emoji,
+			},
+		}
+	}
+
+	publicUser := Public{
 		GivenName:    u.GivenName,
 		FamilyName:   u.FamilyName,
 		GivenNameJa:  u.GivenNameJa,
@@ -56,6 +184,12 @@ func (h Handler) PublicProfileHandler(e echo.Context) error {
 		AvatarURL:    u.AvatarURL,
 		Created:      u.Created,
 		Modified:     u.Modified,
+
+		Biographies: publicBios,
+
+		Products: publicProds,
+
+		Links: publicLinks,
 	}
 
 	return e.JSON(http.StatusOK, publicUser)
