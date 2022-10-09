@@ -52,6 +52,12 @@ func (bc *BiographyCreate) SetPosition(s string) *BiographyCreate {
 	return bc
 }
 
+// SetPositionJa sets the "position_ja" field.
+func (bc *BiographyCreate) SetPositionJa(s string) *BiographyCreate {
+	bc.mutation.SetPositionJa(s)
+	return bc
+}
+
 // SetJoin sets the "join" field.
 func (bc *BiographyCreate) SetJoin(t time.Time) *BiographyCreate {
 	bc.mutation.SetJoin(t)
@@ -203,6 +209,9 @@ func (bc *BiographyCreate) check() error {
 	if _, ok := bc.mutation.Position(); !ok {
 		return &ValidationError{Name: "position", err: errors.New(`ent: missing required field "Biography.position"`)}
 	}
+	if _, ok := bc.mutation.PositionJa(); !ok {
+		return &ValidationError{Name: "position_ja", err: errors.New(`ent: missing required field "Biography.position_ja"`)}
+	}
 	if _, ok := bc.mutation.Join(); !ok {
 		return &ValidationError{Name: "join", err: errors.New(`ent: missing required field "Biography.join"`)}
 	}
@@ -279,6 +288,14 @@ func (bc *BiographyCreate) createSpec() (*Biography, *sqlgraph.CreateSpec) {
 			Column: biography.FieldPosition,
 		})
 		_node.Position = value
+	}
+	if value, ok := bc.mutation.PositionJa(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: biography.FieldPositionJa,
+		})
+		_node.PositionJa = value
 	}
 	if value, ok := bc.mutation.Join(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

@@ -19,6 +19,8 @@ const (
 	FieldLocationID = "location_id"
 	// FieldPosition holds the string denoting the position field in the database.
 	FieldPosition = "position"
+	// FieldPositionJa holds the string denoting the position_ja field in the database.
+	FieldPositionJa = "position_ja"
 	// FieldJoin holds the string denoting the join field in the database.
 	FieldJoin = "join"
 	// FieldLeave holds the string denoting the leave field in the database.
@@ -38,6 +40,7 @@ var Columns = []string{
 	FieldIsPublic,
 	FieldLocationID,
 	FieldPosition,
+	FieldPositionJa,
 	FieldJoin,
 	FieldLeave,
 	FieldCreated,

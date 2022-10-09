@@ -24,6 +24,8 @@ type Biography struct {
 	LocationID uint32 `json:"location_id,omitempty"`
 	// Position holds the value of the "position" field.
 	Position string `json:"position,omitempty"`
+	// PositionJa holds the value of the "position_ja" field.
+	PositionJa string `json:"position_ja,omitempty"`
 	// Join holds the value of the "join" field.
 	Join time.Time `json:"join,omitempty"`
 	// Leave holds the value of the "leave" field.
@@ -43,7 +45,7 @@ func (*Biography) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullBool)
 		case biography.FieldID, biography.FieldUserID, biography.FieldLocationID:
 			values[i] = new(sql.NullInt64)
-		case biography.FieldPosition:
+		case biography.FieldPosition, biography.FieldPositionJa:
 			values[i] = new(sql.NullString)
 		case biography.FieldJoin, biography.FieldLeave, biography.FieldCreated, biography.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -91,6 +93,12 @@ func (b *Biography) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field position", values[i])
 			} else if value.Valid {
 				b.Position = value.String
+			}
+		case biography.FieldPositionJa:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field position_ja", values[i])
+			} else if value.Valid {
+				b.PositionJa = value.String
 			}
 		case biography.FieldJoin:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -155,6 +163,9 @@ func (b *Biography) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("position=")
 	builder.WriteString(b.Position)
+	builder.WriteString(", ")
+	builder.WriteString("position_ja=")
+	builder.WriteString(b.PositionJa)
 	builder.WriteString(", ")
 	builder.WriteString("join=")
 	builder.WriteString(b.Join.Format(time.ANSIC))

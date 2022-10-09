@@ -108,6 +108,13 @@ func Position(v string) predicate.Biography {
 	})
 }
 
+// PositionJa applies equality check predicate on the "position_ja" field. It's identical to PositionJaEQ.
+func PositionJa(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPositionJa), v))
+	})
+}
+
 // Join applies equality check predicate on the "join" field. It's identical to JoinEQ.
 func Join(v time.Time) predicate.Biography {
 	return predicate.Biography(func(s *sql.Selector) {
@@ -374,6 +381,105 @@ func PositionEqualFold(v string) predicate.Biography {
 func PositionContainsFold(v string) predicate.Biography {
 	return predicate.Biography(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldPosition), v))
+	})
+}
+
+// PositionJaEQ applies the EQ predicate on the "position_ja" field.
+func PositionJaEQ(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaNEQ applies the NEQ predicate on the "position_ja" field.
+func PositionJaNEQ(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaIn applies the In predicate on the "position_ja" field.
+func PositionJaIn(vs ...string) predicate.Biography {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldPositionJa), v...))
+	})
+}
+
+// PositionJaNotIn applies the NotIn predicate on the "position_ja" field.
+func PositionJaNotIn(vs ...string) predicate.Biography {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldPositionJa), v...))
+	})
+}
+
+// PositionJaGT applies the GT predicate on the "position_ja" field.
+func PositionJaGT(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaGTE applies the GTE predicate on the "position_ja" field.
+func PositionJaGTE(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaLT applies the LT predicate on the "position_ja" field.
+func PositionJaLT(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaLTE applies the LTE predicate on the "position_ja" field.
+func PositionJaLTE(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaContains applies the Contains predicate on the "position_ja" field.
+func PositionJaContains(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaHasPrefix applies the HasPrefix predicate on the "position_ja" field.
+func PositionJaHasPrefix(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaHasSuffix applies the HasSuffix predicate on the "position_ja" field.
+func PositionJaHasSuffix(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaEqualFold applies the EqualFold predicate on the "position_ja" field.
+func PositionJaEqualFold(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPositionJa), v))
+	})
+}
+
+// PositionJaContainsFold applies the ContainsFold predicate on the "position_ja" field.
+func PositionJaContainsFold(v string) predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPositionJa), v))
 	})
 }
 

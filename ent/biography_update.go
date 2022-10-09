@@ -74,6 +74,12 @@ func (bu *BiographyUpdate) SetPosition(s string) *BiographyUpdate {
 	return bu
 }
 
+// SetPositionJa sets the "position_ja" field.
+func (bu *BiographyUpdate) SetPositionJa(s string) *BiographyUpdate {
+	bu.mutation.SetPositionJa(s)
+	return bu
+}
+
 // SetJoin sets the "join" field.
 func (bu *BiographyUpdate) SetJoin(t time.Time) *BiographyUpdate {
 	bu.mutation.SetJoin(t)
@@ -234,6 +240,13 @@ func (bu *BiographyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: biography.FieldPosition,
 		})
 	}
+	if value, ok := bu.mutation.PositionJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: biography.FieldPositionJa,
+		})
+	}
 	if value, ok := bu.mutation.Join(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -324,6 +337,12 @@ func (buo *BiographyUpdateOne) AddLocationID(u int32) *BiographyUpdateOne {
 // SetPosition sets the "position" field.
 func (buo *BiographyUpdateOne) SetPosition(s string) *BiographyUpdateOne {
 	buo.mutation.SetPosition(s)
+	return buo
+}
+
+// SetPositionJa sets the "position_ja" field.
+func (buo *BiographyUpdateOne) SetPositionJa(s string) *BiographyUpdateOne {
+	buo.mutation.SetPositionJa(s)
 	return buo
 }
 
@@ -515,6 +534,13 @@ func (buo *BiographyUpdateOne) sqlSave(ctx context.Context) (_node *Biography, e
 			Type:   field.TypeString,
 			Value:  value,
 			Column: biography.FieldPosition,
+		})
+	}
+	if value, ok := buo.mutation.PositionJa(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: biography.FieldPositionJa,
 		})
 	}
 	if value, ok := buo.mutation.Join(); ok {

@@ -34,7 +34,13 @@ func (Biography) Fields() []ent.Field {
 		// `position` TEXT NOT NULL
 		field.Text("position").
 			SchemaType(map[string]string{
-				dialect.MySQL: "date",
+				dialect.MySQL: "text",
+			}),
+
+		// `position_ja` TEXT NOT NULL
+		field.Text("position_ja").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
 			}),
 
 		// `join` DATE NOT NULL

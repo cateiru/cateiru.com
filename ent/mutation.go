@@ -56,6 +56,7 @@ type BiographyMutation struct {
 	location_id    *uint32
 	addlocation_id *int32
 	position       *string
+	position_ja    *string
 	join           *time.Time
 	leave          *time.Time
 	created        *time.Time
@@ -354,6 +355,42 @@ func (m *BiographyMutation) ResetPosition() {
 	m.position = nil
 }
 
+// SetPositionJa sets the "position_ja" field.
+func (m *BiographyMutation) SetPositionJa(s string) {
+	m.position_ja = &s
+}
+
+// PositionJa returns the value of the "position_ja" field in the mutation.
+func (m *BiographyMutation) PositionJa() (r string, exists bool) {
+	v := m.position_ja
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPositionJa returns the old "position_ja" field's value of the Biography entity.
+// If the Biography object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BiographyMutation) OldPositionJa(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPositionJa is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPositionJa requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPositionJa: %w", err)
+	}
+	return oldValue.PositionJa, nil
+}
+
+// ResetPositionJa resets all changes to the "position_ja" field.
+func (m *BiographyMutation) ResetPositionJa() {
+	m.position_ja = nil
+}
+
 // SetJoin sets the "join" field.
 func (m *BiographyMutation) SetJoin(t time.Time) {
 	m.join = &t
@@ -517,7 +554,7 @@ func (m *BiographyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BiographyMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.user_id != nil {
 		fields = append(fields, biography.FieldUserID)
 	}
@@ -529,6 +566,9 @@ func (m *BiographyMutation) Fields() []string {
 	}
 	if m.position != nil {
 		fields = append(fields, biography.FieldPosition)
+	}
+	if m.position_ja != nil {
+		fields = append(fields, biography.FieldPositionJa)
 	}
 	if m.join != nil {
 		fields = append(fields, biography.FieldJoin)
@@ -558,6 +598,8 @@ func (m *BiographyMutation) Field(name string) (ent.Value, bool) {
 		return m.LocationID()
 	case biography.FieldPosition:
 		return m.Position()
+	case biography.FieldPositionJa:
+		return m.PositionJa()
 	case biography.FieldJoin:
 		return m.Join()
 	case biography.FieldLeave:
@@ -583,6 +625,8 @@ func (m *BiographyMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldLocationID(ctx)
 	case biography.FieldPosition:
 		return m.OldPosition(ctx)
+	case biography.FieldPositionJa:
+		return m.OldPositionJa(ctx)
 	case biography.FieldJoin:
 		return m.OldJoin(ctx)
 	case biography.FieldLeave:
@@ -627,6 +671,13 @@ func (m *BiographyMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPosition(v)
+		return nil
+	case biography.FieldPositionJa:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPositionJa(v)
 		return nil
 	case biography.FieldJoin:
 		v, ok := value.(time.Time)
@@ -743,6 +794,9 @@ func (m *BiographyMutation) ResetField(name string) error {
 		return nil
 	case biography.FieldPosition:
 		m.ResetPosition()
+		return nil
+	case biography.FieldPositionJa:
+		m.ResetPositionJa()
 		return nil
 	case biography.FieldJoin:
 		m.ResetJoin()

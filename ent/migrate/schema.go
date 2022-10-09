@@ -14,7 +14,8 @@ var (
 		{Name: "user_id", Type: field.TypeUint32},
 		{Name: "is_public", Type: field.TypeBool, Default: false},
 		{Name: "location_id", Type: field.TypeUint32},
-		{Name: "position", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "date"}},
+		{Name: "position", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "position_ja", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "join", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
 		{Name: "leave", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
 		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
@@ -34,7 +35,7 @@ var (
 			{
 				Name:    "biography_user_id_join",
 				Unique:  false,
-				Columns: []*schema.Column{BiographiesColumns[1], BiographiesColumns[5]},
+				Columns: []*schema.Column{BiographiesColumns[1], BiographiesColumns[6]},
 			},
 		},
 	}
