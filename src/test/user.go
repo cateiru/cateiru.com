@@ -2,7 +2,6 @@ package test
 
 import (
 	"context"
-	"crypto/rand"
 	"errors"
 	"fmt"
 	"net/http"
@@ -32,7 +31,27 @@ type TestUser struct {
 	Session *ent.Session
 }
 
-func NewUser() (*TestUser, error) {
+func NewUser(d ...ent.User) (*TestUser, error) {
+	if len(d) == 1 {
+		u := d[0]
+		return &TestUser{
+			GivenName:    u.GivenName,
+			FamilyName:   u.FamilyName,
+			UserId:       u.UserID,
+			Mail:         u.Mail,
+			BirthDate:    u.BirthDate,
+			GivenNameJa:  u.GivenNameJa,
+			FamilyNameJa: u.FamilyNameJa,
+			Location:     u.Location,
+			LocationJa:   u.LocationJa,
+			AvatarURL:    u.AvatarURL,
+			SSOToken:     u.SSOToken,
+
+			User:    nil,
+			Session: nil,
+		}, nil
+	}
+
 	userId, err := MakeRandomStr(10)
 	if err != nil {
 		return nil, err
@@ -122,20 +141,26 @@ func (c *TestUser) SelectStatus(ctx context.Context, s bool) error {
 	return c.User.Update().SetSelected(s).Exec(ctx)
 }
 
-func MakeRandomStr(digit uint32) (string, error) {
-	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-
-	// 乱数を生成
-	b := make([]byte, digit)
-	if _, err := rand.Read(b); err != nil {
-		return "", errors.New("unexpected error")
+func (c *TestUser) CreateBio() (*TestBio, error) {
+	if c.User == nil {
+		return nil, errors.New("user is not inserted in db")
 	}
 
-	// letters からランダムに取り出して文字列を生成
-	var result string
-	for _, v := range b {
-		// index が letters の長さに収まるように調整
-		result += string(letters[int(v)%len(letters)])
+	return NewTestBio(c.User.ID)
+}
+
+func (c *TestUser) CreateProduct() (*TestProduct, error) {
+	if c.User == nil {
+		return nil, errors.New("user is not inserted in db")
 	}
-	return result, nil
+
+	return NewTestProduct(c.User.ID)
+}
+
+func (c *TestUser) CreateLink() (*TestLink, error) {
+	if c.User == nil {
+		return nil, errors.New("user is not inserted in db")
+	}
+
+	return NewTestLink(c.User.ID)
 }

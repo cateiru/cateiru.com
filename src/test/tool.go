@@ -2,6 +2,8 @@ package test
 
 import (
 	"context"
+	"crypto/rand"
+	"errors"
 
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/cateiru/cateiru.com/src/handler"
@@ -54,6 +56,16 @@ func (c *TestTool) ClearUser(ctx context.Context) error {
 	return nil
 }
 
+func (c *TestTool) ClearBio(ctx context.Context) error {
+	if _, err := c.DB.Client.Biography.Delete().Exec(ctx); err != nil {
+		return err
+	}
+	if _, err := c.DB.Client.Location.Delete().Exec(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Returns list of user ids
 func (c *TestTool) GetUserIds() []uint32 {
 	ids := []uint32{}
@@ -67,4 +79,22 @@ func (c *TestTool) GetUserIds() []uint32 {
 
 func (c *TestTool) Handler() (*handler.Handler, error) {
 	return handler.NewHandler(c.DB)
+}
+
+func MakeRandomStr(digit uint32) (string, error) {
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+	// 乱数を生成
+	b := make([]byte, digit)
+	if _, err := rand.Read(b); err != nil {
+		return "", errors.New("unexpected error")
+	}
+
+	// letters からランダムに取り出して文字列を生成
+	var result string
+	for _, v := range b {
+		// index が letters の長さに収まるように調整
+		result += string(letters[int(v)%len(letters)])
+	}
+	return result, nil
 }
