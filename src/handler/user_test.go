@@ -2,11 +2,13 @@ package handler_test
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"testing"
 	"time"
 
 	"github.com/cateiru/cateiru.com/ent"
+	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/contents"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
@@ -216,5 +218,54 @@ func TestAllUsersHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, *body, 2)
+	})
+}
+
+func TestChangeSelectHandler(t *testing.T) {
+	test.Init()
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearUser(ctx)
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		u2, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		tool.DB.Client.User.Update().Where(user.ID(u2.User.ID)).SetSelected(true).SaveX(ctx)
+
+		u2Changed, err := tool.DB.Client.User.Query().Where(user.ID(u2.User.ID)).First(ctx)
+		require.NoError(t, err)
+		require.True(t, u2Changed.Selected)
+
+		form := contents.NewMultipart()
+		form.Insert("id", fmt.Sprintf("%d", u.User.ID))
+
+		m, err := mock.NewFormData("/", form, http.MethodPost)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u.HandlerSession(ctx, tool.DB, m)
+
+		e := m.Echo()
+		err = h.ChangeSelect(e)
+		require.NoError(t, err)
+
+		u2ChangedSecond, err := tool.DB.Client.User.Query().Where(user.ID(u2.User.ID)).First(ctx)
+		require.NoError(t, err)
+		require.False(t, u2ChangedSecond.Selected)
+
+		uChanged, err := tool.DB.Client.User.Query().Where(user.ID(u.User.ID)).First(ctx)
+		require.NoError(t, err)
+		require.True(t, uChanged.Selected)
 	})
 }
