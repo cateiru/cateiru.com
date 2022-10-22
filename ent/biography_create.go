@@ -70,6 +70,14 @@ func (bc *BiographyCreate) SetLeave(t time.Time) *BiographyCreate {
 	return bc
 }
 
+// SetNillableLeave sets the "leave" field if the given value is not nil.
+func (bc *BiographyCreate) SetNillableLeave(t *time.Time) *BiographyCreate {
+	if t != nil {
+		bc.SetLeave(*t)
+	}
+	return bc
+}
+
 // SetCreated sets the "created" field.
 func (bc *BiographyCreate) SetCreated(t time.Time) *BiographyCreate {
 	bc.mutation.SetCreated(t)
@@ -214,9 +222,6 @@ func (bc *BiographyCreate) check() error {
 	}
 	if _, ok := bc.mutation.Join(); !ok {
 		return &ValidationError{Name: "join", err: errors.New(`ent: missing required field "Biography.join"`)}
-	}
-	if _, ok := bc.mutation.Leave(); !ok {
-		return &ValidationError{Name: "leave", err: errors.New(`ent: missing required field "Biography.leave"`)}
 	}
 	if _, ok := bc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Biography.created"`)}

@@ -92,6 +92,20 @@ func (bu *BiographyUpdate) SetLeave(t time.Time) *BiographyUpdate {
 	return bu
 }
 
+// SetNillableLeave sets the "leave" field if the given value is not nil.
+func (bu *BiographyUpdate) SetNillableLeave(t *time.Time) *BiographyUpdate {
+	if t != nil {
+		bu.SetLeave(*t)
+	}
+	return bu
+}
+
+// ClearLeave clears the value of the "leave" field.
+func (bu *BiographyUpdate) ClearLeave() *BiographyUpdate {
+	bu.mutation.ClearLeave()
+	return bu
+}
+
 // SetCreated sets the "created" field.
 func (bu *BiographyUpdate) SetCreated(t time.Time) *BiographyUpdate {
 	bu.mutation.SetCreated(t)
@@ -261,6 +275,12 @@ func (bu *BiographyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: biography.FieldLeave,
 		})
 	}
+	if bu.mutation.LeaveCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Column: biography.FieldLeave,
+		})
+	}
 	if value, ok := bu.mutation.Created(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -355,6 +375,20 @@ func (buo *BiographyUpdateOne) SetJoin(t time.Time) *BiographyUpdateOne {
 // SetLeave sets the "leave" field.
 func (buo *BiographyUpdateOne) SetLeave(t time.Time) *BiographyUpdateOne {
 	buo.mutation.SetLeave(t)
+	return buo
+}
+
+// SetNillableLeave sets the "leave" field if the given value is not nil.
+func (buo *BiographyUpdateOne) SetNillableLeave(t *time.Time) *BiographyUpdateOne {
+	if t != nil {
+		buo.SetLeave(*t)
+	}
+	return buo
+}
+
+// ClearLeave clears the value of the "leave" field.
+func (buo *BiographyUpdateOne) ClearLeave() *BiographyUpdateOne {
+	buo.mutation.ClearLeave()
 	return buo
 }
 
@@ -554,6 +588,12 @@ func (buo *BiographyUpdateOne) sqlSave(ctx context.Context) (_node *Biography, e
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
+			Column: biography.FieldLeave,
+		})
+	}
+	if buo.mutation.LeaveCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
 			Column: biography.FieldLeave,
 		})
 	}

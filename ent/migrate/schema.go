@@ -17,7 +17,7 @@ var (
 		{Name: "position", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "position_ja", Type: field.TypeString, Size: 2147483647, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "join", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
-		{Name: "leave", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "date"}},
+		{Name: "leave", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"mysql": "date"}},
 		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}

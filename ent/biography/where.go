@@ -611,6 +611,20 @@ func LeaveLTE(v time.Time) predicate.Biography {
 	})
 }
 
+// LeaveIsNil applies the IsNil predicate on the "leave" field.
+func LeaveIsNil() predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldLeave)))
+	})
+}
+
+// LeaveNotNil applies the NotNil predicate on the "leave" field.
+func LeaveNotNil() predicate.Biography {
+	return predicate.Biography(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldLeave)))
+	})
+}
+
 // CreatedEQ applies the EQ predicate on the "created" field.
 func CreatedEQ(v time.Time) predicate.Biography {
 	return predicate.Biography(func(s *sql.Selector) {

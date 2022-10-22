@@ -53,7 +53,8 @@ func (Biography) Fields() []ent.Field {
 		field.Time("leave").
 			SchemaType(map[string]string{
 				dialect.MySQL: "date",
-			}),
+			}).
+			Optional(),
 
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 		field.Time("created").
