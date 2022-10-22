@@ -12,6 +12,8 @@ github.com/cateiru/cateiru-sso/pkg/go v0.0.0-20220928234848-f28940e76bfa h1:ZTcp
 github.com/cateiru/cateiru-sso/pkg/go v0.0.0-20220928234848-f28940e76bfa/go.mod h1:5QSzyEiKkKLvnwohRZrPtoaOFmUgyb/VrxcQ2f9X4Tk=
 github.com/cateiru/go-http-easy-test v1.1.1 h1:BeqhuU+WtlBnIHgoQ572YOGb7nIf+Lbo4TPn7ag1r6c=
 github.com/cateiru/go-http-easy-test v1.1.1/go.mod h1:XP5chOJS57Dp/hNpOeQknjq6gdHpsnPFS4nKf5Nupqs=
+github.com/cateiru/go-http-easy-test v1.1.2 h1:qYXD34IN1jLGmYq/qMrISY0vNUhBv3Zac5ioJZZrIxM=
+github.com/cateiru/go-http-easy-test v1.1.2/go.mod h1:XP5chOJS57Dp/hNpOeQknjq6gdHpsnPFS4nKf5Nupqs=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

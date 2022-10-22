@@ -5,7 +5,7 @@ go 1.19
 require (
 	entgo.io/ent v0.11.2
 	github.com/cateiru/cateiru-sso/pkg/go v0.0.0-20220928234848-f28940e76bfa
-	github.com/cateiru/go-http-easy-test v1.1.1
+	github.com/cateiru/go-http-easy-test v1.1.2
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
