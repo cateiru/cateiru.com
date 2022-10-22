@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/contents"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
@@ -173,5 +174,47 @@ func TestUpdateUserHandler(t *testing.T) {
 		e := m.Echo()
 		err = h.UpdateUserHandler(e)
 		require.Error(t, err)
+	})
+}
+
+func TestAllUsersHandler(t *testing.T) {
+	test.Init()
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearUser(ctx)
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		_, err = tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", "/")
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u.HandlerSession(ctx, tool.DB, m)
+
+		e := m.Echo()
+
+		err = h.AllUsersHandler(e)
+		require.NoError(t, err)
+
+		m.Ok(t)
+
+		body := new([]ent.User)
+
+		err = m.Json(body)
+		require.NoError(t, err)
+
+		require.Len(t, *body, 2)
 	})
 }
