@@ -37,7 +37,7 @@ func TestLogout(t *testing.T) {
 
 		m.Ok(t)
 
-		cookies := m.W.Result().Cookies()
+		cookies := m.SetCookies()
 		c := new(http.Cookie)
 		for _, cookie := range cookies {
 			if cookie.Name == config.Config.SessionCookieName {

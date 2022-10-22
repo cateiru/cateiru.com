@@ -175,7 +175,7 @@ func TestLoginHandler(t *testing.T) {
 		err = h.LoginHandler(e)
 		require.NoError(t, err)
 
-		cookies := m.W.Result().Cookies()
+		cookies := m.SetCookies()
 
 		sessionToken := ""
 		for _, cookie := range cookies {
@@ -312,7 +312,7 @@ func TestLoginAlreadyExistUser(t *testing.T) {
 		err = h.LoginHandler(e)
 		require.NoError(t, err)
 
-		cookies := m.W.Result().Cookies()
+		cookies := m.SetCookies()
 
 		sessionToken := ""
 		for _, cookie := range cookies {

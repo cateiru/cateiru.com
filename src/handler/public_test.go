@@ -2,7 +2,6 @@ package handler_test
 
 import (
 	"context"
-	"encoding/json"
 	"testing"
 
 	"github.com/cateiru/cateiru.com/src/handler"
@@ -58,7 +57,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		m.Ok(t)
 
 		response := new(handler.Public)
-		err = json.Unmarshal(m.W.Body.Bytes(), response)
+		err = m.Json(response)
 		require.NoError(t, err)
 
 		require.Equal(t, response.GivenName, u.GivenName)
@@ -143,7 +142,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		m.Ok(t)
 
 		response := new(handler.Public)
-		err = json.Unmarshal(m.W.Body.Bytes(), response)
+		err = m.Json(response)
 		require.NoError(t, err)
 
 		require.Equal(t, response.GivenName, u.GivenName)
@@ -189,7 +188,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		m.Ok(t)
 
 		response := new(handler.Public)
-		err = json.Unmarshal(m.W.Body.Bytes(), response)
+		err = m.Json(response)
 		require.NoError(t, err)
 
 		require.Equal(t, response.GivenName, u.GivenName)
@@ -235,7 +234,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		m.Ok(t)
 
 		response := new(handler.Public)
-		err = json.Unmarshal(m.W.Body.Bytes(), response)
+		err = m.Json(response)
 		require.NoError(t, err)
 
 		require.Equal(t, response.GivenName, u.GivenName)
