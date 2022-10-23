@@ -9,9 +9,11 @@ import (
 
 	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/user"
+	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/contents"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
 
@@ -45,21 +47,8 @@ func TestMeHandler(t *testing.T) {
 		m.Ok(t)
 	})
 
-	t.Run("no login", func(t *testing.T) {
-		tool, err := test.NewTestTool()
-		require.NoError(t, err)
-		defer tool.Close()
-
-		h, err := tool.Handler()
-		require.NoError(t, err)
-
-		m, err := mock.NewGet("", "/user/me")
-		require.NoError(t, err)
-
-		e := m.Echo()
-
-		err = h.MeHandler(e)
-		require.Error(t, err)
+	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
+		return h.MeHandler(e)
 	})
 }
 
@@ -177,6 +166,10 @@ func TestUpdateUserHandler(t *testing.T) {
 		err = h.UpdateUserHandler(e)
 		require.Error(t, err)
 	})
+
+	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
+		return h.UpdateUserHandler(e)
+	})
 }
 
 func TestAllUsersHandler(t *testing.T) {
@@ -218,6 +211,10 @@ func TestAllUsersHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, *body, 2)
+	})
+
+	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
+		return h.AllUsersHandler(e)
 	})
 }
 
@@ -267,5 +264,9 @@ func TestChangeSelectHandler(t *testing.T) {
 		uChanged, err := tool.DB.Client.User.Query().Where(user.ID(u.User.ID)).First(ctx)
 		require.NoError(t, err)
 		require.True(t, uChanged.Selected)
+	})
+
+	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
+		return h.ChangeSelect(e)
 	})
 }
