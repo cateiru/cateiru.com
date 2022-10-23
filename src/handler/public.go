@@ -74,7 +74,8 @@ type PublicCategory struct {
 	Emoji          string `json:"emoji,omitempty"`
 }
 
-func (h Handler) PublicProfileHandler(e echo.Context) error {
+// Response public profiles
+func (h *Handler) PublicProfileHandler(e echo.Context) error {
 	ctx := context.Background()
 
 	u, err := h.DB.Client.User.Query().Where(user.Selected(true)).First(ctx)

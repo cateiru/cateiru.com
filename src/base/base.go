@@ -122,6 +122,9 @@ func (c *Base) getSessionToken(e echo.Context) (uuid.UUID, error) {
 // Login from session token
 func (c *Base) sessionLogin(ctx context.Context, client ent.Client, sessionToken uuid.UUID) (*ent.User, error) {
 	session, err := client.Session.Get(ctx, sessionToken)
+	if _, ok := err.(*ent.NotFoundError); ok {
+		return nil, echo.NewHTTPError(http.StatusForbidden, "session token invalid")
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +134,9 @@ func (c *Base) sessionLogin(ctx context.Context, client ent.Client, sessionToken
 	}
 
 	user, err := client.User.Get(ctx, session.UserID)
+	if _, ok := err.(*ent.NotFoundError); ok {
+		return nil, echo.NewHTTPError(http.StatusForbidden, "no user")
+	}
 	if err != nil {
 		return nil, err
 	}
