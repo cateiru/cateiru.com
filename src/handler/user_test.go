@@ -37,7 +37,8 @@ func TestMeHandler(t *testing.T) {
 		m, err := mock.NewGet("", "/user/me")
 		require.NoError(t, err)
 
-		u.HandlerSession(ctx, tool.DB, m)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
 
 		e := m.Echo()
 
@@ -81,7 +82,8 @@ func TestUpdateUserHandler(t *testing.T) {
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
 
-		u.HandlerSession(ctx, tool.DB, m)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
 
 		h, err := tool.Handler()
 		require.NoError(t, err)
@@ -119,7 +121,8 @@ func TestUpdateUserHandler(t *testing.T) {
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
 
-		u.HandlerSession(ctx, tool.DB, m)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
 
 		h, err := tool.Handler()
 		require.NoError(t, err)
@@ -157,7 +160,8 @@ func TestUpdateUserHandler(t *testing.T) {
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
 
-		u.HandlerSession(ctx, tool.DB, m)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
 
 		h, err := tool.Handler()
 		require.NoError(t, err)
@@ -196,7 +200,8 @@ func TestAllUsersHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		u.HandlerSession(ctx, tool.DB, m)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
 
 		e := m.Echo()
 
@@ -251,7 +256,8 @@ func TestChangeSelectHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		u.HandlerSession(ctx, tool.DB, m)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
 
 		e := m.Echo()
 		err = h.ChangeSelect(e)
