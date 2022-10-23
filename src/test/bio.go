@@ -73,20 +73,10 @@ func (c *TestBio) CreateDB(ctx context.Context, db *db.DB) (*ent.Biography, erro
 	if c.Location != nil {
 		c.LocationId = c.Location.ID
 	} else if c.LocationId == UNDEFINED_LOCATION_ID {
-		location, err := db.Client.Location.
-			Create().
-			SetType(c.LocationType).
-			SetName(c.LocationName).
-			SetNameJa(c.LocationNameJa).
-			SetAddress(c.LocationAddress).
-			SetAddressJa(c.LocationAddressJa).
-			Save(ctx)
+		_, err := c.CreateLocationDB(ctx, db)
 		if err != nil {
 			return nil, err
 		}
-
-		c.LocationId = location.ID
-		c.Location = location
 	}
 
 	bio, err := db.Client.Biography.
@@ -106,4 +96,23 @@ func (c *TestBio) CreateDB(ctx context.Context, db *db.DB) (*ent.Biography, erro
 	c.Biography = bio
 
 	return bio, nil
+}
+
+func (c *TestBio) CreateLocationDB(ctx context.Context, db *db.DB) (*ent.Location, error) {
+	location, err := db.Client.Location.
+		Create().
+		SetType(c.LocationType).
+		SetName(c.LocationName).
+		SetNameJa(c.LocationNameJa).
+		SetAddress(c.LocationAddress).
+		SetAddressJa(c.LocationAddressJa).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	c.LocationId = location.ID
+	c.Location = location
+
+	return location, nil
 }
