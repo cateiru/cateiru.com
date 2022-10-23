@@ -9,6 +9,6 @@ import (
 )
 
 // Redirect to CateiruSSO Login page.
-func (h Handler) LoginURLHandler(c echo.Context) error {
+func (h *Handler) LoginURLHandler(c echo.Context) error {
 	return c.Redirect(http.StatusMovedPermanently, sso.CreateURI(config.Config.SSOClientID, config.Config.SSORedirectURI.String()))
 }

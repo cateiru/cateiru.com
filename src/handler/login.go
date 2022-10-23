@@ -16,7 +16,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h Handler) LoginHandler(c echo.Context) error {
+// Login from OIDC
+// Require `?code=` param.
+// - code param is Open ID Connect code.
+func (h *Handler) LoginHandler(c echo.Context) error {
 	ctx := context.Background()
 
 	code := c.QueryParams().Get("code")

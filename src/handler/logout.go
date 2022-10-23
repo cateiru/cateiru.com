@@ -6,7 +6,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h Handler) LogoutHandler(e echo.Context) error {
+// Logout session
+// no delete users.
+func (h *Handler) LogoutHandler(e echo.Context) error {
 	ctx := context.Background()
 
 	if err := h.Session(ctx, e); err != nil {
