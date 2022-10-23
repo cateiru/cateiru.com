@@ -121,7 +121,7 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 		return err
 	}
 
-	return e.JSON(http.StatusOK, bioDB)
+	return e.JSON(http.StatusCreated, bioDB)
 }
 
 // Set a new bio

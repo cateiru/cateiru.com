@@ -103,7 +103,7 @@ func TestCreateBioHandler(t *testing.T) {
 		err = h.CreateBioHandler(e)
 		require.NoError(t, err)
 
-		m.Ok(t)
+		m.Status(t, http.StatusCreated)
 
 		// check
 		b := new(ent.Biography)
@@ -159,7 +159,7 @@ func TestCreateBioHandler(t *testing.T) {
 		err = h.CreateBioHandler(e)
 		require.NoError(t, err)
 
-		m.Ok(t)
+		m.Status(t, http.StatusCreated)
 
 		// check
 		b := new(ent.Biography)
