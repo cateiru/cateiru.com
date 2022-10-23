@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
@@ -105,9 +106,12 @@ func TestCreateBioHandler(t *testing.T) {
 		m.Ok(t)
 
 		// check
+		b := new(ent.Biography)
+		err = m.Json(b)
+		require.NoError(t, err)
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.UserID(u.User.ID)).
+			Where(biography.ID(b.ID)).
 			First(ctx)
 		require.NoError(t, err)
 
@@ -158,9 +162,12 @@ func TestCreateBioHandler(t *testing.T) {
 		m.Ok(t)
 
 		// check
+		b := new(ent.Biography)
+		err = m.Json(b)
+		require.NoError(t, err)
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.UserID(u.User.ID)).
+			Where(biography.ID(b.ID)).
 			First(ctx)
 		require.NoError(t, err)
 
@@ -230,6 +237,7 @@ func TestUpdateBioHandler(t *testing.T) {
 
 		// create post form
 		form := contents.NewMultipart()
+		form.Insert("bio_id", strconv.Itoa(int(bio.Biography.ID)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
 
@@ -249,7 +257,7 @@ func TestUpdateBioHandler(t *testing.T) {
 		// check
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.UserID(u.User.ID)).
+			Where(biography.ID(bio.Biography.ID)).
 			First(ctx)
 		require.NoError(t, err)
 
@@ -279,6 +287,7 @@ func TestUpdateBioHandler(t *testing.T) {
 
 		// create post form
 		form := contents.NewMultipart()
+		form.Insert("bio_id", strconv.Itoa(int(bio.Biography.ID)))
 		form.Insert("is_public", "true")
 		form.Insert("location_id", strconv.Itoa(int(bioUsedLoc.LocationId)))
 		form.Insert("position", "web application engineer")
@@ -302,7 +311,7 @@ func TestUpdateBioHandler(t *testing.T) {
 		// check
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.UserID(u.User.ID)).
+			Where(biography.ID(bio.Biography.ID)).
 			First(ctx)
 		require.NoError(t, err)
 
@@ -331,6 +340,7 @@ func TestUpdateBioHandler(t *testing.T) {
 
 		// create post form
 		form := contents.NewMultipart()
+		form.Insert("bio_id", strconv.Itoa(int(bio.Biography.ID)))
 
 		m, err := mock.NewFormData("/", form, http.MethodPut)
 		require.NoError(t, err)

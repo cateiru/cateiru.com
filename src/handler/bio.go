@@ -116,11 +116,12 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 	bio = bio.SetPositionJa(positionJa)
 	bio = bio.SetJoin(joinDate)
 
-	if err := bio.Exec(ctx); err != nil {
-		return nil
+	bioDB, err := bio.Save(ctx)
+	if err != nil {
+		return err
 	}
 
-	return nil
+	return e.JSON(http.StatusOK, bioDB)
 }
 
 // Set a new bio
@@ -139,10 +140,20 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 		return err
 	}
 
+	bioId, err := strconv.Atoi(e.FormValue("bio_id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: bio_id")
+	}
+
 	changes := false
 	u := h.DB.Client.Biography.
 		Update().
-		Where(biography.UserID(h.User.ID))
+		Where(
+			biography.And(
+				biography.ID(uint32(bioId)),
+				biography.UserID(h.User.ID),
+			),
+		)
 
 	isPublicStr := e.FormValue("is_public")
 	if isPublicStr != "" {
@@ -207,7 +218,20 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 		return err
 	}
 
-	return nil
+	bioDB, err := h.DB.Client.Biography.
+		Query().
+		Where(
+			biography.And(
+				biography.ID(uint32(bioId)),
+				biography.UserID(h.User.ID),
+			),
+		).
+		First(ctx)
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusOK, bioDB)
 }
 
 func (h *Handler) DeleteBioHandler(e echo.Context) error {
