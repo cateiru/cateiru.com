@@ -4,9 +4,16 @@ import (
 	"context"
 	"crypto/rand"
 	"errors"
+	"net/http"
+	"testing"
 
+	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/cateiru/cateiru.com/src/handler"
+	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
+	"github.com/stretchr/testify/require"
 )
 
 type TestTool struct {
@@ -97,4 +104,83 @@ func MakeRandomStr(digit uint32) (string, error) {
 		result += string(letters[int(v)%len(letters)])
 	}
 	return result, nil
+}
+
+func LoginTestGet(t *testing.T, o func(h *handler.Handler, e echo.Context) error) {
+	t.Run("no login", func(t *testing.T) {
+		tool, err := NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", "/")
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = o(h, e)
+		require.Error(t, err)
+		CheckHTTPErrorMessage(t, err, "cookie is not found")
+	})
+
+	t.Run("invalid cookie: parse failed UUID", func(t *testing.T) {
+		tool, err := NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", "/")
+		require.NoError(t, err)
+
+		m.Cookie([]*http.Cookie{
+			{
+				Name:  config.Config.SessionCookieName,
+				Value: "oooooo",
+			},
+		})
+
+		e := m.Echo()
+
+		err = o(h, e)
+		require.Error(t, err)
+		CheckHTTPErrorMessage(t, err, "failed parse session token uuid")
+	})
+
+	t.Run("invalid session token", func(t *testing.T) {
+		tool, err := NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", "/")
+		require.NoError(t, err)
+
+		uuid := uuid.New()
+
+		m.Cookie([]*http.Cookie{
+			{
+				Name:  config.Config.SessionCookieName,
+				Value: uuid.String(),
+			},
+		})
+
+		e := m.Echo()
+
+		err = o(h, e)
+		require.Error(t, err)
+		CheckHTTPErrorMessage(t, err, "session token invalid")
+	})
+}
+
+func CheckHTTPErrorMessage(t *testing.T, err error, message string) {
+	httpErr, ok := err.(*echo.HTTPError)
+	require.True(t, ok, "err is no echo.HTTPError")
+
+	require.Equal(t, httpErr.Message, message, "invalid error message")
 }
