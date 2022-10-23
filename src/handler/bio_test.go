@@ -18,6 +18,8 @@ import (
 )
 
 func TestBioHandler(t *testing.T) {
+	test.Init()
+
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 
@@ -63,6 +65,8 @@ func TestBioHandler(t *testing.T) {
 }
 
 func TestCreateBioHandler(t *testing.T) {
+	test.Init()
+
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 
@@ -207,6 +211,8 @@ func TestCreateBioHandler(t *testing.T) {
 }
 
 func TestUpdateBioHandler(t *testing.T) {
+	test.Init()
+
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 
@@ -344,6 +350,8 @@ func TestUpdateBioHandler(t *testing.T) {
 }
 
 func TestDeleteBioHandler(t *testing.T) {
+	test.Init()
+
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 
