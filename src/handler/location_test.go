@@ -2,7 +2,9 @@ package handler_test
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strconv"
 	"testing"
 
 	"github.com/cateiru/cateiru.com/ent"
@@ -159,6 +161,132 @@ func TestCreateLocationHandler(t *testing.T) {
 func TestUpdateLocationHandler(t *testing.T) {
 	test.Init()
 
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		// create a new location
+		bio, err := u.CreateBio()
+		require.NoError(t, err)
+		_, err = bio.CreateLocationDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		// create post form
+		form := contents.NewMultipart()
+		form.Insert("location_id", strconv.Itoa(int(bio.LocationId)))
+		form.Insert("name", "cateiru")
+		form.Insert("name_ja", "cateiru")
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.UpdateLocationHandler(e)
+		require.NoError(t, err)
+
+		m.Ok(t)
+
+		// check
+		locationDB, err := tool.DB.Client.Location.
+			Query().
+			Where(location.ID(bio.LocationId)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, locationDB.Name, "cateiru")
+		require.Equal(t, locationDB.NameJa, "cateiru")
+	})
+
+	t.Run("all changes", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		// create a new location
+		bio, err := u.CreateBio()
+		require.NoError(t, err)
+		_, err = bio.CreateLocationDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		// create post form
+		form := contents.NewMultipart()
+		form.Insert("location_id", strconv.Itoa(int(bio.LocationId)))
+		form.Insert("type", "corp")
+		form.Insert("name", "cateiru")
+		form.Insert("name_ja", "cateiru")
+		form.Insert("address", "Saitama")
+		form.Insert("address_ja", "埼玉県")
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.UpdateLocationHandler(e)
+		require.NoError(t, err)
+
+		m.Ok(t)
+
+		// check
+		locationDB, err := tool.DB.Client.Location.
+			Query().
+			Where(location.ID(bio.LocationId)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, locationDB.Type, location.Type("corp"))
+		require.Equal(t, locationDB.Name, "cateiru")
+		require.Equal(t, locationDB.NameJa, "cateiru")
+		require.Equal(t, locationDB.Address, "Saitama")
+		require.Equal(t, locationDB.AddressJa, "埼玉県")
+	})
+
+	t.Run("no changes", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		// create a new location
+		bio, err := u.CreateBio()
+		require.NoError(t, err)
+		_, err = bio.CreateLocationDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		// create post form
+		form := contents.NewMultipart()
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.UpdateLocationHandler(e)
+		require.Error(t, err)
+	})
+
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.UpdateLocationHandler(e)
 	})
@@ -166,6 +294,42 @@ func TestUpdateLocationHandler(t *testing.T) {
 
 func TestDeleteLocationHandler(t *testing.T) {
 	test.Init()
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		bio, err := u.CreateBio()
+		require.NoError(t, err)
+		_, err = bio.CreateLocationDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", fmt.Sprintf("/?location_id=%v", bio.LocationId))
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.DeleteLocationHandler(e)
+		require.NoError(t, err)
+
+		exist, err := tool.DB.Client.Location.
+			Query().
+			Where(location.ID(bio.LocationId)).
+			Exist(ctx)
+		require.NoError(t, err)
+		require.False(t, exist)
+	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.DeleteLocationHandler(e)
