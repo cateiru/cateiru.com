@@ -67,7 +67,18 @@ func (c *TestTool) ClearBio(ctx context.Context) error {
 	if _, err := c.DB.Client.Biography.Delete().Exec(ctx); err != nil {
 		return err
 	}
+	return c.ClearLocation(ctx)
+}
+
+func (c *TestTool) ClearLocation(ctx context.Context) error {
 	if _, err := c.DB.Client.Location.Delete().Exec(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *TestTool) ClearProduct(ctx context.Context) error {
+	if _, err := c.DB.Client.Product.Delete().Exec(ctx); err != nil {
 		return err
 	}
 	return nil
