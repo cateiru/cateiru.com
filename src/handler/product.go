@@ -2,7 +2,9 @@ package handler
 
 import (
 	"context"
+	"net/http"
 
+	"github.com/cateiru/cateiru.com/ent/product"
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,7 +16,15 @@ func (h *Handler) ProductHandler(e echo.Context) error {
 		return err
 	}
 
-	return nil
+	products, err := h.DB.Client.Product.
+		Query().
+		Where(product.UserID(h.User.ID)).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusOK, products)
 }
 
 // Create a new products
