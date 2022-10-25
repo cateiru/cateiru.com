@@ -233,7 +233,10 @@ func (h *Handler) DeleteProductHandler(e echo.Context) error {
 
 	_, err = h.DB.Client.Product.
 		Delete().
-		Where(product.ID(uint32(id))).
+		Where(product.And(
+			product.ID(uint32(id)),
+			product.UserID(h.User.ID)),
+		).
 		Exec(ctx)
 	if err != nil {
 		return err

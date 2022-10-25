@@ -2,6 +2,7 @@ package handler_test
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 	"testing"
@@ -298,6 +299,73 @@ func TestUpdateProductHandler(t *testing.T) {
 
 func TestDeleteProductHandler(t *testing.T) {
 	test.Init()
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		p, err := u.CreateProduct()
+		require.NoError(t, err)
+		_, err = p.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		m, err := mock.NewMock("", http.MethodDelete, fmt.Sprintf("/?product_id=%v", p.Product.ID))
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.DeleteProductHandler(e)
+		require.NoError(t, err)
+
+		exist, err := tool.DB.Client.Product.
+			Query().
+			Where(product.ID(p.Product.ID)).
+			Exist(ctx)
+		require.NoError(t, err)
+		require.False(t, exist)
+	})
+
+	t.Run("other users", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		u2, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		p2, err := u2.CreateProduct()
+		require.NoError(t, err)
+		_, err = p2.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		m, err := mock.NewMock("", http.MethodDelete, fmt.Sprintf("/?product_id=%v", p2.Product.ID))
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.DeleteProductHandler(e)
+		require.NoError(t, err)
+
+		exist, err := tool.DB.Client.Product.
+			Query().
+			Where(product.ID(p2.Product.ID)).
+			Exist(ctx)
+		require.NoError(t, err)
+		require.True(t, exist)
+	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.DeleteProductHandler(e)
