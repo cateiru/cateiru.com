@@ -2,11 +2,14 @@ package handler_test
 
 import (
 	"context"
+	"net/http"
 	"testing"
 
 	"github.com/cateiru/cateiru.com/ent"
+	"github.com/cateiru/cateiru.com/ent/product"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
+	"github.com/cateiru/go-http-easy-test/contents"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
@@ -69,6 +72,103 @@ func TestProductHandler(t *testing.T) {
 
 func TestCreateProductHandler(t *testing.T) {
 	test.Init()
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		_, err = u.CreateProduct()
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("name", "cateiru.com")
+		form.Insert("name_ja", "cateiru.com")
+		form.Insert("detail", "my portfolio")
+		form.Insert("detail_ja", "ポートフォリオ")
+		form.Insert("site_url", "https://cateiru.com")
+		form.Insert("dev_time", "2022-10-25T00:00:00-0900")
+
+		m, err := mock.NewFormData("/", form, http.MethodPost)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.CreateProductHandler(e)
+		require.NoError(t, err)
+
+		m.Status(t, http.StatusCreated)
+
+		res := new(ent.Product)
+		err = m.Json(res)
+		require.NoError(t, err)
+		prodInDB, err := tool.DB.Client.Product.
+			Query().
+			Where(product.ID(res.ID)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, prodInDB.Name, "cateiru.com")
+		require.Equal(t, prodInDB.DetailJa, "ポートフォリオ")
+		require.Equal(t, prodInDB.SiteURL, "https://cateiru.com")
+		require.Equal(t, prodInDB.GithubURL, "")
+		require.Equal(t, prodInDB.Thumbnail, "")
+	})
+
+	t.Run("all change", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		_, err = u.CreateProduct()
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("name", "cateiru.com")
+		form.Insert("name_ja", "cateiru.com")
+		form.Insert("detail", "my portfolio")
+		form.Insert("detail_ja", "ポートフォリオ")
+		form.Insert("site_url", "https://cateiru.com")
+		form.Insert("github_url", "https://github.com/cateiru/cateiru.com")
+		form.Insert("thumbnail", "https://caiteiru.com/ogp.png")
+		form.Insert("dev_time", "2022-10-25T00:00:00-0900")
+
+		m, err := mock.NewFormData("/", form, http.MethodPost)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.CreateProductHandler(e)
+		require.NoError(t, err)
+
+		m.Status(t, http.StatusCreated)
+
+		res := new(ent.Product)
+		err = m.Json(res)
+		require.NoError(t, err)
+		prodInDB, err := tool.DB.Client.Product.
+			Query().
+			Where(product.ID(res.ID)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, prodInDB.Name, "cateiru.com")
+		require.Equal(t, prodInDB.DetailJa, "ポートフォリオ")
+		require.Equal(t, prodInDB.GithubURL, "https://github.com/cateiru/cateiru.com")
+		require.Equal(t, prodInDB.Thumbnail, "https://caiteiru.com/ogp.png")
+	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.CreateProductHandler(e)

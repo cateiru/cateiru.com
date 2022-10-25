@@ -78,9 +78,6 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 	if err := ValidateURL(siteUrl); err != nil {
 		return err
 	}
-	if err := ValidateURL(githubUrl); err != nil {
-		return err
-	}
 
 	devTime, err := time.Parse("2006-01-02T15:04:05-0700", devTimeStr)
 	if err != nil {
@@ -89,16 +86,24 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 
 	c := h.DB.Client.Product.
 		Create().
+		SetUserID(h.User.ID).
 		SetName(name).
 		SetNameJa(nameJa).
 		SetDetail(detail).
 		SetDetailJa(detailJa).
-		SetDevTime(devTime)
+		SetDevTime(devTime).
+		SetSiteURL(siteUrl)
 
 	if githubUrl != "" {
+		if err := ValidateURL(githubUrl); err != nil {
+			return err
+		}
 		c = c.SetGithubURL(githubUrl)
 	}
 	if thumbnail != "" {
+		if err := ValidateURL(thumbnail); err != nil {
+			return err
+		}
 		c = c.SetThumbnail(thumbnail)
 	}
 
@@ -107,7 +112,7 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 		return err
 	}
 
-	return e.JSON(http.StatusOK, prod)
+	return e.JSON(http.StatusCreated, prod)
 }
 
 // Update a product
@@ -187,6 +192,9 @@ func (h *Handler) UpdateProductHandler(e echo.Context) error {
 	}
 	thumbnail := e.FormValue("thumbnail")
 	if thumbnail != "" {
+		if err := ValidateURL(thumbnail); err != nil {
+			return err
+		}
 		c = c.SetThumbnail(thumbnail)
 		changed = true
 	}
