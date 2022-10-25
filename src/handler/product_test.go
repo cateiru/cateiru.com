@@ -3,6 +3,7 @@ package handler_test
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"testing"
 
 	"github.com/cateiru/cateiru.com/ent"
@@ -81,8 +82,6 @@ func TestCreateProductHandler(t *testing.T) {
 		defer tool.Close()
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
-		_, err = u.CreateProduct()
-		require.NoError(t, err)
 
 		form := contents.NewMultipart()
 		form.Insert("name", "cateiru.com")
@@ -128,8 +127,6 @@ func TestCreateProductHandler(t *testing.T) {
 		require.NoError(t, err)
 		defer tool.Close()
 		u, err := tool.NewUser(ctx)
-		require.NoError(t, err)
-		_, err = u.CreateProduct()
 		require.NoError(t, err)
 
 		form := contents.NewMultipart()
@@ -177,6 +174,122 @@ func TestCreateProductHandler(t *testing.T) {
 
 func TestUpdateProductHandler(t *testing.T) {
 	test.Init()
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		p, err := u.CreateProduct()
+		require.NoError(t, err)
+		_, err = p.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("product_id", strconv.Itoa(int(p.Product.ID)))
+		form.Insert("name", "cateiru--aaaa")
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.UpdateProductHandler(e)
+		require.NoError(t, err)
+
+		prod, err := tool.DB.Client.Product.
+			Query().
+			Where(product.ID(p.Product.ID)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, prod.Name, "cateiru--aaaa")
+	})
+
+	t.Run("all change", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		p, err := u.CreateProduct()
+		require.NoError(t, err)
+		_, err = p.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("product_id", strconv.Itoa(int(p.Product.ID)))
+		form.Insert("name", "cateiru.com")
+		form.Insert("name_ja", "cateiru.com")
+		form.Insert("detail", "my portfolio")
+		form.Insert("detail_ja", "ポートフォリオ")
+		form.Insert("site_url", "https://cateiru.com")
+		form.Insert("github_url", "https://github.com/cateiru/cateiru.com")
+		form.Insert("thumbnail", "https://caiteiru.com/ogp.png")
+		form.Insert("dev_time", "2022-10-25T00:00:00-0900")
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.UpdateProductHandler(e)
+		require.NoError(t, err)
+
+		prod, err := tool.DB.Client.Product.
+			Query().
+			Where(product.ID(p.Product.ID)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, prod.Name, "cateiru.com")
+		require.Equal(t, prod.NameJa, "cateiru.com")
+		require.Equal(t, prod.Detail, "my portfolio")
+		require.Equal(t, prod.DetailJa, "ポートフォリオ")
+		require.Equal(t, prod.SiteURL, "https://cateiru.com")
+		require.Equal(t, prod.GithubURL, "https://github.com/cateiru/cateiru.com")
+		require.Equal(t, prod.Thumbnail, "https://caiteiru.com/ogp.png")
+		require.Equal(t, prod.DevTime.Day(), 25)
+	})
+
+	t.Run("no changes", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		p, err := u.CreateProduct()
+		require.NoError(t, err)
+		_, err = p.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("product_id", strconv.Itoa(int(p.Product.ID)))
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+		e := m.Echo()
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		err = h.UpdateProductHandler(e)
+		require.Error(t, err)
+	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.UpdateProductHandler(e)
