@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/cateiru/cateiru.com/ent/product"
@@ -74,6 +75,13 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: dev_time")
 	}
 
+	if err := ValidateURL(siteUrl); err != nil {
+		return err
+	}
+	if err := ValidateURL(githubUrl); err != nil {
+		return err
+	}
+
 	devTime, err := time.Parse("2006-01-02T15:04:05-0700", devTimeStr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: dev_time")
@@ -110,9 +118,9 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 // - detail: string
 // - detail_ja: string
 // - site_url: string
-// - github_url: Optional string
+// - github_url: string
 // - dev_time: ISO 8601 type date
-// - thumbnail: Optional string
+// - thumbnail: string
 func (h *Handler) UpdateProductHandler(e echo.Context) error {
 	ctx := context.Background()
 
@@ -120,19 +128,106 @@ func (h *Handler) UpdateProductHandler(e echo.Context) error {
 		return err
 	}
 
-	// idStr := e.FormValue("product_id")
-	// id, err := strconv.Atoi(idStr)
-	// if err != nil {
-	// 	return err
-	// }
+	idStr := e.FormValue("product_id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return err
+	}
 
-	return nil
+	c := h.DB.Client.Product.
+		Update().
+		Where(product.ID(uint32(id)))
+
+	changed := false
+
+	name := e.FormValue("name")
+	if name != "" {
+		c = c.SetName(name)
+		changed = true
+	}
+	nameJa := e.FormValue("name_ja")
+	if nameJa != "" {
+		c = c.SetNameJa(nameJa)
+		changed = true
+	}
+	detail := e.FormValue("detail")
+	if detail != "" {
+		c = c.SetDetail(detail)
+		changed = true
+	}
+	detailJa := e.FormValue("detail_ja")
+	if detail != "" {
+		c = c.SetDetailJa(detailJa)
+		changed = true
+	}
+	siteUrl := e.FormValue("site_url")
+	if siteUrl != "" {
+		if err := ValidateURL(siteUrl); err != nil {
+			return err
+		}
+		c = c.SetSiteURL(siteUrl)
+		changed = true
+	}
+	githubUrl := e.FormValue("github_url")
+	if githubUrl != "" {
+		if err := ValidateURL(githubUrl); err != nil {
+			return err
+		}
+		c = c.SetGithubURL(githubUrl)
+		changed = true
+	}
+	devTimeStr := e.FormValue("dev_time")
+	if devTimeStr != "" {
+		devTime, err := time.Parse("2006-01-02T15:04:05-0700", devTimeStr)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: dev_time")
+		}
+		c = c.SetDevTime(devTime)
+		changed = true
+	}
+	thumbnail := e.FormValue("thumbnail")
+	if thumbnail != "" {
+		c = c.SetThumbnail(thumbnail)
+		changed = true
+	}
+
+	if !changed {
+		return echo.NewHTTPError(http.StatusBadRequest, "no changes")
+	}
+
+	if err := c.Exec(ctx); err != nil {
+		return err
+	}
+
+	prod, err := h.DB.Client.Product.
+		Query().
+		Where(product.ID(uint32(id))).
+		First(ctx)
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusOK, prod)
 }
 
 func (h *Handler) DeleteProductHandler(e echo.Context) error {
 	ctx := context.Background()
 
 	if err := h.Session(ctx, e); err != nil {
+		return err
+	}
+
+	idStr := e.QueryParam("product_id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: product_id")
+	}
+
+	_, err = h.DB.Client.Product.
+		Delete().
+		Where(product.ID(uint32(id))).
+		Exec(ctx)
+	if err != nil {
 		return err
 	}
 
