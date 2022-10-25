@@ -402,6 +402,49 @@ func TestDeleteBioHandler(t *testing.T) {
 		require.False(t, exist)
 	})
 
+	t.Run("delete other user", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		u2, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		bio2, err := u2.CreateBio()
+		require.NoError(t, err)
+		_, err = bio2.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		m, err := mock.NewMock("", http.MethodDelete, fmt.Sprintf("/?bio_id=%v", bio2.Biography.ID))
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.DeleteBioHandler(e)
+		require.NoError(t, err)
+
+		m.Ok(t)
+
+		exist, err := tool.DB.Client.Biography.
+			Query().
+			Where(biography.ID(bio2.Biography.ID)).
+			Exist(ctx)
+		require.NoError(t, err)
+
+		require.True(t, exist)
+	})
+
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.DeleteBioHandler(e)
 	})

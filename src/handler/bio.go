@@ -252,7 +252,10 @@ func (h *Handler) DeleteBioHandler(e echo.Context) error {
 
 	_, err = h.DB.Client.Biography.
 		Delete().
-		Where(biography.ID(uint32(id))).
+		Where(biography.And(
+			biography.ID(uint32(id)),
+			biography.UserID(h.User.ID),
+		)).
 		Exec(ctx)
 	if err != nil {
 		return err
