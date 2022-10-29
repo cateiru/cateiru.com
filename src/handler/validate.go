@@ -17,5 +17,9 @@ func ValidateURL(target string) error {
 	if !ok {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid args: %s", target))
 	}
+	// _, err := url.Parse(target)
+	// if err != nil {
+	// 	return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid args: %s", target))
+	// }
 	return nil
 }

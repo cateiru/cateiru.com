@@ -21,9 +21,9 @@ func TestValidateURL(t *testing.T) {
 
 	for url, ok := range urls {
 		if ok {
-			require.NoError(t, handler.ValidateURL(url))
+			require.NoError(t, handler.ValidateURL(url), url)
 		} else {
-			require.Error(t, handler.ValidateURL(url))
+			require.Error(t, handler.ValidateURL(url), url)
 		}
 	}
 }
