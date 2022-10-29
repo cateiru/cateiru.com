@@ -56,17 +56,9 @@ func (c *TestLink) CreateDB(ctx context.Context, db *db.DB) (*ent.Link, error) {
 	if c.Category != nil {
 		c.CategoryId = c.Category.ID
 	} else if c.CategoryId == UNDEFINED_CATEGORY_ID {
-		category, err := db.Client.Category.
-			Create().
-			SetName(c.CategoryName).
-			SetNameJa(c.CategoryNameJa).
-			SetEmoji(c.Emoji).
-			Save(ctx)
-		if err != nil {
+		if _, err := c.CreateCategoryDB(ctx, db); err != nil {
 			return nil, err
 		}
-		c.CategoryId = category.ID
-		c.Category = category
 	}
 
 	link, err := db.Client.Link.
@@ -84,4 +76,20 @@ func (c *TestLink) CreateDB(ctx context.Context, db *db.DB) (*ent.Link, error) {
 
 	c.Link = link
 	return link, nil
+}
+
+func (c *TestLink) CreateCategoryDB(ctx context.Context, db *db.DB) (*ent.Category, error) {
+	category, err := db.Client.Category.
+		Create().
+		SetName(c.CategoryName).
+		SetNameJa(c.CategoryNameJa).
+		SetEmoji(c.Emoji).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	c.CategoryId = category.ID
+	c.Category = category
+
+	return category, nil
 }
