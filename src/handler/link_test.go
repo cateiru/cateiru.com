@@ -4,10 +4,12 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"strconv"
 	"testing"
 
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
+	"github.com/cateiru/go-http-easy-test/contents"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
 	"github.com/jarcoal/httpmock"
 	"github.com/labstack/echo/v4"
@@ -23,6 +25,9 @@ func TestLinkHandler(t *testing.T) {
 		tool, err := test.NewTestTool()
 		require.NoError(t, err)
 		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
 
 		h, err := tool.Handler()
 		require.NoError(t, err)
@@ -65,6 +70,64 @@ func TestLinkHandler(t *testing.T) {
 
 func TestCreateLinkHandler(t *testing.T) {
 	test.Init()
+
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	f, err := os.ReadFile("./favicon_short_url.html")
+	require.NoError(t, err)
+
+	httpmock.RegisterResponder(
+		"GET",
+		"https://cateiru.com",
+		httpmock.NewBytesResponder(http.StatusOK, f),
+	)
+	httpmock.RegisterResponder(
+		"GET",
+		"https://cateiru.com/aaa/favicon.ico",
+		httpmock.NewStringResponder(http.StatusOK, ""),
+	)
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		l, err := u.CreateLink()
+		require.NoError(t, err)
+
+		// INSERT DB only category
+		_, err = l.CreateCategoryDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("name", "hoge")
+		form.Insert("name_ja", "あああ")
+		form.Insert("site_url", "https://cateiru.com")
+		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
+
+		m, err := mock.NewFormData("/", form, http.MethodGet)
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.CreateLinkHandler(e)
+		require.NoError(t, err)
+	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.CreateLinkHandler(e)
@@ -158,6 +221,41 @@ func TestGetFavicon(t *testing.T) {
 		require.Equal(t, info["GET https://example.com"], 1)
 		require.Equal(t, info["GET https://example.com/favicon.ico"], 1)
 		require.Equal(t, info["GET https://example.com/html/favicon.ico"], 0)
+	})
+
+	t.Run("favicon short url", func(t *testing.T) {
+		httpmock.Activate()
+		defer httpmock.DeactivateAndReset()
+
+		f, err := os.ReadFile("./favicon_short_url.html")
+		require.NoError(t, err)
+
+		httpmock.RegisterResponder(
+			"GET",
+			"https://cateiru.com",
+			httpmock.NewBytesResponder(http.StatusOK, f),
+		)
+		httpmock.RegisterResponder(
+			"GET",
+			"https://cateiru.com/favicon.ico",
+			httpmock.NewStringResponder(http.StatusOK, ""),
+		)
+		httpmock.RegisterResponder(
+			"GET",
+			"https://cateiru.com/aaa/favicon.ico",
+			httpmock.NewStringResponder(http.StatusOK, ""),
+		)
+
+		fav, err := handler.GetFavicon("https://cateiru.com")
+		require.NoError(t, err)
+
+		require.Equal(t, fav, "https://cateiru.com/aaa/favicon.ico")
+
+		httpmock.GetTotalCallCount()
+		info := httpmock.GetCallCountInfo()
+		require.Equal(t, info["GET https://cateiru.com"], 1)
+		require.Equal(t, info["GET https://cateiru.com/favicon.ico"], 0)
+		require.Equal(t, info["GET https://cateiru.com/aaa/favicon.ico"], 1)
 	})
 
 	t.Run("favicon not found", func(t *testing.T) {

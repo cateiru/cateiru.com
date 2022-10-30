@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -115,6 +116,7 @@ func (h *Handler) CreateLinkHandler(e echo.Context) error {
 
 	link, err := h.DB.Client.Link.
 		Create().
+		SetUserID(h.User.ID).
 		SetName(name).
 		SetNameJa(nameJa).
 		SetSiteURL(siteUrl).
@@ -193,25 +195,33 @@ func GetFavicon(siteUrl string) (string, error) {
 		}
 	})
 
+	u, err := url.Parse(siteUrl)
+	if err != nil {
+		return "", err
+	}
+
 	if len(favicons) == 0 {
 		// If not found favicon in HTML, request `/favicon.ico` path.
-		u, err := url.Parse(siteUrl)
-		if err != nil {
-			return "", err
-		}
 		u.Path = "/favicon.ico"
 
 		favicons = append(favicons, u.String())
 	}
 
 	for _, f := range favicons {
-		reqF, err := http.Get(f)
+		favUrl := ""
+		if err := ValidateURL(f); err != nil {
+			favUrl = fmt.Sprintf("%s%s", u.String(), f)
+		} else {
+			favUrl = f
+		}
+
+		reqF, err := http.Get(favUrl)
 		if err != nil {
 			return "", err
 		}
 		defer reqF.Body.Close()
 		if reqF.StatusCode == 200 {
-			return f, nil
+			return favUrl, nil
 		}
 	}
 
