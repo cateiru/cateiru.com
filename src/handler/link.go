@@ -227,6 +227,26 @@ func (h *Handler) DeleteLinkHandler(e echo.Context) error {
 		return err
 	}
 
+	idStr := e.QueryParam("link_id")
+	if idStr == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "invlaid form: link_id")
+	}
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invlaid form: link_id")
+	}
+
+	_, err = h.DB.Client.Link.
+		Delete().
+		Where(link.And(
+			link.UserID(h.User.ID),
+			link.ID(uint32(id)),
+		)).
+		Exec(ctx)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

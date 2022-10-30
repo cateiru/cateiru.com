@@ -2,6 +2,7 @@ package handler_test
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -353,6 +354,47 @@ func TestDeleteLinkHandler(t *testing.T) {
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.DeleteLinkHandler(e)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		l, err := u.CreateLink()
+		require.NoError(t, err)
+
+		_, err = l.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", fmt.Sprintf("/?link_id=%v", l.Link.ID))
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.DeleteLinkHandler(e)
+		require.NoError(t, err)
+
+		exist, err := tool.DB.Client.Link.
+			Query().
+			Where(link.ID(l.Link.ID)).
+			Exist(ctx)
+		require.NoError(t, err)
+		require.False(t, exist)
 	})
 }
 
