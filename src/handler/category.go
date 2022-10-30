@@ -47,7 +47,7 @@ func (h *Handler) CreateCategoryHandler(e echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: name_ja")
 	}
 	// emoji is one char
-	if utf8.RuneCountInString(emoji) == 1 {
+	if utf8.RuneCountInString(emoji) != 1 {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: emoji")
 	}
 
