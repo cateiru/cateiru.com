@@ -84,6 +84,16 @@ func (c *TestTool) ClearProduct(ctx context.Context) error {
 	return nil
 }
 
+func (c *TestTool) ClearLink(ctx context.Context) error {
+	if _, err := c.DB.Client.Link.Delete().Exec(ctx); err != nil {
+		return err
+	}
+	if _, err := c.DB.Client.Category.Delete().Exec(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Returns list of user ids
 func (c *TestTool) GetUserIds() []uint32 {
 	ids := []uint32{}
