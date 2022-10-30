@@ -230,8 +230,15 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	if err != nil {
 		return err
 	}
+	location, err := h.DB.Client.Location.Get(ctx, bioDB.LocationID)
+	if err != nil {
+		return err
+	}
 
-	return e.JSON(http.StatusOK, bioDB)
+	return e.JSON(http.StatusOK, BioResponse{
+		Biography: *bioDB,
+		Location:  *location,
+	})
 }
 
 func (h *Handler) DeleteBioHandler(e echo.Context) error {
