@@ -164,3 +164,11 @@ func (c *TestUser) CreateLink() (*TestLink, error) {
 
 	return NewTestLink(c.User.ID)
 }
+
+func (c *TestUser) CreateNotice() (*TestNotice, error) {
+	if c.User == nil {
+		return nil, errors.New("user is not inserted in db")
+	}
+
+	return NewTestNotice(c.User.ID)
+}
