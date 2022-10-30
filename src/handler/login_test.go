@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateiru-sso/pkg/go/sso"
+	"github.com/cateiru/cateiru.com/ent/notice"
 	"github.com/cateiru/cateiru.com/ent/session"
 	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/cateiru/cateiru.com/src/config"
@@ -206,6 +207,10 @@ func TestLoginHandler(t *testing.T) {
 
 		require.Equal(t, dbInsertedUser.FamilyName, testUser.FamilyName)
 		require.Equal(t, dbInsertedUser.UserID, testUser.UserId)
+
+		nExist, err := base.DB.Client.Notice.Query().Where(notice.UserID(users[0].ID)).Exist(ctx)
+		require.NoError(t, err)
+		require.True(t, nExist)
 	})
 }
 

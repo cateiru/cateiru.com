@@ -124,5 +124,12 @@ func CreateUser(ctx context.Context, base *base.Base, claims *sso.Claims) (*ent.
 		return nil, echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
 	}
 
+	_, err = base.DB.Client.Notice.Create().
+		SetUserID(u.ID).
+		Save(ctx)
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
+	}
+
 	return u, nil
 }
