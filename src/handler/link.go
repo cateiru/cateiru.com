@@ -7,11 +7,17 @@ import (
 	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/category"
 	"github.com/cateiru/cateiru.com/ent/link"
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/labstack/echo/v4"
 )
+
+type LinkResponse struct {
+	Link     ent.Link
+	Category ent.Category
+}
 
 // Response all Links
 func (h *Handler) LinkHandler(e echo.Context) error {
@@ -29,7 +35,33 @@ func (h *Handler) LinkHandler(e echo.Context) error {
 		return err
 	}
 
-	return e.JSON(http.StatusOK, links)
+	resp := []LinkResponse{}
+	categories := map[uint32]*ent.Category{}
+	for _, l := range links {
+		c, ok := categories[l.CategoryID]
+		if ok {
+			resp = append(resp, LinkResponse{
+				Link:     *l,
+				Category: *c,
+			})
+		} else {
+			newC, err := h.DB.Client.Category.
+				Query().
+				Where(category.ID(l.CategoryID)).
+				First(ctx)
+			if err != nil {
+				return err
+			}
+			categories[newC.ID] = newC
+
+			resp = append(resp, LinkResponse{
+				Link:     *l,
+				Category: *newC,
+			})
+		}
+	}
+
+	return e.JSON(http.StatusOK, resp)
 }
 
 // Create a new Link
