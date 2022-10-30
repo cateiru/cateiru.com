@@ -12,6 +12,10 @@ var UrlRegexp = regexp.MustCompile(
 	`https?://[\w/:%#\$&\?\(\)~\.=\+\-]+`,
 )
 
+var MailRegexp = regexp.MustCompile(
+	`[\w\-\._]+@[\w\-\._]+\.[A-Za-z]+`,
+)
+
 func ValidateURL(target string) error {
 	ok := UrlRegexp.MatchString(target)
 	if !ok {
@@ -21,5 +25,13 @@ func ValidateURL(target string) error {
 	// if err != nil {
 	// 	return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid args: %s", target))
 	// }
+	return nil
+}
+
+func ValidateMail(target string) error {
+	ok := MailRegexp.MatchString(target)
+	if !ok {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid args: %s", target))
+	}
 	return nil
 }
