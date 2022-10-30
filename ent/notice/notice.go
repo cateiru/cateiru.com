@@ -11,6 +11,8 @@ const (
 	Label = "notice"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldUserID holds the string denoting the user_id field in the database.
+	FieldUserID = "user_id"
 	// FieldDiscordWebhook holds the string denoting the discord_webhook field in the database.
 	FieldDiscordWebhook = "discord_webhook"
 	// FieldSlackWebhook holds the string denoting the slack_webhook field in the database.
@@ -28,6 +30,7 @@ const (
 // Columns holds all SQL columns for notice fields.
 var Columns = []string{
 	FieldID,
+	FieldUserID,
 	FieldDiscordWebhook,
 	FieldSlackWebhook,
 	FieldMail,

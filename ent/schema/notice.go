@@ -20,6 +20,10 @@ func (Notice) Fields() []ent.Field {
 		// `id` INT UNSIGNED AUTO_INCREMENT NOT NULL
 		field.Uint32("id"),
 
+		// `user_id` INT UNSIGNED UNIQUE NOT NULL
+		field.Uint32("user_id").
+			Unique(),
+
 		// `discord_webhook` TEXT
 		field.String("discord_webhook").
 			SchemaType(map[string]string{

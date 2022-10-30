@@ -80,6 +80,13 @@ func IDLTE(id uint32) predicate.Notice {
 	})
 }
 
+// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
+func UserID(v uint32) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUserID), v))
+	})
+}
+
 // DiscordWebhook applies equality check predicate on the "discord_webhook" field. It's identical to DiscordWebhookEQ.
 func DiscordWebhook(v string) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
@@ -112,6 +119,70 @@ func Created(v time.Time) predicate.Notice {
 func Modified(v time.Time) predicate.Notice {
 	return predicate.Notice(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldModified), v))
+	})
+}
+
+// UserIDEQ applies the EQ predicate on the "user_id" field.
+func UserIDEQ(v uint32) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUserID), v))
+	})
+}
+
+// UserIDNEQ applies the NEQ predicate on the "user_id" field.
+func UserIDNEQ(v uint32) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUserID), v))
+	})
+}
+
+// UserIDIn applies the In predicate on the "user_id" field.
+func UserIDIn(vs ...uint32) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUserID), v...))
+	})
+}
+
+// UserIDNotIn applies the NotIn predicate on the "user_id" field.
+func UserIDNotIn(vs ...uint32) predicate.Notice {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUserID), v...))
+	})
+}
+
+// UserIDGT applies the GT predicate on the "user_id" field.
+func UserIDGT(v uint32) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUserID), v))
+	})
+}
+
+// UserIDGTE applies the GTE predicate on the "user_id" field.
+func UserIDGTE(v uint32) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUserID), v))
+	})
+}
+
+// UserIDLT applies the LT predicate on the "user_id" field.
+func UserIDLT(v uint32) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUserID), v))
+	})
+}
+
+// UserIDLTE applies the LTE predicate on the "user_id" field.
+func UserIDLTE(v uint32) predicate.Notice {
+	return predicate.Notice(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUserID), v))
 	})
 }
 

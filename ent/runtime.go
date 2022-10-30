@@ -89,11 +89,11 @@ func init() {
 	noticeFields := schema.Notice{}.Fields()
 	_ = noticeFields
 	// noticeDescCreated is the schema descriptor for created field.
-	noticeDescCreated := noticeFields[4].Descriptor()
+	noticeDescCreated := noticeFields[5].Descriptor()
 	// notice.DefaultCreated holds the default value on creation for the created field.
 	notice.DefaultCreated = noticeDescCreated.Default.(func() time.Time)
 	// noticeDescModified is the schema descriptor for modified field.
-	noticeDescModified := noticeFields[5].Descriptor()
+	noticeDescModified := noticeFields[6].Descriptor()
 	// notice.DefaultModified holds the default value on creation for the modified field.
 	notice.DefaultModified = noticeDescModified.Default.(func() time.Time)
 	// notice.UpdateDefaultModified holds the default value on update for the modified field.

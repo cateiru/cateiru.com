@@ -253,12 +253,12 @@ func (nq *NoticeQuery) Clone() *NoticeQuery {
 // Example:
 //
 //	var v []struct {
-//		DiscordWebhook string `json:"discord_webhook,omitempty"`
+//		UserID uint32 `json:"user_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Notice.Query().
-//		GroupBy(notice.FieldDiscordWebhook).
+//		GroupBy(notice.FieldUserID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (nq *NoticeQuery) GroupBy(field string, fields ...string) *NoticeGroupBy {
@@ -281,11 +281,11 @@ func (nq *NoticeQuery) GroupBy(field string, fields ...string) *NoticeGroupBy {
 // Example:
 //
 //	var v []struct {
-//		DiscordWebhook string `json:"discord_webhook,omitempty"`
+//		UserID uint32 `json:"user_id,omitempty"`
 //	}
 //
 //	client.Notice.Query().
-//		Select(notice.FieldDiscordWebhook).
+//		Select(notice.FieldUserID).
 //		Scan(ctx, &v)
 func (nq *NoticeQuery) Select(fields ...string) *NoticeSelect {
 	nq.fields = append(nq.fields, fields...)

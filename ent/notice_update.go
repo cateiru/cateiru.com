@@ -28,6 +28,19 @@ func (nu *NoticeUpdate) Where(ps ...predicate.Notice) *NoticeUpdate {
 	return nu
 }
 
+// SetUserID sets the "user_id" field.
+func (nu *NoticeUpdate) SetUserID(u uint32) *NoticeUpdate {
+	nu.mutation.ResetUserID()
+	nu.mutation.SetUserID(u)
+	return nu
+}
+
+// AddUserID adds u to the "user_id" field.
+func (nu *NoticeUpdate) AddUserID(u int32) *NoticeUpdate {
+	nu.mutation.AddUserID(u)
+	return nu
+}
+
 // SetDiscordWebhook sets the "discord_webhook" field.
 func (nu *NoticeUpdate) SetDiscordWebhook(s string) *NoticeUpdate {
 	nu.mutation.SetDiscordWebhook(s)
@@ -194,6 +207,20 @@ func (nu *NoticeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := nu.mutation.UserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: notice.FieldUserID,
+		})
+	}
+	if value, ok := nu.mutation.AddedUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: notice.FieldUserID,
+		})
+	}
 	if value, ok := nu.mutation.DiscordWebhook(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -264,6 +291,19 @@ type NoticeUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *NoticeMutation
+}
+
+// SetUserID sets the "user_id" field.
+func (nuo *NoticeUpdateOne) SetUserID(u uint32) *NoticeUpdateOne {
+	nuo.mutation.ResetUserID()
+	nuo.mutation.SetUserID(u)
+	return nuo
+}
+
+// AddUserID adds u to the "user_id" field.
+func (nuo *NoticeUpdateOne) AddUserID(u int32) *NoticeUpdateOne {
+	nuo.mutation.AddUserID(u)
+	return nuo
 }
 
 // SetDiscordWebhook sets the "discord_webhook" field.
@@ -461,6 +501,20 @@ func (nuo *NoticeUpdateOne) sqlSave(ctx context.Context) (_node *Notice, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := nuo.mutation.UserID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: notice.FieldUserID,
+		})
+	}
+	if value, ok := nuo.mutation.AddedUserID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: notice.FieldUserID,
+		})
 	}
 	if value, ok := nuo.mutation.DiscordWebhook(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{

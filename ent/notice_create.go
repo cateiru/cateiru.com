@@ -20,6 +20,12 @@ type NoticeCreate struct {
 	hooks    []Hook
 }
 
+// SetUserID sets the "user_id" field.
+func (nc *NoticeCreate) SetUserID(u uint32) *NoticeCreate {
+	nc.mutation.SetUserID(u)
+	return nc
+}
+
 // SetDiscordWebhook sets the "discord_webhook" field.
 func (nc *NoticeCreate) SetDiscordWebhook(s string) *NoticeCreate {
 	nc.mutation.SetDiscordWebhook(s)
@@ -185,6 +191,9 @@ func (nc *NoticeCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (nc *NoticeCreate) check() error {
+	if _, ok := nc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Notice.user_id"`)}
+	}
 	if _, ok := nc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Notice.created"`)}
 	}
@@ -223,6 +232,14 @@ func (nc *NoticeCreate) createSpec() (*Notice, *sqlgraph.CreateSpec) {
 	if id, ok := nc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
+	}
+	if value, ok := nc.mutation.UserID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: notice.FieldUserID,
+		})
+		_node.UserID = value
 	}
 	if value, ok := nc.mutation.DiscordWebhook(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

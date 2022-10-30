@@ -16,6 +16,8 @@ type Notice struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uint32 `json:"id,omitempty"`
+	// UserID holds the value of the "user_id" field.
+	UserID uint32 `json:"user_id,omitempty"`
 	// DiscordWebhook holds the value of the "discord_webhook" field.
 	DiscordWebhook string `json:"discord_webhook,omitempty"`
 	// SlackWebhook holds the value of the "slack_webhook" field.
@@ -33,7 +35,7 @@ func (*Notice) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case notice.FieldID:
+		case notice.FieldID, notice.FieldUserID:
 			values[i] = new(sql.NullInt64)
 		case notice.FieldDiscordWebhook, notice.FieldSlackWebhook, notice.FieldMail:
 			values[i] = new(sql.NullString)
@@ -60,6 +62,12 @@ func (n *Notice) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			n.ID = uint32(value.Int64)
+		case notice.FieldUserID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+			} else if value.Valid {
+				n.UserID = uint32(value.Int64)
+			}
 		case notice.FieldDiscordWebhook:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field discord_webhook", values[i])
@@ -118,6 +126,9 @@ func (n *Notice) String() string {
 	var builder strings.Builder
 	builder.WriteString("Notice(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", n.ID))
+	builder.WriteString("user_id=")
+	builder.WriteString(fmt.Sprintf("%v", n.UserID))
+	builder.WriteString(", ")
 	builder.WriteString("discord_webhook=")
 	builder.WriteString(n.DiscordWebhook)
 	builder.WriteString(", ")

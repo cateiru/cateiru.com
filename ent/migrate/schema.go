@@ -127,6 +127,7 @@ var (
 	// NoticesColumns holds the columns for the "notices" table.
 	NoticesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "user_id", Type: field.TypeUint32, Unique: true},
 		{Name: "discord_webhook", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "slack_webhook", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "mail", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
