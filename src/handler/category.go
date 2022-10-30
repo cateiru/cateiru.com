@@ -26,6 +26,9 @@ func (h *Handler) CategoryHandler(e echo.Context) error {
 	return e.JSON(http.StatusOK, c)
 }
 
+// - name: string
+// - name_ja: string
+// - emoji: len 1 string
 func (h *Handler) CreateCategoryHandler(e echo.Context) error {
 	ctx := context.Background()
 
@@ -60,6 +63,9 @@ func (h *Handler) CreateCategoryHandler(e echo.Context) error {
 	return e.JSON(http.StatusCreated, c)
 }
 
+// - name: string
+// - name_ja: string
+// - emoji: len 1 string
 func (h *Handler) UpdateCategoryHandler(e echo.Context) error {
 	ctx := context.Background()
 

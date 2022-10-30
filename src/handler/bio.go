@@ -208,6 +208,8 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: leave_date")
 		}
 		u = u.SetLeave(leaveDate)
+	} else {
+		u = u.ClearLeave()
 	}
 
 	if !changes {
