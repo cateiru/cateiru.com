@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/cateiru/cateiru.com/ent/link"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/contents"
@@ -127,6 +128,59 @@ func TestCreateLinkHandler(t *testing.T) {
 
 		err = h.CreateLinkHandler(e)
 		require.NoError(t, err)
+
+		links, err := tool.DB.Client.Link.
+			Query().
+			Where(link.UserID(u.User.ID)).
+			All(ctx)
+		require.NoError(t, err)
+
+		require.Len(t, links, 1)
+		require.Equal(t, links[0].Name, "hoge")
+		require.Equal(t, links[0].NameJa, "あああ")
+		require.Equal(t, links[0].SiteURL, "https://cateiru.com")
+		require.Equal(t, links[0].CategoryID, l.Category.ID)
+	})
+
+	t.Run("failed form", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		l, err := u.CreateLink()
+		require.NoError(t, err)
+
+		// INSERT DB only category
+		_, err = l.CreateCategoryDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("name", "hoge")
+		form.Insert("name_ja", "あああ")
+		// form.Insert("site_url", "https://cateiru.com")
+		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
+
+		m, err := mock.NewFormData("/", form, http.MethodGet)
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.CreateLinkHandler(e)
+		require.Error(t, err)
 	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
