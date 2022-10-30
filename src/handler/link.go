@@ -137,7 +137,87 @@ func (h *Handler) UpdateLinkHandler(e echo.Context) error {
 		return err
 	}
 
-	return nil
+	idStr := e.FormValue("link_id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: link_id")
+	}
+
+	l := h.DB.Client.Link.
+		Update().
+		Where(link.And(
+			link.UserID(h.User.ID),
+			link.ID(uint32(id)),
+		))
+	changed := false
+
+	name := e.FormValue("name")
+	if name != "" {
+		l = l.SetName(name)
+		changed = true
+	}
+	nameJa := e.FormValue("name_ja")
+	if nameJa != "" {
+		l = l.SetNameJa(nameJa)
+		changed = true
+	}
+	siteUrl := e.FormValue("site_url")
+	if siteUrl != "" {
+		if err := ValidateURL(siteUrl); err != nil {
+			return err
+		}
+		favicon, err := GetFavicon(siteUrl)
+		if err != nil {
+			return err
+		}
+		l = l.SetSiteURL(siteUrl).SetFaviconURL(favicon)
+		changed = true
+	}
+	categoryIdStr := e.FormValue("category_id")
+	if categoryIdStr != "" {
+		categoryId, err := strconv.Atoi(categoryIdStr)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: category_id")
+		}
+
+		if err := existCategoryId(ctx, h.DB, uint32(categoryId)); err != nil {
+			return err
+		}
+
+		l = l.SetCategoryID(uint32(categoryId))
+		changed = true
+	}
+
+	if !changed {
+		return echo.NewHTTPError(http.StatusBadRequest, "no changes")
+	}
+
+	if err := l.Exec(ctx); err != nil {
+		return err
+	}
+
+	linkDB, err := h.DB.Client.Link.
+		Query().
+		Where(link.And(
+			link.UserID(h.User.ID),
+			link.ID(uint32(id)),
+		)).
+		First(ctx)
+	if err != nil {
+		return err
+	}
+	category, err := h.DB.Client.Category.
+		Query().
+		Where(category.ID(linkDB.CategoryID)).
+		First(ctx)
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusOK, LinkResponse{
+		Link:     *linkDB,
+		Category: *category,
+	})
 }
 
 func (h *Handler) DeleteLinkHandler(e echo.Context) error {

@@ -118,7 +118,7 @@ func TestCreateLinkHandler(t *testing.T) {
 		form.Insert("site_url", "https://cateiru.com")
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodGet)
+		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -171,7 +171,7 @@ func TestCreateLinkHandler(t *testing.T) {
 		// form.Insert("site_url", "https://cateiru.com")
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodGet)
+		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -190,6 +190,158 @@ func TestCreateLinkHandler(t *testing.T) {
 
 func TestUpdateLinkHandler(t *testing.T) {
 	test.Init()
+
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	f, err := os.ReadFile("./favicon_short_url.html")
+	require.NoError(t, err)
+
+	httpmock.RegisterResponder(
+		"GET",
+		"https://cateiru.com",
+		httpmock.NewBytesResponder(http.StatusOK, f),
+	)
+	httpmock.RegisterResponder(
+		"GET",
+		"https://cateiru.com/aaa/favicon.ico",
+		httpmock.NewStringResponder(http.StatusOK, ""),
+	)
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		l, err := u.CreateLink()
+		require.NoError(t, err)
+
+		_, err = l.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
+		form.Insert("name", "nyancat")
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.UpdateLinkHandler(e)
+		require.NoError(t, err)
+
+		link, err := tool.DB.Client.Link.
+			Query().
+			Where(link.ID(l.Link.ID)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, link.Name, "nyancat")
+	})
+
+	t.Run("all changes", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		l, err := u.CreateLink()
+		require.NoError(t, err)
+
+		_, err = l.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
+		form.Insert("name", "hoge")
+		form.Insert("name_ja", "あああ")
+		form.Insert("site_url", "https://cateiru.com")
+		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.UpdateLinkHandler(e)
+		require.NoError(t, err)
+
+		link, err := tool.DB.Client.Link.
+			Query().
+			Where(link.ID(l.Link.ID)).
+			First(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, link.Name, "hoge")
+		require.Equal(t, link.NameJa, "あああ")
+		require.Equal(t, link.SiteURL, "https://cateiru.com")
+		require.Equal(t, link.CategoryID, l.Category.ID)
+	})
+
+	t.Run("no changes", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		l, err := u.CreateLink()
+		require.NoError(t, err)
+
+		_, err = l.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.UpdateLinkHandler(e)
+		require.Error(t, err)
+	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.UpdateLinkHandler(e)
