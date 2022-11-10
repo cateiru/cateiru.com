@@ -95,6 +95,9 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 	if _, ok := err.(*ent.NotFoundError); ok {
 		return echo.ErrNotFound
 	}
+	if err != nil {
+		return err
+	}
 
 	// Get Biography
 	bios, err := h.DB.Client.Biography.Query().Where(biography.UserID(u.ID)).All(ctx)
