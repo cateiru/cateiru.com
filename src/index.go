@@ -19,6 +19,7 @@ func Init(mode string) {
 // This API is run to hold information for `cateiru.com“.
 func Server() {
 	e := echo.New()
+	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
 	db, err := db.NewConnectMySQL()
 	if err != nil {
