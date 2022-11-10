@@ -42,35 +42,62 @@ func (Contact) Fields() []ent.Field {
 				dialect.MySQL: "text",
 			}),
 
-		// `category` TEXT NOT NULL
-		field.String("category").
-			SchemaType(map[string]string{
-				dialect.MySQL: "text",
-			}),
-
 		// `ip` VARCHAR(16) NOT NULL
 		field.String("ip").
 			Annotations(entsql.Annotation{
 				Size: 16,
 			}),
 
-		// `device_name` VARCHAR(31) NOT NULL
+		// `lang` TEXT NOT NULL
+		field.String("lang").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}),
+
+		// `url` TEXT
+		field.String("url").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}).Optional(),
+
+		// `category` TEXT
+		field.String("category").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}).Optional(),
+
+		// `custom_title` TEXT
+		field.String("custom_title").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}).Optional(),
+
+		// `custom_value` TEXT
+		field.String("custom_value").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}).Optional(),
+
+		// `device_name` VARCHAR(31)
 		field.String("device_name").
 			Annotations(entsql.Annotation{
 				Size: 31,
-			}),
+			}).Optional(),
 
-		// `os` VARCHAR(15) NOT NULL
+		// `os` VARCHAR(15)
 		field.String("os").
 			Annotations(entsql.Annotation{
 				Size: 15,
-			}),
+			}).Optional(),
 
-		// `browser_name` VARCHAR(15) NOT NULL
+		// `browser_name` VARCHAR(15)
 		field.String("browser_name").
 			Annotations(entsql.Annotation{
 				Size: 15,
-			}),
+			}).Optional(),
+
+		// `is_mobile` bool
+		field.Bool("is_mobile").Optional(),
 
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 		field.Time("created").

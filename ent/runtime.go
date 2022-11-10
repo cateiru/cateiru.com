@@ -53,11 +53,11 @@ func init() {
 	contactFields := schema.Contact{}.Fields()
 	_ = contactFields
 	// contactDescCreated is the schema descriptor for created field.
-	contactDescCreated := contactFields[10].Descriptor()
+	contactDescCreated := contactFields[15].Descriptor()
 	// contact.DefaultCreated holds the default value on creation for the created field.
 	contact.DefaultCreated = contactDescCreated.Default.(func() time.Time)
 	// contactDescModified is the schema descriptor for modified field.
-	contactDescModified := contactFields[11].Descriptor()
+	contactDescModified := contactFields[16].Descriptor()
 	// contact.DefaultModified holds the default value on creation for the modified field.
 	contact.DefaultModified = contactDescModified.Default.(func() time.Time)
 	// contact.UpdateDefaultModified holds the default value on update for the modified field.

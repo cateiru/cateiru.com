@@ -24,16 +24,26 @@ type Contact struct {
 	Detail string `json:"detail,omitempty"`
 	// Mail holds the value of the "mail" field.
 	Mail string `json:"mail,omitempty"`
-	// Category holds the value of the "category" field.
-	Category string `json:"category,omitempty"`
 	// IP holds the value of the "ip" field.
 	IP string `json:"ip,omitempty"`
+	// Lang holds the value of the "lang" field.
+	Lang string `json:"lang,omitempty"`
+	// URL holds the value of the "url" field.
+	URL string `json:"url,omitempty"`
+	// Category holds the value of the "category" field.
+	Category string `json:"category,omitempty"`
+	// CustomTitle holds the value of the "custom_title" field.
+	CustomTitle string `json:"custom_title,omitempty"`
+	// CustomValue holds the value of the "custom_value" field.
+	CustomValue string `json:"custom_value,omitempty"`
 	// DeviceName holds the value of the "device_name" field.
 	DeviceName string `json:"device_name,omitempty"`
 	// Os holds the value of the "os" field.
 	Os string `json:"os,omitempty"`
 	// BrowserName holds the value of the "browser_name" field.
 	BrowserName string `json:"browser_name,omitempty"`
+	// IsMobile holds the value of the "is_mobile" field.
+	IsMobile bool `json:"is_mobile,omitempty"`
 	// Created holds the value of the "created" field.
 	Created time.Time `json:"created,omitempty"`
 	// Modified holds the value of the "modified" field.
@@ -45,9 +55,11 @@ func (*Contact) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case contact.FieldIsMobile:
+			values[i] = new(sql.NullBool)
 		case contact.FieldID, contact.FieldToUserID:
 			values[i] = new(sql.NullInt64)
-		case contact.FieldTitle, contact.FieldDetail, contact.FieldMail, contact.FieldCategory, contact.FieldIP, contact.FieldDeviceName, contact.FieldOs, contact.FieldBrowserName:
+		case contact.FieldTitle, contact.FieldDetail, contact.FieldMail, contact.FieldIP, contact.FieldLang, contact.FieldURL, contact.FieldCategory, contact.FieldCustomTitle, contact.FieldCustomValue, contact.FieldDeviceName, contact.FieldOs, contact.FieldBrowserName:
 			values[i] = new(sql.NullString)
 		case contact.FieldCreated, contact.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -96,17 +108,41 @@ func (c *Contact) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				c.Mail = value.String
 			}
+		case contact.FieldIP:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ip", values[i])
+			} else if value.Valid {
+				c.IP = value.String
+			}
+		case contact.FieldLang:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field lang", values[i])
+			} else if value.Valid {
+				c.Lang = value.String
+			}
+		case contact.FieldURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field url", values[i])
+			} else if value.Valid {
+				c.URL = value.String
+			}
 		case contact.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
 				c.Category = value.String
 			}
-		case contact.FieldIP:
+		case contact.FieldCustomTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field ip", values[i])
+				return fmt.Errorf("unexpected type %T for field custom_title", values[i])
 			} else if value.Valid {
-				c.IP = value.String
+				c.CustomTitle = value.String
+			}
+		case contact.FieldCustomValue:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_value", values[i])
+			} else if value.Valid {
+				c.CustomValue = value.String
 			}
 		case contact.FieldDeviceName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -125,6 +161,12 @@ func (c *Contact) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field browser_name", values[i])
 			} else if value.Valid {
 				c.BrowserName = value.String
+			}
+		case contact.FieldIsMobile:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_mobile", values[i])
+			} else if value.Valid {
+				c.IsMobile = value.Bool
 			}
 		case contact.FieldCreated:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -178,11 +220,23 @@ func (c *Contact) String() string {
 	builder.WriteString("mail=")
 	builder.WriteString(c.Mail)
 	builder.WriteString(", ")
+	builder.WriteString("ip=")
+	builder.WriteString(c.IP)
+	builder.WriteString(", ")
+	builder.WriteString("lang=")
+	builder.WriteString(c.Lang)
+	builder.WriteString(", ")
+	builder.WriteString("url=")
+	builder.WriteString(c.URL)
+	builder.WriteString(", ")
 	builder.WriteString("category=")
 	builder.WriteString(c.Category)
 	builder.WriteString(", ")
-	builder.WriteString("ip=")
-	builder.WriteString(c.IP)
+	builder.WriteString("custom_title=")
+	builder.WriteString(c.CustomTitle)
+	builder.WriteString(", ")
+	builder.WriteString("custom_value=")
+	builder.WriteString(c.CustomValue)
 	builder.WriteString(", ")
 	builder.WriteString("device_name=")
 	builder.WriteString(c.DeviceName)
@@ -192,6 +246,9 @@ func (c *Contact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("browser_name=")
 	builder.WriteString(c.BrowserName)
+	builder.WriteString(", ")
+	builder.WriteString("is_mobile=")
+	builder.WriteString(fmt.Sprintf("%v", c.IsMobile))
 	builder.WriteString(", ")
 	builder.WriteString("created=")
 	builder.WriteString(c.Created.Format(time.ANSIC))

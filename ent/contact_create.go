@@ -44,15 +44,71 @@ func (cc *ContactCreate) SetMail(s string) *ContactCreate {
 	return cc
 }
 
+// SetIP sets the "ip" field.
+func (cc *ContactCreate) SetIP(s string) *ContactCreate {
+	cc.mutation.SetIP(s)
+	return cc
+}
+
+// SetLang sets the "lang" field.
+func (cc *ContactCreate) SetLang(s string) *ContactCreate {
+	cc.mutation.SetLang(s)
+	return cc
+}
+
+// SetURL sets the "url" field.
+func (cc *ContactCreate) SetURL(s string) *ContactCreate {
+	cc.mutation.SetURL(s)
+	return cc
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableURL(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetURL(*s)
+	}
+	return cc
+}
+
 // SetCategory sets the "category" field.
 func (cc *ContactCreate) SetCategory(s string) *ContactCreate {
 	cc.mutation.SetCategory(s)
 	return cc
 }
 
-// SetIP sets the "ip" field.
-func (cc *ContactCreate) SetIP(s string) *ContactCreate {
-	cc.mutation.SetIP(s)
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableCategory(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetCategory(*s)
+	}
+	return cc
+}
+
+// SetCustomTitle sets the "custom_title" field.
+func (cc *ContactCreate) SetCustomTitle(s string) *ContactCreate {
+	cc.mutation.SetCustomTitle(s)
+	return cc
+}
+
+// SetNillableCustomTitle sets the "custom_title" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableCustomTitle(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetCustomTitle(*s)
+	}
+	return cc
+}
+
+// SetCustomValue sets the "custom_value" field.
+func (cc *ContactCreate) SetCustomValue(s string) *ContactCreate {
+	cc.mutation.SetCustomValue(s)
+	return cc
+}
+
+// SetNillableCustomValue sets the "custom_value" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableCustomValue(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetCustomValue(*s)
+	}
 	return cc
 }
 
@@ -62,15 +118,53 @@ func (cc *ContactCreate) SetDeviceName(s string) *ContactCreate {
 	return cc
 }
 
+// SetNillableDeviceName sets the "device_name" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableDeviceName(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetDeviceName(*s)
+	}
+	return cc
+}
+
 // SetOs sets the "os" field.
 func (cc *ContactCreate) SetOs(s string) *ContactCreate {
 	cc.mutation.SetOs(s)
 	return cc
 }
 
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableOs(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetOs(*s)
+	}
+	return cc
+}
+
 // SetBrowserName sets the "browser_name" field.
 func (cc *ContactCreate) SetBrowserName(s string) *ContactCreate {
 	cc.mutation.SetBrowserName(s)
+	return cc
+}
+
+// SetNillableBrowserName sets the "browser_name" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableBrowserName(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetBrowserName(*s)
+	}
+	return cc
+}
+
+// SetIsMobile sets the "is_mobile" field.
+func (cc *ContactCreate) SetIsMobile(b bool) *ContactCreate {
+	cc.mutation.SetIsMobile(b)
+	return cc
+}
+
+// SetNillableIsMobile sets the "is_mobile" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableIsMobile(b *bool) *ContactCreate {
+	if b != nil {
+		cc.SetIsMobile(*b)
+	}
 	return cc
 }
 
@@ -209,20 +303,11 @@ func (cc *ContactCreate) check() error {
 	if _, ok := cc.mutation.Mail(); !ok {
 		return &ValidationError{Name: "mail", err: errors.New(`ent: missing required field "Contact.mail"`)}
 	}
-	if _, ok := cc.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New(`ent: missing required field "Contact.category"`)}
-	}
 	if _, ok := cc.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`ent: missing required field "Contact.ip"`)}
 	}
-	if _, ok := cc.mutation.DeviceName(); !ok {
-		return &ValidationError{Name: "device_name", err: errors.New(`ent: missing required field "Contact.device_name"`)}
-	}
-	if _, ok := cc.mutation.Os(); !ok {
-		return &ValidationError{Name: "os", err: errors.New(`ent: missing required field "Contact.os"`)}
-	}
-	if _, ok := cc.mutation.BrowserName(); !ok {
-		return &ValidationError{Name: "browser_name", err: errors.New(`ent: missing required field "Contact.browser_name"`)}
+	if _, ok := cc.mutation.Lang(); !ok {
+		return &ValidationError{Name: "lang", err: errors.New(`ent: missing required field "Contact.lang"`)}
 	}
 	if _, ok := cc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Contact.created"`)}
@@ -295,6 +380,30 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		})
 		_node.Mail = value
 	}
+	if value, ok := cc.mutation.IP(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldIP,
+		})
+		_node.IP = value
+	}
+	if value, ok := cc.mutation.Lang(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldLang,
+		})
+		_node.Lang = value
+	}
+	if value, ok := cc.mutation.URL(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldURL,
+		})
+		_node.URL = value
+	}
 	if value, ok := cc.mutation.Category(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -303,13 +412,21 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		})
 		_node.Category = value
 	}
-	if value, ok := cc.mutation.IP(); ok {
+	if value, ok := cc.mutation.CustomTitle(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: contact.FieldIP,
+			Column: contact.FieldCustomTitle,
 		})
-		_node.IP = value
+		_node.CustomTitle = value
+	}
+	if value, ok := cc.mutation.CustomValue(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCustomValue,
+		})
+		_node.CustomValue = value
 	}
 	if value, ok := cc.mutation.DeviceName(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -334,6 +451,14 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 			Column: contact.FieldBrowserName,
 		})
 		_node.BrowserName = value
+	}
+	if value, ok := cc.mutation.IsMobile(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: contact.FieldIsMobile,
+		})
+		_node.IsMobile = value
 	}
 	if value, ok := cc.mutation.Created(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

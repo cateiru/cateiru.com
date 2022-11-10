@@ -59,15 +59,95 @@ func (cu *ContactUpdate) SetMail(s string) *ContactUpdate {
 	return cu
 }
 
+// SetIP sets the "ip" field.
+func (cu *ContactUpdate) SetIP(s string) *ContactUpdate {
+	cu.mutation.SetIP(s)
+	return cu
+}
+
+// SetLang sets the "lang" field.
+func (cu *ContactUpdate) SetLang(s string) *ContactUpdate {
+	cu.mutation.SetLang(s)
+	return cu
+}
+
+// SetURL sets the "url" field.
+func (cu *ContactUpdate) SetURL(s string) *ContactUpdate {
+	cu.mutation.SetURL(s)
+	return cu
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableURL(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetURL(*s)
+	}
+	return cu
+}
+
+// ClearURL clears the value of the "url" field.
+func (cu *ContactUpdate) ClearURL() *ContactUpdate {
+	cu.mutation.ClearURL()
+	return cu
+}
+
 // SetCategory sets the "category" field.
 func (cu *ContactUpdate) SetCategory(s string) *ContactUpdate {
 	cu.mutation.SetCategory(s)
 	return cu
 }
 
-// SetIP sets the "ip" field.
-func (cu *ContactUpdate) SetIP(s string) *ContactUpdate {
-	cu.mutation.SetIP(s)
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableCategory(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetCategory(*s)
+	}
+	return cu
+}
+
+// ClearCategory clears the value of the "category" field.
+func (cu *ContactUpdate) ClearCategory() *ContactUpdate {
+	cu.mutation.ClearCategory()
+	return cu
+}
+
+// SetCustomTitle sets the "custom_title" field.
+func (cu *ContactUpdate) SetCustomTitle(s string) *ContactUpdate {
+	cu.mutation.SetCustomTitle(s)
+	return cu
+}
+
+// SetNillableCustomTitle sets the "custom_title" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableCustomTitle(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetCustomTitle(*s)
+	}
+	return cu
+}
+
+// ClearCustomTitle clears the value of the "custom_title" field.
+func (cu *ContactUpdate) ClearCustomTitle() *ContactUpdate {
+	cu.mutation.ClearCustomTitle()
+	return cu
+}
+
+// SetCustomValue sets the "custom_value" field.
+func (cu *ContactUpdate) SetCustomValue(s string) *ContactUpdate {
+	cu.mutation.SetCustomValue(s)
+	return cu
+}
+
+// SetNillableCustomValue sets the "custom_value" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableCustomValue(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetCustomValue(*s)
+	}
+	return cu
+}
+
+// ClearCustomValue clears the value of the "custom_value" field.
+func (cu *ContactUpdate) ClearCustomValue() *ContactUpdate {
+	cu.mutation.ClearCustomValue()
 	return cu
 }
 
@@ -77,15 +157,77 @@ func (cu *ContactUpdate) SetDeviceName(s string) *ContactUpdate {
 	return cu
 }
 
+// SetNillableDeviceName sets the "device_name" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableDeviceName(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetDeviceName(*s)
+	}
+	return cu
+}
+
+// ClearDeviceName clears the value of the "device_name" field.
+func (cu *ContactUpdate) ClearDeviceName() *ContactUpdate {
+	cu.mutation.ClearDeviceName()
+	return cu
+}
+
 // SetOs sets the "os" field.
 func (cu *ContactUpdate) SetOs(s string) *ContactUpdate {
 	cu.mutation.SetOs(s)
 	return cu
 }
 
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableOs(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetOs(*s)
+	}
+	return cu
+}
+
+// ClearOs clears the value of the "os" field.
+func (cu *ContactUpdate) ClearOs() *ContactUpdate {
+	cu.mutation.ClearOs()
+	return cu
+}
+
 // SetBrowserName sets the "browser_name" field.
 func (cu *ContactUpdate) SetBrowserName(s string) *ContactUpdate {
 	cu.mutation.SetBrowserName(s)
+	return cu
+}
+
+// SetNillableBrowserName sets the "browser_name" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableBrowserName(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetBrowserName(*s)
+	}
+	return cu
+}
+
+// ClearBrowserName clears the value of the "browser_name" field.
+func (cu *ContactUpdate) ClearBrowserName() *ContactUpdate {
+	cu.mutation.ClearBrowserName()
+	return cu
+}
+
+// SetIsMobile sets the "is_mobile" field.
+func (cu *ContactUpdate) SetIsMobile(b bool) *ContactUpdate {
+	cu.mutation.SetIsMobile(b)
+	return cu
+}
+
+// SetNillableIsMobile sets the "is_mobile" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableIsMobile(b *bool) *ContactUpdate {
+	if b != nil {
+		cu.SetIsMobile(*b)
+	}
+	return cu
+}
+
+// ClearIsMobile clears the value of the "is_mobile" field.
+func (cu *ContactUpdate) ClearIsMobile() *ContactUpdate {
+	cu.mutation.ClearIsMobile()
 	return cu
 }
 
@@ -230,13 +372,6 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: contact.FieldMail,
 		})
 	}
-	if value, ok := cu.mutation.Category(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldCategory,
-		})
-	}
 	if value, ok := cu.mutation.IP(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -244,10 +379,75 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: contact.FieldIP,
 		})
 	}
+	if value, ok := cu.mutation.Lang(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldLang,
+		})
+	}
+	if value, ok := cu.mutation.URL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldURL,
+		})
+	}
+	if cu.mutation.URLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldURL,
+		})
+	}
+	if value, ok := cu.mutation.Category(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCategory,
+		})
+	}
+	if cu.mutation.CategoryCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldCategory,
+		})
+	}
+	if value, ok := cu.mutation.CustomTitle(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCustomTitle,
+		})
+	}
+	if cu.mutation.CustomTitleCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldCustomTitle,
+		})
+	}
+	if value, ok := cu.mutation.CustomValue(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCustomValue,
+		})
+	}
+	if cu.mutation.CustomValueCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldCustomValue,
+		})
+	}
 	if value, ok := cu.mutation.DeviceName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: contact.FieldDeviceName,
+		})
+	}
+	if cu.mutation.DeviceNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: contact.FieldDeviceName,
 		})
 	}
@@ -258,11 +458,36 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: contact.FieldOs,
 		})
 	}
+	if cu.mutation.OsCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldOs,
+		})
+	}
 	if value, ok := cu.mutation.BrowserName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
 			Column: contact.FieldBrowserName,
+		})
+	}
+	if cu.mutation.BrowserNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldBrowserName,
+		})
+	}
+	if value, ok := cu.mutation.IsMobile(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: contact.FieldIsMobile,
+		})
+	}
+	if cu.mutation.IsMobileCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Column: contact.FieldIsMobile,
 		})
 	}
 	if value, ok := cu.mutation.Created(); ok {
@@ -329,15 +554,95 @@ func (cuo *ContactUpdateOne) SetMail(s string) *ContactUpdateOne {
 	return cuo
 }
 
+// SetIP sets the "ip" field.
+func (cuo *ContactUpdateOne) SetIP(s string) *ContactUpdateOne {
+	cuo.mutation.SetIP(s)
+	return cuo
+}
+
+// SetLang sets the "lang" field.
+func (cuo *ContactUpdateOne) SetLang(s string) *ContactUpdateOne {
+	cuo.mutation.SetLang(s)
+	return cuo
+}
+
+// SetURL sets the "url" field.
+func (cuo *ContactUpdateOne) SetURL(s string) *ContactUpdateOne {
+	cuo.mutation.SetURL(s)
+	return cuo
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableURL(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetURL(*s)
+	}
+	return cuo
+}
+
+// ClearURL clears the value of the "url" field.
+func (cuo *ContactUpdateOne) ClearURL() *ContactUpdateOne {
+	cuo.mutation.ClearURL()
+	return cuo
+}
+
 // SetCategory sets the "category" field.
 func (cuo *ContactUpdateOne) SetCategory(s string) *ContactUpdateOne {
 	cuo.mutation.SetCategory(s)
 	return cuo
 }
 
-// SetIP sets the "ip" field.
-func (cuo *ContactUpdateOne) SetIP(s string) *ContactUpdateOne {
-	cuo.mutation.SetIP(s)
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableCategory(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetCategory(*s)
+	}
+	return cuo
+}
+
+// ClearCategory clears the value of the "category" field.
+func (cuo *ContactUpdateOne) ClearCategory() *ContactUpdateOne {
+	cuo.mutation.ClearCategory()
+	return cuo
+}
+
+// SetCustomTitle sets the "custom_title" field.
+func (cuo *ContactUpdateOne) SetCustomTitle(s string) *ContactUpdateOne {
+	cuo.mutation.SetCustomTitle(s)
+	return cuo
+}
+
+// SetNillableCustomTitle sets the "custom_title" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableCustomTitle(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetCustomTitle(*s)
+	}
+	return cuo
+}
+
+// ClearCustomTitle clears the value of the "custom_title" field.
+func (cuo *ContactUpdateOne) ClearCustomTitle() *ContactUpdateOne {
+	cuo.mutation.ClearCustomTitle()
+	return cuo
+}
+
+// SetCustomValue sets the "custom_value" field.
+func (cuo *ContactUpdateOne) SetCustomValue(s string) *ContactUpdateOne {
+	cuo.mutation.SetCustomValue(s)
+	return cuo
+}
+
+// SetNillableCustomValue sets the "custom_value" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableCustomValue(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetCustomValue(*s)
+	}
+	return cuo
+}
+
+// ClearCustomValue clears the value of the "custom_value" field.
+func (cuo *ContactUpdateOne) ClearCustomValue() *ContactUpdateOne {
+	cuo.mutation.ClearCustomValue()
 	return cuo
 }
 
@@ -347,15 +652,77 @@ func (cuo *ContactUpdateOne) SetDeviceName(s string) *ContactUpdateOne {
 	return cuo
 }
 
+// SetNillableDeviceName sets the "device_name" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableDeviceName(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetDeviceName(*s)
+	}
+	return cuo
+}
+
+// ClearDeviceName clears the value of the "device_name" field.
+func (cuo *ContactUpdateOne) ClearDeviceName() *ContactUpdateOne {
+	cuo.mutation.ClearDeviceName()
+	return cuo
+}
+
 // SetOs sets the "os" field.
 func (cuo *ContactUpdateOne) SetOs(s string) *ContactUpdateOne {
 	cuo.mutation.SetOs(s)
 	return cuo
 }
 
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableOs(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetOs(*s)
+	}
+	return cuo
+}
+
+// ClearOs clears the value of the "os" field.
+func (cuo *ContactUpdateOne) ClearOs() *ContactUpdateOne {
+	cuo.mutation.ClearOs()
+	return cuo
+}
+
 // SetBrowserName sets the "browser_name" field.
 func (cuo *ContactUpdateOne) SetBrowserName(s string) *ContactUpdateOne {
 	cuo.mutation.SetBrowserName(s)
+	return cuo
+}
+
+// SetNillableBrowserName sets the "browser_name" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableBrowserName(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetBrowserName(*s)
+	}
+	return cuo
+}
+
+// ClearBrowserName clears the value of the "browser_name" field.
+func (cuo *ContactUpdateOne) ClearBrowserName() *ContactUpdateOne {
+	cuo.mutation.ClearBrowserName()
+	return cuo
+}
+
+// SetIsMobile sets the "is_mobile" field.
+func (cuo *ContactUpdateOne) SetIsMobile(b bool) *ContactUpdateOne {
+	cuo.mutation.SetIsMobile(b)
+	return cuo
+}
+
+// SetNillableIsMobile sets the "is_mobile" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableIsMobile(b *bool) *ContactUpdateOne {
+	if b != nil {
+		cuo.SetIsMobile(*b)
+	}
+	return cuo
+}
+
+// ClearIsMobile clears the value of the "is_mobile" field.
+func (cuo *ContactUpdateOne) ClearIsMobile() *ContactUpdateOne {
+	cuo.mutation.ClearIsMobile()
 	return cuo
 }
 
@@ -530,13 +897,6 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			Column: contact.FieldMail,
 		})
 	}
-	if value, ok := cuo.mutation.Category(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldCategory,
-		})
-	}
 	if value, ok := cuo.mutation.IP(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -544,10 +904,75 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			Column: contact.FieldIP,
 		})
 	}
+	if value, ok := cuo.mutation.Lang(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldLang,
+		})
+	}
+	if value, ok := cuo.mutation.URL(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldURL,
+		})
+	}
+	if cuo.mutation.URLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldURL,
+		})
+	}
+	if value, ok := cuo.mutation.Category(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCategory,
+		})
+	}
+	if cuo.mutation.CategoryCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldCategory,
+		})
+	}
+	if value, ok := cuo.mutation.CustomTitle(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCustomTitle,
+		})
+	}
+	if cuo.mutation.CustomTitleCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldCustomTitle,
+		})
+	}
+	if value, ok := cuo.mutation.CustomValue(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldCustomValue,
+		})
+	}
+	if cuo.mutation.CustomValueCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldCustomValue,
+		})
+	}
 	if value, ok := cuo.mutation.DeviceName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: contact.FieldDeviceName,
+		})
+	}
+	if cuo.mutation.DeviceNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: contact.FieldDeviceName,
 		})
 	}
@@ -558,11 +983,36 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			Column: contact.FieldOs,
 		})
 	}
+	if cuo.mutation.OsCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldOs,
+		})
+	}
 	if value, ok := cuo.mutation.BrowserName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
 			Column: contact.FieldBrowserName,
+		})
+	}
+	if cuo.mutation.BrowserNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldBrowserName,
+		})
+	}
+	if value, ok := cuo.mutation.IsMobile(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: contact.FieldIsMobile,
+		})
+	}
+	if cuo.mutation.IsMobileCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Column: contact.FieldIsMobile,
 		})
 	}
 	if value, ok := cuo.mutation.Created(); ok {

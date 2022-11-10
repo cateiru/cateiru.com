@@ -1428,11 +1428,16 @@ type ContactMutation struct {
 	title         *string
 	detail        *string
 	mail          *string
-	category      *string
 	ip            *string
+	lang          *string
+	url           *string
+	category      *string
+	custom_title  *string
+	custom_value  *string
 	device_name   *string
 	os            *string
 	browser_name  *string
+	is_mobile     *bool
 	created       *time.Time
 	modified      *time.Time
 	clearedFields map[string]struct{}
@@ -1709,42 +1714,6 @@ func (m *ContactMutation) ResetMail() {
 	m.mail = nil
 }
 
-// SetCategory sets the "category" field.
-func (m *ContactMutation) SetCategory(s string) {
-	m.category = &s
-}
-
-// Category returns the value of the "category" field in the mutation.
-func (m *ContactMutation) Category() (r string, exists bool) {
-	v := m.category
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCategory returns the old "category" field's value of the Contact entity.
-// If the Contact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContactMutation) OldCategory(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCategory requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
-	}
-	return oldValue.Category, nil
-}
-
-// ResetCategory resets all changes to the "category" field.
-func (m *ContactMutation) ResetCategory() {
-	m.category = nil
-}
-
 // SetIP sets the "ip" field.
 func (m *ContactMutation) SetIP(s string) {
 	m.ip = &s
@@ -1781,6 +1750,238 @@ func (m *ContactMutation) ResetIP() {
 	m.ip = nil
 }
 
+// SetLang sets the "lang" field.
+func (m *ContactMutation) SetLang(s string) {
+	m.lang = &s
+}
+
+// Lang returns the value of the "lang" field in the mutation.
+func (m *ContactMutation) Lang() (r string, exists bool) {
+	v := m.lang
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLang returns the old "lang" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldLang(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLang is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLang requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLang: %w", err)
+	}
+	return oldValue.Lang, nil
+}
+
+// ResetLang resets all changes to the "lang" field.
+func (m *ContactMutation) ResetLang() {
+	m.lang = nil
+}
+
+// SetURL sets the "url" field.
+func (m *ContactMutation) SetURL(s string) {
+	m.url = &s
+}
+
+// URL returns the value of the "url" field in the mutation.
+func (m *ContactMutation) URL() (r string, exists bool) {
+	v := m.url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldURL returns the old "url" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+	}
+	return oldValue.URL, nil
+}
+
+// ClearURL clears the value of the "url" field.
+func (m *ContactMutation) ClearURL() {
+	m.url = nil
+	m.clearedFields[contact.FieldURL] = struct{}{}
+}
+
+// URLCleared returns if the "url" field was cleared in this mutation.
+func (m *ContactMutation) URLCleared() bool {
+	_, ok := m.clearedFields[contact.FieldURL]
+	return ok
+}
+
+// ResetURL resets all changes to the "url" field.
+func (m *ContactMutation) ResetURL() {
+	m.url = nil
+	delete(m.clearedFields, contact.FieldURL)
+}
+
+// SetCategory sets the "category" field.
+func (m *ContactMutation) SetCategory(s string) {
+	m.category = &s
+}
+
+// Category returns the value of the "category" field in the mutation.
+func (m *ContactMutation) Category() (r string, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategory returns the old "category" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldCategory(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+	}
+	return oldValue.Category, nil
+}
+
+// ClearCategory clears the value of the "category" field.
+func (m *ContactMutation) ClearCategory() {
+	m.category = nil
+	m.clearedFields[contact.FieldCategory] = struct{}{}
+}
+
+// CategoryCleared returns if the "category" field was cleared in this mutation.
+func (m *ContactMutation) CategoryCleared() bool {
+	_, ok := m.clearedFields[contact.FieldCategory]
+	return ok
+}
+
+// ResetCategory resets all changes to the "category" field.
+func (m *ContactMutation) ResetCategory() {
+	m.category = nil
+	delete(m.clearedFields, contact.FieldCategory)
+}
+
+// SetCustomTitle sets the "custom_title" field.
+func (m *ContactMutation) SetCustomTitle(s string) {
+	m.custom_title = &s
+}
+
+// CustomTitle returns the value of the "custom_title" field in the mutation.
+func (m *ContactMutation) CustomTitle() (r string, exists bool) {
+	v := m.custom_title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCustomTitle returns the old "custom_title" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldCustomTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCustomTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCustomTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCustomTitle: %w", err)
+	}
+	return oldValue.CustomTitle, nil
+}
+
+// ClearCustomTitle clears the value of the "custom_title" field.
+func (m *ContactMutation) ClearCustomTitle() {
+	m.custom_title = nil
+	m.clearedFields[contact.FieldCustomTitle] = struct{}{}
+}
+
+// CustomTitleCleared returns if the "custom_title" field was cleared in this mutation.
+func (m *ContactMutation) CustomTitleCleared() bool {
+	_, ok := m.clearedFields[contact.FieldCustomTitle]
+	return ok
+}
+
+// ResetCustomTitle resets all changes to the "custom_title" field.
+func (m *ContactMutation) ResetCustomTitle() {
+	m.custom_title = nil
+	delete(m.clearedFields, contact.FieldCustomTitle)
+}
+
+// SetCustomValue sets the "custom_value" field.
+func (m *ContactMutation) SetCustomValue(s string) {
+	m.custom_value = &s
+}
+
+// CustomValue returns the value of the "custom_value" field in the mutation.
+func (m *ContactMutation) CustomValue() (r string, exists bool) {
+	v := m.custom_value
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCustomValue returns the old "custom_value" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldCustomValue(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCustomValue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCustomValue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCustomValue: %w", err)
+	}
+	return oldValue.CustomValue, nil
+}
+
+// ClearCustomValue clears the value of the "custom_value" field.
+func (m *ContactMutation) ClearCustomValue() {
+	m.custom_value = nil
+	m.clearedFields[contact.FieldCustomValue] = struct{}{}
+}
+
+// CustomValueCleared returns if the "custom_value" field was cleared in this mutation.
+func (m *ContactMutation) CustomValueCleared() bool {
+	_, ok := m.clearedFields[contact.FieldCustomValue]
+	return ok
+}
+
+// ResetCustomValue resets all changes to the "custom_value" field.
+func (m *ContactMutation) ResetCustomValue() {
+	m.custom_value = nil
+	delete(m.clearedFields, contact.FieldCustomValue)
+}
+
 // SetDeviceName sets the "device_name" field.
 func (m *ContactMutation) SetDeviceName(s string) {
 	m.device_name = &s
@@ -1812,9 +2013,22 @@ func (m *ContactMutation) OldDeviceName(ctx context.Context) (v string, err erro
 	return oldValue.DeviceName, nil
 }
 
+// ClearDeviceName clears the value of the "device_name" field.
+func (m *ContactMutation) ClearDeviceName() {
+	m.device_name = nil
+	m.clearedFields[contact.FieldDeviceName] = struct{}{}
+}
+
+// DeviceNameCleared returns if the "device_name" field was cleared in this mutation.
+func (m *ContactMutation) DeviceNameCleared() bool {
+	_, ok := m.clearedFields[contact.FieldDeviceName]
+	return ok
+}
+
 // ResetDeviceName resets all changes to the "device_name" field.
 func (m *ContactMutation) ResetDeviceName() {
 	m.device_name = nil
+	delete(m.clearedFields, contact.FieldDeviceName)
 }
 
 // SetOs sets the "os" field.
@@ -1848,9 +2062,22 @@ func (m *ContactMutation) OldOs(ctx context.Context) (v string, err error) {
 	return oldValue.Os, nil
 }
 
+// ClearOs clears the value of the "os" field.
+func (m *ContactMutation) ClearOs() {
+	m.os = nil
+	m.clearedFields[contact.FieldOs] = struct{}{}
+}
+
+// OsCleared returns if the "os" field was cleared in this mutation.
+func (m *ContactMutation) OsCleared() bool {
+	_, ok := m.clearedFields[contact.FieldOs]
+	return ok
+}
+
 // ResetOs resets all changes to the "os" field.
 func (m *ContactMutation) ResetOs() {
 	m.os = nil
+	delete(m.clearedFields, contact.FieldOs)
 }
 
 // SetBrowserName sets the "browser_name" field.
@@ -1884,9 +2111,71 @@ func (m *ContactMutation) OldBrowserName(ctx context.Context) (v string, err err
 	return oldValue.BrowserName, nil
 }
 
+// ClearBrowserName clears the value of the "browser_name" field.
+func (m *ContactMutation) ClearBrowserName() {
+	m.browser_name = nil
+	m.clearedFields[contact.FieldBrowserName] = struct{}{}
+}
+
+// BrowserNameCleared returns if the "browser_name" field was cleared in this mutation.
+func (m *ContactMutation) BrowserNameCleared() bool {
+	_, ok := m.clearedFields[contact.FieldBrowserName]
+	return ok
+}
+
 // ResetBrowserName resets all changes to the "browser_name" field.
 func (m *ContactMutation) ResetBrowserName() {
 	m.browser_name = nil
+	delete(m.clearedFields, contact.FieldBrowserName)
+}
+
+// SetIsMobile sets the "is_mobile" field.
+func (m *ContactMutation) SetIsMobile(b bool) {
+	m.is_mobile = &b
+}
+
+// IsMobile returns the value of the "is_mobile" field in the mutation.
+func (m *ContactMutation) IsMobile() (r bool, exists bool) {
+	v := m.is_mobile
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsMobile returns the old "is_mobile" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldIsMobile(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsMobile is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsMobile requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsMobile: %w", err)
+	}
+	return oldValue.IsMobile, nil
+}
+
+// ClearIsMobile clears the value of the "is_mobile" field.
+func (m *ContactMutation) ClearIsMobile() {
+	m.is_mobile = nil
+	m.clearedFields[contact.FieldIsMobile] = struct{}{}
+}
+
+// IsMobileCleared returns if the "is_mobile" field was cleared in this mutation.
+func (m *ContactMutation) IsMobileCleared() bool {
+	_, ok := m.clearedFields[contact.FieldIsMobile]
+	return ok
+}
+
+// ResetIsMobile resets all changes to the "is_mobile" field.
+func (m *ContactMutation) ResetIsMobile() {
+	m.is_mobile = nil
+	delete(m.clearedFields, contact.FieldIsMobile)
 }
 
 // SetCreated sets the "created" field.
@@ -1980,7 +2269,7 @@ func (m *ContactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContactMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 16)
 	if m.to_user_id != nil {
 		fields = append(fields, contact.FieldToUserID)
 	}
@@ -1993,11 +2282,23 @@ func (m *ContactMutation) Fields() []string {
 	if m.mail != nil {
 		fields = append(fields, contact.FieldMail)
 	}
+	if m.ip != nil {
+		fields = append(fields, contact.FieldIP)
+	}
+	if m.lang != nil {
+		fields = append(fields, contact.FieldLang)
+	}
+	if m.url != nil {
+		fields = append(fields, contact.FieldURL)
+	}
 	if m.category != nil {
 		fields = append(fields, contact.FieldCategory)
 	}
-	if m.ip != nil {
-		fields = append(fields, contact.FieldIP)
+	if m.custom_title != nil {
+		fields = append(fields, contact.FieldCustomTitle)
+	}
+	if m.custom_value != nil {
+		fields = append(fields, contact.FieldCustomValue)
 	}
 	if m.device_name != nil {
 		fields = append(fields, contact.FieldDeviceName)
@@ -2007,6 +2308,9 @@ func (m *ContactMutation) Fields() []string {
 	}
 	if m.browser_name != nil {
 		fields = append(fields, contact.FieldBrowserName)
+	}
+	if m.is_mobile != nil {
+		fields = append(fields, contact.FieldIsMobile)
 	}
 	if m.created != nil {
 		fields = append(fields, contact.FieldCreated)
@@ -2030,16 +2334,26 @@ func (m *ContactMutation) Field(name string) (ent.Value, bool) {
 		return m.Detail()
 	case contact.FieldMail:
 		return m.Mail()
-	case contact.FieldCategory:
-		return m.Category()
 	case contact.FieldIP:
 		return m.IP()
+	case contact.FieldLang:
+		return m.Lang()
+	case contact.FieldURL:
+		return m.URL()
+	case contact.FieldCategory:
+		return m.Category()
+	case contact.FieldCustomTitle:
+		return m.CustomTitle()
+	case contact.FieldCustomValue:
+		return m.CustomValue()
 	case contact.FieldDeviceName:
 		return m.DeviceName()
 	case contact.FieldOs:
 		return m.Os()
 	case contact.FieldBrowserName:
 		return m.BrowserName()
+	case contact.FieldIsMobile:
+		return m.IsMobile()
 	case contact.FieldCreated:
 		return m.Created()
 	case contact.FieldModified:
@@ -2061,16 +2375,26 @@ func (m *ContactMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDetail(ctx)
 	case contact.FieldMail:
 		return m.OldMail(ctx)
-	case contact.FieldCategory:
-		return m.OldCategory(ctx)
 	case contact.FieldIP:
 		return m.OldIP(ctx)
+	case contact.FieldLang:
+		return m.OldLang(ctx)
+	case contact.FieldURL:
+		return m.OldURL(ctx)
+	case contact.FieldCategory:
+		return m.OldCategory(ctx)
+	case contact.FieldCustomTitle:
+		return m.OldCustomTitle(ctx)
+	case contact.FieldCustomValue:
+		return m.OldCustomValue(ctx)
 	case contact.FieldDeviceName:
 		return m.OldDeviceName(ctx)
 	case contact.FieldOs:
 		return m.OldOs(ctx)
 	case contact.FieldBrowserName:
 		return m.OldBrowserName(ctx)
+	case contact.FieldIsMobile:
+		return m.OldIsMobile(ctx)
 	case contact.FieldCreated:
 		return m.OldCreated(ctx)
 	case contact.FieldModified:
@@ -2112,6 +2436,27 @@ func (m *ContactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMail(v)
 		return nil
+	case contact.FieldIP:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIP(v)
+		return nil
+	case contact.FieldLang:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLang(v)
+		return nil
+	case contact.FieldURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetURL(v)
+		return nil
 	case contact.FieldCategory:
 		v, ok := value.(string)
 		if !ok {
@@ -2119,12 +2464,19 @@ func (m *ContactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCategory(v)
 		return nil
-	case contact.FieldIP:
+	case contact.FieldCustomTitle:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetIP(v)
+		m.SetCustomTitle(v)
+		return nil
+	case contact.FieldCustomValue:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCustomValue(v)
 		return nil
 	case contact.FieldDeviceName:
 		v, ok := value.(string)
@@ -2146,6 +2498,13 @@ func (m *ContactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBrowserName(v)
+		return nil
+	case contact.FieldIsMobile:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsMobile(v)
 		return nil
 	case contact.FieldCreated:
 		v, ok := value.(time.Time)
@@ -2205,7 +2564,32 @@ func (m *ContactMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ContactMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(contact.FieldURL) {
+		fields = append(fields, contact.FieldURL)
+	}
+	if m.FieldCleared(contact.FieldCategory) {
+		fields = append(fields, contact.FieldCategory)
+	}
+	if m.FieldCleared(contact.FieldCustomTitle) {
+		fields = append(fields, contact.FieldCustomTitle)
+	}
+	if m.FieldCleared(contact.FieldCustomValue) {
+		fields = append(fields, contact.FieldCustomValue)
+	}
+	if m.FieldCleared(contact.FieldDeviceName) {
+		fields = append(fields, contact.FieldDeviceName)
+	}
+	if m.FieldCleared(contact.FieldOs) {
+		fields = append(fields, contact.FieldOs)
+	}
+	if m.FieldCleared(contact.FieldBrowserName) {
+		fields = append(fields, contact.FieldBrowserName)
+	}
+	if m.FieldCleared(contact.FieldIsMobile) {
+		fields = append(fields, contact.FieldIsMobile)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -2218,6 +2602,32 @@ func (m *ContactMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ContactMutation) ClearField(name string) error {
+	switch name {
+	case contact.FieldURL:
+		m.ClearURL()
+		return nil
+	case contact.FieldCategory:
+		m.ClearCategory()
+		return nil
+	case contact.FieldCustomTitle:
+		m.ClearCustomTitle()
+		return nil
+	case contact.FieldCustomValue:
+		m.ClearCustomValue()
+		return nil
+	case contact.FieldDeviceName:
+		m.ClearDeviceName()
+		return nil
+	case contact.FieldOs:
+		m.ClearOs()
+		return nil
+	case contact.FieldBrowserName:
+		m.ClearBrowserName()
+		return nil
+	case contact.FieldIsMobile:
+		m.ClearIsMobile()
+		return nil
+	}
 	return fmt.Errorf("unknown Contact nullable field %s", name)
 }
 
@@ -2237,11 +2647,23 @@ func (m *ContactMutation) ResetField(name string) error {
 	case contact.FieldMail:
 		m.ResetMail()
 		return nil
+	case contact.FieldIP:
+		m.ResetIP()
+		return nil
+	case contact.FieldLang:
+		m.ResetLang()
+		return nil
+	case contact.FieldURL:
+		m.ResetURL()
+		return nil
 	case contact.FieldCategory:
 		m.ResetCategory()
 		return nil
-	case contact.FieldIP:
-		m.ResetIP()
+	case contact.FieldCustomTitle:
+		m.ResetCustomTitle()
+		return nil
+	case contact.FieldCustomValue:
+		m.ResetCustomValue()
 		return nil
 	case contact.FieldDeviceName:
 		m.ResetDeviceName()
@@ -2251,6 +2673,9 @@ func (m *ContactMutation) ResetField(name string) error {
 		return nil
 	case contact.FieldBrowserName:
 		m.ResetBrowserName()
+		return nil
+	case contact.FieldIsMobile:
+		m.ResetIsMobile()
 		return nil
 	case contact.FieldCreated:
 		m.ResetCreated()

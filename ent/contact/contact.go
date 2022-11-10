@@ -19,16 +19,26 @@ const (
 	FieldDetail = "detail"
 	// FieldMail holds the string denoting the mail field in the database.
 	FieldMail = "mail"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
 	// FieldIP holds the string denoting the ip field in the database.
 	FieldIP = "ip"
+	// FieldLang holds the string denoting the lang field in the database.
+	FieldLang = "lang"
+	// FieldURL holds the string denoting the url field in the database.
+	FieldURL = "url"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
+	// FieldCustomTitle holds the string denoting the custom_title field in the database.
+	FieldCustomTitle = "custom_title"
+	// FieldCustomValue holds the string denoting the custom_value field in the database.
+	FieldCustomValue = "custom_value"
 	// FieldDeviceName holds the string denoting the device_name field in the database.
 	FieldDeviceName = "device_name"
 	// FieldOs holds the string denoting the os field in the database.
 	FieldOs = "os"
 	// FieldBrowserName holds the string denoting the browser_name field in the database.
 	FieldBrowserName = "browser_name"
+	// FieldIsMobile holds the string denoting the is_mobile field in the database.
+	FieldIsMobile = "is_mobile"
 	// FieldCreated holds the string denoting the created field in the database.
 	FieldCreated = "created"
 	// FieldModified holds the string denoting the modified field in the database.
@@ -44,11 +54,16 @@ var Columns = []string{
 	FieldTitle,
 	FieldDetail,
 	FieldMail,
-	FieldCategory,
 	FieldIP,
+	FieldLang,
+	FieldURL,
+	FieldCategory,
+	FieldCustomTitle,
+	FieldCustomValue,
 	FieldDeviceName,
 	FieldOs,
 	FieldBrowserName,
+	FieldIsMobile,
 	FieldCreated,
 	FieldModified,
 }
