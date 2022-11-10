@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/cateiru/cateiru.com/ent"
@@ -72,6 +73,18 @@ type PublicCategory struct {
 	CategoryName   string `json:"category_name,omitempty"`
 	CategoryNameJa string `json:"category_name_ja,omitempty"`
 	Emoji          string `json:"emoji,omitempty"`
+}
+
+type PublicProduct struct {
+	ID        uint32    `json:"id,omitempty"`
+	Name      string    `json:"name,omitempty"`
+	NameJa    string    `json:"name_ja,omitempty"`
+	Detail    string    `json:"detail,omitempty"`
+	DetailJa  string    `json:"detail_ja,omitempty"`
+	SiteURL   string    `json:"site_url,omitempty"`
+	GithubURL string    `json:"github_url,omitempty"`
+	DevTime   time.Time `json:"dev_time,omitempty"`
+	Thumbnail string    `json:"thumbnail,omitempty"`
 }
 
 // Response public profiles
@@ -194,4 +207,39 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, publicUser)
+}
+
+func (h *Handler) PublicProductsHandler(e echo.Context) error {
+	ctx := context.Background()
+
+	productIdStr := e.QueryParam("product_id")
+	productId, err := strconv.Atoi(productIdStr)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid query: product_id")
+	}
+
+	p, err := h.DB.Client.Product.
+		Query().
+		Where(product.ID(uint32(productId))).
+		First(ctx)
+	if _, ok := err.(*ent.NotFoundError); ok {
+		return echo.ErrNotFound
+	}
+	if err != nil {
+		return err
+	}
+
+	publicProduct := PublicProduct{
+		ID:        p.ID,
+		Name:      p.Name,
+		NameJa:    p.NameJa,
+		Detail:    p.Detail,
+		DetailJa:  p.DetailJa,
+		SiteURL:   p.SiteURL,
+		GithubURL: p.GithubURL,
+		DevTime:   p.DevTime,
+		Thumbnail: p.Thumbnail,
+	}
+
+	return e.JSON(http.StatusOK, publicProduct)
 }

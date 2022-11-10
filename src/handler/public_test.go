@@ -2,6 +2,7 @@ package handler_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/cateiru/cateiru.com/src/handler"
@@ -241,5 +242,57 @@ func TestPublicProfileHandler(t *testing.T) {
 		require.Len(t, response.Biographies, 1)
 		require.Len(t, response.Products, 1)
 		require.Len(t, response.Links, 0)
+	})
+}
+
+func TestPublicProductHandler(t *testing.T) {
+	test.Init()
+
+	t.Run("success", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		p1, err := u.CreateProduct()
+		require.NoError(t, err)
+		_, err = p1.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", fmt.Sprintf("/?product_id=%v", p1.Product.ID))
+		require.NoError(t, err)
+		e := m.Echo()
+
+		err = h.PublicProductsHandler(e)
+		require.NoError(t, err)
+
+		m.Ok(t)
+
+		responseProduct := new(handler.PublicProduct)
+		err = m.Json(responseProduct)
+		require.NoError(t, err)
+
+		require.Equal(t, p1.Name, responseProduct.Name)
+	})
+
+	t.Run("no exist product id", func(t *testing.T) {
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", "/?product_id=123456")
+		require.NoError(t, err)
+		e := m.Echo()
+
+		err = h.PublicProductsHandler(e)
+		require.ErrorIs(t, err, echo.ErrNotFound)
 	})
 }
