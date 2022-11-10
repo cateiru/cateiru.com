@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"entgo.io/ent/dialect/sql"
 	"github.com/labstack/echo/v4"
 	"github.com/mileusna/useragent"
 
+	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/notice"
 	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/cateiru/cateiru.com/src/db"
@@ -87,7 +87,20 @@ func (h *Handler) ContactHandler(e echo.Context) error {
 		UserData: userData,
 	}
 
-	return SwitchPostingService(ctx, h.DB, forms)
+	u, err := h.DB.Client.User.Query().Where(user.Selected(true)).First(ctx)
+	if _, ok := err.(*ent.NotFoundError); ok {
+		return echo.ErrNotFound
+	}
+	if err != nil {
+		return err
+	}
+
+	err = forms.InsertDB(ctx, h.DB, u.ID)
+	if err != nil {
+		return err
+	}
+
+	return SwitchPostingService(ctx, h.DB, u, forms)
 }
 
 // Get user data from User-Agent or Client Hints
@@ -120,51 +133,39 @@ func GetUserAgent(e echo.Context) (*sender.UserData, error) {
 	}, nil
 }
 
-func SwitchPostingService(ctx context.Context, db *db.DB, forms *sender.SendForm) error {
-	// SELECT * FROM notices
-	// WHERE
-	// 	notices.user_id in (
-	// 		SELECT users.id FORM users
-	// 			WHERE users.selected = 1
-	// 		);
-	notices, err := db.Client.Notice.Query().Where(func(s *sql.Selector) {
-		t := sql.Table(user.Table)
-		p := sql.EQ(t.C(user.FieldSelected), true)
-		s.Where(sql.In(s.C(notice.FieldUserID), sql.Select(t.C(user.FieldID)).From(t).Where(p)))
-	}).All(ctx)
+func SwitchPostingService(ctx context.Context, db *db.DB, u *ent.User, forms *sender.SendForm) error {
+	n, err := db.Client.Notice.Query().Where(notice.UserID(u.ID)).First(ctx)
 	if err != nil {
 		return err
 	}
 
-	for i, n := range notices {
-		logging.Sugar.Infof("Posting form. count: %d, send service: %s", i)
+	logging.Sugar.Infof("Posting form. send user: %d", u.ID)
 
-		senderErr := false
-		if n.DiscordWebhook != "" {
-			err = forms.DiscordSender(n.DiscordWebhook)
-			if err != nil {
-				senderErr = true
-				logging.Sugar.Error(err)
-			}
+	senderErr := false
+	if n.DiscordWebhook != "" {
+		err = forms.DiscordSender(n.DiscordWebhook)
+		if err != nil {
+			senderErr = true
+			logging.Sugar.Error(err)
 		}
-		if n.SlackWebhook != "" {
-			err = forms.SlackSender(n.SlackWebhook)
-			if err != nil {
-				senderErr = true
-				logging.Sugar.Error(err)
-			}
+	}
+	if n.SlackWebhook != "" {
+		err = forms.SlackSender(n.SlackWebhook)
+		if err != nil {
+			senderErr = true
+			logging.Sugar.Error(err)
 		}
-		if n.Mail != "" {
-			err = forms.MailSender(n.Mail)
-			if err != nil {
-				senderErr = true
-				logging.Sugar.Error(err)
-			}
+	}
+	if n.Mail != "" {
+		err = forms.MailSender(n.Mail)
+		if err != nil {
+			senderErr = true
+			logging.Sugar.Error(err)
 		}
+	}
 
-		if senderErr {
-			return errors.New("dont send forms")
-		}
+	if senderErr {
+		return errors.New("dont send forms")
 	}
 
 	return nil

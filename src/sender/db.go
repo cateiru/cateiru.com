@@ -6,9 +6,9 @@ import (
 	"github.com/cateiru/cateiru.com/src/db"
 )
 
-func (f *SendForm) InsertDB(ctx context.Context, db *db.DB) error {
+func (f *SendForm) InsertDB(ctx context.Context, db *db.DB, userId uint32) error {
 	contact := db.Client.Contact.Create().
-		SetToUserID(0).
+		SetToUserID(userId).
 		SetTitle(f.Subject).
 		SetDetail(f.Detail).
 		SetMail(f.Mail).
