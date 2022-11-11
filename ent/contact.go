@@ -18,6 +18,8 @@ type Contact struct {
 	ID uint32 `json:"id,omitempty"`
 	// ToUserID holds the value of the "to_user_id" field.
 	ToUserID uint32 `json:"to_user_id,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
 	// Detail holds the value of the "detail" field.
@@ -59,7 +61,7 @@ func (*Contact) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullBool)
 		case contact.FieldID, contact.FieldToUserID:
 			values[i] = new(sql.NullInt64)
-		case contact.FieldTitle, contact.FieldDetail, contact.FieldMail, contact.FieldIP, contact.FieldLang, contact.FieldURL, contact.FieldCategory, contact.FieldCustomTitle, contact.FieldCustomValue, contact.FieldDeviceName, contact.FieldOs, contact.FieldBrowserName:
+		case contact.FieldName, contact.FieldTitle, contact.FieldDetail, contact.FieldMail, contact.FieldIP, contact.FieldLang, contact.FieldURL, contact.FieldCategory, contact.FieldCustomTitle, contact.FieldCustomValue, contact.FieldDeviceName, contact.FieldOs, contact.FieldBrowserName:
 			values[i] = new(sql.NullString)
 		case contact.FieldCreated, contact.FieldModified:
 			values[i] = new(sql.NullTime)
@@ -89,6 +91,12 @@ func (c *Contact) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field to_user_id", values[i])
 			} else if value.Valid {
 				c.ToUserID = uint32(value.Int64)
+			}
+		case contact.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				c.Name = value.String
 			}
 		case contact.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -210,6 +218,9 @@ func (c *Contact) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
 	builder.WriteString("to_user_id=")
 	builder.WriteString(fmt.Sprintf("%v", c.ToUserID))
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(c.Name)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(c.Title)

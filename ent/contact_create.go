@@ -26,6 +26,12 @@ func (cc *ContactCreate) SetToUserID(u uint32) *ContactCreate {
 	return cc
 }
 
+// SetName sets the "name" field.
+func (cc *ContactCreate) SetName(s string) *ContactCreate {
+	cc.mutation.SetName(s)
+	return cc
+}
+
 // SetTitle sets the "title" field.
 func (cc *ContactCreate) SetTitle(s string) *ContactCreate {
 	cc.mutation.SetTitle(s)
@@ -294,6 +300,9 @@ func (cc *ContactCreate) check() error {
 	if _, ok := cc.mutation.ToUserID(); !ok {
 		return &ValidationError{Name: "to_user_id", err: errors.New(`ent: missing required field "Contact.to_user_id"`)}
 	}
+	if _, ok := cc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Contact.name"`)}
+	}
 	if _, ok := cc.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Contact.title"`)}
 	}
@@ -355,6 +364,14 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 			Column: contact.FieldToUserID,
 		})
 		_node.ToUserID = value
+	}
+	if value, ok := cc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldName,
+		})
+		_node.Name = value
 	}
 	if value, ok := cc.mutation.Title(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

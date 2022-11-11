@@ -1425,6 +1425,7 @@ type ContactMutation struct {
 	id            *uint32
 	to_user_id    *uint32
 	addto_user_id *int32
+	name          *string
 	title         *string
 	detail        *string
 	mail          *string
@@ -1604,6 +1605,42 @@ func (m *ContactMutation) AddedToUserID() (r int32, exists bool) {
 func (m *ContactMutation) ResetToUserID() {
 	m.to_user_id = nil
 	m.addto_user_id = nil
+}
+
+// SetName sets the "name" field.
+func (m *ContactMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ContactMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ContactMutation) ResetName() {
+	m.name = nil
 }
 
 // SetTitle sets the "title" field.
@@ -2269,9 +2306,12 @@ func (m *ContactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContactMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.to_user_id != nil {
 		fields = append(fields, contact.FieldToUserID)
+	}
+	if m.name != nil {
+		fields = append(fields, contact.FieldName)
 	}
 	if m.title != nil {
 		fields = append(fields, contact.FieldTitle)
@@ -2328,6 +2368,8 @@ func (m *ContactMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case contact.FieldToUserID:
 		return m.ToUserID()
+	case contact.FieldName:
+		return m.Name()
 	case contact.FieldTitle:
 		return m.Title()
 	case contact.FieldDetail:
@@ -2369,6 +2411,8 @@ func (m *ContactMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case contact.FieldToUserID:
 		return m.OldToUserID(ctx)
+	case contact.FieldName:
+		return m.OldName(ctx)
 	case contact.FieldTitle:
 		return m.OldTitle(ctx)
 	case contact.FieldDetail:
@@ -2414,6 +2458,13 @@ func (m *ContactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetToUserID(v)
+		return nil
+	case contact.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
 		return nil
 	case contact.FieldTitle:
 		v, ok := value.(string)
@@ -2637,6 +2688,9 @@ func (m *ContactMutation) ResetField(name string) error {
 	switch name {
 	case contact.FieldToUserID:
 		m.ResetToUserID()
+		return nil
+	case contact.FieldName:
+		m.ResetName()
 		return nil
 	case contact.FieldTitle:
 		m.ResetTitle()

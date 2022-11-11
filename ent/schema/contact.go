@@ -24,6 +24,12 @@ func (Contact) Fields() []ent.Field {
 		// `to_user_id` INT UNSIGNED NOT NULL
 		field.Uint32("to_user_id"),
 
+		// `name` TEXT NOT NULL
+		field.String("name").
+			SchemaType(map[string]string{
+				dialect.MySQL: "text",
+			}),
+
 		// `title` TEXT NOT NULL
 		field.String("title").
 			SchemaType(map[string]string{

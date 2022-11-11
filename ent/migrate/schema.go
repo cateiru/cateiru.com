@@ -58,6 +58,7 @@ var (
 	ContactsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true},
 		{Name: "to_user_id", Type: field.TypeUint32},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "title", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "detail", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "mail", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},

@@ -41,6 +41,12 @@ func (cu *ContactUpdate) AddToUserID(u int32) *ContactUpdate {
 	return cu
 }
 
+// SetName sets the "name" field.
+func (cu *ContactUpdate) SetName(s string) *ContactUpdate {
+	cu.mutation.SetName(s)
+	return cu
+}
+
 // SetTitle sets the "title" field.
 func (cu *ContactUpdate) SetTitle(s string) *ContactUpdate {
 	cu.mutation.SetTitle(s)
@@ -351,6 +357,13 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: contact.FieldToUserID,
 		})
 	}
+	if value, ok := cu.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldName,
+		})
+	}
 	if value, ok := cu.mutation.Title(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -533,6 +546,12 @@ func (cuo *ContactUpdateOne) SetToUserID(u uint32) *ContactUpdateOne {
 // AddToUserID adds u to the "to_user_id" field.
 func (cuo *ContactUpdateOne) AddToUserID(u int32) *ContactUpdateOne {
 	cuo.mutation.AddToUserID(u)
+	return cuo
+}
+
+// SetName sets the "name" field.
+func (cuo *ContactUpdateOne) SetName(s string) *ContactUpdateOne {
+	cuo.mutation.SetName(s)
 	return cuo
 }
 
@@ -874,6 +893,13 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			Type:   field.TypeUint32,
 			Value:  value,
 			Column: contact.FieldToUserID,
+		})
+	}
+	if value, ok := cuo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: contact.FieldName,
 		})
 	}
 	if value, ok := cuo.mutation.Title(); ok {

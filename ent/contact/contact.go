@@ -13,6 +13,8 @@ const (
 	FieldID = "id"
 	// FieldToUserID holds the string denoting the to_user_id field in the database.
 	FieldToUserID = "to_user_id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDetail holds the string denoting the detail field in the database.
@@ -51,6 +53,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldToUserID,
+	FieldName,
 	FieldTitle,
 	FieldDetail,
 	FieldMail,
