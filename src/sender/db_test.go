@@ -10,6 +10,8 @@ import (
 )
 
 func TestInsertDB(t *testing.T) {
+	test.Init()
+
 	t.Run("success", func(t *testing.T) {
 		ctx := context.Background()
 
