@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/mileusna/useragent"
 
 	"github.com/cateiru/cateiru.com/ent"
+	"github.com/cateiru/cateiru.com/ent/contact"
 	"github.com/cateiru/cateiru.com/ent/notice"
 	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/cateiru/cateiru.com/src/db"
@@ -95,12 +97,53 @@ func (h *Handler) ContactHandler(e echo.Context) error {
 		return err
 	}
 
-	err = forms.InsertDB(ctx, h.DB, u.ID)
+	_, err = forms.InsertDB(ctx, h.DB, u.ID)
 	if err != nil {
 		return err
 	}
 
 	return SwitchPostingService(ctx, h.DB, u, forms)
+}
+
+func (h *Handler) ContactGetHandler(e echo.Context) error {
+	ctx := context.Background()
+
+	if err := h.Session(ctx, e); err != nil {
+		return err
+	}
+
+	c, err := h.DB.Client.Contact.Query().
+		Where(contact.ToUserID(h.User.ID)).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusOK, c)
+}
+
+func (h *Handler) ContactDeleteHandler(e echo.Context) error {
+	ctx := context.Background()
+
+	if err := h.Session(ctx, e); err != nil {
+		return err
+	}
+
+	idStr := e.QueryParam("contact_id")
+	if idStr == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid params: contact_id")
+	}
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid params: contact_id")
+	}
+
+	_, err = h.DB.Client.Contact.Delete().Where(contact.ID(uint32(id))).Exec(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Get user data from User-Agent or Client Hints
