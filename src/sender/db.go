@@ -9,6 +9,7 @@ import (
 func (f *SendForm) InsertDB(ctx context.Context, db *db.DB, userId uint32) error {
 	contact := db.Client.Contact.Create().
 		SetToUserID(userId).
+		SetName(f.Name).
 		SetTitle(f.Subject).
 		SetDetail(f.Detail).
 		SetMail(f.Mail).
