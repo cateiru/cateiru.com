@@ -29,7 +29,7 @@ func TestInsertDB(t *testing.T) {
 		form, err := tool.NewForm()
 		require.NoError(t, err)
 
-		err = form.InsertDB(ctx, tool.DB, u.User.ID)
+		_, err = form.InsertDB(ctx, tool.DB, u.User.ID)
 		require.NoError(t, err)
 
 		dbForm, err := tool.DB.Client.Contact.Query().

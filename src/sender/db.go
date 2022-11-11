@@ -3,10 +3,11 @@ package sender
 import (
 	"context"
 
+	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/src/db"
 )
 
-func (f *SendForm) InsertDB(ctx context.Context, db *db.DB, userId uint32) error {
+func (f *SendForm) InsertDB(ctx context.Context, db *db.DB, userId uint32) (*ent.Contact, error) {
 	contact := db.Client.Contact.Create().
 		SetToUserID(userId).
 		SetName(f.Name).
@@ -38,5 +39,5 @@ func (f *SendForm) InsertDB(ctx context.Context, db *db.DB, userId uint32) error
 		contact = contact.SetOs(f.UserData.OS)
 	}
 
-	return contact.Exec(ctx)
+	return contact.Save(ctx)
 }
