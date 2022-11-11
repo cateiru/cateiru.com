@@ -11,6 +11,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/gtuk/discordwebhook v1.0.2
 	github.com/jarcoal/httpmock v1.2.0
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/joho/godotenv v1.4.0
@@ -29,7 +30,6 @@ require (
 	github.com/dunglas/httpsfv v1.0.0 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/gtuk/discordwebhook v1.0.2 // indirect
 	github.com/hashicorp/hcl/v2 v2.14.0 // indirect
 	github.com/labstack/gommon v0.3.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
