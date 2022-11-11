@@ -4,12 +4,15 @@ import (
 	"context"
 	"crypto/rand"
 	"errors"
+	"fmt"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/cateiru/cateiru.com/src/handler"
+	"github.com/cateiru/cateiru.com/src/sender"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -54,6 +57,45 @@ func (c *TestTool) NewUser(ctx context.Context) (*TestUser, error) {
 	c.Users = append(c.Users, user)
 
 	return user, nil
+}
+
+func (c *TestTool) NewForm() (*sender.SendForm, error) {
+	name, err := MakeRandomStr(10)
+	if err != nil {
+		return nil, err
+	}
+	subj, err := MakeRandomStr(10)
+	if err != nil {
+		return nil, err
+	}
+	detail, err := MakeRandomStr(20)
+	if err != nil {
+		return nil, err
+	}
+
+	return &sender.SendForm{
+		Name:    name,
+		Mail:    fmt.Sprintf("%s@example.com", name),
+		Lang:    "ja",
+		Subject: subj,
+		Detail:  detail,
+
+		URL:      "",
+		Category: "",
+
+		Time: time.Now(),
+		IP:   "10.0.0.1",
+
+		CustomTitle: "",
+		CustomValue: "",
+
+		UserData: &sender.UserData{
+			Browser:  "Google Chrome",
+			OS:       "Windows",
+			Device:   "Windows",
+			IsMobile: false,
+		},
+	}, nil
 }
 
 func (c *TestTool) ClearUser(ctx context.Context) error {
