@@ -178,6 +178,9 @@ func GetUserAgent(e echo.Context) (*sender.UserData, error) {
 
 func SwitchPostingService(ctx context.Context, db *db.DB, u *ent.User, forms *sender.SendForm) error {
 	n, err := db.Client.Notice.Query().Where(notice.UserID(u.ID)).First(ctx)
+	if _, ok := err.(*ent.NotFoundError); ok {
+		return nil
+	}
 	if err != nil {
 		return err
 	}
