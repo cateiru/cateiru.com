@@ -20,6 +20,8 @@ var LocalConfig = ConfigDefs{
 		Scheme: "http",
 	},
 
+	Cors: nil,
+
 	// This config is docker-cmpose MySQL connection.
 	DBConfig: mysql.Config{
 		DBName:    "cateiru",

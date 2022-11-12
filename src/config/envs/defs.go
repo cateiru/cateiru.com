@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-sql-driver/mysql"
+	"github.com/labstack/echo/v4"
 )
 
 type ConfigDefs struct {
@@ -13,6 +14,8 @@ type ConfigDefs struct {
 
 	ApiDomain  url.URL
 	PageDomain url.URL
+
+	Cors echo.MiddlewareFunc
 
 	// DB Connect config
 	DBConfig mysql.Config

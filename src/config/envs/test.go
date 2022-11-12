@@ -20,6 +20,8 @@ var TestConfig = ConfigDefs{
 		Scheme: "http",
 	},
 
+	Cors: nil,
+
 	DBConfig: mysql.Config{
 		DBName:    "test",
 		User:      "docker",

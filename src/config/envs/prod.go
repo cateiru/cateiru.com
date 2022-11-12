@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github.com/go-sql-driver/mysql"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 var ProdConfig = ConfigDefs{
@@ -20,6 +22,11 @@ var ProdConfig = ConfigDefs{
 		Host:   "api.cateiru.com",
 		Scheme: "https",
 	},
+
+	Cors: middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"cateiru.com"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}),
 
 	DBConfig: mysql.Config{
 		DBName:    "cateirucom",

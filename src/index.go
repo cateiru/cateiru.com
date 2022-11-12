@@ -21,6 +21,10 @@ func Server() {
 	e := echo.New()
 	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
+	if config.Config.Cors != nil {
+		e.Use(config.Config.Cors)
+	}
+
 	db, err := db.NewConnectMySQL()
 	if err != nil {
 		logging.Sugar.Fatal(err)
