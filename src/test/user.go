@@ -137,7 +137,12 @@ func (c *TestUser) CreateSession(ctx context.Context, db *db.DB) (uuid.UUID, err
 	return s.ID, nil
 }
 
-func (c *TestUser) SelectStatus(ctx context.Context, s bool) error {
+func (c *TestUser) SelectStatus(ctx context.Context, db *db.DB, s bool) error {
+	// remove select all users
+	if err := db.Client.User.Update().SetSelected(false).Exec(ctx); err != nil {
+		return err
+	}
+
 	return c.User.Update().SetSelected(s).Exec(ctx)
 }
 

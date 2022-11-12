@@ -26,13 +26,10 @@ func TestContactHandler(t *testing.T) {
 		require.NoError(t, err)
 		defer tool.Close()
 
-		err = tool.ClearUser(ctx)
-		require.NoError(t, err)
-
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		form := contents.NewMultipart()
@@ -68,13 +65,10 @@ func TestContactHandler(t *testing.T) {
 		require.NoError(t, err)
 		defer tool.Close()
 
-		err = tool.ClearUser(ctx)
-		require.NoError(t, err)
-
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		form := contents.NewMultipart()
@@ -113,7 +107,7 @@ func TestContactGetHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		form, err := tool.NewForm()
@@ -160,7 +154,7 @@ func TestContactDeleteHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		form, err := tool.NewForm()

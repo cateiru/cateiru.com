@@ -26,7 +26,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		// bio
@@ -116,7 +116,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		// product
@@ -162,7 +162,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		// bio
@@ -208,7 +208,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		err = u.SelectStatus(ctx, true)
+		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
 		// bio
