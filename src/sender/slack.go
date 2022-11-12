@@ -52,6 +52,22 @@ func (f *SendForm) SlackSender(webhook string) error {
 			Type: "section",
 			Text: SlackPlainTextBlock{
 				Type:  "plain_text",
+				Text:  fmt.Sprintf("- Name: %v", f.Name),
+				Emoji: true,
+			},
+		},
+		SlackSectionBlock{
+			Type: "section",
+			Text: SlackPlainTextBlock{
+				Type:  "plain_text",
+				Text:  fmt.Sprintf("- Mail: %v", f.Mail),
+				Emoji: true,
+			},
+		},
+		SlackSectionBlock{
+			Type: "section",
+			Text: SlackPlainTextBlock{
+				Type:  "plain_text",
 				Text:  fmt.Sprintf("- IP Address: %v", f.IP),
 				Emoji: true,
 			},

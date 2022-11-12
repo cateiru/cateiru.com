@@ -15,6 +15,14 @@ func (f *SendForm) DiscordSender(webhook string) error {
 		Title: toPtr("User Data"),
 		Fields: &[]discordwebhook.Field{
 			{
+				Name:  toPtr("Name"),
+				Value: &f.Name,
+			},
+			{
+				Name:  toPtr("Mail"),
+				Value: &f.Mail,
+			},
+			{
 				Name:  toPtr("IP Address"),
 				Value: &f.IP,
 			},
