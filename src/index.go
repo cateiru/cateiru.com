@@ -6,6 +6,7 @@ import (
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/logging"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/net/http2"
 )
 
 // Initialize Server
@@ -39,9 +40,11 @@ func Server() {
 	// setting routes
 	Routes(e, handler)
 
+	s := http2.Server{}
+
 	// Start a server
 	// connection port is `8080`
 	//
 	// and, `http://localhist:8080` to access.
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.StartH2CServer(":8080", &s))
 }
