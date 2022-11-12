@@ -53,4 +53,8 @@ var LocalConfig = ConfigDefs{
 		Path:   "/login",
 	},
 	SSOClientID: "e962e6d0db161d59ae5110736ae8ac",
+
+	MailFromDomain:    "m.cateiru.com",
+	MailgunAPIKey:     "123456789abcd",
+	SenderMailAddress: "Cateiru <info@m.cateiru.com>",
 }

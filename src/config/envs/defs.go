@@ -29,4 +29,8 @@ type ConfigDefs struct {
 	SSOTokenSecret string
 	SSORedirectURI url.URL
 	SSOClientID    string
+
+	MailFromDomain    string
+	MailgunAPIKey     string
+	SenderMailAddress string
 }

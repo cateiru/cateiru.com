@@ -52,4 +52,8 @@ var TestConfig = ConfigDefs{
 		Path:   "/login",
 	},
 	SSOClientID: "12345",
+
+	MailFromDomain:    "m.cateiru.com",
+	MailgunAPIKey:     "123456789abcd",
+	SenderMailAddress: "Cateiru <info@m.cateiru.com>",
 }

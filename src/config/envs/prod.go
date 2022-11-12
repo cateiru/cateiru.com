@@ -53,4 +53,8 @@ var ProdConfig = ConfigDefs{
 		Path:   "/login",
 	},
 	SSOClientID: "",
+
+	MailFromDomain:    "m.cateiru.com",
+	MailgunAPIKey:     os.Getenv("MAILGUN_APIKEY"),
+	SenderMailAddress: "Cateiru <info@m.cateiru.com>",
 }
