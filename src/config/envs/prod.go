@@ -15,11 +15,11 @@ var ProdConfig = ConfigDefs{
 	Mode: "prod",
 
 	ApiDomain: url.URL{
-		Host:   "cateiru.com",
+		Host:   "api.cateiru.com",
 		Scheme: "https",
 	},
 	PageDomain: url.URL{
-		Host:   "api.cateiru.com",
+		Host:   "cateiru.com",
 		Scheme: "https",
 	},
 
