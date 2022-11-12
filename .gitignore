@@ -38,3 +38,11 @@ yarn-error.log*
 *.tsbuildinfo
 
 .env
+
+# ----- custom config
+
+db/.data/**
+!db/.data/.gitkeep
+
+schema.sql
+migration_diff.sql

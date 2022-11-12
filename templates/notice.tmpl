@@ -1,0 +1,36 @@
+##### New inquiry from cateiru.com #######
+
+----
+
+# {{.Subject}}
+
+{{.Detail}}
+
+---
+
+{{ if .Category ne "" }}
+- Category : {{.Category}}
+{{ end }}
+
+{{ if .URL ne "" }}
+- URL : {{.URL}}
+{{ end }}
+
+{{ if .CustomTitle ne "" }}
+- {{.CustomTitle}} : {{.CustomValue}}
+{{ end }}
+
+---
+
+# User Data
+
+- Name: {{.Name}}
+- Language: {{.Lang}}
+- Mail Address: {{.Mail}}
+- IP Address: {{.IP}}
+- Browser: {{.UserData.Browser}}
+- OS: {{.UserData.OS}}
+- Device: {{.UserData.Device}}
+- Is Mobile: {{.UserData.IsMobile}}
+
+{{.Time}}

@@ -1,0 +1,27 @@
+# ===== Next.js
+# Src files
+components/**
+pages/**
+public/**
+utils/**
+nod_modules/**
+
+# Other
+.next/**
+next-ent.d.ts
+next.config.js
+package.json
+tsconfig.json
+yarn.lock
+.eslintignore
+.eslintrc.json
+
+# ===== Ignore
+.github/**
+.gitignore
+.prettierrc.js
+db/**
+docs/**
+docker-compose.yaml
+LICENSE
+README.md
