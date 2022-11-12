@@ -53,13 +53,13 @@ var ProdConfig = ConfigDefs{
 		Path:     "/",
 	},
 
-	SSOTokenSecret: "",
+	SSOTokenSecret: os.Getenv("SSO_TOKEN_SECRET"),
 	SSORedirectURI: url.URL{
-		Host:   "localhost:8080",
-		Scheme: "http",
+		Host:   "cateiru.com",
+		Scheme: "https",
 		Path:   "/login",
 	},
-	SSOClientID: "",
+	SSOClientID: os.Getenv("SSO_CLIENT_ID"),
 
 	MailFromDomain:    "m.cateiru.com",
 	MailgunAPIKey:     os.Getenv("MAILGUN_APIKEY"),
