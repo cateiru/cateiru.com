@@ -19,6 +19,9 @@ func TestInsertDB(t *testing.T) {
 		require.NoError(t, err)
 		defer tool.Close()
 
+		err = tool.ClearUser(ctx)
+		require.NoError(t, err)
+
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
