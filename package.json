@@ -24,7 +24,8 @@
         "react-dom": "18.2.0",
         "react-hook-form": "^7.34.2",
         "react-icons": "^4.4.0",
-        "recoil": "^0.7.5"
+        "recoil": "^0.7.5",
+        "zod": "^3.19.1"
     },
     "devDependencies": {
         "@types/gtag.js": "^0.0.11",
