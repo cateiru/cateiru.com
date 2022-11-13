@@ -2,6 +2,7 @@ package base
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -107,7 +108,7 @@ func (c *Base) Logout(ctx context.Context, e echo.Context) {
 func (c *Base) getSessionToken(e echo.Context) (uuid.UUID, error) {
 	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
 	if err != nil {
-		return uuid.UUID{}, echo.NewHTTPError(http.StatusBadRequest, "cookie is not found")
+		return uuid.UUID{}, echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("cookie is not found: %v", err))
 	}
 	token := tokenCookie.Value
 

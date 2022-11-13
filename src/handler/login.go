@@ -111,9 +111,9 @@ func CreateUser(ctx context.Context, base *base.Base, claims *sso.Claims) (*ent.
 		SetBirthDate(time.Now()).
 		SetGivenNameJa(claims.GivenName).
 		SetFamilyNameJa(claims.FamilyName).
-		SetLocation("").
+		SetLocation("todo").
 		SetSSOToken(claims.ID).
-		SetLocationJa("")
+		SetLocationJa("todo")
 
 	if claims.Picture != "" {
 		userConf = userConf.SetAvatarURL(claims.Picture)

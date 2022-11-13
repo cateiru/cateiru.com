@@ -6,21 +6,27 @@ import (
 	"time"
 
 	"github.com/go-sql-driver/mysql"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 var LocalConfig = ConfigDefs{
 	Mode: "local",
 
 	ApiDomain: url.URL{
-		Host:   "localhost:8080",
+		Host:   "100.125.206.35:8080",
 		Scheme: "http",
 	},
 	PageDomain: url.URL{
-		Host:   "localhost:3000",
+		Host:   "100.125.206.35:3000",
 		Scheme: "http",
 	},
 
-	Cors: nil,
+	Cors: middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://100.125.206.35:3000"},
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowCredentials: true,
+	}),
 
 	// This config is docker-cmpose MySQL connection.
 	DBConfig: mysql.Config{
