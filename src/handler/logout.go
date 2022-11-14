@@ -15,7 +15,7 @@ func (h *Handler) LogoutHandler(e echo.Context) error {
 		return err
 	}
 
-	h.Base.Logout(ctx, e)
+	h.Base.Logout(e)
 
 	return nil
 }
