@@ -98,7 +98,7 @@ export const UserCard = () => {
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: '出身', en: 'Location'})}
+                  {convertLang({ja: '在住', en: 'Location'})}
                 </Td>
                 <Td>{lang === 'ja' ? user?.location_ja : user?.location}</Td>
               </Tr>
@@ -106,13 +106,13 @@ export const UserCard = () => {
                 <Td fontWeight="bold">
                   {convertLang({ja: '作成日時', en: 'Created'})}
                 </Td>
-                <Td>{user?.created}</Td>
+                <Td>{parseDate(user?.created ?? '', lang)}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
                   {convertLang({ja: '編集日時', en: 'Modified'})}
                 </Td>
-                <Td>{user?.modified}</Td>
+                <Td>{parseDate(user?.modified ?? '', lang)}</Td>
               </Tr>
             </Tbody>
           </Table>

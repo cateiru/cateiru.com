@@ -235,7 +235,7 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location)}>
               <FormLabel htmlFor="location">
-                {convertLang({ja: '出身地(英語)', en: 'Location'})}
+                {convertLang({ja: '在住(英語)', en: 'Location'})}
               </FormLabel>
               <Input
                 id="location"
@@ -252,7 +252,7 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location_ja)}>
               <FormLabel htmlFor="location_ja">
-                {convertLang({ja: '出身地', en: 'location_ja (japanese)'})}
+                {convertLang({ja: '在住', en: 'Location (japanese)'})}
               </FormLabel>
               <Input
                 id="location_ja"
