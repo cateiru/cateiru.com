@@ -141,7 +141,7 @@ export const UserEdit = () => {
       >
         <Box width={{base: 'auto', md: '500px'}}>
           <NextLink passHref href="/admin">
-            <Button my="1rem" variant="ghost" leftIcon={<IoArrowBack />}>
+            <Button my="1rem" variant="ghost" leftIcon={<IoArrowBack />} as="a">
               {convertLang({ja: '戻る', en: 'Back'})}
             </Button>
           </NextLink>

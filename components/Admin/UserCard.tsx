@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import {useRecoilValue} from 'recoil';
+import {parseDate} from '../../utils/parse';
 import {UserState} from '../../utils/state/atoms';
 import useLanguage from '../useLanguage';
 
@@ -93,7 +94,7 @@ export const UserCard = () => {
                 <Td fontWeight="bold">
                   {convertLang({ja: '誕生日', en: 'Birth Date'})}
                 </Td>
-                <Td>{user?.birth_date}</Td>
+                <Td>{parseDate(user?.birth_date ?? '', lang)}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">

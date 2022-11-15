@@ -7,6 +7,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
+import NextLink from 'next/link';
 import {useRouter} from 'next/router';
 import React from 'react';
 import {api} from '../../utils/api';
@@ -59,6 +60,15 @@ export const ControllerCard = () => {
           <Button onClick={logoutHandler} isLoading={load}>
             {convertLang({ja: 'ログアウト', en: 'Logout'})}
           </Button>
+        </Flex>
+        <Flex alignItems="center" mt="1rem">
+          <Text>
+            {convertLang({ja: 'ページを見に行く', en: 'Go to Top Page'})}
+          </Text>
+          <Spacer />
+          <NextLink passHref href="/">
+            <Button as="a">{convertLang({ja: 'トップ', en: 'Top'})}</Button>
+          </NextLink>
         </Flex>
       </Box>
     </Box>
