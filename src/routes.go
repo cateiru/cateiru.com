@@ -32,7 +32,7 @@ func Routes(e *echo.Echo, handler *handler.Handler) {
 	e.DELETE("/user/bio", handler.DeleteBioHandler)
 
 	// location
-	e.GET("/user/location", handler.LoginHandler)
+	e.GET("/user/location", handler.LocationHandler)
 	e.POST("/user/location", handler.CreateLocationHandler)
 	e.PUT("/user/location", handler.UpdateLocationHandler)
 	e.DELETE("/user/location", handler.DeleteLocationHandler)

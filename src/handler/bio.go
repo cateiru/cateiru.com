@@ -14,8 +14,8 @@ import (
 )
 
 type BioResponse struct {
-	Biography ent.Biography
-	Location  ent.Location
+	Biography ent.Biography `json:"biography"`
+	Location  ent.Location  `json:"location"`
 }
 
 // Get my bio
@@ -30,6 +30,9 @@ func (h *Handler) BioHandler(e echo.Context) error {
 		Query().
 		Where(biography.UserID(h.User.ID)).
 		First(ctx)
+	if _, ok := err.(*ent.NotFoundError); ok {
+		return echo.ErrNotFound
+	}
 	if err != nil {
 		return err
 	}
