@@ -192,7 +192,7 @@ func LoginTestGet(t *testing.T, o func(h *handler.Handler, e echo.Context) error
 
 		err = o(h, e)
 		require.Error(t, err)
-		CheckHTTPErrorMessage(t, err, "cookie is not found")
+		CheckHTTPErrorMessage(t, err, "cookie is not found: http: named cookie not present")
 	})
 
 	t.Run("invalid cookie: parse failed UUID", func(t *testing.T) {
