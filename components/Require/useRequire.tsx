@@ -18,6 +18,11 @@ export const useRequire = (
 
   React.useEffect(() => {
     const f = async () => {
+      if (user) {
+        setShow(true);
+        return;
+      }
+
       const verify = new Verify(
         isRedirect,
         u => setUser(u),

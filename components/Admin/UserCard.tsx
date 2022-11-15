@@ -12,6 +12,7 @@ import {
   Badge,
   Button,
 } from '@chakra-ui/react';
+import NextLink from 'next/link';
 import {useRecoilValue} from 'recoil';
 import {UserState} from '../../utils/state/atoms';
 import useLanguage from '../useLanguage';
@@ -30,7 +31,11 @@ export const UserCard = () => {
       position="relative"
     >
       <Box position="absolute" top="20" right="20">
-        <Button size="sm">{convertLang({ja: '編集', en: 'edit'})}</Button>
+        <NextLink passHref href="/admin/user">
+          <Button size="sm" as="a">
+            {convertLang({ja: '編集', en: 'edit'})}
+          </Button>
+        </NextLink>
       </Box>
       {user?.selected && (
         <Box position="absolute" top="20" left="20">
