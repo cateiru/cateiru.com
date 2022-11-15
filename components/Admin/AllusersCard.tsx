@@ -38,9 +38,6 @@ export const AllUsersCard = () => {
   }, [data]);
 
   const changeSelected = (id: string) => {
-    console.log(id);
-    setSelected(id);
-
     const f = async () => {
       const form = new FormData();
       form.append('id', id);
