@@ -64,6 +64,7 @@ func (h *Handler) LoginHandler(c echo.Context) error {
 	redirectURL := url.URL{
 		Host:   config.Config.PageDomain.Host,
 		Scheme: config.Config.PageDomain.Scheme,
+		Path:   "/admin",
 	}
 
 	return c.Redirect(http.StatusMovedPermanently, redirectURL.String())
