@@ -89,8 +89,8 @@ func TestCreateBioHandler(t *testing.T) {
 		form.Insert("location_id", strconv.Itoa(int(loc.ID)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
-		form.Insert("leave_date", "2120-10-31T00:00:00-0900")
+		form.Insert("join_date", "2022-11-12T07:00:29.967Z")
+		form.Insert("leave_date", "2120-01-31T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -146,7 +146,7 @@ func TestCreateBioHandler(t *testing.T) {
 		form.Insert("location_id", strconv.Itoa(int(loc.ID)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
+		form.Insert("join_date", "2022-11-12T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -198,7 +198,7 @@ func TestCreateBioHandler(t *testing.T) {
 		form.Insert("location_id", "123456")
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
+		form.Insert("join_date", "2022-11-15T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -292,8 +292,8 @@ func TestUpdateBioHandler(t *testing.T) {
 		form.Insert("location_id", strconv.Itoa(int(bioUsedLoc.LocationId)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
-		form.Insert("leave_date", "2120-10-31T00:00:00-0900")
+		form.Insert("join_date", "2022-11-15T07:00:29.967Z")
+		form.Insert("leave_date", "2120-11-15T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPut)
 		require.NoError(t, err)

@@ -38,7 +38,7 @@ func (h *Handler) ProductHandler(e echo.Context) error {
 // - detail_ja: string
 // - site_url: string
 // - github_url: Optional string
-// - dev_time: ISO 8601 type date
+// - dev_time: RFC3339type date
 // - thumbnail: Optional string
 func (h *Handler) CreateProductHandler(e echo.Context) error {
 	ctx := context.Background()
@@ -79,7 +79,7 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 		return err
 	}
 
-	devTime, err := time.Parse("2006-01-02T15:04:05-0700", devTimeStr)
+	devTime, err := time.Parse(time.RFC3339, devTimeStr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: dev_time")
 	}
@@ -124,7 +124,7 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 // - detail_ja: string
 // - site_url: string
 // - github_url: string
-// - dev_time: ISO 8601 type date
+// - dev_time: RFC3339type date
 // - thumbnail: string
 func (h *Handler) UpdateProductHandler(e echo.Context) error {
 	ctx := context.Background()
@@ -185,7 +185,7 @@ func (h *Handler) UpdateProductHandler(e echo.Context) error {
 	}
 	devTimeStr := e.FormValue("dev_time")
 	if devTimeStr != "" {
-		devTime, err := time.Parse("2006-01-02T15:04:05-0700", devTimeStr)
+		devTime, err := time.Parse(time.RFC3339, devTimeStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: dev_time")
 		}

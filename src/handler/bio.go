@@ -52,8 +52,8 @@ func (h *Handler) BioHandler(e echo.Context) error {
 // - location_id: uint32
 // - position: string
 // - position_ja: string
-// - join_date: ISO 8601 type date
-// - leave_date: Optional ISO 8601 type date
+// - join_date:  type date
+// - leave_date: Optional RFC3339 type date
 func (h *Handler) CreateBioHandler(e echo.Context) error {
 	ctx := context.Background()
 
@@ -91,8 +91,8 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 		return err
 	}
 
-	// ISO 8601
-	joinDate, err := time.Parse("2006-01-02T15:04:05-0700", joinDateStr)
+	// RFC3339
+	joinDate, err := time.Parse(time.RFC3339, joinDateStr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: join_date")
 	}
@@ -100,8 +100,8 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 	bio := h.DB.Client.Biography.Create()
 
 	if leaveDateStr != "" {
-		// ISO 8601
-		leaveDate, err := time.Parse("2006-01-02T15:04:05-0700", leaveDateStr)
+		// RFC3339
+		leaveDate, err := time.Parse(time.RFC3339, leaveDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: leave_date")
 		}
@@ -131,8 +131,8 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 // - location_id: uint32
 // - position: string
 // - position_ja: string
-// - join_date: ISO 8601 type date
-// - leave_date: ISO 8601 type date
+// - join_date: RFC3339 type date
+// - leave_date: RFC3339 type date
 func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	ctx := context.Background()
 
@@ -193,7 +193,7 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	joinDateStr := e.FormValue("join_date")
 	if joinDateStr != "" {
 		changes = true
-		joinDate, err := time.Parse("2006-01-02T15:04:05-0700", joinDateStr)
+		joinDate, err := time.Parse(time.RFC3339, joinDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: join_date")
 		}
@@ -203,7 +203,7 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	leaveDateStr := e.FormValue("leave_date")
 	if leaveDateStr != "" {
 		changes = true
-		leaveDate, err := time.Parse("2006-01-02T15:04:05-0700", leaveDateStr)
+		leaveDate, err := time.Parse(time.RFC3339, leaveDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: leave_date")
 		}

@@ -74,7 +74,7 @@ func TestUpdateUserHandler(t *testing.T) {
 
 		b := time.Now()
 		b = b.AddDate(-10, 0, 0)
-		form.Insert("birth_date", b.Format("2006-01-02T15:04:05-0700"))
+		form.Insert("birth_date", b.Format(time.RFC3339))
 
 		form.Insert("location", "locattttttt")
 		form.Insert("location_ja", "ロケーション")

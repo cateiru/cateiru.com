@@ -90,7 +90,7 @@ func TestCreateProductHandler(t *testing.T) {
 		form.Insert("detail", "my portfolio")
 		form.Insert("detail_ja", "ポートフォリオ")
 		form.Insert("site_url", "https://cateiru.com")
-		form.Insert("dev_time", "2022-10-25T00:00:00-0900")
+		form.Insert("dev_time", "2022-11-15T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -138,7 +138,7 @@ func TestCreateProductHandler(t *testing.T) {
 		form.Insert("site_url", "https://cateiru.com")
 		form.Insert("github_url", "https://github.com/cateiru/cateiru.com")
 		form.Insert("thumbnail", "https://caiteiru.com/ogp.png")
-		form.Insert("dev_time", "2022-10-25T00:00:00-0900")
+		form.Insert("dev_time", "2022-11-15T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -235,7 +235,7 @@ func TestUpdateProductHandler(t *testing.T) {
 		form.Insert("site_url", "https://cateiru.com")
 		form.Insert("github_url", "https://github.com/cateiru/cateiru.com")
 		form.Insert("thumbnail", "https://caiteiru.com/ogp.png")
-		form.Insert("dev_time", "2022-10-25T00:00:00-0900")
+		form.Insert("dev_time", "2022-11-25T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPut)
 		require.NoError(t, err)
