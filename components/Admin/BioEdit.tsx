@@ -430,7 +430,7 @@ export const NewBio: React.FC<{
 
             <Button
               mt={4}
-              w={{base: '100%', md: 'auto'}}
+              w="100%"
               colorScheme="blue"
               isLoading={isSubmitting}
               type="submit"
@@ -470,10 +470,16 @@ const UpdateBio: React.FC<{
     setValue('location_id', String(target.biography.location_id));
     setValue('position', target.biography.position);
     setValue('position_ja', target.biography.position_ja);
-    setValue('join_date', target.biography.join);
+    setValue(
+      'join_date',
+      new Date(target.biography.join ?? '').toISOString().substring(0, 10)
+    );
 
-    if (target.biography.leave) {
-      setValue('leave_date', target.biography.leave);
+    if (target.biography.leave !== '0001-01-01T00:00:00Z') {
+      setValue(
+        'leave_date',
+        new Date(target.biography.leave ?? '').toISOString().substring(0, 10)
+      );
     }
   }, [target]);
 
@@ -484,7 +490,7 @@ const UpdateBio: React.FC<{
     const form = new FormData();
     form.append('bio_id', `${target.biography.id}`);
     let changed = false;
-    if (d.is_public !== target.biography.is_public) {
+    if (d.is_public !== Boolean(target.biography.is_public)) {
       form.append('is_public', d.is_public ? 'true' : 'false');
       changed = true;
     }
@@ -500,11 +506,18 @@ const UpdateBio: React.FC<{
       form.append('position_ja', d.position_ja);
       changed = true;
     }
-    if (d.join_date !== target.biography.join) {
+    if (
+      new Date(d.join_date).toISOString() !==
+      new Date(target.biography.join).toISOString()
+    ) {
       form.append('join_date', new Date(d.join_date).toISOString());
       changed = true;
     }
-    if (d.leave_date && d.leave_date !== target.biography.leave) {
+    if (
+      d.leave_date &&
+      new Date(d.leave_date).toISOString() !==
+        new Date(target.biography.leave).toISOString()
+    ) {
       form.append('leave_date', new Date(d.leave_date).toISOString());
       changed = true;
     }
