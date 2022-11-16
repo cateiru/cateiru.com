@@ -52,12 +52,13 @@ func TestBioHandler(t *testing.T) {
 
 		m.Ok(t)
 
-		res := new(handler.BioResponse)
-		err = m.Json(res)
+		res := []handler.BioResponse{}
+		err = m.Json(&res)
 		require.NoError(t, err)
 
-		require.Equal(t, res.Biography.ID, bio.Biography.ID)
-		require.Equal(t, res.Location.Address, bio.Location.Address)
+		require.Len(t, res, 1)
+		require.Equal(t, res[0].Biography.ID, bio.Biography.ID)
+		require.Equal(t, res[0].Location.Address, bio.Location.Address)
 	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {

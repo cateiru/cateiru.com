@@ -14,8 +14,8 @@ import (
 )
 
 type BioResponse struct {
-	Biography ent.Biography `json:"biography"`
-	Location  ent.Location  `json:"location"`
+	Biography *ent.Biography `json:"biography"`
+	Location  *ent.Location  `json:"location"`
 }
 
 // Get my bio
@@ -26,26 +26,29 @@ func (h *Handler) BioHandler(e echo.Context) error {
 		return err
 	}
 
-	bio, err := h.DB.Client.Biography.
-		Query().
-		Where(biography.UserID(h.User.ID)).
-		First(ctx)
-	if _, ok := err.(*ent.NotFoundError); ok {
-		return echo.ErrNotFound
-	}
+	bios, err := h.DB.Client.Biography.Query().Where(biography.UserID(h.User.ID)).All(ctx)
 	if err != nil {
 		return err
 	}
-
-	location, err := h.DB.Client.Location.Get(ctx, bio.LocationID)
-	if err != nil {
-		return err
+	var locationMap map[uint32]*ent.Location
+	bioResps := make([]BioResponse, len(bios))
+	for i, bio := range bios {
+		var loc *ent.Location
+		if locationMap[bio.LocationID] != nil {
+			loc = locationMap[bio.LocationID]
+		} else {
+			loc, err = h.DB.Client.Location.Get(ctx, bio.LocationID)
+			if err != nil {
+				return err
+			}
+		}
+		bioResps[i] = BioResponse{
+			Biography: bio,
+			Location:  loc,
+		}
 	}
 
-	return e.JSON(http.StatusOK, BioResponse{
-		*bio,
-		*location,
-	})
+	return e.JSON(http.StatusOK, bioResps)
 }
 
 // Set a new bio
@@ -241,8 +244,8 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, BioResponse{
-		Biography: *bioDB,
-		Location:  *location,
+		Biography: bioDB,
+		Location:  location,
 	})
 }
 
