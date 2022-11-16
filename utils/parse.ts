@@ -8,6 +8,8 @@
 export function parseDate(d: string, lang: string): string {
   if (d.length === 9) {
     return lang === 'ja' ? '不明' : 'Unknown';
+  } else if (d === '0001-01-01T00:00:00Z') {
+    return '-';
   }
 
   const date = new Date(d);

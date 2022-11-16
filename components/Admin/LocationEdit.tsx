@@ -61,19 +61,17 @@ export const LocationEdit = () => {
     switch (type) {
       case 'cre':
       case 'upd':
-        if (l) {
-          if (data) {
-            const d = [...data];
-            const inLocationIndex = d.findIndex(v => v.id === l.id);
-            if (inLocationIndex !== -1) {
-              d[inLocationIndex] = l;
-            } else {
-              d.push(l);
-            }
-            mutate(d);
+        if (data) {
+          const d = [...data];
+          const inLocationIndex = d.findIndex(v => v.id === l.id);
+          if (inLocationIndex !== -1) {
+            d[inLocationIndex] = l;
           } else {
-            mutate([l]);
+            d.push(l);
           }
+          mutate(d);
+        } else {
+          mutate([l]);
         }
         break;
       case 'del':
@@ -176,15 +174,17 @@ export const LocationEdit = () => {
         convertLang={convertLang}
         update={updateLocationHand}
       />
-      {updateLocation && (
-        <UpdateForm
-          isOpen={updateModal.isOpen}
-          onClose={updateModal.onClose}
-          convertLang={convertLang}
-          target={updateLocation}
-          update={updateLocationHand}
-        />
-      )}
+
+      <UpdateForm
+        isOpen={updateModal.isOpen}
+        onClose={() => {
+          setUpdateLocation(undefined);
+          updateModal.onClose();
+        }}
+        convertLang={convertLang}
+        target={updateLocation}
+        update={updateLocationHand}
+      />
     </Box>
   );
 };
@@ -360,7 +360,7 @@ const NewForm: React.FC<{
 };
 
 const UpdateForm: React.FC<{
-  target: Location;
+  target: Location | undefined;
   convertLang: (e: MultiLang) => string;
   isOpen: boolean;
   onClose: () => void;
@@ -376,6 +376,9 @@ const UpdateForm: React.FC<{
   const toast = useToast();
 
   React.useEffect(() => {
+    if (!target) {
+      return;
+    }
     setValue('type', target.type);
     setValue('name', target.name);
     setValue('name_ja', target.name_ja);
@@ -384,6 +387,9 @@ const UpdateForm: React.FC<{
   }, [target]);
 
   const onSubmit = async (d: LocationForm) => {
+    if (!target) {
+      return;
+    }
     const form = new FormData();
     form.append('location_id', `${target.id}`);
     let changed = false;
@@ -396,7 +402,7 @@ const UpdateForm: React.FC<{
       changed = true;
     }
     if (d.name_ja !== target.name_ja) {
-      form.append('name.name_ja', d.name_ja);
+      form.append('name_ja', d.name_ja);
       changed = true;
     }
     if (d.address !== target.address) {
@@ -436,6 +442,10 @@ const UpdateForm: React.FC<{
 
   const onDelete = () => {
     const f = async () => {
+      if (!target) {
+        return;
+      }
+
       const res = await fetch(api(`/user/location?location_id=${target.id}`), {
         method: 'DELETE',
         credentials: 'include',
