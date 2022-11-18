@@ -45,10 +45,14 @@ import {
   Bio,
   BioLoc,
   BioLocArray,
+  BioLocSchema,
   BioSchema,
   LocationArray,
 } from '../../utils/types';
 import useLanguage from '../useLanguage';
+import {useList} from './useList';
+import {useNew} from './useNew';
+import {useUpdate} from './useUpdate';
 
 interface BioForm {
   is_public: boolean;
@@ -61,51 +65,18 @@ interface BioForm {
 
 export const BioList = () => {
   const [lang, convertLang] = useLanguage();
-  const {data, error, mutate} = useSWR<BioLocArray, SWRError>(
-    '/user/bio',
-    fetcher
-  );
+  const {
+    data,
+    error,
+    mutate,
+    update,
+    updateValue,
+    onUpdate,
+    closeUpdateModal,
+    createModal,
+    updateModal,
+  } = useList<BioLoc>('/user/bio', (t, v) => t.biography.id === v.biography.id);
   const locations = useSWR<LocationArray, SWRError>('/user/location', fetcher);
-  const createModal = useDisclosure();
-  const updateModal = useDisclosure();
-
-  const [updateBio, setUpdateBio] = React.useState<BioLoc>();
-
-  const update = (l: Bio, type: 'cre' | 'del' | 'upd') => {
-    const f = async () => {
-      switch (type) {
-        case 'cre':
-          if (data) {
-            const d = [...data];
-            d.push({biography: l});
-            mutate(d);
-          }
-          break;
-        case 'upd':
-          if (data) {
-            const d = [...data];
-            const i = d.findIndex(v => v.biography.id === l.id);
-            d[i].biography = l;
-            mutate(d);
-          }
-          break;
-        case 'del':
-          if (data) {
-            const d = [...data];
-            const i = d.findIndex(v => v.biography.id === l.id);
-            const delData = d.slice(i, i + 1);
-            mutate(delData);
-          }
-          break;
-      }
-    };
-    f();
-  };
-
-  const onUpdate = (id: number) => {
-    setUpdateBio(data?.find(v => v.biography.id === id));
-    updateModal.onOpen();
-  };
 
   return (
     <Box mt="3rem">
@@ -201,10 +172,7 @@ export const BioList = () => {
                           {v.biography.is_public ? <TbCheck size="20" /> : ''}
                         </Td>
                         <Td>
-                          <Button
-                            size="sm"
-                            onClick={() => onUpdate(v.biography.id)}
-                          >
+                          <Button size="sm" onClick={() => onUpdate(v)}>
                             {convertLang({ja: '編集', en: 'Edit'})}
                           </Button>
                         </Td>
@@ -227,12 +195,9 @@ export const BioList = () => {
       <UpdateBio
         convertLang={convertLang}
         isOpen={updateModal.isOpen}
-        onClose={() => {
-          setUpdateBio(undefined);
-          updateModal.onClose();
-        }}
+        onClose={closeUpdateModal}
         update={update}
-        target={updateBio}
+        target={updateValue}
         locations={locations}
       />
     </Box>
@@ -243,59 +208,34 @@ export const NewBio: React.FC<{
   convertLang: (e: MultiLang) => string;
   isOpen: boolean;
   onClose: () => void;
-  update: (newV: Bio, type: 'cre' | 'del' | 'upd') => void;
+  update: (newV: BioLoc, type: 'cre' | 'del' | 'upd') => void;
   locations: SWRResponse<LocationArray>;
 }> = ({convertLang, isOpen, onClose, update, locations}) => {
   const {
+    onSubmit,
     handleSubmit,
     register,
-    reset,
     formState: {errors, isSubmitting},
-  } = useForm<BioForm>();
-  const toast = useToast();
-
-  const onSubmit = async (f: BioForm) => {
-    const form = new FormData();
-    form.append('is_public', f.is_public ? 'true' : 'false');
-    form.append('location_id', f.location_id);
-    form.append('position', f.position);
-    form.append('position_ja', f.position_ja);
-    form.append('join_date', new Date(f.join_date).toISOString());
-
-    if (f.leave_date) {
-      form.append('leave_date', new Date(f.leave_date).toISOString());
-    }
-
-    const res = await fetch(api('/user/bio'), {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      body: form,
-    });
-
-    if (res.ok) {
-      toast({
-        status: 'success',
-        title: convertLang({ja: '作成しました', en: 'Success created'}),
-      });
-      const bio = BioSchema.parse(await res.json());
-      update(bio, 'cre');
-    } else {
-      toast({
-        status: 'error',
-        title: (await res.json()).message,
-      });
-    }
-
-    wrapperOnClose();
-
-    return () => {};
-  };
-
-  const wrapperOnClose = () => {
-    reset();
-    onClose();
-  };
+    wrapperOnClose,
+  } = useNew<BioLoc, BioForm>({
+    path: '/user/bio',
+    formFunc: v => {
+      const form = new FormData();
+      form.append('is_public', v.is_public ? 'true' : 'false');
+      form.append('location_id', v.location_id);
+      form.append('position', v.position);
+      form.append('position_ja', v.position_ja);
+      form.append('join_date', new Date(v.join_date).toISOString());
+      if (v.leave_date) {
+        form.append('leave_date', new Date(v.leave_date).toISOString());
+      }
+      return form;
+    },
+    convertLang,
+    parse: r => BioLocSchema.parse(r),
+    update,
+    onClose,
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={wrapperOnClose} size="xl">
@@ -449,135 +389,80 @@ const UpdateBio: React.FC<{
   convertLang: (e: MultiLang) => string;
   isOpen: boolean;
   onClose: () => void;
-  update: (newV: Bio, type: 'cre' | 'del' | 'upd') => void;
+  update: (newV: BioLoc, type: 'cre' | 'del' | 'upd') => void;
   locations: SWRResponse<LocationArray>;
 }> = ({convertLang, target, isOpen, onClose, update, locations}) => {
   const {
+    onSubmit,
     handleSubmit,
     register,
-    reset,
-    setValue,
     formState: {errors, isSubmitting},
-  } = useForm<BioForm>({});
-  const toast = useToast();
-
-  React.useEffect(() => {
-    if (!target) {
-      return;
-    }
-
-    setValue('is_public', target.biography.is_public ?? false);
-    setValue('location_id', String(target.biography.location_id));
-    setValue('position', target.biography.position);
-    setValue('position_ja', target.biography.position_ja);
-    setValue(
-      'join_date',
-      new Date(target.biography.join ?? '').toISOString().substring(0, 10)
-    );
-
-    if (target.biography.leave !== '0001-01-01T00:00:00Z') {
+    wrapperOnClose,
+    onDelete,
+  } = useUpdate<BioLoc, BioForm>({
+    formFunc: (d, id) => {
+      const form = new FormData();
+      form.append('bio_id', `${id}`);
+      let changed = false;
+      if (d.is_public !== Boolean(target?.biography.is_public)) {
+        form.append('is_public', d.is_public ? 'true' : 'false');
+        changed = true;
+      }
+      if (d.location_id !== String(target?.biography.location_id)) {
+        form.append('location_id', d.location_id);
+        changed = true;
+      }
+      if (d.position !== target?.biography.position) {
+        form.append('position', d.position);
+        changed = true;
+      }
+      if (d.position_ja !== target?.biography.position_ja) {
+        form.append('position_ja', d.position_ja);
+        changed = true;
+      }
+      if (
+        new Date(d.join_date).toISOString() !==
+        new Date(target?.biography.join ?? '').toISOString()
+      ) {
+        form.append('join_date', new Date(d.join_date).toISOString());
+        changed = true;
+      }
+      if (
+        d.leave_date &&
+        new Date(d.leave_date).toISOString() !==
+          new Date(target?.biography.leave ?? '').toISOString()
+      ) {
+        form.append('leave_date', new Date(d.leave_date).toISOString());
+        changed = true;
+      }
+      return [form, changed];
+    },
+    parse: r => BioLocSchema.parse(r),
+    update,
+    onClose,
+    target,
+    targetId: t => t.biography.id,
+    setValues: (t, setValue) => {
+      setValue('is_public', t.biography.is_public ?? false);
+      setValue('location_id', String(t.biography.location_id));
+      setValue('position', t.biography.position);
+      setValue('position_ja', t.biography.position_ja);
       setValue(
-        'leave_date',
-        new Date(target.biography.leave ?? '').toISOString().substring(0, 10)
+        'join_date',
+        new Date(t.biography.join ?? '').toISOString().substring(0, 10)
       );
-    }
-  }, [target]);
 
-  const onSubmit = async (d: BioForm) => {
-    if (!target) {
-      return;
-    }
-    const form = new FormData();
-    form.append('bio_id', `${target.biography.id}`);
-    let changed = false;
-    if (d.is_public !== Boolean(target.biography.is_public)) {
-      form.append('is_public', d.is_public ? 'true' : 'false');
-      changed = true;
-    }
-    if (d.location_id !== String(target.biography.location_id)) {
-      form.append('location_id', d.location_id);
-      changed = true;
-    }
-    if (d.position !== target.biography.position) {
-      form.append('position', d.position);
-      changed = true;
-    }
-    if (d.position_ja !== target.biography.position_ja) {
-      form.append('position_ja', d.position_ja);
-      changed = true;
-    }
-    if (
-      new Date(d.join_date).toISOString() !==
-      new Date(target.biography.join).toISOString()
-    ) {
-      form.append('join_date', new Date(d.join_date).toISOString());
-      changed = true;
-    }
-    if (
-      d.leave_date &&
-      new Date(d.leave_date).toISOString() !==
-        new Date(target.biography.leave).toISOString()
-    ) {
-      form.append('leave_date', new Date(d.leave_date).toISOString());
-      changed = true;
-    }
-
-    if (!changed) {
-      return;
-    }
-
-    const res = await fetch(api('/user/bio'), {
-      method: 'PUT',
-      credentials: 'include',
-      mode: 'cors',
-      body: form,
-    });
-
-    if (res.ok) {
-      const bio = BioSchema.parse(await res.json());
-      update(bio, 'upd');
-    } else {
-      toast({
-        status: 'error',
-        title: (await res.json()).message,
-      });
-    }
-
-    wrapperOnClose();
-
-    return () => {};
-  };
-
-  const onDelete = () => {
-    const f = async () => {
-      if (!target) {
-        return;
+      if (t.biography.leave !== '0001-01-01T00:00:00Z') {
+        setValue(
+          'leave_date',
+          new Date(t.biography.leave ?? '').toISOString().substring(0, 10)
+        );
       }
-
-      const res = await fetch(api(`/user/bio?bio_id=${target.biography.id}`), {
-        method: 'DELETE',
-        credentials: 'include',
-        mode: 'cors',
-      });
-
-      if (res.ok) {
-        update(target.biography, 'del');
-        wrapperOnClose();
-      } else {
-        toast({
-          status: 'error',
-          title: (await res.json()).message,
-        });
-      }
-    };
-
-    f();
-  };
-
-  const wrapperOnClose = () => {
-    reset();
-    onClose();
-  };
+    },
+    path: '/user/bio',
+    deleteIdName: 'bio_id',
+    convertLang,
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={wrapperOnClose} size="xl">

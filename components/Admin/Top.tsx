@@ -2,6 +2,7 @@ import {SimpleGrid} from '@chakra-ui/react';
 import {AllUsersCard} from './AllusersCard';
 import {BioCard} from './BioCard';
 import {ControllerCard} from './ControllerCard';
+import {ProductCard} from './ProductCard';
 import {UserCard} from './UserCard';
 
 export const AdminTop = () => {
@@ -15,6 +16,7 @@ export const AdminTop = () => {
       <UserCard />
       <AllUsersCard />
       <BioCard />
+      <ProductCard />
       <ControllerCard />
     </SimpleGrid>
   );

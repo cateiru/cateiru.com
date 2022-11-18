@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Center,
   Heading,
@@ -17,19 +16,14 @@ import {parseDate} from '../../utils/parse';
 import {fetcher, SWRError} from '../../utils/swr';
 import {BioLocArray} from '../../utils/types';
 import useLanguage from '../useLanguage';
+import {CardFrame} from './CardFrame';
 
 export const BioCard = () => {
   const [lang, convertLang] = useLanguage();
   const {data, error} = useSWR<BioLocArray, SWRError>('/user/bio', fetcher);
 
   return (
-    <Box
-      w="100%"
-      minH="350px"
-      boxShadow="0px 1px 26px -3px #a0acc0"
-      borderRadius="56px"
-      p="1rem"
-    >
+    <CardFrame>
       <Heading fontSize="1.2rem" textAlign="center" fontWeight="bold">
         {convertLang({ja: '略歴', en: 'Biography'})}
       </Heading>
@@ -70,10 +64,10 @@ export const BioCard = () => {
                 data.map(v => {
                   return (
                     <Tr key={v.biography.id}>
-                      <Td fontWeight="bold">
+                      <Td>
                         {convertLang({
-                          ja: v.location.name_ja,
-                          en: v.location.name,
+                          ja: v.location?.name_ja ?? '',
+                          en: v.location?.name ?? '',
                         })}
                       </Td>
                       <Td>
@@ -91,6 +85,6 @@ export const BioCard = () => {
           </Table>
         </TableContainer>
       )}
-    </Box>
+    </CardFrame>
   );
 };

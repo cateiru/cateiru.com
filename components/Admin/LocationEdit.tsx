@@ -19,24 +19,21 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
   FormControl,
   FormLabel,
   Input,
   FormErrorMessage,
   Select,
-  useToast,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
-import {useForm} from 'react-hook-form';
 import {IoArrowBack} from 'react-icons/io5';
-import useSWR from 'swr';
-import {api} from '../../utils/api';
 import {MultiLang} from '../../utils/config/lang';
-import {fetcher, SWRError} from '../../utils/swr';
-import {Location, LocationArray, LocationSchema} from '../../utils/types';
+import {Location, LocationSchema} from '../../utils/types';
 import useLanguage from '../useLanguage';
+import {useList} from './useList';
+import {useNew} from './useNew';
+import {useUpdate} from './useUpdate';
 
 interface LocationForm {
   type: string;
@@ -48,50 +45,16 @@ interface LocationForm {
 
 export const LocationEdit = () => {
   const [lang, convertLang] = useLanguage();
-  const {data, error, mutate} = useSWR<LocationArray, SWRError>(
-    '/user/location',
-    fetcher
-  );
-  const createModal = useDisclosure();
-  const updateModal = useDisclosure();
-
-  const [updateLocation, setUpdateLocation] = React.useState<Location>();
-
-  const updateLocationHand = (l: Location, type: 'cre' | 'del' | 'upd') => {
-    switch (type) {
-      case 'cre':
-      case 'upd':
-        if (data) {
-          const d = [...data];
-          const inLocationIndex = d.findIndex(v => v.id === l.id);
-          if (inLocationIndex !== -1) {
-            d[inLocationIndex] = l;
-          } else {
-            d.push(l);
-          }
-          mutate(d);
-        } else {
-          mutate([l]);
-        }
-        break;
-      case 'del':
-        if (data) {
-          const d = [...data];
-          const inLocationIndex = d.findIndex(v => v.id === l.id);
-          const deletedLocData = d.slice(inLocationIndex, inLocationIndex + 1);
-          mutate(deletedLocData);
-        }
-        break;
-    }
-  };
-
-  const edit = (id: number) => {
-    const l = data?.find(v => v.id === id);
-    if (l) {
-      setUpdateLocation(l);
-      updateModal.onOpen();
-    }
-  };
+  const {
+    data,
+    error,
+    update,
+    updateValue,
+    onUpdate,
+    closeUpdateModal,
+    createModal,
+    updateModal,
+  } = useList<Location>('/user/location', (t, v) => t.id === v.id);
 
   return (
     <Box mt="3rem">
@@ -155,7 +118,7 @@ export const LocationEdit = () => {
                           </Badge>
                         </Td>
                         <Td>
-                          <Button size="sm" onClick={() => edit(v.id)}>
+                          <Button size="sm" onClick={() => onUpdate(v)}>
                             {convertLang({ja: '編集', en: 'Edit'})}
                           </Button>
                         </Td>
@@ -172,18 +135,15 @@ export const LocationEdit = () => {
         isOpen={createModal.isOpen}
         onClose={createModal.onClose}
         convertLang={convertLang}
-        update={updateLocationHand}
+        update={update}
       />
 
       <UpdateForm
         isOpen={updateModal.isOpen}
-        onClose={() => {
-          setUpdateLocation(undefined);
-          updateModal.onClose();
-        }}
+        onClose={closeUpdateModal}
         convertLang={convertLang}
-        target={updateLocation}
-        update={updateLocationHand}
+        target={updateValue}
+        update={update}
       />
     </Box>
   );
@@ -196,47 +156,27 @@ const NewForm: React.FC<{
   update: (newV: Location, type: 'cre' | 'del' | 'upd') => void;
 }> = ({convertLang, isOpen, onClose, update}) => {
   const {
+    onSubmit,
     handleSubmit,
     register,
-    reset,
     formState: {errors, isSubmitting},
-  } = useForm<LocationForm>();
-  const toast = useToast();
-
-  const onSubmit = async (d: LocationForm) => {
-    const form = new FormData();
-    form.append('type', d.type);
-    form.append('name', d.name);
-    form.append('name_ja', d.name_ja);
-    form.append('address', d.address);
-    form.append('address_ja', d.address_ja);
-
-    const res = await fetch(api('/user/location'), {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      body: form,
-    });
-
-    if (res.ok) {
-      const location = LocationSchema.parse(await res.json());
-      update(location, 'cre');
-    } else {
-      toast({
-        status: 'error',
-        title: (await res.json()).message,
-      });
-    }
-
-    wrapperOnClose();
-
-    return () => {};
-  };
-
-  const wrapperOnClose = () => {
-    reset();
-    onClose();
-  };
+    wrapperOnClose,
+  } = useNew<Location, LocationForm>({
+    path: '/user/location',
+    formFunc: d => {
+      const form = new FormData();
+      form.append('type', d.type);
+      form.append('name', d.name);
+      form.append('name_ja', d.name_ja);
+      form.append('address', d.address);
+      form.append('address_ja', d.address_ja);
+      return form;
+    },
+    convertLang,
+    parse: r => LocationSchema.parse(r),
+    update,
+    onClose,
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={wrapperOnClose} size="xl">
@@ -367,109 +307,55 @@ const UpdateForm: React.FC<{
   update: (newV: Location, type: 'cre' | 'del' | 'upd') => void;
 }> = ({convertLang, target, isOpen, onClose, update}) => {
   const {
+    onSubmit,
     handleSubmit,
     register,
-    reset,
-    setValue,
     formState: {errors, isSubmitting},
-  } = useForm<LocationForm>({});
-  const toast = useToast();
-
-  React.useEffect(() => {
-    if (!target) {
-      return;
-    }
-    setValue('type', target.type);
-    setValue('name', target.name);
-    setValue('name_ja', target.name_ja);
-    setValue('address', target.address);
-    setValue('address_ja', target.address_ja);
-  }, [target]);
-
-  const onSubmit = async (d: LocationForm) => {
-    if (!target) {
-      return;
-    }
-    const form = new FormData();
-    form.append('location_id', `${target.id}`);
-    let changed = false;
-    if (d.type !== target.type) {
-      form.append('type', d.type);
-      changed = true;
-    }
-    if (d.name !== target.name) {
-      form.append('name', d.name);
-      changed = true;
-    }
-    if (d.name_ja !== target.name_ja) {
-      form.append('name_ja', d.name_ja);
-      changed = true;
-    }
-    if (d.address !== target.address) {
-      form.append('address', d.address);
-      changed = true;
-    }
-    if (d.address_ja !== target.address_ja) {
-      form.append('address_ja', d.address_ja);
-      changed = true;
-    }
-
-    if (!changed) {
-      return;
-    }
-
-    const res = await fetch(api('/user/location'), {
-      method: 'PUT',
-      credentials: 'include',
-      mode: 'cors',
-      body: form,
-    });
-
-    if (res.ok) {
-      const location = LocationSchema.parse(await res.json());
-      update(location, 'upd');
-    } else {
-      toast({
-        status: 'error',
-        title: (await res.json()).message,
-      });
-    }
-
-    wrapperOnClose();
-
-    return () => {};
-  };
-
-  const onDelete = () => {
-    const f = async () => {
-      if (!target) {
-        return;
+    wrapperOnClose,
+    onDelete,
+  } = useUpdate<Location, LocationForm>({
+    formFunc: (d, id) => {
+      const form = new FormData();
+      form.append('location_id', `${id}`);
+      let changed = false;
+      if (d.type !== target?.type) {
+        form.append('type', d.type);
+        changed = true;
       }
-
-      const res = await fetch(api(`/user/location?location_id=${target.id}`), {
-        method: 'DELETE',
-        credentials: 'include',
-        mode: 'cors',
-      });
-
-      if (res.ok) {
-        update(target, 'del');
-        wrapperOnClose();
-      } else {
-        toast({
-          status: 'error',
-          title: (await res.json()).message,
-        });
+      if (d.name !== target?.name) {
+        form.append('name', d.name);
+        changed = true;
       }
-    };
-
-    f();
-  };
-
-  const wrapperOnClose = () => {
-    reset();
-    onClose();
-  };
+      if (d.name_ja !== target?.name_ja) {
+        form.append('name_ja', d.name_ja);
+        changed = true;
+      }
+      if (d.address !== target?.address) {
+        form.append('address', d.address);
+        changed = true;
+      }
+      if (d.address_ja !== target?.address_ja) {
+        form.append('address_ja', d.address_ja);
+        changed = true;
+      }
+      return [form, changed];
+    },
+    parse: r => LocationSchema.parse(r),
+    update,
+    onClose,
+    target,
+    targetId: t => t.id,
+    setValues: (t, setValue) => {
+      setValue('type', t.type);
+      setValue('name', t.name);
+      setValue('name_ja', t.name_ja);
+      setValue('address', t.address);
+      setValue('address_ja', t.address_ja);
+    },
+    path: '/user/location',
+    deleteIdName: 'location_id',
+    convertLang,
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={wrapperOnClose} size="xl">

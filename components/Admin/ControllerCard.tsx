@@ -12,6 +12,7 @@ import {useRouter} from 'next/router';
 import React from 'react';
 import {api} from '../../utils/api';
 import useLanguage from '../useLanguage';
+import {CardFrame} from './CardFrame';
 
 export const ControllerCard = () => {
   const [lang, convertLang] = useLanguage();
@@ -42,16 +43,9 @@ export const ControllerCard = () => {
   };
 
   return (
-    <Box
-      w="100%"
-      minH="350px"
-      boxShadow="0px 1px 26px -3px #a0acc0"
-      borderRadius="56px"
-      p="1rem"
-      position="relative"
-    >
+    <CardFrame>
       <Heading fontSize="1.2rem" textAlign="center" fontWeight="bold">
-        {convertLang({ja: 'コントローラ', en: 'COntroller'})}
+        {convertLang({ja: 'コントローラ', en: 'Controller'})}
       </Heading>
       <Box mt="2rem" mx="1rem">
         <Flex alignItems="center">
@@ -71,6 +65,6 @@ export const ControllerCard = () => {
           </NextLink>
         </Flex>
       </Box>
-    </Box>
+    </CardFrame>
   );
 };

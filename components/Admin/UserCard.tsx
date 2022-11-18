@@ -17,20 +17,14 @@ import {useRecoilValue} from 'recoil';
 import {parseDate} from '../../utils/parse';
 import {UserState} from '../../utils/state/atoms';
 import useLanguage from '../useLanguage';
+import {CardFrame} from './CardFrame';
 
 export const UserCard = () => {
   const [lang, convertLang] = useLanguage();
   const user = useRecoilValue(UserState);
 
   return (
-    <Box
-      w="100%"
-      minH="350px"
-      boxShadow="0px 1px 26px -3px #a0acc0"
-      borderRadius="56px"
-      p="1rem"
-      position="relative"
-    >
+    <CardFrame>
       <Box position="absolute" top="20" right="20">
         <NextLink passHref href="/admin/user">
           <Button size="sm" as="a">
@@ -118,6 +112,6 @@ export const UserCard = () => {
           </Table>
         </TableContainer>
       </Box>
-    </Box>
+    </CardFrame>
   );
 };

@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Box,
   Center,
   Heading,
   Radio,
@@ -22,6 +21,7 @@ import {UserState} from '../../utils/state/atoms';
 import {fetcher, SWRError} from '../../utils/swr';
 import {AllUsers} from '../../utils/types';
 import useLanguage from '../useLanguage';
+import {CardFrame} from './CardFrame';
 
 export const AllUsersCard = () => {
   const [lang, convertLang] = useLanguage();
@@ -74,14 +74,7 @@ export const AllUsersCard = () => {
   };
 
   return (
-    <Box
-      w="100%"
-      minH="350px"
-      boxShadow="0px 1px 26px -3px #a0acc0"
-      borderRadius="56px"
-      p="1rem"
-      position="relative"
-    >
+    <CardFrame>
       <Heading fontSize="1.2rem" textAlign="center" fontWeight="bold">
         {convertLang({ja: '全ユーザ', en: 'All Users'})}
       </Heading>
@@ -129,6 +122,6 @@ export const AllUsersCard = () => {
           </RadioGroup>
         </>
       )}
-    </Box>
+    </CardFrame>
   );
 };

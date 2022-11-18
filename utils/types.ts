@@ -1,4 +1,4 @@
-import {number, z} from 'zod';
+import {z} from 'zod';
 
 export const UserSchema = z.object({
   id: z.number(),
@@ -50,13 +50,28 @@ export const BioLocSchema = z.object({
 });
 export const BioLocArraySchema = z.array(BioLocSchema);
 
-export const ProductSchema = z.object({});
+export const ProductSchema = z.object({
+  id: z.number(),
+  user_id: z.number(),
+  name: z.string(),
+  name_ja: z.string(),
+  detail: z.string(),
+  detail_ja: z.string(),
+  site_url: z.string(),
+  github_url: z.optional(z.string()),
+  dev_time: z.string(),
+  thumbnail: z.optional(z.string()),
+  created: z.string(),
+  modified: z.string(),
+});
+export const ProductArraySchema = z.array(ProductSchema);
 export const LocationArraySchema = z.array(LocationSchema);
 
 export type User = typeof UserSchema._type;
 export type Bio = typeof BioSchema._type;
 export type AllUsers = typeof UsersListSchema._type;
 export type Product = typeof ProductSchema._type;
+export type ProductArray = typeof ProductArraySchema._type;
 export type BioLoc = typeof BioLocSchema._type;
 export type BioLocArray = typeof BioLocArraySchema._type;
 export type Location = typeof LocationSchema._type;
