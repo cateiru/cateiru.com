@@ -161,7 +161,7 @@ func (h *Handler) UpdateProductHandler(e echo.Context) error {
 		changed = true
 	}
 	detailJa := e.FormValue("detail_ja")
-	if detail != "" {
+	if detailJa != "" {
 		c = c.SetDetailJa(detailJa)
 		changed = true
 	}
