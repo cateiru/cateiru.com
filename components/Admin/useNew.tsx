@@ -5,6 +5,7 @@ import type {
   FormState,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormReturn,
 } from 'react-hook-form';
 import {api} from '../../utils/api';
 import {MultiLang} from '../../utils/config/lang';
@@ -25,6 +26,7 @@ interface ReturnValues<V extends FieldValues> {
   register: UseFormRegister<V>;
   formState: FormState<V>;
   wrapperOnClose: () => void;
+  methods: UseFormReturn<V, any>;
 }
 
 /**
@@ -35,7 +37,8 @@ interface ReturnValues<V extends FieldValues> {
 export function useNew<T, V extends FieldValues>(
   a: Args<T, V>
 ): ReturnValues<V> {
-  const {handleSubmit, register, reset, formState} = useForm<V>();
+  const methods = useForm<V>();
+  const {handleSubmit, register, reset, formState} = methods;
   const toast = useToast();
 
   const wrapperOnClose = () => {
@@ -72,5 +75,5 @@ export function useNew<T, V extends FieldValues>(
     return () => {};
   };
 
-  return {onSubmit, handleSubmit, register, formState, wrapperOnClose};
+  return {onSubmit, handleSubmit, register, formState, wrapperOnClose, methods};
 }

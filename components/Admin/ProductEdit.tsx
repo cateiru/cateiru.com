@@ -7,7 +7,10 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  IconButton,
+  Image,
   Input,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,11 +25,14 @@ import {
   Textarea,
   Th,
   Thead,
+  Tooltip,
   Tr,
+  useColorMode,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
 import {IoArrowBack} from 'react-icons/io5';
+import {TbLink, TbBrandGithub} from 'react-icons/tb';
 import {MultiLang} from '../../utils/config/lang';
 import {parseDate} from '../../utils/parse';
 import {Product, ProductSchema} from '../../utils/types';
@@ -58,6 +64,7 @@ export const ProductEdit = () => {
     createModal,
     updateModal,
   } = useList<Product>('/user/product', (t, v) => t.id === v.id);
+  const {colorMode} = useColorMode();
 
   return (
     <Box mt="3rem">
@@ -101,6 +108,7 @@ export const ProductEdit = () => {
               <Table variant="simple">
                 <Thead>
                   <Tr>
+                    <Th></Th>
                     <Th>{convertLang({ja: '名前', en: 'Name'})}</Th>
                     <Th>{convertLang({ja: '詳細', en: 'Detail'})}</Th>
                     <Th>{convertLang({ja: '開発日時', en: 'Dev Time'})}</Th>
@@ -112,6 +120,11 @@ export const ProductEdit = () => {
                   {data?.map(v => {
                     return (
                       <Tr key={v.id}>
+                        <Td>
+                          {v.thumbnail && (
+                            <Image src={v.thumbnail} alt="thumbnail" />
+                          )}
+                        </Td>
                         <Td>{convertLang({ja: v.name_ja, en: v.name})}</Td>
                         <Td
                           whiteSpace="nowrap"
@@ -122,6 +135,38 @@ export const ProductEdit = () => {
                           {convertLang({ja: v.detail_ja, en: v.detail})}
                         </Td>
                         <Td>{parseDate(v.dev_time, lang)}</Td>
+                        <Td>
+                          <Box>
+                            <Tooltip
+                              label={v.site_url}
+                              color={colorMode === 'dark' ? 'black' : 'white'}
+                            >
+                              <IconButton
+                                icon={<TbLink size="20" />}
+                                aria-label="site url"
+                                variant="ghost"
+                                as={Link}
+                                href={v.site_url}
+                                isExternal
+                              />
+                            </Tooltip>
+                            {v.github_url && (
+                              <Tooltip
+                                label={v.github_url}
+                                color={colorMode === 'dark' ? 'black' : 'white'}
+                              >
+                                <IconButton
+                                  icon={<TbBrandGithub size="20" />}
+                                  aria-label="site url"
+                                  variant="ghost"
+                                  as={Link}
+                                  href={v.github_url}
+                                  isExternal
+                                />
+                              </Tooltip>
+                            )}
+                          </Box>
+                        </Td>
                         <Td>
                           <Button size="sm" onClick={() => onUpdate(v)}>
                             {convertLang({ja: '編集', en: 'Edit'})}

@@ -17,7 +17,6 @@ export const UserSchema = z.object({
   created: z.string(),
   modified: z.string(),
 });
-
 export const UsersListSchema = z.array(UserSchema);
 
 export const BioSchema = z.object({
@@ -32,7 +31,6 @@ export const BioSchema = z.object({
   created: z.string(),
   modified: z.string(),
 });
-
 export const LocationSchema = z.object({
   id: z.number(),
   type: z.string(),
@@ -43,6 +41,7 @@ export const LocationSchema = z.object({
   created: z.string(),
   modified: z.string(),
 });
+export const LocationArraySchema = z.array(LocationSchema);
 
 export const BioLocSchema = z.object({
   biography: BioSchema,
@@ -65,7 +64,27 @@ export const ProductSchema = z.object({
   modified: z.string(),
 });
 export const ProductArraySchema = z.array(ProductSchema);
-export const LocationArraySchema = z.array(LocationSchema);
+
+export const LinkSchema = z.object({
+  id: z.number(),
+  user_id: z.number(),
+  name: z.string(),
+  name_ja: z.string(),
+  site_url: z.string().url(),
+  favicon_url: z.string().url(),
+  category_id: z.number(),
+  created: z.string(),
+  modified: z.string(),
+});
+
+export const CategorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  name_ja: z.string(),
+  emoji: z.string(),
+  created: z.string(),
+  modified: z.string(),
+});
 
 export type User = typeof UserSchema._type;
 export type Bio = typeof BioSchema._type;
@@ -76,3 +95,5 @@ export type BioLoc = typeof BioLocSchema._type;
 export type BioLocArray = typeof BioLocArraySchema._type;
 export type Location = typeof LocationSchema._type;
 export type LocationArray = typeof LocationArraySchema._type;
+export type Link = typeof LinkSchema._type;
+export type Category = typeof CategorySchema._type;

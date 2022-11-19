@@ -22,3 +22,11 @@ export function parseDate(d: string, lang: string): string {
 
   return date.toLocaleDateString();
 }
+
+// Convert emoji to Unicode
+export const toUnicode = (str: string) => {
+  if (str.length < 4) return str.codePointAt(0)?.toString(16);
+  return (
+    str.codePointAt(0)?.toString(16) + '-' + str.codePointAt(2)?.toString(16)
+  );
+};

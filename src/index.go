@@ -1,6 +1,8 @@
 package src
 
 import (
+	"time"
+
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/cateiru/cateiru.com/src/handler"
@@ -32,11 +34,15 @@ func Server() {
 				logging.Logger.Error("request",
 					zap.String("URI", v.URI),
 					zap.Int("status", v.Status),
+					zap.String("host", v.Host),
+					zap.String("response_time", time.Since(v.StartTime).String()),
 				)
 			} else {
 				logging.Logger.Info("request",
 					zap.String("URI", v.URI),
 					zap.Int("status", v.Status),
+					zap.String("host", v.Host),
+					zap.String("response_time", time.Since(v.StartTime).String()),
 				)
 			}
 
