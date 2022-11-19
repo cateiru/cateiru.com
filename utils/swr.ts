@@ -19,7 +19,8 @@ export async function fetcher(url: string) {
     const error: SWRError = new Error(
       'An error occurred while fetching the data.'
     );
-    error.message = (await res.json()).message;
+    const m = (await res.json()).message;
+    error.message = `${res.status} : ${m}`;
     error.status = res.status;
     throw error;
   }

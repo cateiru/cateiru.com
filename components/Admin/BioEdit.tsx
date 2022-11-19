@@ -88,7 +88,7 @@ export const BioList = () => {
           color="red.400"
           textAlign="center"
         >
-          {error.status} : {error.message}
+          {error.message}
         </Center>
       ) : (
         <Box

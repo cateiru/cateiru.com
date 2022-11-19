@@ -39,13 +39,12 @@ export const ProductCard = () => {
       </Center>
       {error ? (
         <Center
-          h="100%"
           fontSize="1.5rem"
           fontWeight="bold"
           color="red.400"
           textAlign="center"
         >
-          {error.status} : {error.message}
+          {error.message}
         </Center>
       ) : (
         <TableContainer>
