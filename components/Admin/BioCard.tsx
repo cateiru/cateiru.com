@@ -63,7 +63,7 @@ export const BioCard = () => {
               {data &&
                 data.map(v => {
                   return (
-                    <Tr key={v.biography.id}>
+                    <Tr key={`bio-${v.biography.id}`}>
                       <Td>
                         {convertLang({
                           ja: v.location?.name_ja ?? '',

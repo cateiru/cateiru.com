@@ -16,8 +16,8 @@ import (
 )
 
 type LinkResponse struct {
-	Link     ent.Link
-	Category ent.Category
+	Link     ent.Link     `json:"link"`
+	Category ent.Category `json:"category"`
 }
 
 // Response all Links
@@ -127,7 +127,15 @@ func (h *Handler) CreateLinkHandler(e echo.Context) error {
 		return err
 	}
 
-	return e.JSON(http.StatusCreated, link)
+	c, err := h.DB.Client.Category.Get(ctx, uint32(categoryId))
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusCreated, LinkResponse{
+		Link:     *link,
+		Category: *c,
+	})
 }
 
 func (h *Handler) UpdateLinkHandler(e echo.Context) error {

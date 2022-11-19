@@ -13,14 +13,14 @@ import {
 import NextLink from 'next/link';
 import useSWR from 'swr';
 import {fetcher, SWRError} from '../../utils/swr';
-import {Link} from '../../utils/types';
+import {LinkCategory} from '../../utils/types';
 import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const LinkCard = () => {
   const [lang, convertLang] = useLanguage();
 
-  const {data, error} = useSWR<Link[], SWRError>('/user/link', fetcher);
+  const {data, error} = useSWR<LinkCategory[], SWRError>('/user/link', fetcher);
 
   return (
     <CardFrame>
@@ -53,15 +53,24 @@ export const LinkCard = () => {
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>{convertLang({ja: '名前', en: 'Location'})}</Th>
+                <Th>{convertLang({ja: '名前', en: 'Name'})}</Th>
+                <Th>{convertLang({ja: 'カテゴリ', en: 'Category'})}</Th>
               </Tr>
             </Thead>
             <Tbody>
               {data &&
                 data.map(v => {
                   return (
-                    <Tr key={v.id}>
-                      <Td></Td>
+                    <Tr key={`link-${v.link.id}`}>
+                      <Td>
+                        {convertLang({ja: v.link.name_ja, en: v.link.name})}
+                      </Td>
+                      <Td>
+                        {convertLang({
+                          ja: v.category.name_ja,
+                          en: v.category.name,
+                        })}
+                      </Td>
                     </Tr>
                   );
                 })}

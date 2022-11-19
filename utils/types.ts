@@ -71,7 +71,6 @@ export const LinkSchema = z.object({
   name: z.string(),
   name_ja: z.string(),
   site_url: z.string().url(),
-  favicon_url: z.string().url(),
   category_id: z.number(),
   created: z.string(),
   modified: z.string(),
@@ -85,6 +84,10 @@ export const CategorySchema = z.object({
   created: z.string(),
   modified: z.string(),
 });
+export const LinkCategorySchema = z.object({
+  category: CategorySchema,
+  link: LinkSchema,
+});
 
 export type User = typeof UserSchema._type;
 export type Bio = typeof BioSchema._type;
@@ -97,3 +100,4 @@ export type Location = typeof LocationSchema._type;
 export type LocationArray = typeof LocationArraySchema._type;
 export type Link = typeof LinkSchema._type;
 export type Category = typeof CategorySchema._type;
+export type LinkCategory = typeof LinkCategorySchema._type;

@@ -26,8 +26,6 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
-  useToast,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';

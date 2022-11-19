@@ -120,10 +120,16 @@ export const ProductEdit = () => {
                   {data?.map(v => {
                     return (
                       <Tr key={v.id}>
-                        <Td>
-                          {v.thumbnail && (
-                            <Image src={v.thumbnail} alt="thumbnail" />
-                          )}
+                        <Td p="0">
+                          <Box width="50px">
+                            {v.thumbnail && (
+                              <Image
+                                src={v.thumbnail}
+                                alt="thumbnail"
+                                width="100px"
+                              />
+                            )}
+                          </Box>
                         </Td>
                         <Td>{convertLang({ja: v.name_ja, en: v.name})}</Td>
                         <Td

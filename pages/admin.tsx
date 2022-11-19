@@ -8,7 +8,7 @@ const AdminPage = () => {
   return (
     <>
       <Head>
-        <title>Contact Us</title>
+        <title>Admin</title>
       </Head>
       {show && <AdminTop />}
     </>
