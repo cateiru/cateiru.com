@@ -8,7 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
@@ -107,12 +106,12 @@ func TestCreateBioHandler(t *testing.T) {
 		m.Status(t, http.StatusCreated)
 
 		// check
-		b := new(ent.Biography)
+		b := new(handler.BioResponse)
 		err = m.Json(b)
 		require.NoError(t, err)
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.ID(b.ID)).
+			Where(biography.ID(b.Biography.ID)).
 			First(ctx)
 		require.NoError(t, err)
 
@@ -163,12 +162,12 @@ func TestCreateBioHandler(t *testing.T) {
 		m.Status(t, http.StatusCreated)
 
 		// check
-		b := new(ent.Biography)
+		b := new(handler.BioResponse)
 		err = m.Json(b)
 		require.NoError(t, err)
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.ID(b.ID)).
+			Where(biography.ID(b.Biography.ID)).
 			First(ctx)
 		require.NoError(t, err)
 

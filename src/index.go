@@ -6,6 +6,8 @@ import (
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/logging"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"go.uber.org/zap"
 	"golang.org/x/net/http2"
 )
 
@@ -21,6 +23,26 @@ func Init(mode string) {
 func Server() {
 	e := echo.New()
 	e.IPExtractor = echo.ExtractIPFromXFFHeader()
+
+	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		LogURI:    true,
+		LogStatus: true,
+		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+			if v.Status == 500 {
+				logging.Logger.Error("request",
+					zap.String("URI", v.URI),
+					zap.Int("status", v.Status),
+				)
+			} else {
+				logging.Logger.Info("request",
+					zap.String("URI", v.URI),
+					zap.Int("status", v.Status),
+				)
+			}
+
+			return nil
+		},
+	}))
 
 	if config.Config.Cors != nil {
 		e.Use(config.Config.Cors)

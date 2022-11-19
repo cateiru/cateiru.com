@@ -132,7 +132,7 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 		return err
 	}
 
-	return e.JSON(http.StatusOK, BioResponse{
+	return e.JSON(http.StatusCreated, BioResponse{
 		Biography: bioDB,
 		Location:  location,
 	})
