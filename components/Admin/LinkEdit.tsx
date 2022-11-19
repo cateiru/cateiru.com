@@ -294,6 +294,7 @@ export const NewLink: React.FC<{
               </FormLabel>
               <Input
                 id="site_url"
+                placeholder="https://"
                 {...register('site_url', {
                   required: convertLang({
                     ja: 'この項目は必須です',
@@ -484,6 +485,7 @@ const UpdateLink: React.FC<{
               </FormLabel>
               <Input
                 id="site_url"
+                placeholder="https://"
                 {...register('site_url', {
                   required: convertLang({
                     ja: 'この項目は必須です',

@@ -75,7 +75,6 @@ export const LinkSchema = z.object({
   created: z.string(),
   modified: z.string(),
 });
-
 export const CategorySchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -87,6 +86,16 @@ export const CategorySchema = z.object({
 export const LinkCategorySchema = z.object({
   category: CategorySchema,
   link: LinkSchema,
+});
+
+export const NoticeSchema = z.object({
+  id: z.number(),
+  user_id: z.number(),
+  discord_webhook: z.optional(z.string().url()),
+  slack_webhook: z.optional(z.string().url()),
+  mail: z.optional(z.string().email()),
+  created: z.string(),
+  modified: z.string(),
 });
 
 export type User = typeof UserSchema._type;
@@ -101,3 +110,4 @@ export type LocationArray = typeof LocationArraySchema._type;
 export type Link = typeof LinkSchema._type;
 export type Category = typeof CategorySchema._type;
 export type LinkCategory = typeof LinkCategorySchema._type;
+export type Notice = typeof NoticeSchema._type;

@@ -18,7 +18,7 @@ func (h *Handler) NoticeHandler(e echo.Context) error {
 	n, err := h.DB.Client.Notice.
 		Query().
 		Where(notice.UserID(h.User.ID)).
-		All(ctx)
+		First(ctx)
 	if err != nil {
 		return err
 	}

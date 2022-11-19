@@ -327,6 +327,7 @@ export const NewProduct: React.FC<{
               </FormLabel>
               <Input
                 id="site_url"
+                placeholder="https://"
                 {...register('site_url', {
                   required: convertLang({
                     ja: 'この項目は必須です',
@@ -378,6 +379,7 @@ export const NewProduct: React.FC<{
               </FormLabel>
               <Input
                 id="thumbnail"
+                placeholder="https://"
                 {...register('thumbnail', {
                   pattern: {
                     value: /https?:\/\/([\da-z.-]+).([a-z.]{2,6})[/\w .-]*\/?/,

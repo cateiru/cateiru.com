@@ -3,6 +3,7 @@ import {AllUsersCard} from './AllusersCard';
 import {BioCard} from './BioCard';
 import {ControllerCard} from './ControllerCard';
 import {LinkCard} from './LinkCard';
+import {NoticeCard} from './NoticeCard';
 import {ProductCard} from './ProductCard';
 import {UserCard} from './UserCard';
 
@@ -19,6 +20,7 @@ export const AdminTop = () => {
       <BioCard />
       <ProductCard />
       <LinkCard />
+      <NoticeCard />
       <ControllerCard />
     </SimpleGrid>
   );
