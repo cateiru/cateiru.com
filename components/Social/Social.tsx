@@ -17,7 +17,7 @@ const Social: React.FC<{
   next: () => void;
   r: React.MutableRefObject<HTMLDivElement>;
 }> = ({next, r}) => {
-  const [, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
 
   const element = (name: MultiLang, link: string, noLink?: boolean) => {
     return (

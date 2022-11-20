@@ -1,14 +1,55 @@
-import type {NextPage} from 'next';
+import type {GetStaticProps, NextPage} from 'next';
+import React from 'react';
 import {Head} from '../components/Common/Head';
 import Index from '../components/Index';
+import {consolePublic} from '../utils/parse';
+import {getPublicProfile} from '../utils/public';
+import {Public} from '../utils/types';
 
-const Home: NextPage = () => {
+const CACHE_TIME = 86400; // 1 day
+
+type Props = {
+  profile?: Public;
+  error?: string;
+};
+
+const Home: NextPage<Props> = props => {
+  React.useEffect(() => {
+    if (props.profile && typeof window !== 'undefined') {
+      consolePublic(props.profile);
+    }
+  }, []);
+
   return (
     <>
       <Head title={{ja: 'Cateiruのページ', en: "Cateiru's Page"}} />
-      <Index />
+      <Index profile={props.profile} error={props.error} />
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  try {
+    const d = await getPublicProfile();
+    return {
+      props: {
+        profile: d,
+      },
+      revalidate: CACHE_TIME,
+    };
+  } catch (e) {
+    if (e instanceof Error) {
+      return {
+        props: {
+          error: e.message,
+        },
+      };
+    }
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default Home;

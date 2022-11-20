@@ -33,7 +33,7 @@ export const BioSchema = z.object({
 });
 export const LocationSchema = z.object({
   id: z.number(),
-  type: z.string(),
+  type: z.enum(['univ', 'corp']),
   name: z.string(),
   name_ja: z.string(),
   address: z.string(),
@@ -119,6 +119,71 @@ export const ContactSchema = z.object({
   modified: z.string(),
 });
 
+export const PublicBioSchema = z.array(
+  z.object({
+    position: z.string(),
+    position_ja: z.string(),
+    join: z.string(),
+    leave: z.string(),
+    type: z.enum(['univ', 'corp']),
+    name: z.string(),
+    name_ja: z.string(),
+    address: z.string(),
+    address_ja: z.string(),
+  })
+);
+
+export const PublicSchema = z.object({
+  given_name: z.string(),
+  family_name: z.string(),
+  given_name_ja: z.string(),
+  family_name_ja: z.string(),
+  user_id: z.string(),
+  birth_date: z.string(),
+  location: z.string(),
+  location_ja: z.string(),
+  avatar_url: z.string().url(),
+  created: z.string(),
+  modified: z.string(),
+
+  biographies: PublicBioSchema,
+  products: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      name_ja: z.string(),
+      detail: z.string(),
+      detail_ja: z.string(),
+      dev_time: z.string(),
+      thumbnail: z.optional(z.string().url()),
+      github_url: z.optional(z.string().url()),
+    })
+  ),
+  links: z.array(
+    z.object({
+      name: z.string(),
+      name_ja: z.string(),
+      site_url: z.string(),
+      favicon_url: z.string().optional(),
+      category_name: z.string(),
+      category_name_ja: z.string(),
+      emoji: z.string(),
+    })
+  ),
+});
+
+export const PublicProductSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  name_ja: z.string(),
+  detail: z.string(),
+  detail_ja: z.string(),
+  site_url: z.string(),
+  github_url: z.optional(z.string()),
+  dev_time: z.string(),
+  thumbnail: z.optional(z.string()),
+});
+
 export type User = typeof UserSchema._type;
 export type Bio = typeof BioSchema._type;
 export type AllUsers = typeof UsersListSchema._type;
@@ -133,3 +198,6 @@ export type Category = typeof CategorySchema._type;
 export type LinkCategory = typeof LinkCategorySchema._type;
 export type Notice = typeof NoticeSchema._type;
 export type Contact = typeof ContactSchema._type;
+export type Public = typeof PublicSchema._type;
+export type PublicProduct = typeof PublicProductSchema._type;
+export type PublicBio = typeof PublicBioSchema._type;

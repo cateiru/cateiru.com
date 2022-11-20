@@ -10,6 +10,8 @@ import theme from '../utils/theme/theme';
 
 import '@fontsource/noto-sans-jp';
 import 'nprogress/nprogress.css';
+import 'gantt-task-react/dist/index.css';
+import '../styles/gantt.css';
 
 nprogress.configure({showSpinner: false, speed: 400, minimum: 0.25});
 

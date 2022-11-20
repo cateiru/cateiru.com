@@ -29,15 +29,16 @@ type Public struct {
 	Created      time.Time `json:"created,omitempty"`
 	Modified     time.Time `json:"modified,omitempty"`
 
-	Biographies []PublicBioGraphy
-	Products    []PublicShortProduct
-	Links       []PublicLink
+	Biographies []PublicBioGraphy    `json:"biographies"`
+	Products    []PublicShortProduct `json:"products"`
+	Links       []PublicLink         `json:"links"`
 }
 
 type PublicBioGraphy struct {
-	Position string    `json:"position,omitempty"`
-	Join     time.Time `json:"join,omitempty"`
-	Leave    time.Time `json:"leave,omitempty"`
+	Position   string    `json:"position,omitempty"`
+	PositionJa string    `json:"position_ja,omitempty"`
+	Join       time.Time `json:"join,omitempty"`
+	Leave      time.Time `json:"leave,omitempty"`
 
 	PublicLocation
 }
@@ -58,6 +59,7 @@ type PublicShortProduct struct {
 	DetailJa  string    `json:"detail_ja,omitempty"`
 	DevTime   time.Time `json:"dev_time,omitempty"`
 	Thumbnail string    `json:"thumbnail,omitempty"`
+	GithubURL string    `json:"github_url,omitempty"`
 }
 
 type PublicLink struct {
@@ -100,7 +102,11 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 	}
 
 	// Get Biography
-	bios, err := h.DB.Client.Biography.Query().Where(biography.UserID(u.ID)).All(ctx)
+	bios, err := h.DB.Client.Biography.
+		Query().
+		Where(biography.UserID(u.ID)).
+		Order(ent.OrderFunc(ent.Asc(biography.FieldJoin))).
+		All(ctx)
 	if err != nil {
 		return err
 	}
@@ -117,9 +123,10 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 			}
 		}
 		publicBios[i] = PublicBioGraphy{
-			Position: bio.Position,
-			Join:     bio.Join,
-			Leave:    bio.Leave,
+			Position:   bio.Position,
+			PositionJa: bio.PositionJa,
+			Join:       bio.Join,
+			Leave:      bio.Leave,
 
 			PublicLocation: PublicLocation{
 				Type:      loc.Type,
@@ -151,6 +158,7 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 			DetailJa:  prod.DetailJa,
 			DevTime:   prod.DevTime,
 			Thumbnail: prod.Thumbnail,
+			GithubURL: prod.GithubURL,
 		}
 	}
 
