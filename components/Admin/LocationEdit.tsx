@@ -44,7 +44,7 @@ interface LocationForm {
 }
 
 export const LocationEdit = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   const {
     data,
     error,

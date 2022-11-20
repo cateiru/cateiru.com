@@ -53,7 +53,7 @@ interface ProductForm {
 }
 
 export const ProductEdit = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   const {
     data,
     error,

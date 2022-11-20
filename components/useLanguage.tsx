@@ -3,7 +3,12 @@ import {useRecoilValue} from 'recoil';
 import type {MultiLang} from '../utils/config/lang';
 import {langState} from '../utils/state/atoms';
 
-const useLanguage = (): [string, (e: MultiLang) => string] => {
+interface ReturnValue {
+  lang: string;
+  convertLang: (e: MultiLang) => string;
+}
+
+const useLanguage = (): ReturnValue => {
   const lang = useRecoilValue(langState);
 
   const convertLang = React.useCallback(
@@ -16,7 +21,7 @@ const useLanguage = (): [string, (e: MultiLang) => string] => {
     [lang]
   );
 
-  return [lang, convertLang];
+  return {lang, convertLang};
 };
 
 export default useLanguage;

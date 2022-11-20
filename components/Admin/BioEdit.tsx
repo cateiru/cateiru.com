@@ -29,24 +29,15 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
-import {useForm} from 'react-hook-form';
 import {IoArrowBack} from 'react-icons/io5';
 import {TbAdjustmentsAlt} from 'react-icons/tb';
 import {TbCheck} from 'react-icons/tb';
 import useSWR from 'swr';
 import type {SWRResponse} from 'swr';
-import {api} from '../../utils/api';
 import {MultiLang} from '../../utils/config/lang';
 import {parseDate} from '../../utils/parse';
 import {fetcher, SWRError} from '../../utils/swr';
-import {
-  Bio,
-  BioLoc,
-  BioLocArray,
-  BioLocSchema,
-  BioSchema,
-  LocationArray,
-} from '../../utils/types';
+import {BioLoc, BioLocSchema, LocationArray} from '../../utils/types';
 import useLanguage from '../useLanguage';
 import {useList} from './useList';
 import {useNew} from './useNew';
@@ -62,11 +53,10 @@ interface BioForm {
 }
 
 export const BioList = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   const {
     data,
     error,
-    mutate,
     update,
     updateValue,
     onUpdate,

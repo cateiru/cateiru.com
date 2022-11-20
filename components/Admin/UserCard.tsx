@@ -20,7 +20,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const UserCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   const user = useRecoilValue(UserState);
 
   return (

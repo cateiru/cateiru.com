@@ -37,7 +37,7 @@ const Contact = () => {
     reset,
     setValue,
   } = useForm<FormValue>();
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   const toast = useToast();
 
   React.useEffect(() => {

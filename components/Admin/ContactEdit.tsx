@@ -30,7 +30,7 @@ import {Contact} from '../../utils/types';
 import useLanguage from '../useLanguage';
 
 export const ContactEdit = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const {data, error} = useSWR<Contact[], SWRError>('/user/contact', fetcher);
   const {isOpen, onClose, onOpen} = useDisclosure();
   const toast = useToast();

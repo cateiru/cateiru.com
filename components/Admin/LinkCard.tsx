@@ -18,7 +18,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const LinkCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
 
   const {data, error} = useSWR<LinkCategory[], SWRError>('/user/link', fetcher);
 

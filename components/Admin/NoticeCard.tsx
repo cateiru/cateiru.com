@@ -7,8 +7,6 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Th,
-  Thead,
   Tr,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
@@ -20,7 +18,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const NoticeCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
 
   const {data, error} = useSWR<Notice, SWRError>('/user/notice', fetcher);
 

@@ -5,7 +5,7 @@ import config from '../../utils/config/config';
 import useLanguage from '../useLanguage';
 
 const ProfileText = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   return (
     <Box textAlign="center">
       <Heading>{convertLang(config.name)}</Heading>

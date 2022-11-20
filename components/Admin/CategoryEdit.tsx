@@ -7,10 +7,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
-  IconButton,
-  Image,
   Input,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,27 +19,18 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Textarea,
   Th,
   Thead,
-  Tooltip,
   Tr,
-  useColorMode,
 } from '@chakra-ui/react';
 import {Emoji} from 'emoji-picker-react';
 import NextLink from 'next/link';
 import React from 'react';
 import {FormProvider} from 'react-hook-form';
 import {IoArrowBack} from 'react-icons/io5';
-import {TbLink, TbBrandGithub} from 'react-icons/tb';
 import {MultiLang} from '../../utils/config/lang';
-import {parseDate, toUnicode} from '../../utils/parse';
-import {
-  Category,
-  CategorySchema,
-  Product,
-  ProductSchema,
-} from '../../utils/types';
+import {toUnicode} from '../../utils/parse';
+import {Category, CategorySchema} from '../../utils/types';
 import {EmojiPick} from '../Form/EmojiPick';
 import useLanguage from '../useLanguage';
 import {useList} from './useList';
@@ -56,7 +44,7 @@ interface CategoryForm {
 }
 
 export const CategoryEdit = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const {
     data,
     error,
@@ -67,7 +55,6 @@ export const CategoryEdit = () => {
     createModal,
     updateModal,
   } = useList<Category>('/user/category', (t, v) => t.id === v.id);
-  const {colorMode} = useColorMode();
 
   return (
     <Box mt="3rem">

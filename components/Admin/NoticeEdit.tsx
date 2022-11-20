@@ -12,10 +12,8 @@ import NextLink from 'next/link';
 import React from 'react';
 import {useForm} from 'react-hook-form';
 import {IoArrowBack} from 'react-icons/io5';
-import {useRecoilState} from 'recoil';
 import useSWR from 'swr';
 import {api} from '../../utils/api';
-import {UserState} from '../../utils/state/atoms';
 import {fetcher, SWRError} from '../../utils/swr';
 import {Notice} from '../../utils/types';
 import useLanguage from '../useLanguage';
@@ -26,7 +24,7 @@ interface Form {
 }
 
 export const NoticeEdit = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const toast = useToast();
   const {
     handleSubmit,

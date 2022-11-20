@@ -19,7 +19,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const ContactCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
 
   const {data, error} = useSWR<Contact[], SWRError>('/user/contact', fetcher);
 

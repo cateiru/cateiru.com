@@ -17,7 +17,7 @@ const Bio: React.FC<{
   next: () => void;
   r: React.MutableRefObject<HTMLDivElement>;
 }> = ({next, r}) => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
 
   const area = (area: Area) => {
     if (lang === 'en') {

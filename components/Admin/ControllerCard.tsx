@@ -15,7 +15,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const ControllerCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const router = useRouter();
   const toast = useToast();
 

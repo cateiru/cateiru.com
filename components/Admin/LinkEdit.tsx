@@ -50,7 +50,7 @@ interface LinkForm {
 }
 
 export const LinkEdit = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const {
     data,
     error,

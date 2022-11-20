@@ -17,7 +17,7 @@ const Products: React.FC<{
   next: () => void;
   r: React.MutableRefObject<HTMLDivElement>;
 }> = ({next, r}) => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
 
   const element = (product: Product) => {
     const d = () => {

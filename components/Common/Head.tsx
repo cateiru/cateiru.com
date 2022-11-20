@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const Head: React.FC<Props> = props => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
 
   return (
     <NextHead>

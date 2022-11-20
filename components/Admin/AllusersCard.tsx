@@ -24,7 +24,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const AllUsersCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const {data, error} = useSWR<AllUsers, SWRError>('/users', fetcher);
   const toast = useToast();
   const [user, setUser] = useRecoilState(UserState);

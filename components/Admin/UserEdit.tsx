@@ -31,7 +31,7 @@ interface Form {
 }
 
 export const UserEdit = () => {
-  const [lang, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const [user, setUser] = useRecoilState(UserState);
   const toast = useToast();
   const {

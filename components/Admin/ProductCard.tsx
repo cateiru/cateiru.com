@@ -19,7 +19,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const ProductCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   const {data, error} = useSWR<ProductArray, SWRError>(
     '/user/product',
     fetcher

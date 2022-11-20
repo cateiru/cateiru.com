@@ -19,7 +19,7 @@ import useLanguage from '../useLanguage';
 import {CardFrame} from './CardFrame';
 
 export const BioCard = () => {
-  const [lang, convertLang] = useLanguage();
+  const {lang, convertLang} = useLanguage();
   const {data, error} = useSWR<BioLocArray, SWRError>('/user/bio', fetcher);
 
   return (
