@@ -4,7 +4,7 @@ import Router, {useRouter} from 'next/router';
 import nprogress from 'nprogress';
 import {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
-import Base from '../components/common/Base/Base';
+import Base from '../components/Common/Base/Base';
 import {GA_TRACKING_ID, pageview} from '../utils/ga/gtag';
 import theme from '../utils/theme/theme';
 

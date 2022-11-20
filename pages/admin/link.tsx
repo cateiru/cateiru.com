@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import {LinkEdit} from '../../components/Admin/LinkEdit';
+import {Head} from '../../components/Common/Head';
 import {useRequire} from '../../components/Require/useRequire';
 
 const AdminBio = () => {
@@ -7,9 +7,7 @@ const AdminBio = () => {
 
   return (
     <>
-      <Head>
-        <title>Links</title>
-      </Head>
+      <Head title={{ja: 'リンク詳細', en: 'Links Detail'}} />
       {show && <LinkEdit />}
     </>
   );

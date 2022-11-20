@@ -1,12 +1,10 @@
-import Head from 'next/head';
+import {Head} from '../components/Common/Head';
 import Contact from '../components/Contact/Contact';
 
 const ContactPage = () => {
   return (
     <>
-      <Head>
-        <title>Contact Us</title>
-      </Head>
+      <Head title={{ja: 'お問い合わせ', en: 'Contact Us'}} />
       <Contact />
     </>
   );

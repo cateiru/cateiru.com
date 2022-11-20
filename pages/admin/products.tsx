@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import {ProductEdit} from '../../components/Admin/ProductEdit';
+import {Head} from '../../components/Common/Head';
 import {useRequire} from '../../components/Require/useRequire';
 
 const AdminProducts = () => {
@@ -7,9 +7,7 @@ const AdminProducts = () => {
 
   return (
     <>
-      <Head>
-        <title>Location Edit</title>
-      </Head>
+      <Head title={{ja: '制作物詳細', en: 'Products Detail'}} />
       {show && <ProductEdit />}
     </>
   );

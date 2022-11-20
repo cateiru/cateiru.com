@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import {AdminTop} from '../components/Admin/Top';
+import {Head} from '../components/Common/Head';
 import {useRequire} from '../components/Require/useRequire';
 
 const AdminPage = () => {
@@ -7,9 +7,7 @@ const AdminPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Admin</title>
-      </Head>
+      <Head title={{ja: '管理者向けページ', en: 'Admin Page'}} />
       {show && <AdminTop />}
     </>
   );

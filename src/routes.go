@@ -60,8 +60,8 @@ func Routes(e *echo.Echo, handler *handler.Handler) {
 	e.PUT("/user/notice", handler.UpdateNoticeHandler)
 
 	// Contacts
-	e.GET("/contact", handler.ContactGetHandler)
-	e.DELETE("/contact", handler.ContactDeleteHandler)
+	e.GET("/user/contact", handler.ContactGetHandler)
+	e.DELETE("/user/contact", handler.ContactDeleteHandler)
 
 	// Public endpoints
 	e.GET("/public/profile", handler.PublicProfileHandler)

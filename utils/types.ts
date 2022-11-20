@@ -98,6 +98,27 @@ export const NoticeSchema = z.object({
   modified: z.string(),
 });
 
+export const ContactSchema = z.object({
+  id: z.number(),
+  to_user_id: z.number(),
+  name: z.string(),
+  title: z.string(),
+  detail: z.string(),
+  mail: z.string().email(),
+  ip: z.string(),
+  lang: z.string(),
+  url: z.optional(z.string().url()),
+  category: z.optional(z.string()),
+  custom_title: z.optional(z.string()),
+  custom_value: z.optional(z.string()),
+  device_name: z.optional(z.string()),
+  os: z.optional(z.string()),
+  browser_name: z.optional(z.string()),
+  is_mobile: z.optional(z.boolean()),
+  created: z.string(),
+  modified: z.string(),
+});
+
 export type User = typeof UserSchema._type;
 export type Bio = typeof BioSchema._type;
 export type AllUsers = typeof UsersListSchema._type;
@@ -111,3 +132,4 @@ export type Link = typeof LinkSchema._type;
 export type Category = typeof CategorySchema._type;
 export type LinkCategory = typeof LinkCategorySchema._type;
 export type Notice = typeof NoticeSchema._type;
+export type Contact = typeof ContactSchema._type;

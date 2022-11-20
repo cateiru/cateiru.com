@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import {BioList} from '../../components/Admin/BioEdit';
+import {Head} from '../../components/Common/Head';
 import {useRequire} from '../../components/Require/useRequire';
 
 const AdminBio = () => {
@@ -7,9 +7,7 @@ const AdminBio = () => {
 
   return (
     <>
-      <Head>
-        <title>Bios</title>
-      </Head>
+      <Head title={{ja: '略歴詳細', en: 'Bio Detail'}} />
       {show && <BioList />}
     </>
   );
