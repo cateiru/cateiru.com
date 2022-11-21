@@ -22,8 +22,8 @@ export const ProductPage: React.FC<{
   const {colorMode} = useColorMode();
 
   return (
-    <Center h="100vh">
-      <Box w={{base: '95%', md: '500px'}} h="700px">
+    <Center minH="100vh">
+      <Box w={{base: '95%', md: '500px'}} minH="700px">
         {product.thumbnail ? (
           <Image
             src={product.thumbnail}
@@ -39,7 +39,7 @@ export const ProductPage: React.FC<{
         ) : (
           <Center
             w="100%"
-            h="40%"
+            h="300px"
             bgColor={colorMode === 'dark' ? 'gray.700' : 'gray.100'}
             borderRadius="25"
             boxShadow={
