@@ -288,8 +288,9 @@ func TestUpdateProductHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
+		// GitHub URLとThumbnailは指定しない場合削除
 		err = h.UpdateProductHandler(e)
-		require.Error(t, err)
+		require.NoError(t, err)
 	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
