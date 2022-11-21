@@ -8,14 +8,13 @@ import {
   Input,
   useToast,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import React from 'react';
 import {useForm} from 'react-hook-form';
-import {IoArrowBack} from 'react-icons/io5';
 import useSWR from 'swr';
 import {api} from '../../utils/api';
 import {fetcher, SWRError} from '../../utils/swr';
 import {Notice} from '../../utils/types';
+import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 interface Form {
   discord_webhook?: string;
@@ -107,11 +106,7 @@ export const NoticeEdit = () => {
         flexDirection="column"
       >
         <Box width={{base: 'auto', md: '500px'}}>
-          <NextLink passHref href="/admin">
-            <Button my="1rem" variant="ghost" leftIcon={<IoArrowBack />} as="a">
-              {convertLang({ja: '戻る', en: 'Back'})}
-            </Button>
-          </NextLink>
+          <Back />
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.discord_webhook)}>

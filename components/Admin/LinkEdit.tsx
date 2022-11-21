@@ -30,13 +30,13 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
-import {IoArrowBack} from 'react-icons/io5';
 import {TbAdjustmentsAlt} from 'react-icons/tb';
 import {TbLink} from 'react-icons/tb';
 import useSWR from 'swr';
 import {MultiLang} from '../../utils/config/lang';
 import {fetcher, SWRError} from '../../utils/swr';
 import {Category, LinkCategory, LinkCategorySchema} from '../../utils/types';
+import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 import {useList} from './useList';
 import {useNew} from './useNew';
@@ -87,16 +87,7 @@ export const LinkEdit = () => {
         >
           <Box width={{base: 'auto', md: '700px'}}>
             <Flex>
-              <NextLink passHref href="/admin">
-                <Button
-                  my="1rem"
-                  variant="ghost"
-                  leftIcon={<IoArrowBack />}
-                  as="a"
-                >
-                  {convertLang({ja: '戻る', en: 'Back'})}
-                </Button>
-              </NextLink>
+              <Back />
               <Spacer />
               <Button my="1rem" onClick={createModal.onOpen}>
                 {convertLang({ja: '新規作成', en: 'New'})}

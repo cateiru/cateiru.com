@@ -8,12 +8,11 @@ import {
   Input,
   useToast,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import {useForm} from 'react-hook-form';
-import {IoArrowBack} from 'react-icons/io5';
 import {useRecoilState} from 'recoil';
 import {api} from '../../utils/api';
 import {UserState} from '../../utils/state/atoms';
+import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 
 interface Form {
@@ -140,11 +139,7 @@ export const UserEdit = () => {
         flexDirection="column"
       >
         <Box width={{base: 'auto', md: '500px'}}>
-          <NextLink passHref href="/admin">
-            <Button my="1rem" variant="ghost" leftIcon={<IoArrowBack />} as="a">
-              {convertLang({ja: '戻る', en: 'Back'})}
-            </Button>
-          </NextLink>
+          <Back />
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.given_name)}>

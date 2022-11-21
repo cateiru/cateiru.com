@@ -19,19 +19,17 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
 } from '@chakra-ui/react';
 import {Emoji} from 'emoji-picker-react';
-import NextLink from 'next/link';
 import React from 'react';
 import {FormProvider} from 'react-hook-form';
-import {IoArrowBack} from 'react-icons/io5';
 import {MultiLang} from '../../utils/config/lang';
 import {toUnicode} from '../../utils/parse';
 import {Category, CategorySchema} from '../../utils/types';
+import {Back} from '../Back';
 import {EmojiPick} from '../Form/EmojiPick';
 import useLanguage from '../useLanguage';
 import {useList} from './useList';
@@ -80,16 +78,7 @@ export const CategoryEdit = () => {
         >
           <Box width={{base: 'auto', md: '700px'}}>
             <Flex>
-              <NextLink passHref href="/admin">
-                <Button
-                  my="1rem"
-                  variant="ghost"
-                  leftIcon={<IoArrowBack />}
-                  as="a"
-                >
-                  {convertLang({ja: '戻る', en: 'Back'})}
-                </Button>
-              </NextLink>
+              <Back />
               <Spacer />
               <Button my="1rem" onClick={createModal.onOpen}>
                 {convertLang({ja: '新規作成', en: 'New'})}

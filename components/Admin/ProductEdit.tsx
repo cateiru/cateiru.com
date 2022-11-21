@@ -29,13 +29,12 @@ import {
   Tr,
   useColorMode,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import React from 'react';
-import {IoArrowBack} from 'react-icons/io5';
 import {TbLink, TbBrandGithub} from 'react-icons/tb';
 import {MultiLang} from '../../utils/config/lang';
 import {parseDate} from '../../utils/parse';
 import {Product, ProductSchema} from '../../utils/types';
+import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 import {useList} from './useList';
 import {useNew} from './useNew';
@@ -89,16 +88,7 @@ export const ProductEdit = () => {
         >
           <Box width={{base: 'auto', md: '700px'}}>
             <Flex>
-              <NextLink passHref href="/admin">
-                <Button
-                  my="1rem"
-                  variant="ghost"
-                  leftIcon={<IoArrowBack />}
-                  as="a"
-                >
-                  {convertLang({ja: '戻る', en: 'Back'})}
-                </Button>
-              </NextLink>
+              <Back />
               <Spacer />
               <Button my="1rem" onClick={createModal.onOpen}>
                 {convertLang({ja: '新規作成', en: 'New'})}

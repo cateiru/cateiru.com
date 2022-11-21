@@ -20,13 +20,12 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import React from 'react';
-import {IoArrowBack} from 'react-icons/io5';
 import useSWR from 'swr';
 import {api} from '../../utils/api';
 import {fetcher, SWRError} from '../../utils/swr';
 import {Contact} from '../../utils/types';
+import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 
 export const ContactEdit = () => {
@@ -91,16 +90,7 @@ export const ContactEdit = () => {
           flexDirection="column"
         >
           <Box width={{base: 'auto', md: '700px'}}>
-            <NextLink passHref href="/admin">
-              <Button
-                my="1rem"
-                variant="ghost"
-                leftIcon={<IoArrowBack />}
-                as="a"
-              >
-                {convertLang({ja: '戻る', en: 'Back'})}
-              </Button>
-            </NextLink>
+            <Back />
             <TableContainer>
               <Table variant="simple">
                 <Thead>

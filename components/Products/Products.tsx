@@ -11,12 +11,14 @@ import React from 'react';
 import {IoCaretDown} from 'react-icons/io5';
 import config from '../../utils/config/config';
 import {Product} from '../../utils/config/product';
+import {Public} from '../../utils/types';
 import useLanguage from '../useLanguage';
 
 const Products: React.FC<{
   next: () => void;
   r: React.MutableRefObject<HTMLDivElement>;
-}> = ({next, r}) => {
+  data: Public;
+}> = ({next, r, data}) => {
   const {lang, convertLang} = useLanguage();
 
   const element = (product: Product) => {

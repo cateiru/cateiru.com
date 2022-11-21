@@ -72,6 +72,7 @@ const Index = React.memo<{
           scrollToSocial();
         }}
         r={productsRef}
+        data={props.profile}
       />
       <Social
         next={() => {
