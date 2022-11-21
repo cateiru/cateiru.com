@@ -14,7 +14,7 @@ import {
 import {Gantt, ViewMode} from 'gantt-task-react';
 import React from 'react';
 import {IoCaretDown} from 'react-icons/io5';
-import {getTasks} from '../../utils/parse';
+import {getTasks, parseDate, parseShotDate} from '../../utils/parse';
 import {Public} from '../../utils/types';
 import useLanguage from '../useLanguage';
 
@@ -71,18 +71,11 @@ const Bio: React.FC<{
             <Box whiteSpace="nowrap" overflowX="auto">
               <UnorderedList mt="1.5rem" paddingLeft=".5rem">
                 {data.biographies.map((v, i) => {
-                  const start = new Date(v.join);
-
-                  let end: Date | undefined = undefined;
-                  if (v.leave === '0001-01-01T00:00:00Z') {
-                    end = new Date();
-                  }
-
                   return (
                     <ListItem my=".5rem" key={i}>
                       <Text as="span" display="inline-block" minW="10ch">
-                        {start.getFullYear()}&nbsp;-&nbsp;
-                        {end ? end.getFullYear() : ''}
+                        {parseShotDate(v.join, lang)}&nbsp;-&nbsp;
+                        {parseShotDate(v.leave, lang)}
                       </Text>
                       <Text as="span" ml="1rem" fontWeight="bold">
                         {convertLang({ja: v.name_ja, en: v.name})}

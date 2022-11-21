@@ -29,6 +29,27 @@ export function parseDate(d: string, lang: string): string {
 }
 
 /**
+ * Bio 表示用のDate
+ *
+ * @param {string} d - date
+ * @param {string} lang - languages
+ * @returns {string} - formatted date
+ */
+export function parseShotDate(d: string, lang: string): string {
+  if (d === '0001-01-01T00:00:00Z') {
+    return '';
+  }
+
+  const date = new Date(d);
+
+  if (lang === 'ja') {
+    return `${date.getFullYear()}年 ${date.getMonth() + 1}月`;
+  }
+
+  return `${date.getMonth() + 1}/${date.getFullYear()}`;
+}
+
+/**
  * Convert emoji to Unicode
  *
  * 1f468 dc68 200d 1f469 dc69 200d 1f466 dc66
