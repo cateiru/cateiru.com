@@ -1,3 +1,4 @@
+import React from 'react';
 import {Head} from '../components/Common/Head';
 import {NotFound} from '../components/NotFound';
 

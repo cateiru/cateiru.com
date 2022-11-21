@@ -421,44 +421,31 @@ const UpdateProduct: React.FC<{
     formFunc: (d, id) => {
       const form = new FormData();
       form.append('product_id', `${id}`);
-      let changed = false;
       if (d.name !== target?.name) {
         form.append('name', d.name);
-        changed = true;
       }
       if (d.name_ja !== target?.name_ja) {
         form.append('name_ja', d.name_ja);
-        changed = true;
       }
       if (d.detail !== target?.detail) {
         form.append('detail', d.detail);
-        changed = true;
       }
       if (d.detail_ja !== target?.detail_ja) {
         form.append('detail_ja', d.detail_ja);
-        changed = true;
       }
       if (d.site_url !== target?.site_url) {
         form.append('site_url', d.site_url);
-        changed = true;
       }
       if (
         new Date(d.dev_time).toISOString() !==
         new Date(target?.dev_time ?? '').toISOString()
       ) {
         form.append('dev_time', new Date(d.dev_time).toISOString());
-        changed = true;
       }
-      if (d.github_url && d.github_url !== target?.github_url) {
-        form.append('github_url', d.github_url);
-        changed = true;
-      }
-      if (d.thumbnail && d.thumbnail !== target?.thumbnail) {
-        form.append('thumbnail', d.thumbnail);
-        changed = true;
-      }
+      form.append('github_url', d.github_url ?? '');
+      form.append('thumbnail', d.thumbnail ?? '');
 
-      return [form, changed];
+      return [form, true];
     },
     parse: r => {
       return ProductSchema.parse(r);
@@ -591,7 +578,10 @@ const UpdateProduct: React.FC<{
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.github_url)}>
               <FormLabel htmlFor="github_url">
-                {convertLang({ja: 'GitHub URL', en: 'GitHub URL'})}
+                {convertLang({
+                  ja: 'GitHub URL(オプション)',
+                  en: 'GitHub URL(Optional)',
+                })}
               </FormLabel>
               <Input id="github_url" {...register('github_url')} />
               <FormErrorMessage>
@@ -618,7 +608,10 @@ const UpdateProduct: React.FC<{
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.thumbnail)}>
               <FormLabel htmlFor="thumbnail">
-                {convertLang({ja: 'サムネイルURL', en: 'Thumbnail URL'})}
+                {convertLang({
+                  ja: 'サムネイルURL(オプション)',
+                  en: 'Thumbnail URL(Optional)',
+                })}
               </FormLabel>
               <Input id="thumbnail" {...register('thumbnail')} />
               <FormErrorMessage>

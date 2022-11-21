@@ -9,7 +9,7 @@ import {Public} from '../utils/types';
 const CACHE_TIME = 86400; // 1 day
 
 type Props = {
-  profile?: Public;
+  profile: Public;
   error?: string;
 };
 
@@ -23,7 +23,7 @@ const Home: NextPage<Props> = props => {
   return (
     <>
       <Head title={{ja: 'Cateiruのページ', en: "Cateiru's Page"}} />
-      <Index profile={props.profile} error={props.error} />
+      <Index profile={props.profile} />
     </>
   );
 };
@@ -43,12 +43,18 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
         props: {
           error: e.message,
         },
+        notFound: true,
+        revalidate: 1,
       };
     }
   }
 
   return {
-    props: {},
+    props: {
+      error: 'error',
+    },
+    revalidate: 1,
+    notFound: true,
   };
 };
 

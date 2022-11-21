@@ -2,7 +2,7 @@ import {Center, Heading} from '@chakra-ui/react';
 import useLanguage from './useLanguage';
 
 export const NotFound = () => {
-  const {lang, convertLang} = useLanguage();
+  const {convertLang} = useLanguage();
 
   return (
     <Center h="100vh">

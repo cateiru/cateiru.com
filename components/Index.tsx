@@ -8,8 +8,7 @@ import Profile from './Profile/Profile';
 import Social from './Social/Social';
 
 const Index = React.memo<{
-  profile?: Public;
-  error?: string;
+  profile: Public;
 }>(props => {
   const bioRef = React.useRef<HTMLDivElement>(null!);
   const productsRef = React.useRef<HTMLDivElement>(null!);
@@ -43,14 +42,6 @@ const Index = React.memo<{
       block: 'end',
     });
   }, [contactRef]);
-
-  if (typeof props.profile === 'undefined') {
-    return (
-      <Center color="red.500" h="100vh">
-        <Heading>{props.error ?? 'ERROR'}</Heading>
-      </Center>
-    );
-  }
 
   return (
     <>

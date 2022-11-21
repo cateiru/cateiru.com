@@ -29,7 +29,7 @@ export function parseDate(d: string, lang: string): string {
 }
 
 /**
- * Bio 表示用のDate
+ * 年月 表示用のDate
  *
  * @param {string} d - date
  * @param {string} lang - languages
@@ -139,4 +139,22 @@ export function getTasks(d: PublicBio, lang: string): Task[] {
   }
 
   return tasks;
+}
+
+/**
+ *
+ * @param {string} str - target
+ * @returns {string} - sliced str
+ */
+export function sliceStr(str: string): string {
+  const returnValueMatch = str.match(/\n/g);
+  if (returnValueMatch && returnValueMatch.length > 3) {
+    const sliceLen = returnValueMatch.reduce((_, v, a) => v.length + a, 0);
+    return str.slice(0, sliceLen);
+  }
+
+  if (100 < str.length) {
+    return str.slice(0, 100) + '...';
+  }
+  return str;
 }

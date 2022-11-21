@@ -149,6 +149,18 @@ export const PublicLinkSchema = z.object({
   ),
 });
 
+export const PublicProductSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  name_ja: z.string(),
+  detail: z.string(),
+  detail_ja: z.string(),
+  dev_time: z.string(),
+  thumbnail: z.optional(z.string().url()),
+  github_url: z.optional(z.string().url()),
+  site_url: z.string().url(),
+});
+
 export const PublicSchema = z.object({
   given_name: z.string(),
   family_name: z.string(),
@@ -163,31 +175,8 @@ export const PublicSchema = z.object({
   modified: z.string(),
 
   biographies: PublicBioSchema,
-  products: z.array(
-    z.object({
-      id: z.number(),
-      name: z.string(),
-      name_ja: z.string(),
-      detail: z.string(),
-      detail_ja: z.string(),
-      dev_time: z.string(),
-      thumbnail: z.optional(z.string().url()),
-      github_url: z.optional(z.string().url()),
-    })
-  ),
+  products: z.array(PublicProductSchema),
   links: z.array(PublicLinkSchema),
-});
-
-export const PublicProductSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  name_ja: z.string(),
-  detail: z.string(),
-  detail_ja: z.string(),
-  site_url: z.string(),
-  github_url: z.optional(z.string()),
-  dev_time: z.string(),
-  thumbnail: z.optional(z.string()),
 });
 
 export type User = typeof UserSchema._type;

@@ -36,9 +36,9 @@ const Bio: React.FC<{
   };
 
   return (
-    <Center height="100vh" ref={r}>
+    <Center minHeight="100vh" ref={r}>
       <Box width={{base: '90%', md: '700px'}}>
-        <Heading textAlign="center">
+        <Heading textAlign="center" mb="2rem">
           {convertLang({en: 'Brief personal record', ja: '略歴'})}
         </Heading>
         {data.biographies.length !== 0 ? (

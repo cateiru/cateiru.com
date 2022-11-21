@@ -13,12 +13,12 @@ const Social: React.FC<{
   const {convertLang} = useLanguage();
 
   return (
-    <Center height="100vh" ref={r}>
-      <Box width={{base: '90%', md: '500px'}}>
-        <Heading textAlign="center">
+    <Center minHeight="100vh" ref={r}>
+      <Box width={{base: '90%', md: '500px', lg: '900px'}}>
+        <Heading textAlign="center" mb="2rem">
           {convertLang({en: 'Links', ja: 'リンク'})}
         </Heading>
-        <SimpleGrid columns={{base: 1, sm: 2}} spacing={10} mt="1rem">
+        <SimpleGrid columns={{base: 1, sm: 2, lg: 3}} spacing={10} mt="1rem">
           {data.links.map(v => (
             <CategoryCard links={v} key={v.category_id} />
           ))}

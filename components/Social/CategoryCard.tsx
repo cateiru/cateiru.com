@@ -57,6 +57,7 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
                 _hover={{
                   bgColor: colorMode === 'dark' ? 'gray.500' : 'gray.300',
                 }}
+                transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
               >
                 <Flex alignItems="center">
                   {v.favicon_url && (
