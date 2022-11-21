@@ -182,6 +182,7 @@ func (h *Handler) UpdateProductHandler(e echo.Context) error {
 		changed = true
 	} else {
 		c = c.ClearGithubURL()
+		changed = true
 	}
 	devTimeStr := e.FormValue("dev_time")
 	if devTimeStr != "" {
@@ -201,6 +202,7 @@ func (h *Handler) UpdateProductHandler(e echo.Context) error {
 		changed = true
 	} else {
 		c = c.ClearThumbnail()
+		changed = true
 	}
 
 	if !changed {

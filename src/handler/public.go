@@ -60,6 +60,7 @@ type PublicShortProduct struct {
 	DevTime   time.Time `json:"dev_time,omitempty"`
 	Thumbnail string    `json:"thumbnail,omitempty"`
 	GithubURL string    `json:"github_url,omitempty"`
+	SiteURL   string    `json:"site_url"`
 }
 
 type PublicLinkCategory struct {
@@ -160,6 +161,7 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 			DevTime:   prod.DevTime,
 			Thumbnail: prod.Thumbnail,
 			GithubURL: prod.GithubURL,
+			SiteURL:   prod.SiteURL,
 		}
 	}
 
