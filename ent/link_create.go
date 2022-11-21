@@ -50,6 +50,14 @@ func (lc *LinkCreate) SetFaviconURL(s string) *LinkCreate {
 	return lc
 }
 
+// SetNillableFaviconURL sets the "favicon_url" field if the given value is not nil.
+func (lc *LinkCreate) SetNillableFaviconURL(s *string) *LinkCreate {
+	if s != nil {
+		lc.SetFaviconURL(*s)
+	}
+	return lc
+}
+
 // SetCategoryID sets the "category_id" field.
 func (lc *LinkCreate) SetCategoryID(u uint32) *LinkCreate {
 	lc.mutation.SetCategoryID(u)
@@ -190,9 +198,6 @@ func (lc *LinkCreate) check() error {
 	}
 	if _, ok := lc.mutation.SiteURL(); !ok {
 		return &ValidationError{Name: "site_url", err: errors.New(`ent: missing required field "Link.site_url"`)}
-	}
-	if _, ok := lc.mutation.FaviconURL(); !ok {
-		return &ValidationError{Name: "favicon_url", err: errors.New(`ent: missing required field "Link.favicon_url"`)}
 	}
 	if _, ok := lc.mutation.CategoryID(); !ok {
 		return &ValidationError{Name: "category_id", err: errors.New(`ent: missing required field "Link.category_id"`)}

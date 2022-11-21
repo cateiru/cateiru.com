@@ -64,10 +64,6 @@ export const EmojiPick = React.memo<{
             ja: 'この項目は必須です',
             en: 'This is required',
           }),
-          maxLength: {
-            value: 2,
-            message: convertLang({ja: '', en: ''}),
-          },
         })}
       />
       <FormErrorMessage>

@@ -46,7 +46,8 @@ func (Link) Fields() []ent.Field {
 		field.String("favicon_url").
 			SchemaType(map[string]string{
 				dialect.MySQL: "text",
-			}),
+			}).
+			Optional(),
 
 		// `category_id` INT UNSIGNED NOT NULL
 		field.Uint32("category_id"),

@@ -3110,9 +3110,22 @@ func (m *LinkMutation) OldFaviconURL(ctx context.Context) (v string, err error) 
 	return oldValue.FaviconURL, nil
 }
 
+// ClearFaviconURL clears the value of the "favicon_url" field.
+func (m *LinkMutation) ClearFaviconURL() {
+	m.favicon_url = nil
+	m.clearedFields[link.FieldFaviconURL] = struct{}{}
+}
+
+// FaviconURLCleared returns if the "favicon_url" field was cleared in this mutation.
+func (m *LinkMutation) FaviconURLCleared() bool {
+	_, ok := m.clearedFields[link.FieldFaviconURL]
+	return ok
+}
+
 // ResetFaviconURL resets all changes to the "favicon_url" field.
 func (m *LinkMutation) ResetFaviconURL() {
 	m.favicon_url = nil
+	delete(m.clearedFields, link.FieldFaviconURL)
 }
 
 // SetCategoryID sets the "category_id" field.
@@ -3457,7 +3470,11 @@ func (m *LinkMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *LinkMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(link.FieldFaviconURL) {
+		fields = append(fields, link.FieldFaviconURL)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3470,6 +3487,11 @@ func (m *LinkMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *LinkMutation) ClearField(name string) error {
+	switch name {
+	case link.FieldFaviconURL:
+		m.ClearFaviconURL()
+		return nil
+	}
 	return fmt.Errorf("unknown Link nullable field %s", name)
 }
 

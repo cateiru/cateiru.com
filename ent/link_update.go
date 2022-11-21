@@ -65,6 +65,20 @@ func (lu *LinkUpdate) SetFaviconURL(s string) *LinkUpdate {
 	return lu
 }
 
+// SetNillableFaviconURL sets the "favicon_url" field if the given value is not nil.
+func (lu *LinkUpdate) SetNillableFaviconURL(s *string) *LinkUpdate {
+	if s != nil {
+		lu.SetFaviconURL(*s)
+	}
+	return lu
+}
+
+// ClearFaviconURL clears the value of the "favicon_url" field.
+func (lu *LinkUpdate) ClearFaviconURL() *LinkUpdate {
+	lu.mutation.ClearFaviconURL()
+	return lu
+}
+
 // SetCategoryID sets the "category_id" field.
 func (lu *LinkUpdate) SetCategoryID(u uint32) *LinkUpdate {
 	lu.mutation.ResetCategoryID()
@@ -226,6 +240,12 @@ func (lu *LinkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: link.FieldFaviconURL,
 		})
 	}
+	if lu.mutation.FaviconURLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: link.FieldFaviconURL,
+		})
+	}
 	if value, ok := lu.mutation.CategoryID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -307,6 +327,20 @@ func (luo *LinkUpdateOne) SetSiteURL(s string) *LinkUpdateOne {
 // SetFaviconURL sets the "favicon_url" field.
 func (luo *LinkUpdateOne) SetFaviconURL(s string) *LinkUpdateOne {
 	luo.mutation.SetFaviconURL(s)
+	return luo
+}
+
+// SetNillableFaviconURL sets the "favicon_url" field if the given value is not nil.
+func (luo *LinkUpdateOne) SetNillableFaviconURL(s *string) *LinkUpdateOne {
+	if s != nil {
+		luo.SetFaviconURL(*s)
+	}
+	return luo
+}
+
+// ClearFaviconURL clears the value of the "favicon_url" field.
+func (luo *LinkUpdateOne) ClearFaviconURL() *LinkUpdateOne {
+	luo.mutation.ClearFaviconURL()
 	return luo
 }
 
@@ -498,6 +532,12 @@ func (luo *LinkUpdateOne) sqlSave(ctx context.Context) (_node *Link, err error) 
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: link.FieldFaviconURL,
+		})
+	}
+	if luo.mutation.FaviconURLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: link.FieldFaviconURL,
 		})
 	}

@@ -31,7 +31,7 @@ type Public struct {
 
 	Biographies []PublicBioGraphy    `json:"biographies"`
 	Products    []PublicShortProduct `json:"products"`
-	Links       []PublicLink         `json:"links"`
+	Links       []PublicLinkCategory `json:"links"`
 }
 
 type PublicBioGraphy struct {
@@ -62,19 +62,20 @@ type PublicShortProduct struct {
 	GithubURL string    `json:"github_url,omitempty"`
 }
 
+type PublicLinkCategory struct {
+	CategoryId     uint32 `json:"category_id"`
+	CategoryName   string `json:"category_name,omitempty"`
+	CategoryNameJa string `json:"category_name_ja,omitempty"`
+	Emoji          string `json:"emoji,omitempty"`
+
+	Links []PublicLink `json:"links"`
+}
+
 type PublicLink struct {
 	Name       string `json:"name,omitempty"`
 	NameJa     string `json:"name_ja,omitempty"`
 	SiteURL    string `json:"site_url,omitempty"`
 	FaviconURL string `json:"favicon_url,omitempty"`
-
-	PublicCategory
-}
-
-type PublicCategory struct {
-	CategoryName   string `json:"category_name,omitempty"`
-	CategoryNameJa string `json:"category_name_ja,omitempty"`
-	Emoji          string `json:"emoji,omitempty"`
 }
 
 type PublicProduct struct {
@@ -171,29 +172,45 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 	if err != nil {
 		return err
 	}
-	var categoryMap map[uint32]*ent.Category
-	publicLinks := make([]PublicLink, len(links))
-	for i, l := range links {
-		var category *ent.Category
-		if categoryMap[l.CategoryID] != nil {
-			category = categoryMap[l.CategoryID]
+	// var categoryMap map[uint32]int{}
+	publicLinkCategories := []PublicLinkCategory{}
+	for _, l := range links {
+
+		var categoriesIndex int = 0
+		var isFind bool = false
+		for i, c := range publicLinkCategories {
+			if c.CategoryId == l.CategoryID {
+				isFind = true
+				categoriesIndex = i
+			}
+		}
+
+		if isFind {
+			publicLinkCategories[categoriesIndex].Links = append(publicLinkCategories[categoriesIndex].Links, PublicLink{
+				Name:       l.Name,
+				NameJa:     l.NameJa,
+				SiteURL:    l.SiteURL,
+				FaviconURL: l.FaviconURL,
+			})
 		} else {
-			category, err = h.DB.Client.Category.Get(ctx, l.CategoryID)
+			category, err := h.DB.Client.Category.Get(ctx, l.CategoryID)
 			if err != nil {
 				return err
 			}
-		}
-		publicLinks[i] = PublicLink{
-			Name:       l.Name,
-			NameJa:     l.NameJa,
-			SiteURL:    l.SiteURL,
-			FaviconURL: l.FaviconURL,
 
-			PublicCategory: PublicCategory{
+			publicLinkCategories = append(publicLinkCategories, PublicLinkCategory{
+				CategoryId:     category.ID,
 				CategoryName:   category.Name,
 				CategoryNameJa: category.NameJa,
 				Emoji:          category.Emoji,
-			},
+
+				Links: []PublicLink{{
+					Name:       l.Name,
+					NameJa:     l.NameJa,
+					SiteURL:    l.SiteURL,
+					FaviconURL: l.FaviconURL,
+				}},
+			})
 		}
 	}
 
@@ -214,7 +231,7 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 
 		Products: publicProds,
 
-		Links: publicLinks,
+		Links: publicLinkCategories,
 	}
 
 	return e.JSON(http.StatusOK, publicUser)

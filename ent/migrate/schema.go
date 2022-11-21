@@ -44,7 +44,7 @@ var (
 		{Name: "id", Type: field.TypeUint32, Increment: true},
 		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "name_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
-		{Name: "emoji", Type: field.TypeString, Size: 1, SchemaType: map[string]string{"mysql": "char(1)"}},
+		{Name: "emoji", Type: field.TypeString, SchemaType: map[string]string{"mysql": "varchar(15)"}},
 		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 	}
@@ -95,7 +95,7 @@ var (
 		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "name_ja", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "site_url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
-		{Name: "favicon_url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "favicon_url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "category_id", Type: field.TypeUint32},
 		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
 		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},

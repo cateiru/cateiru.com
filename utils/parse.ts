@@ -28,12 +28,34 @@ export function parseDate(d: string, lang: string): string {
   return date.toLocaleDateString();
 }
 
-// Convert emoji to Unicode
-export const toUnicode = (str: string) => {
-  if (str.length < 4) return str.codePointAt(0)?.toString(16);
-  return (
-    str.codePointAt(0)?.toString(16) + '-' + str.codePointAt(2)?.toString(16)
-  );
+/**
+ * Convert emoji to Unicode
+ *
+ * 1f468 dc68 200d 1f469 dc69 200d 1f466 dc66
+ * ↓
+ * 1f468-200d-1f469-200d-1f466
+ *
+ * 1f1ef-ddef-1f1f5-ddf5
+ * ↓
+ * 1f1ef-1f1f5
+ *
+ * @param {string} str - emoji
+ * @returns {string} - unicode
+ */
+export const toUnicode = (str: string): string => {
+  const utf8: string[] = [];
+  const len = str.length;
+
+  for (let i = 0; len > i; i++) {
+    const u = str.codePointAt(i)?.toString(16);
+    if (u) {
+      if (!u.match(/d[a-z][0-9a-z]+/)) {
+        utf8.push(u);
+      }
+    }
+  }
+
+  return utf8.join('-');
 };
 
 export const getAge = (d: string): number => {

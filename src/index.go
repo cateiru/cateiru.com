@@ -29,17 +29,23 @@ func Server() {
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogURI:    true,
 		LogStatus: true,
+		LogMethod: true,
+		LogHost:   true,
+		LogError:  true,
+
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
-			if v.Status == 500 {
+			if v.Error != nil {
 				logging.Logger.Error("request",
 					zap.String("URI", v.URI),
 					zap.Int("status", v.Status),
 					zap.String("host", v.Host),
 					zap.String("response_time", time.Since(v.StartTime).String()),
+					zap.String("error_message", v.Error.Error()),
 				)
 			} else {
 				logging.Logger.Info("request",
 					zap.String("URI", v.URI),
+					zap.String("method", v.Method),
 					zap.Int("status", v.Status),
 					zap.String("host", v.Host),
 					zap.String("response_time", time.Since(v.StartTime).String()),

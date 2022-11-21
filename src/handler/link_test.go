@@ -524,8 +524,9 @@ func TestGetFavicon(t *testing.T) {
 			httpmock.NewStringResponder(http.StatusNotFound, ""),
 		)
 
-		_, err = handler.GetFavicon("https://example.com")
-		require.Error(t, err)
+		fav, err := handler.GetFavicon("https://example.com")
+		require.NoError(t, err)
+		require.Equal(t, fav, "")
 
 		httpmock.GetTotalCallCount()
 		info := httpmock.GetCallCountInfo()

@@ -78,6 +78,7 @@ const Index = React.memo<{
           scrollToContact();
         }}
         r={socialRef}
+        data={props.profile}
       />
       <ContactLink r={contactRef} />
     </>

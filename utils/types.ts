@@ -133,6 +133,22 @@ export const PublicBioSchema = z.array(
   })
 );
 
+export const PublicLinkSchema = z.object({
+  category_id: z.number(),
+  category_name: z.string(),
+  category_name_ja: z.string(),
+  emoji: z.string(),
+
+  links: z.array(
+    z.object({
+      name: z.string(),
+      name_ja: z.string(),
+      site_url: z.string(),
+      favicon_url: z.string().optional(),
+    })
+  ),
+});
+
 export const PublicSchema = z.object({
   given_name: z.string(),
   family_name: z.string(),
@@ -159,17 +175,7 @@ export const PublicSchema = z.object({
       github_url: z.optional(z.string().url()),
     })
   ),
-  links: z.array(
-    z.object({
-      name: z.string(),
-      name_ja: z.string(),
-      site_url: z.string(),
-      favicon_url: z.string().optional(),
-      category_name: z.string(),
-      category_name_ja: z.string(),
-      emoji: z.string(),
-    })
-  ),
+  links: z.array(PublicLinkSchema),
 });
 
 export const PublicProductSchema = z.object({
@@ -201,3 +207,4 @@ export type Contact = typeof ContactSchema._type;
 export type Public = typeof PublicSchema._type;
 export type PublicProduct = typeof PublicProductSchema._type;
 export type PublicBio = typeof PublicBioSchema._type;
+export type PublicLink = typeof PublicLinkSchema._type;

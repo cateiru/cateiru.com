@@ -582,6 +582,20 @@ func FaviconURLHasSuffix(v string) predicate.Link {
 	})
 }
 
+// FaviconURLIsNil applies the IsNil predicate on the "favicon_url" field.
+func FaviconURLIsNil() predicate.Link {
+	return predicate.Link(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldFaviconURL)))
+	})
+}
+
+// FaviconURLNotNil applies the NotNil predicate on the "favicon_url" field.
+func FaviconURLNotNil() predicate.Link {
+	return predicate.Link(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldFaviconURL)))
+	})
+}
+
 // FaviconURLEqualFold applies the EqualFold predicate on the "favicon_url" field.
 func FaviconURLEqualFold(v string) predicate.Link {
 	return predicate.Link(func(s *sql.Selector) {

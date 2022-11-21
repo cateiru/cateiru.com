@@ -114,15 +114,19 @@ func (h *Handler) CreateLinkHandler(e echo.Context) error {
 		return err
 	}
 
-	link, err := h.DB.Client.Link.
+	linkSch := h.DB.Client.Link.
 		Create().
 		SetUserID(h.User.ID).
 		SetName(name).
 		SetNameJa(nameJa).
 		SetSiteURL(siteUrl).
-		SetCategoryID(uint32(categoryId)).
-		SetFaviconURL(favicon).
-		Save(ctx)
+		SetCategoryID(uint32(categoryId))
+
+	if favicon != "" {
+		linkSch = linkSch.SetFaviconURL(favicon)
+	}
+
+	link, err := linkSch.Save(ctx)
 	if err != nil {
 		return err
 	}
@@ -178,7 +182,9 @@ func (h *Handler) UpdateLinkHandler(e echo.Context) error {
 		if err != nil {
 			return err
 		}
-		l = l.SetSiteURL(siteUrl).SetFaviconURL(favicon)
+		if favicon != "" {
+			l = l.SetSiteURL(siteUrl).SetFaviconURL(favicon)
+		}
 		changed = true
 	}
 	categoryIdStr := e.FormValue("category_id")
@@ -333,5 +339,5 @@ func GetFavicon(siteUrl string) (string, error) {
 		}
 	}
 
-	return "", echo.NewHTTPError(http.StatusBadRequest, "favicon is not found")
+	return "", nil
 }
