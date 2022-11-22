@@ -9,15 +9,16 @@
 ---
 
 {{ with .Category }}
-- Category : {{.Category}}
+- Category : {{.}}
 {{ end }}
 
 {{ with .URL }}
-- URL : {{.URL}}
+- URL : {{.}}
 {{ end }}
 
+{{$custom_value := .CustomValue}}
 {{ with .CustomTitle }}
-- {{.CustomTitle}} : {{.CustomValue}}
+- {{.}} : {{$custom_value}}
 {{ end }}
 
 ---

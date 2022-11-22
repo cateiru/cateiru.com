@@ -2,13 +2,13 @@ package handler
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/mileusna/useragent"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/contact"
@@ -188,31 +188,29 @@ func SwitchPostingService(ctx context.Context, db *db.DB, u *ent.User, forms *se
 
 	logging.Sugar.Infof("Posting form. send user: %d", u.ID)
 
-	senderErr := false
+	eg := errgroup.Group{}
+
 	if n.DiscordWebhook != "" {
-		err = forms.DiscordSender(n.DiscordWebhook)
-		if err != nil {
-			senderErr = true
-			logging.Sugar.Error(err)
-		}
+		eg.Go(func() error {
+			return forms.DiscordSender(n.DiscordWebhook)
+		})
+
 	}
 	if n.SlackWebhook != "" {
-		err = forms.SlackSender(n.SlackWebhook)
-		if err != nil {
-			senderErr = true
-			logging.Sugar.Error(err)
-		}
+		eg.Go(func() error {
+			return forms.SlackSender(n.SlackWebhook)
+		})
 	}
 	if n.Mail != "" {
-		err = forms.MailSender(n.Mail)
-		if err != nil {
-			senderErr = true
-			logging.Sugar.Error(err)
-		}
+		eg.Go(func() error {
+			return forms.MailSender(n.Mail)
+		})
+
 	}
 
-	if senderErr {
-		return errors.New("dont send forms")
+	err = eg.Wait()
+	if err != nil {
+		return err
 	}
 
 	return nil
