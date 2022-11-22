@@ -54,23 +54,9 @@ export const NoticeEdit = () => {
     }
 
     const form = new FormData();
-    let changed = false;
-    if (d.discord_webhook && data?.discord_webhook !== d.discord_webhook) {
-      form.append('discord_webhook', d.discord_webhook);
-      changed = true;
-    }
-    if (d.slack_webhook && data?.slack_webhook !== d.slack_webhook) {
-      form.append('slack_webhook', d.slack_webhook);
-      changed = true;
-    }
-    if (d.mail && data?.mail !== d.mail) {
-      form.append('mail', d.mail);
-      changed = true;
-    }
-
-    if (!changed) {
-      return () => {};
-    }
+    form.append('discord_webhook', d.discord_webhook ?? '');
+    form.append('slack_webhook', d.slack_webhook ?? '');
+    form.append('mail', d.mail ?? '');
 
     const res = await fetch(api('/user/notice'), {
       method: 'PUT',
