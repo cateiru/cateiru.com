@@ -13,6 +13,7 @@ import {TbBrandGithub, TbLink} from 'react-icons/tb';
 import {parseShotDate} from '../../utils/parse';
 import {PublicProduct} from '../../utils/types';
 import {Back} from '../Back';
+import Markdown from '../Markdown/Markdown';
 import useLanguage from '../useLanguage';
 
 export const ProductPage: React.FC<{
@@ -66,14 +67,16 @@ export const ProductPage: React.FC<{
           {parseShotDate(product.dev_time, lang)}
         </Text>
         <Box mb="1rem" mt=".5rem" overflow="auto" mx={{base: '.5rem', md: '0'}}>
-          <Text
+          {/* <Text
             as="pre"
             fontFamily="'Noto Sans JP', sans-serif"
             fontSize="1rem"
             maxW="500px"
-          >
+          > */}
+          <Markdown>
             {convertLang({ja: product.detail_ja, en: product.detail})}
-          </Text>
+          </Markdown>
+          {/* </Text> */}
         </Box>
         <Center mt="1rem">
           <IconButton
