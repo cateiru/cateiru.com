@@ -24,7 +24,7 @@ export const ProductPage: React.FC<{
 
   return (
     <Center minH="100vh">
-      <Box w={{base: '95%', md: '500px'}} minH="700px">
+      <Box w={{base: '95%', md: '500px'}} minH="700px" mt="4rem">
         {product.thumbnail ? (
           <Image
             src={product.thumbnail}

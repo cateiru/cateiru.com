@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/cateiru/cateiru.com/src/logging"
 )
 
 type SlackPlainTextBlock struct {
@@ -199,8 +197,6 @@ func (f *SendForm) SlackSender(webhook string) error {
 	if err != nil {
 		return err
 	}
-
-	logging.Sugar.Info(body)
 
 	resp, err := http.Post(webhook, "application-json", body)
 	if err != nil {

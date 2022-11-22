@@ -114,6 +114,7 @@ func (h *Handler) ContactGetHandler(e echo.Context) error {
 
 	c, err := h.DB.Client.Contact.Query().
 		Where(contact.ToUserID(h.User.ID)).
+		Order(ent.Desc(contact.FieldCreated)).
 		All(ctx)
 	if err != nil {
 		return err

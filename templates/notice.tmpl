@@ -8,15 +8,15 @@
 
 ---
 
-{{ if .Category ne "" }}
+{{ with .Category }}
 - Category : {{.Category}}
 {{ end }}
 
-{{ if .URL ne "" }}
+{{ with .URL }}
 - URL : {{.URL}}
 {{ end }}
 
-{{ if .CustomTitle ne "" }}
+{{ with .CustomTitle }}
 - {{.CustomTitle}} : {{.CustomValue}}
 {{ end }}
 

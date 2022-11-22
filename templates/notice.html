@@ -359,7 +359,7 @@
 </td></tr></table>
 <table align="center" border="0" cellpadding="0" cellspacing="0" class="r-outlook -outlook pr-16-outlook pl-16-outlook -outlook" role="none" style="width:446px;" width="446" bgcolor="#fffffe"><tr><td style="line-height:0;font-size:0;mso-line-height-rule:exactly;">
 <![endif]-->
-        {{ if .Category ne "" }}
+        {{ with .Category }}
         <div class="r  pr-16 pl-16"
             style="background:#fffffe;background-color:#fffffe;margin:0px auto;max-width:446px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="none"
@@ -447,7 +447,7 @@
 </td></tr></table>
 <table align="center" border="0" cellpadding="0" cellspacing="0" class="r-outlook -outlook pr-16-outlook pl-16-outlook -outlook" role="none" style="width:446px;" width="446" bgcolor="#fffffe"><tr><td style="line-height:0;font-size:0;mso-line-height-rule:exactly;">
 <![endif]-->
-        {{ if .URL ne ""}}
+        {{ with .URL }}
         <div class="r  pr-16 pl-16"
             style="background:#fffffe;background-color:#fffffe;margin:0px auto;max-width:446px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="none"
@@ -535,7 +535,7 @@
 </td></tr></table>
 <table align="center" border="0" cellpadding="0" cellspacing="0" class="r-outlook -outlook pr-16-outlook pl-16-outlook -outlook" role="none" style="width:446px;" width="446" bgcolor="#fffffe"><tr><td style="line-height:0;font-size:0;mso-line-height-rule:exactly;">
 <![endif]-->
-        {{if .CustomTitle ne "" }}
+        {{ with .CustomTitle }}
         <div class="r  pr-16 pl-16"
             style="background:#fffffe;background-color:#fffffe;margin:0px auto;max-width:446px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="none"
