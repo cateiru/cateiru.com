@@ -31,12 +31,13 @@ var ProdConfig = ConfigDefs{
 	}),
 
 	DBConfig: mysql.Config{
-		DBName:    "cateirucom",
-		User:      os.Getenv("DB_USER"),
-		Passwd:    os.Getenv("DB_PASSWORD"),
-		Addr:      fmt.Sprintf("/cloudsql/%s", os.Getenv("INSTANCE_CONNECTION_NAME")),
-		Net:       "unix",
-		ParseTime: true,
+		DBName:               "cateirucom",
+		User:                 os.Getenv("DB_USER"),
+		Passwd:               os.Getenv("DB_PASSWORD"),
+		Addr:                 fmt.Sprintf("/cloudsql/%s", os.Getenv("INSTANCE_CONNECTION_NAME")),
+		Net:                  "unix",
+		ParseTime:            true,
+		AllowNativePasswords: true,
 	},
 
 	SessionCookieName: "cateirucom-session",
