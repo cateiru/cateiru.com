@@ -25,7 +25,7 @@ var ProdConfig = ConfigDefs{
 	},
 
 	Cors: middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"cateiru.com"},
+		AllowOrigins:     []string{"https://cateiru.com"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}),
