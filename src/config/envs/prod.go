@@ -45,7 +45,7 @@ var ProdConfig = ConfigDefs{
 	SessionCookieConfig: http.Cookie{
 		HttpOnly: true,
 		Secure:   true,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteDefaultMode,
 		Path:     "/",
 		Domain:   "cateiru.com",
 	},
@@ -53,7 +53,7 @@ var ProdConfig = ConfigDefs{
 	SessionConfirmationCookieConfig: http.Cookie{
 		HttpOnly: false,
 		Secure:   true,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteDefaultMode,
 		Path:     "/",
 		Domain:   "cateiru.com",
 	},
