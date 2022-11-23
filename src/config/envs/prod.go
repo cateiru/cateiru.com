@@ -47,7 +47,6 @@ var ProdConfig = ConfigDefs{
 		Secure:   true,
 		SameSite: http.SameSiteDefaultMode,
 		Path:     "/",
-		Domain:   "cateiru.com",
 	},
 	SessionConfirmationCookieName: "cateirusso-issession",
 	SessionConfirmationCookieConfig: http.Cookie{
@@ -55,7 +54,6 @@ var ProdConfig = ConfigDefs{
 		Secure:   true,
 		SameSite: http.SameSiteDefaultMode,
 		Path:     "/",
-		Domain:   "cateiru.com",
 	},
 
 	SSOTokenSecret: os.Getenv("SSO_TOKEN_SECRET"),

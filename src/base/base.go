@@ -57,7 +57,7 @@ func (c *Base) Login(ctx context.Context, e echo.Context, u *ent.User) error {
 	sessionCookie := &http.Cookie{
 		Name:   config.Config.SessionCookieName,
 		Value:  session.ID.String(),
-		Domain: config.Config.PageDomain.Path,
+		Domain: config.Config.PageDomain.Host,
 
 		// FIXME: want to deepcopy and use
 		HttpOnly: config.Config.SessionCookieConfig.HttpOnly,
@@ -70,7 +70,7 @@ func (c *Base) Login(ctx context.Context, e echo.Context, u *ent.User) error {
 	confirmCookie := &http.Cookie{
 		Name:   config.Config.SessionConfirmationCookieName,
 		Value:  "true",
-		Domain: config.Config.PageDomain.Path,
+		Domain: config.Config.PageDomain.Host,
 
 		// FIXME: want to deepcopy and use
 		HttpOnly: config.Config.SessionConfirmationCookieConfig.HttpOnly,
