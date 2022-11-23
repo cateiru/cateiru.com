@@ -56,7 +56,7 @@ var ProdConfig = ConfigDefs{
 
 	SSOTokenSecret: os.Getenv("SSO_TOKEN_SECRET"),
 	SSORedirectURI: url.URL{
-		Host:   "cateiru.com",
+		Host:   "api.cateiru.com",
 		Scheme: "https",
 		Path:   "/login",
 	},
