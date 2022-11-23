@@ -6,7 +6,7 @@ import {ProductPage} from '../../components/Products/ProductPage';
 import {getPublicProduct} from '../../utils/public';
 import {PublicProduct} from '../../utils/types';
 
-const CACHE_TIME = 86400; // 1 day
+const CACHE_TIME = 60; // 1 min
 
 type Props = {
   product?: PublicProduct;

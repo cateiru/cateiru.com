@@ -6,7 +6,7 @@ import {consolePublic} from '../utils/parse';
 import {getPublicProfile} from '../utils/public';
 import {Public} from '../utils/types';
 
-const CACHE_TIME = 86400; // 1 day
+const CACHE_TIME = 60; // 1 min
 
 type Props = {
   profile: Public;
