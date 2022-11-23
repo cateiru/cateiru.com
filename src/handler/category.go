@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-	"unicode/utf8"
 
 	"github.com/cateiru/cateiru.com/ent/category"
 	"github.com/labstack/echo/v4"
@@ -46,10 +45,10 @@ func (h *Handler) CreateCategoryHandler(e echo.Context) error {
 	if nameJa == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: name_ja")
 	}
-	// emoji is one char
-	if utf8.RuneCountInString(emoji) != 1 {
-		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: emoji")
-	}
+	// emoji is one or two  UTF-8 char
+	// if utf8.RuneCountInString(emoji) > 2 {
+	// 	return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: emoji")
+	// }
 
 	c, err := h.DB.Client.Category.Create().
 		SetName(name).
@@ -95,7 +94,7 @@ func (h *Handler) UpdateCategoryHandler(e echo.Context) error {
 		changed = true
 	}
 	emoji := e.FormValue("emoji")
-	if utf8.RuneCountInString(emoji) == 1 {
+	if emoji != "" {
 		c = c.SetEmoji(emoji)
 		changed = true
 	}

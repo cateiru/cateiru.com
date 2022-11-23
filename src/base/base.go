@@ -2,6 +2,7 @@ package base
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -29,11 +30,12 @@ func NewBase(db *db.DB) (*Base, error) {
 func (c *Base) Session(ctx context.Context, e echo.Context) error {
 	token, err := c.getSessionToken(e)
 	if err != nil {
+		c.Logout(e)
 		return err
 	}
 	u, err := c.sessionLogin(ctx, *c.DB.Client, token)
 	if err != nil {
-		c.Logout(ctx, e)
+		c.Logout(e)
 		return err
 	}
 
@@ -84,7 +86,7 @@ func (c *Base) Login(ctx context.Context, e echo.Context, u *ent.User) error {
 }
 
 // Logout
-func (c *Base) Logout(ctx context.Context, e echo.Context) {
+func (c *Base) Logout(e echo.Context) {
 	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
 	if err == nil {
 		tokenCookie.Expires = time.Now()
@@ -107,7 +109,7 @@ func (c *Base) Logout(ctx context.Context, e echo.Context) {
 func (c *Base) getSessionToken(e echo.Context) (uuid.UUID, error) {
 	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
 	if err != nil {
-		return uuid.UUID{}, echo.NewHTTPError(http.StatusBadRequest, "cookie is not found")
+		return uuid.UUID{}, echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("cookie is not found: %v", err))
 	}
 	token := tokenCookie.Value
 

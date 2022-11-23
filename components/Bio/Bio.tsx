@@ -2,85 +2,114 @@ import {
   Center,
   Box,
   Heading,
+  Flex,
+  Switch,
+  useColorMode,
   Text,
   UnorderedList,
   ListItem,
+  ListIcon,
+  Badge,
 } from '@chakra-ui/react';
+import {Gantt, ViewMode} from 'gantt-task-react';
 import React from 'react';
 import {IoCaretDown} from 'react-icons/io5';
-import {Area} from '../../utils/config/area';
-import {BiographyDetail, WorksDetail} from '../../utils/config/bio';
-import config from '../../utils/config/config';
+import {getTasks, parseDate, parseShotDate} from '../../utils/parse';
+import {Public} from '../../utils/types';
 import useLanguage from '../useLanguage';
 
 const Bio: React.FC<{
   next: () => void;
   r: React.MutableRefObject<HTMLDivElement>;
-}> = ({next, r}) => {
-  const [lang, convertLang] = useLanguage();
+  data: Public;
+}> = ({next, r, data}) => {
+  const {lang, convertLang} = useLanguage();
+  const [viewMode, setViewMode] = React.useState<ViewMode>(ViewMode.Year);
+  const {colorMode} = useColorMode();
 
-  const area = (area: Area) => {
-    if (lang === 'en') {
-      return `${convertLang(area.prefecture)}, ${convertLang(area.country)}`;
-    }
+  const tasks = React.useMemo(() => {
+    return getTasks(data.biographies, lang);
+  }, [data, lang]);
 
-    return convertLang(area.prefecture);
-  };
-
-  const biographyElement = (bio: BiographyDetail) => {
-    return (
-      <ListItem my=".5rem">
-        <Text as="span" display="inline-block" minW="10ch">
-          {bio.admission.getFullYear()}&nbsp;-&nbsp;
-          {bio.graduation ? bio.graduation.getFullYear() : ''}
-        </Text>
-        <Text as="span" ml="1rem" fontWeight="bold">
-          {convertLang(bio.name)}
-        </Text>
-        <Text as="span" ml=".5rem">
-          ({area(bio.area)})
-        </Text>
-      </ListItem>
-    );
-  };
-
-  const workElement = (work: WorksDetail) => {
-    return (
-      <ListItem my=".5rem" key={work.name.en}>
-        <Text as="span" display="inline-block" minW="10ch">
-          {work.admission.getFullYear()}&nbsp;-&nbsp;
-          {work.graduation ? work.graduation.getFullYear() : ''}
-        </Text>
-        <Text as="span" ml="1rem" fontWeight="bold">
-          {convertLang(work.name)}
-        </Text>
-        <Text as="span" ml=".5rem">
-          ({area(work.area)})
-        </Text>
-        <Text as="span" ml=".5rem">
-          - {convertLang(work.occupation)}
-        </Text>
-      </ListItem>
-    );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setViewMode(e.target.checked ? ViewMode.Month : ViewMode.Year);
   };
 
   return (
-    <Center height="100vh" ref={r}>
+    <Center minHeight="100vh" ref={r}>
       <Box width={{base: '90%', md: '700px'}}>
-        <Heading textAlign="center">
+        <Heading textAlign="center" mb="2rem">
           {convertLang({en: 'Brief personal record', ja: '略歴'})}
         </Heading>
-        <Box whiteSpace="nowrap" overflowX="auto">
-          <UnorderedList mt="1.5rem" paddingLeft=".5rem">
-            {config.bio.primarySchool &&
-              biographyElement(config.bio.primarySchool)}
-            {config.bio.juniorHighSchool &&
-              biographyElement(config.bio.juniorHighSchool)}
-            {config.bio.highSchool && biographyElement(config.bio.highSchool)}
-            {config.bio.university && biographyElement(config.bio.university)}
-            {config.bio.works.map(v => workElement(v))}
-          </UnorderedList>
-        </Box>
+        {data.biographies.length !== 0 ? (
+          <>
+            <Box
+              boxShadow={
+                colorMode === 'light'
+                  ? '0px 1px 26px -3px #a0acc0'
+                  : '0px 1px 26px -3px #000'
+              }
+              borderRadius="25"
+              mt=".5rem"
+            >
+              <Flex justifyContent="right" pt=".5rem" pr=".5rem">
+                <Switch onChange={handleChange}>
+                  {convertLang({ja: '月ごとで表示する', en: 'View by month'})}
+                </Switch>
+              </Flex>
+              <Flex mt=".5rem" whiteSpace="nowrap" overflowX="auto" id="gantt">
+                <Gantt
+                  tasks={tasks}
+                  listCellWidth=""
+                  viewMode={viewMode}
+                  columnWidth={100}
+                  barCornerRadius={5}
+                  locale={lang === 'ja' ? 'ja' : 'en'}
+                />
+              </Flex>
+            </Box>
+            <Box whiteSpace="nowrap" overflowX="auto">
+              <UnorderedList mt="1.5rem" paddingLeft=".5rem">
+                {data.biographies.map((v, i) => {
+                  return (
+                    <ListItem my=".5rem" key={i}>
+                      <Text as="span" display="inline-block" minW="10ch">
+                        {parseShotDate(v.join, lang)}&nbsp;-&nbsp;
+                        {parseShotDate(v.leave, lang)}
+                      </Text>
+                      <Text as="span" ml="1rem" fontWeight="bold">
+                        {convertLang({ja: v.name_ja, en: v.name})}
+                      </Text>
+                      <Text as="span" ml=".5rem">
+                        ({convertLang({ja: v.address_ja, en: v.address})})
+                      </Text>
+                      <Text as="span" ml=".5rem">
+                        - {convertLang({ja: v.position_ja, en: v.position})}
+                      </Text>
+                      <Text as="span" ml=".5rem">
+                        <Badge
+                          colorScheme={v.type === 'univ' ? 'blue' : 'green'}
+                        >
+                          {v.type === 'univ'
+                            ? convertLang({ja: '大学', en: 'UNIV'})
+                            : convertLang({ja: '会社', en: 'CORP'})}
+                        </Badge>
+                      </Text>
+                    </ListItem>
+                  );
+                })}
+              </UnorderedList>
+            </Box>
+          </>
+        ) : (
+          <Text textAlign="center" mt="1rem" color="yellow.500">
+            {convertLang({
+              ja: '表示できる略歴がありません。',
+              en: 'There is no biography to display.',
+            })}
+          </Text>
+        )}
+
         <Center mt="1.5rem" cursor="pointer" onClick={next}>
           <IoCaretDown size="25px" />
         </Center>

@@ -69,8 +69,8 @@ func (h *Handler) UpdateUserHandler(e echo.Context) error {
 	}
 
 	if birthDateStr != "" {
-		// parse ISO 8601 types
-		birthDate, err := time.Parse("2006-01-02T15:04:05-0700", birthDateStr)
+		// parse RFC3339 types
+		birthDate, err := time.Parse(time.RFC3339, birthDateStr)
 		if err == nil {
 			u = u.SetBirthDate(birthDate)
 			changeFlag = true

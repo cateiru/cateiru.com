@@ -24,8 +24,9 @@ var ProdConfig = ConfigDefs{
 	},
 
 	Cors: middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"cateiru.com"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowOrigins:     []string{"cateiru.com"},
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowCredentials: true,
 	}),
 
 	DBConfig: mysql.Config{

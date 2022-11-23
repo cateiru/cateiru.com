@@ -45,7 +45,7 @@ func (h *Handler) LoginHandler(c echo.Context) error {
 	var u *ent.User
 
 	if existUser {
-		u, err = h.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).First(ctx)
+		u, err = UpdateUser(ctx, h.Base, claims)
 		if err != nil {
 			return err
 		}
@@ -64,6 +64,7 @@ func (h *Handler) LoginHandler(c echo.Context) error {
 	redirectURL := url.URL{
 		Host:   config.Config.PageDomain.Host,
 		Scheme: config.Config.PageDomain.Scheme,
+		Path:   "/admin",
 	}
 
 	return c.Redirect(http.StatusMovedPermanently, redirectURL.String())
@@ -111,9 +112,9 @@ func CreateUser(ctx context.Context, base *base.Base, claims *sso.Claims) (*ent.
 		SetBirthDate(time.Now()).
 		SetGivenNameJa(claims.GivenName).
 		SetFamilyNameJa(claims.FamilyName).
-		SetLocation("").
+		SetLocation("todo").
 		SetSSOToken(claims.ID).
-		SetLocationJa("")
+		SetLocationJa("todo")
 
 	if claims.Picture != "" {
 		userConf = userConf.SetAvatarURL(claims.Picture)
@@ -128,8 +129,28 @@ func CreateUser(ctx context.Context, base *base.Base, claims *sso.Claims) (*ent.
 		SetUserID(u.ID).
 		Save(ctx)
 	if err != nil {
-		return nil, echo.NewHTTPError(http.StatusInternalServerError, "failed insert form user db")
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, "failed insert form notice db")
 	}
 
+	return u, nil
+}
+
+func UpdateUser(ctx context.Context, base *base.Base, claims *sso.Claims) (*ent.User, error) {
+	u, err := base.DB.Client.User.Query().Where(user.SSOToken(claims.ID)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	changed := false
+
+	if u.UserID != claims.NickName {
+		u.UserID = claims.NickName
+	}
+	if u.Mail != claims.Email {
+		u.Mail = claims.Email
+	}
+
+	if changed {
+		return u.Update().Save(ctx)
+	}
 	return u, nil
 }

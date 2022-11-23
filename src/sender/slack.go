@@ -180,14 +180,15 @@ func (f *SendForm) SlackSender(webhook string) error {
 		})
 	}
 
+	blocks := []any{}
+	blocks = append(blocks, formFiled...)
+	blocks = append(blocks, SlackDividerBlock{
+		Type: "divider",
+	})
+	blocks = append(blocks, userData...)
+
 	payload := SlackPayload{
-		Blocks: []any{
-			formFiled,
-			SlackDividerBlock{
-				Type: "divider",
-			},
-			userData,
-		},
+		Blocks: blocks,
 	}
 
 	body := new(bytes.Buffer)

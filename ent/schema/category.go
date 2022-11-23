@@ -32,13 +32,10 @@ func (Category) Fields() []ent.Field {
 				dialect.MySQL: "text",
 			}),
 
-		// `emoji` CHAR(1) NOT NULL
+		// `emoji` CHAR(2) NOT NULL
 		field.String("emoji").
 			SchemaType(map[string]string{
-				dialect.MySQL: "char(1)",
-			}).
-			Annotations(entsql.Annotation{
-				Size: 1,
+				dialect.MySQL: "varchar(15)",
 			}),
 
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL

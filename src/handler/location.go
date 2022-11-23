@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/ent/location"
 	"github.com/labstack/echo/v4"
 )
@@ -169,6 +170,18 @@ func (h *Handler) DeleteLocationHandler(e echo.Context) error {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: location_id")
+	}
+
+	exist, err := h.DB.Client.Biography.
+		Query().
+		Where(biography.LocationID(uint32(id))).
+		Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	if exist {
+		return echo.NewHTTPError(http.StatusBadRequest, "This bio is already used")
 	}
 
 	_, err = h.DB.Client.Location.

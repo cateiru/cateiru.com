@@ -8,7 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
@@ -52,12 +51,13 @@ func TestBioHandler(t *testing.T) {
 
 		m.Ok(t)
 
-		res := new(handler.BioResponse)
-		err = m.Json(res)
+		res := []handler.BioResponse{}
+		err = m.Json(&res)
 		require.NoError(t, err)
 
-		require.Equal(t, res.Biography.ID, bio.Biography.ID)
-		require.Equal(t, res.Location.Address, bio.Location.Address)
+		require.Len(t, res, 1)
+		require.Equal(t, res[0].Biography.ID, bio.Biography.ID)
+		require.Equal(t, res[0].Location.Address, bio.Location.Address)
 	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
@@ -89,8 +89,8 @@ func TestCreateBioHandler(t *testing.T) {
 		form.Insert("location_id", strconv.Itoa(int(loc.ID)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
-		form.Insert("leave_date", "2120-10-31T00:00:00-0900")
+		form.Insert("join_date", "2022-11-12T07:00:29.967Z")
+		form.Insert("leave_date", "2120-01-31T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -106,12 +106,12 @@ func TestCreateBioHandler(t *testing.T) {
 		m.Status(t, http.StatusCreated)
 
 		// check
-		b := new(ent.Biography)
+		b := new(handler.BioResponse)
 		err = m.Json(b)
 		require.NoError(t, err)
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.ID(b.ID)).
+			Where(biography.ID(b.Biography.ID)).
 			First(ctx)
 		require.NoError(t, err)
 
@@ -146,7 +146,7 @@ func TestCreateBioHandler(t *testing.T) {
 		form.Insert("location_id", strconv.Itoa(int(loc.ID)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
+		form.Insert("join_date", "2022-11-12T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -162,12 +162,12 @@ func TestCreateBioHandler(t *testing.T) {
 		m.Status(t, http.StatusCreated)
 
 		// check
-		b := new(ent.Biography)
+		b := new(handler.BioResponse)
 		err = m.Json(b)
 		require.NoError(t, err)
 		bioInDB, err := tool.DB.Client.Biography.
 			Query().
-			Where(biography.ID(b.ID)).
+			Where(biography.ID(b.Biography.ID)).
 			First(ctx)
 		require.NoError(t, err)
 
@@ -198,7 +198,7 @@ func TestCreateBioHandler(t *testing.T) {
 		form.Insert("location_id", "123456")
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
+		form.Insert("join_date", "2022-11-15T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPost)
 		require.NoError(t, err)
@@ -292,8 +292,8 @@ func TestUpdateBioHandler(t *testing.T) {
 		form.Insert("location_id", strconv.Itoa(int(bioUsedLoc.LocationId)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
-		form.Insert("join_date", "2022-04-12T00:00:00-0900")
-		form.Insert("leave_date", "2120-10-31T00:00:00-0900")
+		form.Insert("join_date", "2022-11-15T07:00:29.967Z")
+		form.Insert("leave_date", "2120-11-15T07:00:29.967Z")
 
 		m, err := mock.NewFormData("/", form, http.MethodPut)
 		require.NoError(t, err)

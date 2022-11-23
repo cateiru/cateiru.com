@@ -121,7 +121,7 @@ func TestBase(t *testing.T) {
 				return err
 			}
 
-			base.Logout(ctx, e)
+			base.Logout(e)
 			return nil
 		}
 		err = handler(e)

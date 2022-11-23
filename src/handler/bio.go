@@ -14,8 +14,8 @@ import (
 )
 
 type BioResponse struct {
-	Biography ent.Biography
-	Location  ent.Location
+	Biography *ent.Biography `json:"biography"`
+	Location  *ent.Location  `json:"location"`
 }
 
 // Get my bio
@@ -26,23 +26,29 @@ func (h *Handler) BioHandler(e echo.Context) error {
 		return err
 	}
 
-	bio, err := h.DB.Client.Biography.
-		Query().
-		Where(biography.UserID(h.User.ID)).
-		First(ctx)
+	bios, err := h.DB.Client.Biography.Query().Where(biography.UserID(h.User.ID)).All(ctx)
 	if err != nil {
 		return err
 	}
-
-	location, err := h.DB.Client.Location.Get(ctx, bio.LocationID)
-	if err != nil {
-		return err
+	var locationMap map[uint32]*ent.Location
+	bioResps := make([]BioResponse, len(bios))
+	for i, bio := range bios {
+		var loc *ent.Location
+		if locationMap[bio.LocationID] != nil {
+			loc = locationMap[bio.LocationID]
+		} else {
+			loc, err = h.DB.Client.Location.Get(ctx, bio.LocationID)
+			if err != nil {
+				return err
+			}
+		}
+		bioResps[i] = BioResponse{
+			Biography: bio,
+			Location:  loc,
+		}
 	}
 
-	return e.JSON(http.StatusOK, BioResponse{
-		*bio,
-		*location,
-	})
+	return e.JSON(http.StatusOK, bioResps)
 }
 
 // Set a new bio
@@ -52,8 +58,8 @@ func (h *Handler) BioHandler(e echo.Context) error {
 // - location_id: uint32
 // - position: string
 // - position_ja: string
-// - join_date: ISO 8601 type date
-// - leave_date: Optional ISO 8601 type date
+// - join_date:  type date
+// - leave_date: Optional RFC3339 type date
 func (h *Handler) CreateBioHandler(e echo.Context) error {
 	ctx := context.Background()
 
@@ -91,8 +97,8 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 		return err
 	}
 
-	// ISO 8601
-	joinDate, err := time.Parse("2006-01-02T15:04:05-0700", joinDateStr)
+	// RFC3339
+	joinDate, err := time.Parse(time.RFC3339, joinDateStr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: join_date")
 	}
@@ -100,8 +106,8 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 	bio := h.DB.Client.Biography.Create()
 
 	if leaveDateStr != "" {
-		// ISO 8601
-		leaveDate, err := time.Parse("2006-01-02T15:04:05-0700", leaveDateStr)
+		// RFC3339
+		leaveDate, err := time.Parse(time.RFC3339, leaveDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: leave_date")
 		}
@@ -121,7 +127,15 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 		return err
 	}
 
-	return e.JSON(http.StatusCreated, bioDB)
+	location, err := h.DB.Client.Location.Get(ctx, bioDB.LocationID)
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusCreated, BioResponse{
+		Biography: bioDB,
+		Location:  location,
+	})
 }
 
 // Set a new bio
@@ -131,8 +145,8 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 // - location_id: uint32
 // - position: string
 // - position_ja: string
-// - join_date: ISO 8601 type date
-// - leave_date: ISO 8601 type date
+// - join_date: RFC3339 type date
+// - leave_date: RFC3339 type date
 func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	ctx := context.Background()
 
@@ -193,7 +207,7 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	joinDateStr := e.FormValue("join_date")
 	if joinDateStr != "" {
 		changes = true
-		joinDate, err := time.Parse("2006-01-02T15:04:05-0700", joinDateStr)
+		joinDate, err := time.Parse(time.RFC3339, joinDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: join_date")
 		}
@@ -203,7 +217,7 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	leaveDateStr := e.FormValue("leave_date")
 	if leaveDateStr != "" {
 		changes = true
-		leaveDate, err := time.Parse("2006-01-02T15:04:05-0700", leaveDateStr)
+		leaveDate, err := time.Parse(time.RFC3339, leaveDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: leave_date")
 		}
@@ -238,8 +252,8 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, BioResponse{
-		Biography: *bioDB,
-		Location:  *location,
+		Biography: bioDB,
+		Location:  location,
 	})
 }
 

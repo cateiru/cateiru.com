@@ -331,6 +331,35 @@ func TestDeleteLocationHandler(t *testing.T) {
 		require.False(t, exist)
 	})
 
+	t.Run("already used", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		bio, err := u.CreateBio()
+		require.NoError(t, err)
+		_, err = bio.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		m, err := mock.NewGet("", fmt.Sprintf("/?location_id=%v", bio.LocationId))
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.DeleteLocationHandler(e)
+		require.Error(t, err)
+	})
+
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.DeleteLocationHandler(e)
 	})

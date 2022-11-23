@@ -6,7 +6,7 @@ import useLanguage from '../useLanguage';
 const ContactLink: React.FC<{
   r: React.MutableRefObject<HTMLDivElement>;
 }> = ({r}) => {
-  const [, convertLang] = useLanguage();
+  const {convertLang} = useLanguage();
   const router = useRouter();
 
   return (

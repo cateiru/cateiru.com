@@ -1,0 +1,28 @@
+#gantt svg>g>rect {
+    fill: var(--chakra-colors-chakra-body-bg) !important;
+    stroke: var(--chakra-colors-chakra-body-bg) !important;
+}
+
+#gantt svg line {
+    stroke: var(--chakra-colors-chakra-body-bg) !important;
+}
+
+#gantt svg>g>g>g>rect {
+    fill: var(--chakra-colors-chakra-body-bg) !important;
+}
+
+#gantt svg .calendar>text {
+    fill: var(--chakra-colors-chakra-body-text) !important;
+}
+
+#gantt svg .calendarTop>text {
+    fill: var(--chakra-colors-chakra-body-text) !important;
+}
+
+#gantt svg .bar text {
+    fill: var(--chakra-colors-chakra-body-text) !important;
+}
+
+#gantt b {
+    color: black;
+}

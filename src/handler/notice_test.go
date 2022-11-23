@@ -50,12 +50,11 @@ func TestNoticeHandler(t *testing.T) {
 		err = h.NoticeHandler(e)
 		require.NoError(t, err)
 
-		responseNotice := []ent.Notice{}
+		responseNotice := ent.Notice{}
 		err = m.Json(&responseNotice)
 		require.NoError(t, err)
 
-		require.Len(t, responseNotice, 1)
-		require.Equal(t, responseNotice[0].DiscordWebhook, n.DiscordWebhook)
+		require.Equal(t, responseNotice.DiscordWebhook, n.DiscordWebhook)
 	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {

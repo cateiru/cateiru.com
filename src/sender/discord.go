@@ -11,42 +11,52 @@ func (f *SendForm) DiscordSender(webhook string) error {
 		isMobileStr = "no"
 	}
 
-	userData := discordwebhook.Embed{
-		Title: toPtr("User Data"),
-		Fields: &[]discordwebhook.Field{
-			{
-				Name:  toPtr("Name"),
-				Value: &f.Name,
-			},
-			{
-				Name:  toPtr("Mail"),
-				Value: &f.Mail,
-			},
-			{
-				Name:  toPtr("IP Address"),
-				Value: &f.IP,
-			},
-			{
-				Name:  toPtr("Language"),
-				Value: &f.Lang,
-			},
-			{
-				Name:  toPtr("Device"),
-				Value: &f.UserData.Device,
-			},
-			{
-				Name:  toPtr("Browser"),
-				Value: &f.UserData.Browser,
-			},
-			{
-				Name:  toPtr("OS"),
-				Value: &f.UserData.OS,
-			},
-			{
-				Name:  toPtr("Is Mobile"),
-				Value: &isMobileStr,
-			},
+	userDataFiled := []discordwebhook.Field{
+		{
+			Name:  toPtr("Name"),
+			Value: &f.Name,
 		},
+		{
+			Name:  toPtr("Mail"),
+			Value: &f.Mail,
+		},
+		{
+			Name:  toPtr("IP Address"),
+			Value: &f.IP,
+		},
+		{
+			Name:  toPtr("Language"),
+			Value: &f.Lang,
+		},
+	}
+
+	if f.UserData.Device != "" {
+		userDataFiled = append(userDataFiled, discordwebhook.Field{
+			Name:  toPtr("Device"),
+			Value: &f.UserData.Device,
+		})
+	}
+	if f.UserData.OS != "" {
+		userDataFiled = append(userDataFiled, discordwebhook.Field{
+			Name:  toPtr("Browser"),
+			Value: &f.UserData.Browser,
+		})
+	}
+	if f.UserData.Browser != "" {
+		userDataFiled = append(userDataFiled, discordwebhook.Field{
+			Name:  toPtr("OS"),
+			Value: &f.UserData.OS,
+		})
+	}
+
+	userDataFiled = append(userDataFiled, discordwebhook.Field{
+		Name:  toPtr("Is Mobile"),
+		Value: &isMobileStr,
+	})
+
+	userData := discordwebhook.Embed{
+		Title:  toPtr("User Data"),
+		Fields: &userDataFiled,
 	}
 
 	formFiled := []discordwebhook.Field{}

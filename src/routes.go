@@ -32,7 +32,7 @@ func Routes(e *echo.Echo, handler *handler.Handler) {
 	e.DELETE("/user/bio", handler.DeleteBioHandler)
 
 	// location
-	e.GET("/user/location", handler.LoginHandler)
+	e.GET("/user/location", handler.LocationHandler)
 	e.POST("/user/location", handler.CreateLocationHandler)
 	e.PUT("/user/location", handler.UpdateLocationHandler)
 	e.DELETE("/user/location", handler.DeleteLocationHandler)
@@ -60,8 +60,8 @@ func Routes(e *echo.Echo, handler *handler.Handler) {
 	e.PUT("/user/notice", handler.UpdateNoticeHandler)
 
 	// Contacts
-	e.GET("/contact", handler.ContactGetHandler)
-	e.DELETE("/contact", handler.ContactDeleteHandler)
+	e.GET("/user/contact", handler.ContactGetHandler)
+	e.DELETE("/user/contact", handler.ContactDeleteHandler)
 
 	// Public endpoints
 	e.GET("/public/profile", handler.PublicProfileHandler)

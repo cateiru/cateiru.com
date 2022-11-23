@@ -8,16 +8,17 @@
 
 ---
 
-{{ if .Category ne "" }}
-- Category : {{.Category}}
+{{ with .Category }}
+- Category : {{.}}
 {{ end }}
 
-{{ if .URL ne "" }}
-- URL : {{.URL}}
+{{ with .URL }}
+- URL : {{.}}
 {{ end }}
 
-{{ if .CustomTitle ne "" }}
-- {{.CustomTitle}} : {{.CustomValue}}
+{{$custom_value := .CustomValue}}
+{{ with .CustomTitle }}
+- {{.}} : {{$custom_value}}
 {{ end }}
 
 ---
