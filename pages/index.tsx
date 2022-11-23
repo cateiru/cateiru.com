@@ -9,7 +9,7 @@ import {Public} from '../utils/types';
 const CACHE_TIME = 60; // 1 min
 
 type Props = {
-  profile: Public;
+  profile?: Public;
   error?: string;
 };
 
@@ -23,7 +23,7 @@ const Home: NextPage<Props> = props => {
   return (
     <>
       <Head title={{ja: 'Cateiruのページ', en: "Cateiru's Page"}} />
-      <Index profile={props.profile} />
+      {props.profile && <Index profile={props.profile} />}
     </>
   );
 };

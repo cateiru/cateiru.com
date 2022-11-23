@@ -3528,6 +3528,11 @@ normalize-package-data@^3.0.0:
     semver "^7.3.4"
     validate-npm-package-license "^3.0.1"
 
+noto-sans-cjk-jp@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/noto-sans-cjk-jp/-/noto-sans-cjk-jp-1.0.1.tgz#552f7dbda5880b1dad9df789fd35071c3eb6d67a"
+  integrity sha512-mbse+T0CI/Y2/x9aZAyda47GaAxnTcASnSaDcuRQU+iibeBwyTJR6W326TzyA/oU/+1ATkxjImYafW7hWxSWYw==
+
 npm-run-path@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/npm-run-path/-/npm-run-path-4.0.1.tgz"

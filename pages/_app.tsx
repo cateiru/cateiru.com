@@ -13,6 +13,8 @@ import 'nprogress/nprogress.css';
 import 'gantt-task-react/dist/index.css';
 import '../styles/gantt.css';
 
+import 'noto-sans-cjk-jp';
+
 nprogress.configure({showSpinner: false, speed: 400, minimum: 0.25});
 
 const App = ({Component, pageProps}: AppProps) => {
