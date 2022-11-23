@@ -32,11 +32,7 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
     >
       <Flex justifyContent="center" mt=".5rem" alignItems="center">
         <Emoji size={25} unified={toUnicode(links.emoji)} />
-        <Text
-          fontWeight="bold"
-          fontSize={{base: '1.5rem', sm: '1.2rem'}}
-          ml=".5rem"
-        >
+        <Text fontWeight="bold" fontSize="1.2rem" ml=".5rem">
           {convertLang({ja: links.category_name_ja, en: links.category_name})}
         </Text>
       </Flex>
@@ -49,7 +45,7 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
                 mt="1rem"
                 py=".5rem"
                 cursor="pointer"
-                fontSize={{base: '1.5rem', sm: '1rem'}}
+                fontSize={{base: '1rem', sm: '1rem'}}
                 bgColor={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
                 borderRadius="25"
                 pl="1rem"
@@ -62,11 +58,7 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
                 <Flex alignItems="center">
                   {v.favicon_url && (
                     <Box mr=".5rem">
-                      <Image
-                        src={v.favicon_url}
-                        width={{base: '40px', sm: '20px'}}
-                        alt="favicon"
-                      />
+                      <Image src={v.favicon_url} width="20px" alt="favicon" />
                     </Box>
                   )}
                   <Text maxW={{base: 'calc(100% - 4rem)', sm: '120px'}}>
