@@ -351,7 +351,7 @@ func TestUpdateBioHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		err = h.UpdateBioHandler(e)
-		require.Error(t, err)
+		require.NoError(t, err) // no error
 	})
 
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {

@@ -382,39 +382,29 @@ const UpdateBio: React.FC<{
     formFunc: (d, id) => {
       const form = new FormData();
       form.append('bio_id', `${id}`);
-      let changed = false;
       if (d.is_public !== Boolean(target?.biography.is_public)) {
         form.append('is_public', d.is_public ? 'true' : 'false');
-        changed = true;
       }
       if (d.location_id !== String(target?.biography.location_id)) {
         form.append('location_id', d.location_id);
-        changed = true;
       }
       if (d.position !== target?.biography.position) {
         form.append('position', d.position);
-        changed = true;
       }
       if (d.position_ja !== target?.biography.position_ja) {
         form.append('position_ja', d.position_ja);
-        changed = true;
       }
       if (
         new Date(d.join_date).toISOString() !==
         new Date(target?.biography.join ?? '').toISOString()
       ) {
         form.append('join_date', new Date(d.join_date).toISOString());
-        changed = true;
       }
-      if (
-        d.leave_date &&
-        new Date(d.leave_date).toISOString() !==
-          new Date(target?.biography.leave ?? '').toISOString()
-      ) {
+      if (d.leave_date) {
         form.append('leave_date', new Date(d.leave_date).toISOString());
-        changed = true;
       }
-      return [form, changed];
+
+      return [form, true];
     },
     parse: r => BioLocSchema.parse(r),
     update,

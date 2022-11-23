@@ -159,7 +159,6 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: bio_id")
 	}
 
-	changes := false
 	u := h.DB.Client.Biography.
 		Update().
 		Where(
@@ -171,7 +170,6 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 
 	isPublicStr := e.FormValue("is_public")
 	if isPublicStr != "" {
-		changes = true
 		isPublic, err := strconv.ParseBool(isPublicStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: is_public")
@@ -181,7 +179,6 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 
 	locationIdStr := e.FormValue("location_id")
 	if locationIdStr != "" {
-		changes = true
 		locationId, err := strconv.Atoi(locationIdStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: location_id")
@@ -194,19 +191,16 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 
 	position := e.FormValue("position")
 	if position != "" {
-		changes = true
 		u = u.SetPosition(position)
 	}
 
 	positionJa := e.FormValue("position_ja")
 	if positionJa != "" {
-		changes = true
 		u = u.SetPositionJa(positionJa)
 	}
 
 	joinDateStr := e.FormValue("join_date")
 	if joinDateStr != "" {
-		changes = true
 		joinDate, err := time.Parse(time.RFC3339, joinDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: join_date")
@@ -216,7 +210,6 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 
 	leaveDateStr := e.FormValue("leave_date")
 	if leaveDateStr != "" {
-		changes = true
 		leaveDate, err := time.Parse(time.RFC3339, leaveDateStr)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid forms: leave_date")
@@ -224,10 +217,6 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 		u = u.SetLeave(leaveDate)
 	} else {
 		u = u.ClearLeave()
-	}
-
-	if !changes {
-		return echo.NewHTTPError(http.StatusBadRequest, "no changes")
 	}
 
 	if err := u.Exec(ctx); err != nil {
