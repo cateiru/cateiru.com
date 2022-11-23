@@ -32,6 +32,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		// bio
 		bio, err := u.CreateBio()
 		require.NoError(t, err)
+		bio.IsPublic = true
 		_, err = bio.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 		// product
@@ -168,6 +169,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		// bio
 		bio, err := u.CreateBio()
 		require.NoError(t, err)
+		bio.IsPublic = true
 		_, err = bio.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 		// link
@@ -214,6 +216,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		// bio
 		bio, err := u.CreateBio()
 		require.NoError(t, err)
+		bio.IsPublic = true
 		_, err = bio.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 		// product

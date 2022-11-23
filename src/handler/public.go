@@ -106,7 +106,7 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 	// Get Biography
 	bios, err := h.DB.Client.Biography.
 		Query().
-		Where(biography.UserID(u.ID)).
+		Where(biography.And(biography.UserID(u.ID), biography.IsPublic(true))).
 		Order(ent.OrderFunc(ent.Asc(biography.FieldJoin))).
 		All(ctx)
 	if err != nil {
