@@ -1,6 +1,7 @@
 package envs
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"os"
@@ -33,8 +34,8 @@ var ProdConfig = ConfigDefs{
 		DBName:    "cateirucom",
 		User:      os.Getenv("DB_USER"),
 		Passwd:    os.Getenv("DB_PASSWORD"),
-		Addr:      "localhost:3306",
-		Net:       "tcp",
+		Addr:      fmt.Sprintf("/cloudsql/%s", os.Getenv("INSTANCE_CONNECTION_NAME")),
+		Net:       "unix",
 		ParseTime: true,
 	},
 
