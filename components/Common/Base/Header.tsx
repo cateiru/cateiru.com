@@ -55,10 +55,13 @@ const Header = React.memo(() => {
       <IconButton
         aria-label="switch color mode"
         icon={
-          <Emoji
-            size={25}
-            unified={lang === 'ja' ? '1f1fa-1f1f8' : '1f1ef-1f1f5'}
-          />
+          <>
+            {lang === 'ja' ? '🇺🇸' : '🇯🇵'}
+            {/* <Emoji
+              size={25}
+              unified={lang === 'ja' ? '1f1fa-1f1f8' : '1f1ef-1f1f5'}
+            /> */}
+          </>
         }
         onClick={toggleLang}
         variant="ghost"
