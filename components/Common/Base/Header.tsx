@@ -1,5 +1,4 @@
 import {Flex, IconButton, useColorMode, Text} from '@chakra-ui/react';
-import {Emoji} from 'emoji-picker-react';
 import React from 'react';
 import {IoMoon, IoSunny} from 'react-icons/io5';
 import {useRecoilState} from 'recoil';
@@ -54,15 +53,7 @@ const Header = React.memo(() => {
       />
       <IconButton
         aria-label="switch color mode"
-        icon={
-          <>
-            {lang === 'ja' ? '🇺🇸' : '🇯🇵'}
-            {/* <Emoji
-              size={25}
-              unified={lang === 'ja' ? '1f1fa-1f1f8' : '1f1ef-1f1f5'}
-            /> */}
-          </>
-        }
+        icon={<>{lang === 'ja' ? '🇺🇸' : '🇯🇵'}</>}
         onClick={toggleLang}
         variant="ghost"
         my=".5rem"

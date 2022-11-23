@@ -35,7 +35,7 @@ export const EmojiPick = React.memo<{
   React.useEffect(() => {
     const e = getValues('emoji');
     if (e.length !== 0) {
-      setPreviewEmoji(toUnicode(e) || '');
+      setPreviewEmoji(e);
     }
 
     setTimeout(() => {
@@ -43,9 +43,9 @@ export const EmojiPick = React.memo<{
     }, 1000);
   }, []);
 
-  const setEmoji = (emoji: string, unified: string) => {
+  const setEmoji = (emoji: string) => {
     setValue('emoji', emoji);
-    setPreviewEmoji(unified);
+    setPreviewEmoji(emoji);
   };
 
   return (
@@ -53,8 +53,14 @@ export const EmojiPick = React.memo<{
       <FormLabel htmlFor="emoji">
         {convertLang({ja: '絵文字', en: 'Emoji'})}
       </FormLabel>
-      <Input as={Box} alignItems="center" display="flex" mb=".5rem">
-        <Emoji unified={previewEmoji} size={25} />
+      <Input
+        as={Box}
+        alignItems="center"
+        display="flex"
+        mb=".5rem"
+        fontSize="1.5rem"
+      >
+        {previewEmoji}
       </Input>
       <Input
         display="none"
@@ -73,9 +79,9 @@ export const EmojiPick = React.memo<{
         <Center>
           {showEmojiSearch && (
             <EmojiPicker
-              onEmojiClick={e => setEmoji(e.emoji, e.unified)}
+              onEmojiClick={e => setEmoji(e.emoji)}
               theme={colorMode === 'dark' ? EmojiTheme.DARK : EmojiTheme.LIGHT}
-              emojiStyle={EmojiStyle.APPLE}
+              emojiStyle={EmojiStyle.NATIVE}
               lazyLoadEmojis
               width="100%"
             />

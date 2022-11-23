@@ -97,12 +97,7 @@ export const CategoryEdit = () => {
                   {data?.map(v => {
                     return (
                       <Tr key={v.id}>
-                        <Td>
-                          <Emoji
-                            size={20}
-                            unified={v.emoji ? toUnicode(v.emoji) || '' : ''}
-                          />
-                        </Td>
+                        <Td fontSize="1.5rem">{v.emoji}</Td>
                         <Td>{convertLang({ja: v.name_ja, en: v.name})}</Td>
                         <Td>
                           <Button size="sm" onClick={() => onUpdate(v)}>

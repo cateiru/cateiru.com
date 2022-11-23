@@ -31,7 +31,7 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
       position="relative"
     >
       <Flex justifyContent="center" mt=".5rem" alignItems="center">
-        <Emoji size={25} unified={toUnicode(links.emoji)} />
+        <Text fontSize="1.5rem">{links.emoji}</Text>
         <Text fontWeight="bold" fontSize="1.2rem" ml=".5rem">
           {convertLang({ja: links.category_name_ja, en: links.category_name})}
         </Text>
