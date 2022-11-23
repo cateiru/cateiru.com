@@ -1,6 +1,7 @@
 # Go version 1.19.1
 FROM golang:alpine3.16 as builder
 
+RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates
 WORKDIR /go/src
 
 COPY go.mod go.sum ./
@@ -18,7 +19,8 @@ RUN go build \
 FROM scratch as runner
 
 FROM scratch
-# COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/bin/main /app/main
 
 COPY ./templates /templates/
