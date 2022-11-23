@@ -1,8 +1,7 @@
-import {Flex, IconButton, useColorMode, Text} from '@chakra-ui/react';
+import {Flex, IconButton, useColorMode} from '@chakra-ui/react';
 import React from 'react';
 import {IoMoon, IoSunny} from 'react-icons/io5';
 import {useRecoilState} from 'recoil';
-import {toUnicode} from '../../../utils/parse';
 import {langState} from '../../../utils/state/atoms';
 
 const Header = React.memo(() => {

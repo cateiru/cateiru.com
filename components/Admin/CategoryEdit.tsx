@@ -23,11 +23,9 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import {Emoji} from 'emoji-picker-react';
 import React from 'react';
 import {FormProvider} from 'react-hook-form';
 import {MultiLang} from '../../utils/config/lang';
-import {toUnicode} from '../../utils/parse';
 import {Category, CategorySchema} from '../../utils/types';
 import {Back} from '../Back';
 import {EmojiPick} from '../Form/EmojiPick';

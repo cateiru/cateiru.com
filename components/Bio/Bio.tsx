@@ -8,13 +8,12 @@ import {
   Text,
   UnorderedList,
   ListItem,
-  ListIcon,
   Badge,
 } from '@chakra-ui/react';
 import {Gantt, ViewMode} from 'gantt-task-react';
 import React from 'react';
 import {IoCaretDown} from 'react-icons/io5';
-import {getTasks, parseDate, parseShotDate} from '../../utils/parse';
+import {getTasks, parseShotDate} from '../../utils/parse';
 import {Public} from '../../utils/types';
 import useLanguage from '../useLanguage';
 

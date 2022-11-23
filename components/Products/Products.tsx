@@ -10,7 +10,7 @@ const Products: React.FC<{
   r: React.MutableRefObject<HTMLDivElement>;
   data: Public;
 }> = ({next, r, data}) => {
-  const {lang, convertLang} = useLanguage();
+  const {convertLang} = useLanguage();
 
   return (
     <Center minHeight="100vh" ref={r}>

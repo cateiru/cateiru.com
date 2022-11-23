@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import type {Task} from 'gantt-task-react';
 import stc from 'string-to-color';
-import {date} from 'zod';
 import {Contact, Public, PublicBio} from './types';
 
 /**

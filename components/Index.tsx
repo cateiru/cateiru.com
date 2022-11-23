@@ -1,4 +1,3 @@
-import {Center, Heading} from '@chakra-ui/react';
 import React from 'react';
 import {Public} from '../utils/types';
 import Bio from './Bio/Bio';

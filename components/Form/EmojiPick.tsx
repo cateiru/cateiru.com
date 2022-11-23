@@ -8,12 +8,11 @@ import {
   useColorMode,
   Skeleton,
 } from '@chakra-ui/react';
-import EmojiPicker, {Emoji} from 'emoji-picker-react';
+import EmojiPicker from 'emoji-picker-react';
 import {Theme as EmojiTheme, EmojiStyle} from 'emoji-picker-react';
 import React from 'react';
 import {useFormContext} from 'react-hook-form';
 import {MultiLang} from '../../utils/config/lang';
-import {toUnicode} from '../../utils/parse';
 
 interface EmojiForm {
   emoji: string;

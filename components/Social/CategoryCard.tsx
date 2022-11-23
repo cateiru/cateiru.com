@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Divider,
   Flex,
   Image,
@@ -8,8 +7,6 @@ import {
   Text,
   useColorMode,
 } from '@chakra-ui/react';
-import {Emoji} from 'emoji-picker-react';
-import {toUnicode} from '../../utils/parse';
 import {PublicLink} from '../../utils/types';
 import useLanguage from '../useLanguage';
 

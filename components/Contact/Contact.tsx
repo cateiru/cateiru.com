@@ -1,8 +1,6 @@
-import {Button, Center, Box, Heading, Skeleton} from '@chakra-ui/react';
+import {Center, Box, Heading, Skeleton} from '@chakra-ui/react';
 import {useRouter} from 'next/router';
 import React from 'react';
-import {IoArrowBack} from 'react-icons/io5';
-import {Form} from '../../utils/form';
 import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 import {ContactForm, ContactFormProps} from './ContactForm';
