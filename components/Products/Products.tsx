@@ -13,7 +13,7 @@ const Products: React.FC<{
   const {convertLang} = useLanguage();
 
   return (
-    <Center minHeight="100vh" ref={r}>
+    <Center minHeight="100vh" ref={r} my={{base: '150px', md: '25px'}}>
       <Box width={{base: '90%', md: '80%', lg: '1000px'}}>
         <Heading textAlign="center" mb="2rem">
           {convertLang({en: 'Products', ja: '制作物'})}

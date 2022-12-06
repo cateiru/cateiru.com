@@ -35,7 +35,7 @@ const Bio: React.FC<{
   };
 
   return (
-    <Center minHeight="100vh" ref={r}>
+    <Center minHeight="100vh" ref={r} my={{base: '150px', md: '25px'}}>
       <Box width={{base: '90%', md: '700px'}}>
         <Heading textAlign="center" mb="2rem">
           {convertLang({en: 'Brief personal record', ja: '略歴'})}
@@ -51,7 +51,7 @@ const Bio: React.FC<{
               borderRadius="25"
               mt=".5rem"
             >
-              <Flex justifyContent="right" pt=".5rem" pr=".5rem">
+              <Flex justifyContent="right" pt=".5rem" pr="1rem">
                 <Switch onChange={handleChange}>
                   {convertLang({ja: '月ごとで表示する', en: 'View by month'})}
                 </Switch>

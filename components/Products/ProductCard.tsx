@@ -29,7 +29,6 @@ export const ProductCard: React.FC<{prod: PublicProduct}> = ({prod}) => {
         borderRadius="56px"
         p="1rem"
         position="relative"
-        as="a"
         _hover={{
           bgColor: colorMode === 'light' ? 'gray.100' : 'gray.700',
         }}
@@ -45,7 +44,7 @@ export const ProductCard: React.FC<{prod: PublicProduct}> = ({prod}) => {
         ) : (
           <Center
             w="100%"
-            h="40%"
+            h="160px"
             bgColor={colorMode === 'dark' ? 'gray.700' : 'gray.100'}
             borderRadius="40"
           >

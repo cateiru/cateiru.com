@@ -13,7 +13,7 @@ const Social: React.FC<{
   const {convertLang} = useLanguage();
 
   return (
-    <Center minHeight="100vh" ref={r}>
+    <Center minHeight="100vh" ref={r} my={{base: '150px', md: '25px'}}>
       <Box width={{base: '90%', md: '500px', lg: '900px'}}>
         <Heading textAlign="center" mb="2rem">
           {convertLang({en: 'Links', ja: 'リンク'})}
