@@ -62,7 +62,7 @@ var (
 		{Name: "title", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "detail", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "mail", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
-		{Name: "ip", Type: field.TypeString, Size: 16},
+		{Name: "ip", Type: field.TypeString, Size: 63},
 		{Name: "lang", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "url", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "category", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "text"}},

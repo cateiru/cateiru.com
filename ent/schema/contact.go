@@ -51,7 +51,7 @@ func (Contact) Fields() []ent.Field {
 		// `ip` VARCHAR(16) NOT NULL
 		field.String("ip").
 			Annotations(entsql.Annotation{
-				Size: 16,
+				Size: 63,
 			}),
 
 		// `lang` TEXT NOT NULL
