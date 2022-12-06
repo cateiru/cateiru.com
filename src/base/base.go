@@ -135,6 +135,10 @@ func (c *Base) sessionLogin(ctx context.Context, client ent.Client, sessionToken
 		return nil, echo.NewHTTPError(http.StatusForbidden, "session token is empty")
 	}
 
+	if time.Until(session.Period) < 0 {
+		return nil, echo.NewHTTPError(http.StatusForbidden, "session token is empty")
+	}
+
 	user, err := client.User.Get(ctx, session.UserID)
 	if _, ok := err.(*ent.NotFoundError); ok {
 		return nil, echo.NewHTTPError(http.StatusForbidden, "no user")

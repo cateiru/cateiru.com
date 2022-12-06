@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/cateiru/cateiru.com/src/base"
 	"github.com/cateiru/cateiru.com/src/config"
@@ -72,6 +73,40 @@ func TestBase(t *testing.T) {
 			require.Error(t, err)
 			require.Nil(t, b.User)
 		})
+	})
+
+	t.Run("expired session token", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		// Create session token
+		user, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+		s, err := tool.DB.Client.Session.Create().
+			SetUserID(user.User.ID).
+			SetPeriod(time.Now().Add(-10 * time.Hour)).
+			Save(ctx)
+		require.NoError(t, err)
+
+		m, err := mock.NewMock("", http.MethodGet, "/")
+		require.NoError(t, err)
+
+		sessionCookie := &http.Cookie{
+			Name:  config.Config.SessionCookieName,
+			Value: s.String(),
+		}
+		m.Cookie([]*http.Cookie{sessionCookie})
+
+		c := m.Echo()
+		b, err := base.NewBase(tool.DB)
+		require.NoError(t, err)
+
+		err = b.Session(ctx, c)
+		require.Error(t, err)
+		require.Nil(t, b.User)
 	})
 
 	t.Run("login", func(t *testing.T) {
