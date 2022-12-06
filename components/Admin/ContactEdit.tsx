@@ -28,6 +28,7 @@ import React from 'react';
 import {TbCheck} from 'react-icons/tb';
 import useSWR from 'swr';
 import {api} from '../../utils/api';
+import {MultiLang} from '../../utils/config/lang';
 import {copyElement, parseAgo, parseDetailDate} from '../../utils/parse';
 import {fetcher, SWRError} from '../../utils/swr';
 import {Contact} from '../../utils/types';
@@ -45,7 +46,6 @@ export const ContactEdit = () => {
   const {colorMode} = useColorMode();
 
   const [select, setSelect] = React.useState<Contact>();
-  const {hasCopied, onCopy} = useClipboard(select ? copyElement(select) : '');
 
   const onSelect = (d: Contact) => {
     setSelect(d);
@@ -157,126 +157,134 @@ export const ContactEdit = () => {
           </ModalHeader>
           <ModalCloseButton size="lg" />
           <ModalBody mb="1rem">
-            <Flex justifyContent="right">
-              <Button
-                colorScheme="red"
-                variant="outline"
-                size="sm"
-                onClick={onDelete}
-              >
-                {convertLang({ja: '削除', en: 'Delete'})}
-              </Button>
-            </Flex>
-            <TableContainer>
-              <Table variant="simple">
-                <Tbody>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: '件名', en: 'Subject'})}
-                    </Td>
-                    <Td>{select?.title}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: '日時', en: 'Date'})}
-                    </Td>
-                    <Td>
-                      {select?.created ? parseDetailDate(select?.created) : ''}
-                    </Td>
-                  </Tr>
-                  {select?.url && (
-                    <Tr>
-                      <Td fontWeight="bold">
-                        {convertLang({ja: 'URL', en: 'URL'})}
-                      </Td>
-                      <Td>{select?.url}</Td>
-                    </Tr>
-                  )}
-                  {select?.custom_title && (
-                    <Tr>
-                      <Td fontWeight="bold">{select?.custom_title}</Td>
-                      <Td>{select?.custom_value}</Td>
-                    </Tr>
-                  )}
-                </Tbody>
-              </Table>
-            </TableContainer>
-            <Text
-              as="pre"
-              fontFamily="'Noto Sans JP', sans-serif"
-              fontSize="1rem"
-              minH="120px"
-              my="1rem"
-              mx=".5rem"
-            >
-              {select?.detail}
-            </Text>
-            <TableContainer>
-              <Table variant="simple">
-                <Tbody>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: '名前', en: 'Name'})}
-                    </Td>
-                    <Td>{select?.name}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: 'メールアドレス', en: 'Email'})}
-                    </Td>
-                    <Td>{select?.mail}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: 'IP', en: 'IP'})}
-                    </Td>
-                    <Td>{select?.ip}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: '言語', en: 'Language'})}
-                    </Td>
-                    <Td>{select?.lang}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: 'デバイス', en: 'Device'})}
-                    </Td>
-                    <Td>{select?.device_name ?? '-'}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: 'OS', en: 'OS'})}
-                    </Td>
-                    <Td>{select?.os ?? '-'}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: 'ブラウザ', en: 'Browser'})}
-                    </Td>
-                    <Td>{select?.browser_name ?? '-'}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td fontWeight="bold">
-                      {convertLang({ja: 'モバイル端末', en: 'Mobile'})}
-                    </Td>
-                    <Td>{select?.is_mobile ? 'true' : 'false'}</Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TableContainer>
-            <Button
-              mt="1rem"
-              onClick={onCopy}
-              leftIcon={hasCopied ? <TbCheck size="20" /> : undefined}
-              w="100%"
-              size="sm"
-            >
-              {convertLang({ja: 'コピー', en: 'Copy'})}
-            </Button>
+            {select && (
+              <ContactElement
+                convertLang={convertLang}
+                onDelete={onDelete}
+                select={select}
+              />
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
     </Box>
+  );
+};
+
+const ContactElement: React.FC<{
+  convertLang: (e: MultiLang) => string;
+  onDelete: () => void;
+  select: Contact;
+}> = ({convertLang, onDelete, select}) => {
+  const {hasCopied, onCopy} = useClipboard(copyElement(select));
+
+  return (
+    <>
+      <Flex justifyContent="right">
+        <Button
+          colorScheme="red"
+          variant="outline"
+          size="sm"
+          onClick={onDelete}
+        >
+          {convertLang({ja: '削除', en: 'Delete'})}
+        </Button>
+      </Flex>
+      <TableContainer>
+        <Table variant="simple">
+          <Tbody>
+            <Tr>
+              <Td fontWeight="bold">
+                {convertLang({ja: '件名', en: 'Subject'})}
+              </Td>
+              <Td>{select?.title}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">{convertLang({ja: '日時', en: 'Date'})}</Td>
+              <Td>{select?.created ? parseDetailDate(select?.created) : ''}</Td>
+            </Tr>
+            {select?.url && (
+              <Tr>
+                <Td fontWeight="bold">{convertLang({ja: 'URL', en: 'URL'})}</Td>
+                <Td>{select?.url}</Td>
+              </Tr>
+            )}
+            {select?.custom_title && (
+              <Tr>
+                <Td fontWeight="bold">{select?.custom_title}</Td>
+                <Td>{select?.custom_value}</Td>
+              </Tr>
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      <Text
+        as="pre"
+        fontFamily="'Noto Sans JP', sans-serif"
+        fontSize="1rem"
+        minH="120px"
+        my="1rem"
+        mx=".5rem"
+      >
+        {select?.detail}
+      </Text>
+      <TableContainer>
+        <Table variant="simple">
+          <Tbody>
+            <Tr>
+              <Td fontWeight="bold">{convertLang({ja: '名前', en: 'Name'})}</Td>
+              <Td>{select?.name}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">
+                {convertLang({ja: 'メールアドレス', en: 'Email'})}
+              </Td>
+              <Td>{select?.mail}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">{convertLang({ja: 'IP', en: 'IP'})}</Td>
+              <Td>{select?.ip}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">
+                {convertLang({ja: '言語', en: 'Language'})}
+              </Td>
+              <Td>{select?.lang}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">
+                {convertLang({ja: 'デバイス', en: 'Device'})}
+              </Td>
+              <Td>{select?.device_name ?? '-'}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">{convertLang({ja: 'OS', en: 'OS'})}</Td>
+              <Td>{select?.os ?? '-'}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">
+                {convertLang({ja: 'ブラウザ', en: 'Browser'})}
+              </Td>
+              <Td>{select?.browser_name ?? '-'}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">
+                {convertLang({ja: 'モバイル端末', en: 'Mobile'})}
+              </Td>
+              <Td>{select?.is_mobile ? 'true' : 'false'}</Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      </TableContainer>
+      <Button
+        mt="1rem"
+        onClick={onCopy}
+        leftIcon={hasCopied ? <TbCheck size="20" /> : undefined}
+        w="100%"
+        size="sm"
+      >
+        {convertLang({ja: 'コピー', en: 'Copy'})}
+      </Button>
+    </>
   );
 };
