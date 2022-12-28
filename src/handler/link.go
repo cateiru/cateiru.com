@@ -292,10 +292,6 @@ func GetFavicon(siteUrl string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
-		return "", echo.NewHTTPError(http.StatusBadRequest, "site_url is invalid link")
-	}
-
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
 		return "", err
