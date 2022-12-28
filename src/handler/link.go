@@ -320,7 +320,7 @@ func GetFavicon(siteUrl string) (string, error) {
 	for _, f := range favicons {
 		favUrl := ""
 		if err := ValidateURL(f); err != nil {
-			favUrl = fmt.Sprintf("%s%s", u.String(), f)
+			favUrl = fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, f)
 		} else {
 			favUrl = f
 		}
