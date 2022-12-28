@@ -296,7 +296,7 @@ func GetFavicon(siteUrl string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	query := doc.Find("link[rel=icon]")
+	query := doc.Find(`link[rel="shortcut icon"], link[rel="icon"]`)
 	favicons := []string{}
 	query.Each(func(i int, s *goquery.Selection) {
 		favicon, exist := s.Attr("href")
