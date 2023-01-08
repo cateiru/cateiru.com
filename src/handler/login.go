@@ -20,7 +20,7 @@ import (
 // Require `?code=` param.
 // - code param is Open ID Connect code.
 func (h *Handler) LoginHandler(c echo.Context) error {
-	ctx := context.Background()
+	ctx := c.Request().Context()
 
 	code := c.QueryParams().Get("code")
 	if code == "" {

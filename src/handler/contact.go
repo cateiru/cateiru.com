@@ -22,7 +22,7 @@ import (
 
 // Contact form API
 func (h *Handler) ContactHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	name := e.FormValue("name")
 	mail := e.FormValue("mail")
@@ -106,7 +106,7 @@ func (h *Handler) ContactHandler(e echo.Context) error {
 }
 
 func (h *Handler) ContactGetHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -124,7 +124,7 @@ func (h *Handler) ContactGetHandler(e echo.Context) error {
 }
 
 func (h *Handler) ContactDeleteHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err

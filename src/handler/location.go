@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 
@@ -11,7 +10,7 @@ import (
 )
 
 func (h *Handler) LocationHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -35,7 +34,7 @@ func (h *Handler) LocationHandler(e echo.Context) error {
 // - address: string
 // - address_ja: string
 func (h *Handler) CreateLocationHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -91,7 +90,7 @@ func (h *Handler) CreateLocationHandler(e echo.Context) error {
 // - address: string
 // - address_ja: string
 func (h *Handler) UpdateLocationHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -160,7 +159,7 @@ func (h *Handler) UpdateLocationHandler(e echo.Context) error {
 }
 
 func (h *Handler) DeleteLocationHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err

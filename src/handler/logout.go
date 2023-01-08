@@ -1,15 +1,13 @@
 package handler
 
 import (
-	"context"
-
 	"github.com/labstack/echo/v4"
 )
 
 // Logout session
 // no delete users.
 func (h *Handler) LogoutHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err

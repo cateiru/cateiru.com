@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 	"time"
@@ -93,7 +92,7 @@ type PublicProduct struct {
 
 // Response public profiles
 func (h *Handler) PublicProfileHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	u, err := h.DB.Client.User.Query().Where(user.Selected(true)).First(ctx)
 	if _, ok := err.(*ent.NotFoundError); ok {
@@ -240,7 +239,7 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 }
 
 func (h *Handler) PublicProductsHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	productIdStr := e.QueryParam("product_id")
 	productId, err := strconv.Atoi(productIdStr)

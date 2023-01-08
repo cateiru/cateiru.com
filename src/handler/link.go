@@ -22,7 +22,7 @@ type LinkResponse struct {
 
 // Response all Links
 func (h *Handler) LinkHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -73,7 +73,7 @@ func (h *Handler) LinkHandler(e echo.Context) error {
 // - site_url
 // - category_id
 func (h *Handler) CreateLinkHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -143,7 +143,7 @@ func (h *Handler) CreateLinkHandler(e echo.Context) error {
 }
 
 func (h *Handler) UpdateLinkHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -235,7 +235,7 @@ func (h *Handler) UpdateLinkHandler(e echo.Context) error {
 }
 
 func (h *Handler) DeleteLinkHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err

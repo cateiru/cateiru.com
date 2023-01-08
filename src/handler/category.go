@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 
@@ -11,7 +10,7 @@ import (
 
 // Response all categories
 func (h *Handler) CategoryHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -29,7 +28,7 @@ func (h *Handler) CategoryHandler(e echo.Context) error {
 // - name_ja: string
 // - emoji: len 1 string
 func (h *Handler) CreateCategoryHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -66,7 +65,7 @@ func (h *Handler) CreateCategoryHandler(e echo.Context) error {
 // - name_ja: string
 // - emoji: len 1 string
 func (h *Handler) UpdateCategoryHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -116,7 +115,7 @@ func (h *Handler) UpdateCategoryHandler(e echo.Context) error {
 }
 
 func (h *Handler) DeleteCategoryHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err

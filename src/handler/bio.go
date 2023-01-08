@@ -20,7 +20,7 @@ type BioResponse struct {
 
 // Get my bio
 func (h *Handler) BioHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -61,7 +61,7 @@ func (h *Handler) BioHandler(e echo.Context) error {
 // - join_date:  type date
 // - leave_date: Optional RFC3339 type date
 func (h *Handler) CreateBioHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -148,7 +148,7 @@ func (h *Handler) CreateBioHandler(e echo.Context) error {
 // - join_date: RFC3339 type date
 // - leave_date: RFC3339 type date
 func (h *Handler) UpdateBioHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -247,7 +247,7 @@ func (h *Handler) UpdateBioHandler(e echo.Context) error {
 }
 
 func (h *Handler) DeleteBioHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err

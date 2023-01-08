@@ -89,15 +89,27 @@ func (c *Base) Login(ctx context.Context, e echo.Context, u *ent.User) error {
 func (c *Base) Logout(e echo.Context) {
 	tokenCookie, err := e.Cookie(config.Config.SessionCookieName)
 	if err == nil {
-		tokenCookie.Expires = time.Now()
-		tokenCookie.MaxAge = 0
+		tokenCookie.Domain = config.Config.PageDomain.Host
+		tokenCookie.HttpOnly = config.Config.SessionCookieConfig.HttpOnly
+		tokenCookie.Secure = config.Config.SessionCookieConfig.Secure
+		tokenCookie.SameSite = config.Config.SessionCookieConfig.SameSite
+		tokenCookie.Path = config.Config.SessionCookieConfig.Path
+
+		tokenCookie.Expires = time.Now().Add(-1 * time.Hour)
+		tokenCookie.MaxAge = -1
 		e.SetCookie(tokenCookie)
 	}
 
 	checkCookie, err := e.Cookie(config.Config.SessionConfirmationCookieName)
 	if err == nil {
-		checkCookie.Expires = time.Now()
-		checkCookie.MaxAge = 0
+		checkCookie.Domain = config.Config.PageDomain.Host
+		checkCookie.HttpOnly = config.Config.SessionConfirmationCookieConfig.HttpOnly
+		checkCookie.Secure = config.Config.SessionConfirmationCookieConfig.Secure
+		checkCookie.SameSite = config.Config.SessionConfirmationCookieConfig.SameSite
+		checkCookie.Path = config.Config.SessionConfirmationCookieConfig.Path
+
+		checkCookie.Expires = time.Now().Add(-1 * time.Hour)
+		checkCookie.MaxAge = -1
 		e.SetCookie(checkCookie)
 	}
 }

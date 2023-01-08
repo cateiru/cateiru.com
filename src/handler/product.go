@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 	"time"
@@ -12,7 +11,7 @@ import (
 
 // Response to all products of me.
 func (h *Handler) ProductHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -41,7 +40,7 @@ func (h *Handler) ProductHandler(e echo.Context) error {
 // - dev_time: RFC3339type date
 // - thumbnail: Optional string
 func (h *Handler) CreateProductHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -127,7 +126,7 @@ func (h *Handler) CreateProductHandler(e echo.Context) error {
 // - dev_time: RFC3339type date
 // - thumbnail: string
 func (h *Handler) UpdateProductHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -225,7 +224,7 @@ func (h *Handler) UpdateProductHandler(e echo.Context) error {
 }
 
 func (h *Handler) DeleteProductHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err

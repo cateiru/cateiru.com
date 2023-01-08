@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 	"time"
@@ -12,7 +11,7 @@ import (
 
 // Response login user data
 func (h *Handler) MeHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Base.Session(ctx, e); err != nil {
 		return err
@@ -32,7 +31,7 @@ func (h *Handler) MeHandler(e echo.Context) error {
 // - location
 // - location_ja
 func (h *Handler) UpdateUserHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Base.Session(ctx, e); err != nil {
 		return err
@@ -100,7 +99,7 @@ func (h *Handler) UpdateUserHandler(e echo.Context) error {
 
 // Response all users in users db
 func (h *Handler) AllUsersHandler(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
@@ -115,7 +114,7 @@ func (h *Handler) AllUsersHandler(e echo.Context) error {
 }
 
 func (h *Handler) ChangeSelect(e echo.Context) error {
-	ctx := context.Background()
+	ctx := e.Request().Context()
 
 	if err := h.Session(ctx, e); err != nil {
 		return err
