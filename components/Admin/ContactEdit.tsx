@@ -220,7 +220,7 @@ const ContactElement: React.FC<{
       </TableContainer>
       <Text
         as="pre"
-        fontFamily="'Noto Sans JP', sans-serif"
+        fontFamily="'Kosugi Maru', sans-serif"
         fontSize="1rem"
         minH="120px"
         my="1rem"

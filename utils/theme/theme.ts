@@ -6,8 +6,8 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   fonts: {
-    heading: "'Noto Sans JP', sans-serif",
-    body: "'Noto Sans JP', sans-serif",
+    heading: "'Kosugi Maru', sans-serif",
+    body: "'Kosugi Maru', sans-serif",
   },
   components: {
     CloseButton: {
@@ -15,6 +15,16 @@ const theme = extendTheme({
         _focus: {
           boxShadow: 'none',
         },
+      },
+    },
+    Text: {
+      baseStyle: {
+        fontWeight: 'normal',
+      },
+    },
+    Heading: {
+      baseStyle: {
+        fontWeight: '800',
       },
     },
   },

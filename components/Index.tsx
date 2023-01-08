@@ -17,28 +17,28 @@ const Index = React.memo<{
   const scrollToBio = React.useCallback(() => {
     bioRef.current.scrollIntoView({
       behavior: 'smooth',
-      block: 'end',
+      block: 'start',
     });
   }, [bioRef]);
 
   const scrollToProducts = React.useCallback(() => {
     productsRef.current.scrollIntoView({
       behavior: 'smooth',
-      block: 'end',
+      block: 'start',
     });
   }, [productsRef]);
 
   const scrollToSocial = React.useCallback(() => {
     socialRef.current.scrollIntoView({
       behavior: 'smooth',
-      block: 'end',
+      block: 'start',
     });
   }, [socialRef]);
 
   const scrollToContact = React.useCallback(() => {
     contactRef.current.scrollIntoView({
       behavior: 'smooth',
-      block: 'end',
+      block: 'start',
     });
   }, [contactRef]);
 

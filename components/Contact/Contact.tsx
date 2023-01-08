@@ -1,4 +1,11 @@
-import {Center, Box, Heading, Skeleton} from '@chakra-ui/react';
+import {
+  Center,
+  Box,
+  Heading,
+  Skeleton,
+  Text,
+  useColorMode,
+} from '@chakra-ui/react';
 import {useRouter} from 'next/router';
 import React from 'react';
 import {Back} from '../Back';
@@ -7,8 +14,10 @@ import {ContactForm, ContactFormProps} from './ContactForm';
 
 const Contact = () => {
   const router = useRouter();
+  const {colorMode} = useColorMode();
   const {convertLang} = useLanguage();
   const [data, setData] = React.useState<ContactFormProps | null>(null);
+  const [description, setDescription] = React.useState<string>();
 
   React.useEffect(() => {
     if (!router.isReady) return;
@@ -33,6 +42,9 @@ const Contact = () => {
     if (typeof query['custom_title'] === 'string') {
       d.custom_title = query['custom_title'];
     }
+    if (typeof query['description'] === 'string') {
+      setDescription(query['description']);
+    }
     setData(d);
   }, [router.isReady, router.query]);
 
@@ -43,6 +55,23 @@ const Contact = () => {
         <Heading mb="2rem" textAlign="center" mt="1.5rem">
           {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
         </Heading>
+        {description && (
+          <Text
+            as="pre"
+            w="100%"
+            minH="100px"
+            py="1rem"
+            px=".5rem"
+            bgColor={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
+            borderRadius="10"
+            mb="1.5rem"
+            whiteSpace="pre-wrap"
+            fontSize="1rem"
+            fontFamily="'Kosugi Maru', sans-serif"
+          >
+            {decodeURIComponent(description)}
+          </Text>
+        )}
         {data ? (
           <ContactForm {...data} />
         ) : (

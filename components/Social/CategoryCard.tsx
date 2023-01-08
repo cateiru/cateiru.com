@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   Divider,
   Flex,
   Image,
@@ -7,6 +8,7 @@ import {
   Text,
   useColorMode,
 } from '@chakra-ui/react';
+import {TbPhoto} from 'react-icons/tb';
 import {PublicLink} from '../../utils/types';
 import useLanguage from '../useLanguage';
 
@@ -53,12 +55,16 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
                 transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
               >
                 <Flex alignItems="center">
-                  {v.favicon_url && (
+                  {v.favicon_url ? (
                     <Box mr=".5rem">
                       <Image src={v.favicon_url} width="20px" alt="favicon" />
                     </Box>
+                  ) : (
+                    <Center mr=".5rem">
+                      <TbPhoto size="20px" />
+                    </Center>
                   )}
-                  <Text maxW={{base: 'calc(100% - 4rem)', sm: '120px'}}>
+                  <Text maxW="calc(100% - 4rem)">
                     {convertLang({ja: v.name_ja, en: v.name})}
                   </Text>
                 </Flex>

@@ -8,12 +8,11 @@ import Base from '../components/Common/Base/Base';
 import {GA_TRACKING_ID, pageview} from '../utils/ga/gtag';
 import theme from '../utils/theme/theme';
 
-import '@fontsource/noto-sans-jp';
+import '@fontsource/kosugi-maru';
+
 import 'nprogress/nprogress.css';
 import 'gantt-task-react/dist/index.css';
 import '../styles/gantt.css';
-
-import 'noto-sans-cjk-jp';
 
 nprogress.configure({showSpinner: false, speed: 400, minimum: 0.25});
 
