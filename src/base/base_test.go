@@ -173,6 +173,6 @@ func TestBase(t *testing.T) {
 			}
 		}
 		require.NotNil(t, c)
-		require.Equal(t, c.MaxAge, 0)
+		require.Equal(t, c.MaxAge, -1)
 	})
 }
