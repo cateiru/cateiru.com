@@ -71,14 +71,7 @@ export default class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#572bcf" />
           <meta name="theme-color" content="#ffffff" />
 
-          <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
-            async
-          />
-          <script
-            src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.waves.min.js"
-            async
-          />
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" />
         </Head>
         <body>
           <ColorModeScript initialColorMode="system" />

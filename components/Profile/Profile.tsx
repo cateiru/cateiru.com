@@ -19,9 +19,13 @@ const Profile: React.FC<{next: () => void; data: Public}> = ({next, data}) => {
         FOG({
           el: myRef.current,
           baseColor: colorMode === 'dark' ? 0x1a202c : 0xffffff,
-          highlightColor: 0xcf2ba1,
-          midtoneColor: 0x2bc4cf,
-          lowlightColor: 0x572bcf,
+          highlightColor: 0x2bc4cf,
+          midtoneColor: 0x572bcf,
+          lowlightColor: 0xcf2ba1,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          zoom: 0.5,
         })
       );
     }
@@ -39,9 +43,13 @@ const Profile: React.FC<{next: () => void; data: Public}> = ({next, data}) => {
       FOG({
         el: myRef.current,
         baseColor: colorMode === 'dark' ? 0x1a202c : 0xffffff,
-        highlightColor: 0xcf2ba1,
-        midtoneColor: 0x2bc4cf,
-        lowlightColor: 0x572bcf,
+        highlightColor: 0x2bc4cf,
+        midtoneColor: 0x572bcf,
+        lowlightColor: 0xcf2ba1,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        zoom: 0.5,
       })
     );
   }, [colorMode]);

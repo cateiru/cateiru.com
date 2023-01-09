@@ -13,6 +13,7 @@ export interface Config {
   midtoneColor?: number;
   lowlightColor?: number;
   baseColor?: number;
+  zoom?: number;
 }
 
 export interface VantaEffect {
