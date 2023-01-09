@@ -10,7 +10,7 @@ import theme from '../utils/theme/theme';
 
 import '@fontsource/kosugi-maru';
 
-import 'nprogress/nprogress.css';
+import '../public/nprogress.css';
 import 'gantt-task-react/dist/index.css';
 import '../styles/gantt.css';
 

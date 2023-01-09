@@ -1,4 +1,4 @@
-import {Box, Center, Heading} from '@chakra-ui/react';
+import {Box, Center, Heading, useColorMode} from '@chakra-ui/react';
 import React from 'react';
 import {IoCaretDown} from 'react-icons/io5';
 import {MultiLang} from '../../utils/config/lang';
@@ -10,6 +10,7 @@ export const Section: React.FC<{
   heading?: MultiLang;
   children: React.ReactNode;
 }> = props => {
+  const {colorMode} = useColorMode();
   const {convertLang} = useLanguage();
 
   return (
@@ -27,7 +28,7 @@ export const Section: React.FC<{
             h="2rem"
             borderRadius="25"
             _hover={{
-              bgColor: 'gray.200',
+              bgColor: colorMode === 'dark' ? 'gray.600' : 'gray.200',
             }}
             transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
             cursor="pointer"
