@@ -33,6 +33,7 @@
         "recoil": "^0.7.6",
         "string-to-color": "^2.2.2",
         "swr": "^2.0.0",
+        "vanta": "^0.5.24",
         "zod": "^3.20.2"
     },
     "devDependencies": {
