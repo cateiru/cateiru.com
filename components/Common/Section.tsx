@@ -24,11 +24,15 @@ export const Section: React.FC<{
         {props.children}
         <Center mt="1.5rem">
           <Center
-            w={{base: '200px', sm: '300px', md: '400px'}}
+            w="100px"
             h="2rem"
             borderRadius="25"
             _hover={{
-              bgColor: colorMode === 'dark' ? 'gray.600' : 'gray.200',
+              bgColor: props.heading
+                ? colorMode === 'dark'
+                  ? 'gray.600'
+                  : 'gray.200'
+                : 'rgba(255, 255, 255, 0.2)',
             }}
             transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
             cursor="pointer"

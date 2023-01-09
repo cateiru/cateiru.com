@@ -49,6 +49,7 @@ const Header = React.memo(() => {
         variant="ghost"
         my=".5rem"
         mr=".25rem"
+        borderRadius="25"
       />
       <IconButton
         aria-label="switch color mode"
@@ -57,6 +58,7 @@ const Header = React.memo(() => {
         variant="ghost"
         my=".5rem"
         mr=".5rem"
+        borderRadius="25"
       />
     </Flex>
   );

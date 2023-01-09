@@ -1,4 +1,8 @@
-import {extendTheme, type ThemeConfig} from '@chakra-ui/react';
+import {
+  extendTheme,
+  type ThemeConfig,
+  defineStyleConfig,
+} from '@chakra-ui/react';
 
 const config: ThemeConfig = {
   useSystemColorMode: false,
@@ -10,23 +14,23 @@ const theme = extendTheme({
     body: "'Kosugi Maru', sans-serif",
   },
   components: {
-    CloseButton: {
+    CloseButton: defineStyleConfig({
       baseStyle: {
         _focus: {
           boxShadow: 'none',
         },
       },
-    },
-    Text: {
+    }),
+    Text: defineStyleConfig({
       baseStyle: {
         fontWeight: 'normal',
       },
-    },
-    Heading: {
+    }),
+    Heading: defineStyleConfig({
       baseStyle: {
         fontWeight: '800',
       },
-    },
+    }),
   },
   styles: {
     global: (props: {colorMode: string}) => ({
