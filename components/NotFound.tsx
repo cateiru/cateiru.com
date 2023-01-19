@@ -9,6 +9,7 @@ export const NotFound = () => {
       <Heading
         backgroundImage="linear-gradient(135deg, #2bc4cf, #572bcf, #cf2ba1)"
         backgroundClip="text"
+        textAlign="center"
       >
         {convertLang({
           ja: '404 | お探しのページは見つかりません',

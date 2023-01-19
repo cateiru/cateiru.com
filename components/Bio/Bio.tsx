@@ -47,6 +47,7 @@ const Bio: React.FC<{
             <Box as="summary" textAlign="center" cursor="pointer">
               {convertLang({ja: 'タイムライン表示', en: 'Timeline'})}
             </Box>
+
             <Box
               boxShadow={
                 colorMode === 'light'
@@ -63,24 +64,27 @@ const Bio: React.FC<{
                   {convertLang({ja: '月ごとで表示する', en: 'View by month'})}
                 </Switch>
               </Flex>
-              <Flex
-                mt=".5rem"
-                whiteSpace="nowrap"
-                overflowX="auto"
-                id="gantt"
-                justifyContent="center"
-              >
-                <Box overflowX="auto">
-                  <Gantt
-                    tasks={tasks}
-                    listCellWidth=""
-                    viewMode={viewMode}
-                    columnWidth={100}
-                    barCornerRadius={5}
-                    locale={lang === 'ja' ? 'ja' : 'en'}
-                  />
+              <Box overflowX="auto">
+                <Box
+                  mt=".5rem"
+                  whiteSpace="nowrap"
+                  display="inline-flex"
+                  id="gantt"
+                  justifyContent="center"
+                  minW="100%"
+                >
+                  <Box overflowX="auto">
+                    <Gantt
+                      tasks={tasks}
+                      listCellWidth=""
+                      viewMode={viewMode}
+                      columnWidth={100}
+                      barCornerRadius={5}
+                      locale={lang === 'ja' ? 'ja' : 'en'}
+                    />
+                  </Box>
                 </Box>
-              </Flex>
+              </Box>
             </Box>
           </details>
 
