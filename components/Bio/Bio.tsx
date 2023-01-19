@@ -70,14 +70,16 @@ const Bio: React.FC<{
                 id="gantt"
                 justifyContent="center"
               >
-                <Gantt
-                  tasks={tasks}
-                  listCellWidth=""
-                  viewMode={viewMode}
-                  columnWidth={100}
-                  barCornerRadius={5}
-                  locale={lang === 'ja' ? 'ja' : 'en'}
-                />
+                <Box overflowX="auto">
+                  <Gantt
+                    tasks={tasks}
+                    listCellWidth=""
+                    viewMode={viewMode}
+                    columnWidth={100}
+                    barCornerRadius={5}
+                    locale={lang === 'ja' ? 'ja' : 'en'}
+                  />
+                </Box>
               </Flex>
             </Box>
           </details>

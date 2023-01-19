@@ -36,17 +36,27 @@ const theme = extendTheme({
     global: (props: {colorMode: string}) => ({
       // Chrome
       '&::-webkit-scrollbar': {
-        width: '5px',
+        width: '7px',
         height: '5px',
       },
       '&::-webkit-scrollbar-thumb': {
-        backgroundColor: props.colorMode === 'dark' ? 'gray.600' : 'gray.300',
+        backgroundColor: props.colorMode === 'dark' ? 'gray.600' : 'gray.400',
         borderRadius: '100px',
+        ':hover': {
+          backgroundColor: props.colorMode === 'dark' ? 'gray.500' : 'gray.500',
+        },
+      },
+      '::-webkit-scrollbar-track': {
+        backgroundColor: 'rgba(0,0,0,0)',
       },
       // FireFox
       html: {
         scrollbarWidth: 'thin',
-        scrollbarColor: props.colorMode === 'dark' ? 'gray.600' : 'gray.300',
+        scrollbarColor: props.colorMode === 'dark' ? 'gray.600' : 'gray.400',
+        overflow: 'overlay',
+      },
+      body: {
+        width: '100vw',
       },
     }),
   },
