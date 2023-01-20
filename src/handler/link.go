@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -303,9 +302,13 @@ func existCategoryId(ctx context.Context, db *db.DB, categoryId uint32) error {
 // - GET `/favicon.ico`
 //   - if not found in HTML
 func GetFavicon(siteUrl string) (string, error) {
-	client := &http.Client{}
+	site, err := url.Parse(siteUrl)
+	if err != nil {
+		return "", err
+	}
 
-	req, err := http.NewRequest("GET", siteUrl, nil)
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", site.String(), nil)
 	if err != nil {
 		return "", err
 	}
@@ -323,32 +326,24 @@ func GetFavicon(siteUrl string) (string, error) {
 	query := doc.Find(`link[rel="shortcut icon"], link[rel="icon"]`)
 	favicons := []string{}
 	query.Each(func(i int, s *goquery.Selection) {
-		favicon, exist := s.Attr("href")
+		faviconPath, exist := s.Attr("href")
 		if exist {
-			favicons = append(favicons, favicon)
+			favicon, err := url.Parse(faviconPath)
+			if err == nil {
+				favicons = append(favicons, site.ResolveReference(favicon).String())
+			}
 		}
 	})
 
-	u, err := url.Parse(siteUrl)
-	if err != nil {
-		return "", err
-	}
-
 	if len(favicons) == 0 {
 		// If not found favicon in HTML, request `/favicon.ico` path.
-		u.Path = "/favicon.ico"
+		site.Path = "/favicon.ico"
 
-		favicons = append(favicons, u.String())
+		favicons = append(favicons, site.String())
 	}
 
 	for _, f := range favicons {
-		favUrl := ""
-		if err := ValidateURL(f); err != nil {
-			favUrl = fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, f)
-		} else {
-			favUrl = f
-		}
-		req, err := http.NewRequest("GET", favUrl, nil)
+		req, err := http.NewRequest("GET", f, nil)
 		if err != nil {
 			return "", err
 		}
@@ -360,7 +355,7 @@ func GetFavicon(siteUrl string) (string, error) {
 		}
 		defer reqF.Body.Close()
 		if reqF.StatusCode == 200 {
-			return favUrl, nil
+			return f, nil
 		}
 	}
 

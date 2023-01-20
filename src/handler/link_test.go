@@ -325,11 +325,13 @@ func TestUpdateLinkHandler(t *testing.T) {
 
 		l, err := u.CreateLink()
 		require.NoError(t, err)
+		l.SiteURL = "https://cateiru.com"
 
 		_, err = l.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
 		form := contents.NewMultipart()
+		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
 		form.Insert("update_favicon", "true")
 
 		m, err := mock.NewFormData("/", form, http.MethodPut)
@@ -369,7 +371,6 @@ func TestUpdateLinkHandler(t *testing.T) {
 
 		form := contents.NewMultipart()
 		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
-		form.Insert("update_favicon", "true")
 
 		m, err := mock.NewFormData("/", form, http.MethodPut)
 		require.NoError(t, err)
