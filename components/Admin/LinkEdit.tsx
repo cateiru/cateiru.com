@@ -27,11 +27,13 @@ import {
   Tr,
   useColorMode,
   Link as ChakraLink,
+  Image,
+  Checkbox,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
 import {TbAdjustmentsAlt} from 'react-icons/tb';
-import {TbLink} from 'react-icons/tb';
+import {TbLink, TbPhoto} from 'react-icons/tb';
 import useSWR from 'swr';
 import {MultiLang} from '../../utils/config/lang';
 import {fetcher, SWRError} from '../../utils/swr';
@@ -47,6 +49,7 @@ interface LinkForm {
   name_ja: string;
   site_url: string;
   category_id: string;
+  update_favicon: boolean;
 }
 
 export const LinkEdit = () => {
@@ -97,6 +100,7 @@ export const LinkEdit = () => {
               <Table variant="simple">
                 <Thead>
                   <Tr>
+                    <Th></Th>
                     <Th>{convertLang({ja: '名前', en: 'Name'})}</Th>
                     <Th>
                       {convertLang({ja: 'カテゴリ名', en: 'Category Name'})}
@@ -109,6 +113,19 @@ export const LinkEdit = () => {
                   {data?.map(v => {
                     return (
                       <Tr key={v.link.id}>
+                        <Td>
+                          {v.link.favicon_url ? (
+                            <Image
+                              src={v.link.favicon_url}
+                              width="25px"
+                              alt="favicon"
+                            />
+                          ) : (
+                            <Center mr=".5rem">
+                              <TbPhoto size="25px" />
+                            </Center>
+                          )}
+                        </Td>
                         <Td>
                           {convertLang({ja: v.link.name_ja, en: v.link.name})}
                         </Td>
@@ -360,6 +377,11 @@ const UpdateLink: React.FC<{
         form.append('site_url', d.site_url);
         changed = true;
       }
+      // site_urlが変更されておらず、update_faviconがtrueの場合はfaviconを更新
+      if (d.update_favicon && d.site_url === target?.link.site_url) {
+        form.append('update_favicon', 'true');
+        changed = true;
+      }
 
       return [form, changed];
     },
@@ -375,6 +397,7 @@ const UpdateLink: React.FC<{
       setValue('name_ja', t.link.name_ja);
       setValue('category_id', String(t.link.category_id));
       setValue('site_url', t.link.site_url);
+      setValue('update_favicon', false);
     },
   });
 
@@ -493,6 +516,18 @@ const UpdateLink: React.FC<{
               />
               <FormErrorMessage>
                 {errors.site_url && errors.site_url.message}
+              </FormErrorMessage>
+            </FormControl>
+            <FormControl mt=".5rem" isInvalid={Boolean(errors.update_favicon)}>
+              <Checkbox
+                id="update_favicon"
+                placeholder="https://"
+                {...register('update_favicon')}
+              >
+                {convertLang({ja: 'Favicon更新', en: 'Update Favicon'})}
+              </Checkbox>
+              <FormErrorMessage>
+                {errors.update_favicon && errors.update_favicon.message}
               </FormErrorMessage>
             </FormControl>
 

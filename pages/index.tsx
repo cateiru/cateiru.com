@@ -38,6 +38,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
       revalidate: CACHE_TIME,
     };
   } catch (e) {
+    console.log(e);
     if (e instanceof Error) {
       return {
         props: {

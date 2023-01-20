@@ -215,7 +215,7 @@ func (h *Handler) UpdateLinkHandler(e echo.Context) error {
 		if err != nil {
 			return err
 		}
-		l = l.SetSiteURL(siteUrl).SetFaviconURL(favicon)
+		l = l.SetFaviconURL(favicon)
 		changed = true
 	}
 

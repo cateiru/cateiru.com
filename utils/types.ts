@@ -74,6 +74,7 @@ export const LinkSchema = z.object({
   category_id: z.number(),
   created: z.string(),
   modified: z.string(),
+  favicon_url: z.optional(z.string()),
 });
 export const CategorySchema = z.object({
   id: z.number(),
