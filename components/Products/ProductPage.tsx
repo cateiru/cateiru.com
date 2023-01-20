@@ -54,7 +54,7 @@ export const ProductPage: React.FC<{
             </Text>
           </Center>
         )}
-        <Back />
+        <Back href="/" />
         <Heading textAlign="center" mt="1rem">
           {convertLang({ja: product.name_ja, en: product.name})}
         </Heading>

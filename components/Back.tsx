@@ -3,11 +3,15 @@ import {useRouter} from 'next/router';
 import {TbArrowBigLeft} from 'react-icons/tb';
 import useLanguage from './useLanguage';
 
-export const Back = () => {
+export const Back: React.FC<{href?: string}> = props => {
   const {convertLang} = useLanguage();
   const router = useRouter();
 
   const handleClick = () => {
+    if (props.href) {
+      router.push(props.href, props.href, {scroll: false});
+      return;
+    }
     router.back();
   };
 

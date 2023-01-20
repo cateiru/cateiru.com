@@ -92,8 +92,7 @@ export const NoticeEdit = () => {
         flexDirection="column"
       >
         <Box width={{base: 'auto', md: '500px'}}>
-          <Back />
-
+          <Back href="/admin" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.discord_webhook)}>
               <FormLabel htmlFor="discord_webhook">

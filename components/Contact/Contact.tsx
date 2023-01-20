@@ -51,7 +51,7 @@ const Contact = () => {
   return (
     <Center minHeight="100vh">
       <Box width={{base: '95%', md: '500px'}} mb="4rem" mt="3rem">
-        <Back />
+        <Back href="/" />
         <Heading mb="2rem" textAlign="center" mt="1.5rem">
           {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
         </Heading>

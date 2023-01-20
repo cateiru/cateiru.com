@@ -49,13 +49,6 @@ export const ControllerCard = () => {
       </Heading>
       <Box mt="2rem" mx="1rem">
         <Flex alignItems="center">
-          <Text>{convertLang({ja: 'ログアウト', en: 'Logout'})}</Text>
-          <Spacer />
-          <Button onClick={logoutHandler} isLoading={load}>
-            {convertLang({ja: 'ログアウト', en: 'Logout'})}
-          </Button>
-        </Flex>
-        <Flex alignItems="center" mt="1rem">
           <Text>
             {convertLang({ja: 'ページを見に行く', en: 'Go to Top Page'})}
           </Text>
@@ -63,6 +56,24 @@ export const ControllerCard = () => {
           <NextLink passHref href="/">
             <Button as="a">{convertLang({ja: 'トップ', en: 'Top'})}</Button>
           </NextLink>
+        </Flex>
+        <Flex alignItems="center" mt="1rem">
+          <Text>
+            {convertLang({ja: 'お問い合わせビルダー', en: 'Contact Builder'})}
+          </Text>
+          <Spacer />
+          <NextLink passHref href="/admin/contact_builder">
+            <Button as="a">
+              {convertLang({ja: 'ビルダー', en: 'Builder'})}
+            </Button>
+          </NextLink>
+        </Flex>
+        <Flex alignItems="center" mt="1rem">
+          <Text>{convertLang({ja: 'ログアウト', en: 'Logout'})}</Text>
+          <Spacer />
+          <Button onClick={logoutHandler} isLoading={load} colorScheme="red">
+            {convertLang({ja: 'ログアウト', en: 'Logout'})}
+          </Button>
         </Flex>
       </Box>
     </CardFrame>

@@ -78,7 +78,7 @@ export const LocationEdit = () => {
         >
           <Box width={{base: 'auto', md: '700px'}}>
             <Flex>
-              <Back />
+              <Back href="/admin" />
               <Spacer />
               <Button my="1rem" onClick={createModal.onOpen}>
                 {convertLang({ja: '新規作成', en: 'New'})}

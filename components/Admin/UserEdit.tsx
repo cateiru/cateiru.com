@@ -139,8 +139,7 @@ export const UserEdit = () => {
         flexDirection="column"
       >
         <Box width={{base: 'auto', md: '500px'}}>
-          <Back />
-
+          <Back href="/admin" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.given_name)}>
               <FormLabel htmlFor="given_name">

@@ -30,6 +30,12 @@
                 }
             }
         ],
-        "react-hooks/exhaustive-deps": "off"
+        "react-hooks/exhaustive-deps": "off",
+
+        // TODO: なんとかしたい
+        "node/no-unsupported-features/node-builtins": ["off", {
+            "version": ">=8.0.0",
+            "ignores": []
+        }]
     }
 }

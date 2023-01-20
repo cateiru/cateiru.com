@@ -105,7 +105,7 @@ export const ContactEdit = () => {
           flexDirection="column"
         >
           <Box width={{base: 'auto', md: '700px'}}>
-            <Back />
+            <Back href="/admin" />
             <TableContainer>
               <Table variant="simple">
                 <Thead>
@@ -225,6 +225,7 @@ const ContactElement: React.FC<{
         minH="120px"
         my="1rem"
         mx=".5rem"
+        whiteSpace="break-spaces"
       >
         {select?.detail}
       </Text>
