@@ -307,6 +307,44 @@ func TestUpdateLinkHandler(t *testing.T) {
 		require.Equal(t, link.CategoryID, l.Category.ID)
 	})
 
+	t.Run("update favicon", func(t *testing.T) {
+		ctx := context.Background()
+
+		tool, err := test.NewTestTool()
+		require.NoError(t, err)
+		defer tool.Close()
+
+		err = tool.ClearLink(ctx)
+		require.NoError(t, err)
+
+		h, err := tool.Handler()
+		require.NoError(t, err)
+
+		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		l, err := u.CreateLink()
+		require.NoError(t, err)
+
+		_, err = l.CreateDB(ctx, tool.DB)
+		require.NoError(t, err)
+
+		form := contents.NewMultipart()
+		form.Insert("update_favicon", "true")
+
+		m, err := mock.NewFormData("/", form, http.MethodPut)
+		require.NoError(t, err)
+
+		err = u.HandlerSession(ctx, tool.DB, m)
+		require.NoError(t, err)
+
+		e := m.Echo()
+
+		err = h.UpdateLinkHandler(e)
+		require.NoError(t, err)
+
+	})
+
 	t.Run("no changes", func(t *testing.T) {
 		ctx := context.Background()
 
@@ -331,6 +369,7 @@ func TestUpdateLinkHandler(t *testing.T) {
 
 		form := contents.NewMultipart()
 		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
+		form.Insert("update_favicon", "true")
 
 		m, err := mock.NewFormData("/", form, http.MethodPut)
 		require.NoError(t, err)

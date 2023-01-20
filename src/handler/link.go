@@ -201,6 +201,23 @@ func (h *Handler) UpdateLinkHandler(e echo.Context) error {
 		l = l.SetCategoryID(uint32(categoryId))
 		changed = true
 	}
+	updateFavicon := e.FormValue("update_favicon")
+	if updateFavicon == "true" && siteUrl == "" {
+		oldLink, err := h.DB.Client.Link.Query().Where(link.And(
+			link.UserID(h.User.ID),
+			link.ID(uint32(id)),
+		)).First(ctx)
+		if err != nil {
+			return err
+		}
+
+		favicon, err := GetFavicon(oldLink.SiteURL)
+		if err != nil {
+			return err
+		}
+		l = l.SetSiteURL(siteUrl).SetFaviconURL(favicon)
+		changed = true
+	}
 
 	if !changed {
 		return echo.NewHTTPError(http.StatusBadRequest, "no changes")
@@ -286,7 +303,14 @@ func existCategoryId(ctx context.Context, db *db.DB, categoryId uint32) error {
 // - GET `/favicon.ico`
 //   - if not found in HTML
 func GetFavicon(siteUrl string) (string, error) {
-	resp, err := http.Get(siteUrl)
+	client := &http.Client{}
+
+	req, err := http.NewRequest("GET", siteUrl, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
+	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
 	}
@@ -324,8 +348,13 @@ func GetFavicon(siteUrl string) (string, error) {
 		} else {
 			favUrl = f
 		}
+		req, err := http.NewRequest("GET", favUrl, nil)
+		if err != nil {
+			return "", err
+		}
+		req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
 
-		reqF, err := http.Get(favUrl)
+		reqF, err := client.Do(req)
 		if err != nil {
 			return "", err
 		}
