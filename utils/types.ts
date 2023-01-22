@@ -180,6 +180,13 @@ export const PublicSchema = z.object({
   links: z.array(PublicLinkSchema),
 });
 
+export const UserDataSchema = z.object({
+  browser: z.string(),
+  os: z.string(),
+  device: z.string(),
+  is_mobile: z.boolean(),
+});
+
 export type User = typeof UserSchema._type;
 export type Bio = typeof BioSchema._type;
 export type AllUsers = typeof UsersListSchema._type;
@@ -198,3 +205,4 @@ export type Public = typeof PublicSchema._type;
 export type PublicProduct = typeof PublicProductSchema._type;
 export type PublicBio = typeof PublicBioSchema._type;
 export type PublicLink = typeof PublicLinkSchema._type;
+export type UserData = typeof UserDataSchema._type;

@@ -11,6 +11,7 @@ import React from 'react';
 import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 import {ContactForm, ContactFormProps} from './ContactForm';
+import {PreviewUserData} from './PreviewUserData';
 
 const Contact = () => {
   const router = useRouter();
@@ -74,6 +75,7 @@ const Contact = () => {
             {decodeURIComponent(description)}
           </Text>
         )}
+        <PreviewUserData />
         {data ? (
           <ContactForm {...data} />
         ) : (
