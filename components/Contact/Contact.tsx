@@ -62,8 +62,10 @@ const Contact = () => {
             minH="100px"
             py="1rem"
             px=".5rem"
-            bgColor={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
-            borderRadius="10"
+            bgColor={colorMode === 'dark' ? 'gray.700' : 'gray.100'}
+            borderRadius="5px"
+            borderLeftWidth="4px"
+            borderLeftColor={colorMode === 'dark' ? 'gray.500' : 'gray.400'}
             mb="1.5rem"
             whiteSpace="pre-wrap"
             fontSize="1rem"
