@@ -9,6 +9,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/ent/contact"
 	"github.com/cateiru/cateiru.com/src/handler"
+	"github.com/cateiru/cateiru.com/src/sender"
 	"github.com/cateiru/cateiru.com/src/test"
 	"github.com/cateiru/go-http-easy-test/contents"
 	"github.com/cateiru/go-http-easy-test/handler/mock"
@@ -189,4 +190,37 @@ func TestContactDeleteHandler(t *testing.T) {
 	test.LoginTestGet(t, func(h *handler.Handler, e echo.Context) error {
 		return h.ContactDeleteHandler(e)
 	})
+}
+
+func TestContactPreviewUserDataHandler(t *testing.T) {
+	ctx := context.Background()
+
+	tool, err := test.NewTestTool()
+	require.NoError(t, err)
+	defer tool.Close()
+
+	u, err := tool.NewUser(ctx)
+	require.NoError(t, err)
+
+	err = u.SelectStatus(ctx, tool.DB, true)
+	require.NoError(t, err)
+
+	m, err := mock.NewGet("", "/")
+	require.NoError(t, err)
+
+	// writer ua
+	m.R.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
+
+	h, err := tool.Handler()
+	require.NoError(t, err)
+	e := m.Echo()
+
+	err = h.ContactPreviewUserDataHandler(e)
+	require.NoError(t, err)
+
+	a := new(sender.UserData)
+	err = m.Json(a)
+	require.NoError(t, err)
+
+	require.Equal(t, a, &sender.UserData{Browser: "Chrome", OS: "macOS", Device: "", IsMobile: false})
 }

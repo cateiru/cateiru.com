@@ -3,10 +3,10 @@ package sender
 import "time"
 
 type UserData struct {
-	Browser  string
-	OS       string
-	Device   string
-	IsMobile bool
+	Browser  string `json:"browser"`
+	OS       string `json:"os"`
+	Device   string `json:"device"`
+	IsMobile bool   `json:"is_mobile"`
 }
 
 type SendForm struct {

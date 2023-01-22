@@ -147,6 +147,15 @@ func (h *Handler) ContactDeleteHandler(e echo.Context) error {
 	return nil
 }
 
+// Preview UserData from User-Agent or UA-CH
+func (h *Handler) ContactPreviewUserDataHandler(e echo.Context) error {
+	userData, err := GetUserAgent(e)
+	if err != nil {
+		return err
+	}
+	return e.JSON(http.StatusOK, userData)
+}
+
 // Get user data from User-Agent or Client Hints
 //
 // If useable Client Hints, use it.

@@ -68,4 +68,5 @@ func Routes(e *echo.Echo, handler *handler.Handler) {
 	e.GET("/public/product", handler.PublicProductsHandler)
 
 	e.POST("/contact", handler.ContactHandler)
+	e.GET("/contact/preview", handler.ContactPreviewUserDataHandler)
 }
