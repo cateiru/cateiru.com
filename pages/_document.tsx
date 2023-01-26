@@ -69,7 +69,6 @@ export default class MyDocument extends Document {
             color="#572bcf"
           />
           <meta name="msapplication-TileColor" content="#572bcf" />
-          <meta name="theme-color" content="#ffffff" />
 
           <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" />
         </Head>
