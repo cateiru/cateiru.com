@@ -15,9 +15,11 @@ export const Copyright = () => {
   const now = new Date();
 
   const {convertLang} = useLanguage();
-  const copycopyright = useClipboard(`© ${now.getFullYear()} cateiru`);
+  const copycopyright = useClipboard(
+    `© ${now.getFullYear()} cateiru<https://cateiru.com>`
+  );
   const copycopyright1 = useClipboard(
-    `Copyright (C) ${now.getFullYear()} cateiru`
+    `Copyright (C) ${now.getFullYear()} cateiru<https://cateiru.com>`
   );
 
   return (
