@@ -19,6 +19,15 @@ const ContactLink: React.FC<{
       >
         {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
       </Button>
+      <Button
+        variant="outline"
+        onClick={() => {
+          router.push('/brand_resources');
+        }}
+        ml=".5rem"
+      >
+        {convertLang({ja: 'ブランドリソース', en: 'Brand Resources'})}
+      </Button>
     </Center>
   );
 };
