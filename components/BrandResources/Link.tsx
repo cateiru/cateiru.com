@@ -6,7 +6,7 @@ export const Link = () => {
   const {convertLang} = useLanguage();
 
   return (
-    <Box mt="15vh" mb="10vh">
+    <Box mb="10vh">
       <Center>
         <NextLink passHref href="/">
           <Button>

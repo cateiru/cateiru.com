@@ -14,9 +14,9 @@ export const Color = () => {
   const {convertLang} = useLanguage();
 
   return (
-    <Box mt="15vh">
+    <Box>
       <Heading textAlign="center" mb="1rem" id="colors">
-        {convertLang({ja: '色', en: 'Colors'})}
+        {convertLang({ja: 'カラーパレット', en: 'Color Palettes'})}
       </Heading>
       <Center>
         <Box w={{base: '96%', md: '700px'}}>

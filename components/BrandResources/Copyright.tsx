@@ -21,7 +21,7 @@ export const Copyright = () => {
   );
 
   return (
-    <Box mt="15vh">
+    <Box>
       <Heading textAlign="center" mb="1rem" id="copyright">
         {convertLang({ja: 'コピーライト表記', en: 'Copyright Statement'})}
       </Heading>

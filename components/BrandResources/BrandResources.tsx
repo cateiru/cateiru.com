@@ -1,4 +1,11 @@
-import {Box, Center, Heading, Text, useColorMode} from '@chakra-ui/react';
+import {
+  Box,
+  Center,
+  Divider,
+  Heading,
+  Text,
+  useColorMode,
+} from '@chakra-ui/react';
 import {Color} from './Color';
 import {Copyright} from './Copyright';
 import {Icon} from './Icon';
@@ -10,19 +17,20 @@ export const BrandResources = () => {
   return (
     <Box w="100%" h="100%">
       <Center
-        h="400px"
+        h={{base: '100vh', md: '400px'}}
         bgColor={colorMode === 'dark' ? 'gray.700' : 'gray.100'}
+        mb="10rem"
       >
         <Heading
           fontWeight="bold"
-          fontSize="4rem"
-          marginX={{base: '1rem', sm: '5rem'}}
+          fontSize={{base: '3rem', md: '4rem'}}
+          marginX={{base: '3rem', sm: '5rem'}}
         >
           Cateiru&apos;s&nbsp;
           <Text
             as="span"
             fontWeight="bold"
-            fontSize="4rem"
+            fontSize={{base: '3rem', md: '4rem'}}
             display="inline-block"
             background="linear-gradient(124deg, #2bc4cf, #572bcf, #cf2ba1)"
             backgroundClip="text"
@@ -33,9 +41,20 @@ export const BrandResources = () => {
         </Heading>
       </Center>
       <Icon />
+      <D />
       <Color />
+      <D />
       <Copyright />
+      <D />
       <Link />
     </Box>
+  );
+};
+
+const D = () => {
+  return (
+    <Center>
+      <Divider my="7rem" w={{base: '80%', md: '700px'}} />
+    </Center>
   );
 };

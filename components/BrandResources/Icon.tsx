@@ -6,7 +6,7 @@ export const Icon = () => {
   const {convertLang} = useLanguage();
 
   return (
-    <Box mt="15vh">
+    <Box>
       <Heading textAlign="center" mb="1rem" id="icons">
         {convertLang({ja: 'アイコン', en: 'Icons'})}
       </Heading>
