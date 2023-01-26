@@ -1,5 +1,6 @@
 import {Box, Center, Heading, Text, useColorMode} from '@chakra-ui/react';
 import {Color} from './Color';
+import {Copyright} from './Copyright';
 import {Icon} from './Icon';
 import {Link} from './Link';
 
@@ -33,6 +34,7 @@ export const BrandResources = () => {
       </Center>
       <Icon />
       <Color />
+      <Copyright />
       <Link />
     </Box>
   );

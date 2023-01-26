@@ -7,8 +7,8 @@ export const Icon = () => {
 
   return (
     <Box mt="15vh">
-      <Heading textAlign="center" mb="1rem">
-        {convertLang({ja: 'アイコン', en: 'Icon'})}
+      <Heading textAlign="center" mb="1rem" id="icons">
+        {convertLang({ja: 'アイコン', en: 'Icons'})}
       </Heading>
       <Center mx=".5rem">
         <IconContent

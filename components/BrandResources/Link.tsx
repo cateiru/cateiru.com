@@ -1,4 +1,4 @@
-import {Box, Button, Center, Heading} from '@chakra-ui/react';
+import {Box, Button, Center} from '@chakra-ui/react';
 import NextLink from 'next/link';
 import useLanguage from '../useLanguage';
 
@@ -7,9 +7,6 @@ export const Link = () => {
 
   return (
     <Box mt="15vh" mb="10vh">
-      <Heading textAlign="center" mb="1rem">
-        {convertLang({ja: 'リンク', en: 'Links'})}
-      </Heading>
       <Center>
         <NextLink passHref href="/">
           <Button>

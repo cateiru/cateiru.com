@@ -69,6 +69,15 @@ export const ControllerCard = () => {
           </NextLink>
         </Flex>
         <Flex alignItems="center" mt="1rem">
+          <Text>
+            {convertLang({ja: 'ブランドリソース', en: 'Brand Resources'})}
+          </Text>
+          <Spacer />
+          <NextLink passHref href="/brand_resources">
+            <Button as="a">{convertLang({ja: 'ブランド', en: 'Brand'})}</Button>
+          </NextLink>
+        </Flex>
+        <Flex alignItems="center" mt="1rem">
           <Text>{convertLang({ja: 'ログアウト', en: 'Logout'})}</Text>
           <Spacer />
           <Button onClick={logoutHandler} isLoading={load} colorScheme="red">
