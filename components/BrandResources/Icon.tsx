@@ -1,4 +1,5 @@
-import {Box, Center, Heading, Image, Link} from '@chakra-ui/react';
+import {Box, Button, Center, Heading, Image, Link} from '@chakra-ui/react';
+import NextLink from 'next/link';
 import React from 'react';
 import useLanguage from '../useLanguage';
 
@@ -25,6 +26,13 @@ export const Icon = () => {
           alt="transparent icon"
           ml
         />
+      </Center>
+      <Center mt="1.5rem">
+        <NextLink href="/brand_resources/icon_generator" passHref>
+          <Button as="p">
+            {convertLang({ja: 'アイコンジェネレーター', en: 'Icon Generator'})}
+          </Button>
+        </NextLink>
       </Center>
     </Box>
   );

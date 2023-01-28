@@ -113,7 +113,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
           {errors.name && errors.name.message}
         </FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={Boolean(errors.mail)} mt=".5rem">
+      <FormControl isInvalid={Boolean(errors.mail)} mt="1rem">
         <FormLabel htmlFor="mail">
           {convertLang({ja: 'メールアドレス', en: 'mail Address'})}
         </FormLabel>
@@ -139,7 +139,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
           {errors.mail && errors.mail.message}
         </FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={Boolean(errors.url)} mt=".5rem">
+      <FormControl isInvalid={Boolean(errors.url)} mt="1rem">
         <FormLabel htmlFor="url">
           {convertLang({ja: 'URL（オプション）', en: 'URL (Optional)'})}
         </FormLabel>
@@ -152,7 +152,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
         <FormErrorMessage>{errors.url && errors.url.message}</FormErrorMessage>
       </FormControl>
       {props.category && (
-        <FormControl isInvalid={Boolean(errors.category)} mt=".5rem">
+        <FormControl isInvalid={Boolean(errors.category)} mt="1rem">
           <FormLabel htmlFor="category">
             {convertLang({
               ja: 'カテゴリ',
@@ -171,7 +171,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
         </FormControl>
       )}
       {props.custom_title && (
-        <FormControl isInvalid={Boolean(errors.custom_value)} mt=".5rem">
+        <FormControl isInvalid={Boolean(errors.custom_value)} mt="1rem">
           <FormLabel htmlFor="custom_value">{props.custom_title}</FormLabel>
           <Input
             id="custom_value"
@@ -183,7 +183,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
           </FormErrorMessage>
         </FormControl>
       )}
-      <FormControl isInvalid={Boolean(errors.subject)} mt=".5rem">
+      <FormControl isInvalid={Boolean(errors.subject)} mt="1rem">
         <FormLabel htmlFor="subject">
           {convertLang({ja: '件名', en: 'Subject'})}
         </FormLabel>
@@ -201,7 +201,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
           {errors.subject && errors.subject.message}
         </FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={Boolean(errors.details)} mt=".5rem">
+      <FormControl isInvalid={Boolean(errors.details)} mt="1rem">
         <FormLabel htmlFor="details">
           {convertLang({ja: 'お問い合わせ内容', en: 'Inquiry Details'})}
         </FormLabel>

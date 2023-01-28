@@ -12,7 +12,7 @@ import '@fontsource/kosugi-maru';
 
 import '../public/nprogress.css';
 import 'gantt-task-react/dist/index.css';
-import '../styles/gantt.css';
+import '../public/gantt.css';
 
 nprogress.configure({showSpinner: false, speed: 400, minimum: 0.25});
 

@@ -9,6 +9,7 @@ import {
 import {Color} from './Color';
 import {Copyright} from './Copyright';
 import {Icon} from './Icon';
+import {IconGenerator} from './IconGenerator';
 import {Link} from './Link';
 
 export const BrandResources = () => {
