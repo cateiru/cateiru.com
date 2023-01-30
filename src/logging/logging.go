@@ -47,7 +47,6 @@ func InitLogging(mode string) {
 		logConfig.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	case "prod":
 		logConfig = zap.NewProductionConfig()
-		logConfig.Level.SetLevel(zap.ErrorLevel)
 		logConfig.EncoderConfig = newProductionEncoderConfig()
 	default:
 		return
