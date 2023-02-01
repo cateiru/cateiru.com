@@ -30,6 +30,8 @@ func (h *Handler) LinkHandler(e echo.Context) error {
 	links, err := h.DB.Client.Link.
 		Query().
 		Where(link.UserID(h.User.ID)).
+		Order(ent.Asc(link.FieldCategoryID)).
+		Order(ent.Asc(link.FieldName)).
 		All(ctx)
 	if err != nil {
 		return err

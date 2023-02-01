@@ -115,13 +115,15 @@ export const LinkEdit = () => {
                       <Tr key={v.link.id}>
                         <Td>
                           {v.link.favicon_url ? (
-                            <Image
-                              src={v.link.favicon_url}
-                              width="25px"
-                              alt="favicon"
-                            />
+                            <Center w="25px">
+                              <Image
+                                src={v.link.favicon_url}
+                                width="25px"
+                                alt="favicon"
+                              />
+                            </Center>
                           ) : (
-                            <Center mr=".5rem">
+                            <Center>
                               <TbPhoto size="25px" />
                             </Center>
                           )}

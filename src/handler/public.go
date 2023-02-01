@@ -143,7 +143,7 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 	prods, err := h.DB.Client.Product.
 		Query().
 		Where(product.UserID(u.ID)).
-		Order(ent.Asc(product.FieldDevTime)).
+		Order(ent.Desc(product.FieldDevTime)).
 		All(ctx)
 	if err != nil {
 		return err
@@ -169,6 +169,7 @@ func (h *Handler) PublicProfileHandler(e echo.Context) error {
 		Query().
 		Where(link.UserID(u.ID)).
 		Order(ent.Asc(link.FieldCategoryID)).
+		Order(ent.Asc(link.FieldName)).
 		All(ctx)
 	if err != nil {
 		return err
