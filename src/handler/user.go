@@ -47,7 +47,7 @@ func (h *Handler) UpdateUserHandler(e echo.Context) error {
 	location := e.FormValue("location")
 	locationJa := e.FormValue("location_ja")
 
-	u := h.DB.Client.User.Update()
+	u := h.DB.Client.User.Update().Where(user.ID(h.User.ID))
 	changeFlag := false
 
 	if familyName != "" {
