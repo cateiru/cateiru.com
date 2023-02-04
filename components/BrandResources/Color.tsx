@@ -4,10 +4,14 @@ import {
   Center,
   Heading,
   SimpleGrid,
+  Text,
   useClipboard,
+  useColorMode,
 } from '@chakra-ui/react';
 import React from 'react';
 import {TbCheck} from 'react-icons/tb';
+import {MultiLang} from '../../utils/config/lang';
+import {textColor} from '../../utils/theme/color';
 import useLanguage from '../useLanguage';
 
 export const Color = () => {
@@ -36,6 +40,27 @@ export const Color = () => {
               <ColorCode>#cf2ba1</ColorCode>
             </Box>
           </SimpleGrid>
+          <SimpleGrid
+            columns={{base: 1, sm: 2, md: 3}}
+            spacing="3rem"
+            mt="3rem"
+            mx={{base: '10%', md: 0}}
+          >
+            <ColorTile
+              color="#2bc4cf"
+              title={{ja: 'プライマリ', en: 'Primary'}}
+            />
+            <ColorTile
+              color="#cf2ba1"
+              title={{ja: 'セカンダリ', en: 'Secondary'}}
+            />
+            <ColorTile color="#ffffff" title={{ja: '背景', en: 'Background'}} />
+            <ColorTile
+              color="#1a202c"
+              title={{ja: 'ダークモード背景', en: 'DarkMode Background'}}
+            />
+            <ColorTile color="#0f0f0f" title={{ja: '文字', en: 'Text'}} />
+          </SimpleGrid>
         </Box>
       </Center>
     </Box>
@@ -53,5 +78,53 @@ const ColorCode: React.FC<{children: string}> = props => {
         props.children
       )}
     </Button>
+  );
+};
+
+const ColorTile: React.FC<{
+  color: string;
+  title: MultiLang;
+}> = props => {
+  const {convertLang} = useLanguage();
+  const {colorMode} = useColorMode();
+  const {onCopy, hasCopied} = useClipboard(props.color);
+  const [hasCopiedSlow, setHasCopiedSlow] = React.useState(false);
+
+  React.useEffect(() => {
+    if (hasCopied) {
+      setHasCopiedSlow(true);
+    }
+
+    setTimeout(() => {
+      setHasCopiedSlow(false);
+    }, 1000);
+  }, [hasCopied]);
+
+  return (
+    <Box>
+      <Button
+        w="100%"
+        h="250px"
+        fontSize="1.4rem"
+        color={hasCopiedSlow ? textColor(props.color) : props.color}
+        bgColor={props.color}
+        _hover={{
+          bgColor: props.color,
+          color: textColor(props.color),
+        }}
+        boxShadow={
+          colorMode === 'light'
+            ? '0px 0px 17px -5px #a0acc0'
+            : '0px 0px 17px -5px #000'
+        }
+        borderRadius="10px"
+        onClick={onCopy}
+      >
+        {hasCopied ? <TbCheck size="35px" /> : props.color}
+      </Button>
+      <Text textAlign="center" mt=".5rem" fontSize="1.2rem">
+        {convertLang(props.title)}
+      </Text>
+    </Box>
   );
 };
