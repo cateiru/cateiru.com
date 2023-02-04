@@ -13,16 +13,21 @@ const Header = React.memo(() => {
       (window.navigator.languages && window.navigator.languages[0]) ||
       window.navigator.language;
 
-    if (/^en\b/.test(language)) {
+    if (!/^ja\b/.test(language)) {
       // change english
+      document.querySelector('html')?.setAttribute('lang', 'en');
       setLang('en');
     }
   }, []);
 
   const toggleLang = () => {
+    const htmlElement = document.querySelector('html');
+
     if (lang === 'ja') {
+      htmlElement?.setAttribute('lang', 'en');
       setLang('en');
     } else {
+      htmlElement?.setAttribute('lang', 'ja');
       setLang('ja');
     }
   };
