@@ -47,12 +47,16 @@ export const Color = () => {
             mx={{base: '10%', md: 0}}
           >
             <ColorTile
-              color="#2bc4cf"
+              color="#572bcf"
               title={{ja: 'プライマリ', en: 'Primary'}}
             />
             <ColorTile
-              color="#cf2ba1"
+              color="#2bc4cf"
               title={{ja: 'セカンダリ', en: 'Secondary'}}
+            />
+            <ColorTile
+              color="#cf2ba1"
+              title={{ja: 'アクセント', en: 'Accent'}}
             />
             <ColorTile color="#ffffff" title={{ja: '背景', en: 'Background'}} />
             <ColorTile
