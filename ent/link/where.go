@@ -11,795 +11,517 @@ import (
 
 // ID filters vertices based on their ID field.
 func ID(id uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Link(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
 func IDEQ(id uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Link(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
 func IDNEQ(id uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldID), id))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
 func IDIn(ids ...uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.In(s.C(FieldID), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
 func IDNotIn(ids ...uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.NotIn(s.C(FieldID), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
 func IDGT(id uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldID), id))
-	})
+	return predicate.Link(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
 func IDGTE(id uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldID), id))
-	})
+	return predicate.Link(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
 func IDLT(id uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldID), id))
-	})
+	return predicate.Link(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldID), id))
-	})
+	return predicate.Link(sql.FieldLTE(FieldID, id))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
 func UserID(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserID), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldUserID, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldName, v))
 }
 
 // NameJa applies equality check predicate on the "name_ja" field. It's identical to NameJaEQ.
 func NameJa(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldNameJa, v))
 }
 
 // SiteURL applies equality check predicate on the "site_url" field. It's identical to SiteURLEQ.
 func SiteURL(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldSiteURL, v))
 }
 
 // FaviconURL applies equality check predicate on the "favicon_url" field. It's identical to FaviconURLEQ.
 func FaviconURL(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldFaviconURL, v))
 }
 
 // CategoryID applies equality check predicate on the "category_id" field. It's identical to CategoryIDEQ.
 func CategoryID(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCategoryID), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldCategoryID, v))
 }
 
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCreated), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldCreated, v))
 }
 
 // Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
 func Modified(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldModified), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldModified, v))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
 func UserIDEQ(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserID), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
 func UserIDNEQ(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldUserID), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
 func UserIDIn(vs ...uint32) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldUserID), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
 func UserIDNotIn(vs ...uint32) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldUserID), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
 func UserIDGT(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldUserID), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
 func UserIDGTE(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldUserID), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
 func UserIDLT(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldUserID), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
 func UserIDLTE(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldUserID), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldUserID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldName, v))
 }
 
 // NameNEQ applies the NEQ predicate on the "name" field.
 func NameNEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldName, v))
 }
 
 // NameIn applies the In predicate on the "name" field.
 func NameIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldName), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldName, vs...))
 }
 
 // NameNotIn applies the NotIn predicate on the "name" field.
 func NameNotIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldName), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldName, vs...))
 }
 
 // NameGT applies the GT predicate on the "name" field.
 func NameGT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldName, v))
 }
 
 // NameGTE applies the GTE predicate on the "name" field.
 func NameGTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldName, v))
 }
 
 // NameLT applies the LT predicate on the "name" field.
 func NameLT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldName, v))
 }
 
 // NameLTE applies the LTE predicate on the "name" field.
 func NameLTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldName, v))
 }
 
 // NameContains applies the Contains predicate on the "name" field.
 func NameContains(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldContains(FieldName, v))
 }
 
 // NameHasPrefix applies the HasPrefix predicate on the "name" field.
 func NameHasPrefix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldHasPrefix(FieldName, v))
 }
 
 // NameHasSuffix applies the HasSuffix predicate on the "name" field.
 func NameHasSuffix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldHasSuffix(FieldName, v))
 }
 
 // NameEqualFold applies the EqualFold predicate on the "name" field.
 func NameEqualFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldEqualFold(FieldName, v))
 }
 
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldName), v))
-	})
+	return predicate.Link(sql.FieldContainsFold(FieldName, v))
 }
 
 // NameJaEQ applies the EQ predicate on the "name_ja" field.
 func NameJaEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldNameJa, v))
 }
 
 // NameJaNEQ applies the NEQ predicate on the "name_ja" field.
 func NameJaNEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldNameJa, v))
 }
 
 // NameJaIn applies the In predicate on the "name_ja" field.
 func NameJaIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldNameJa), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldNameJa, vs...))
 }
 
 // NameJaNotIn applies the NotIn predicate on the "name_ja" field.
 func NameJaNotIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldNameJa), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldNameJa, vs...))
 }
 
 // NameJaGT applies the GT predicate on the "name_ja" field.
 func NameJaGT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldNameJa, v))
 }
 
 // NameJaGTE applies the GTE predicate on the "name_ja" field.
 func NameJaGTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldNameJa, v))
 }
 
 // NameJaLT applies the LT predicate on the "name_ja" field.
 func NameJaLT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldNameJa, v))
 }
 
 // NameJaLTE applies the LTE predicate on the "name_ja" field.
 func NameJaLTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldNameJa, v))
 }
 
 // NameJaContains applies the Contains predicate on the "name_ja" field.
 func NameJaContains(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldContains(FieldNameJa, v))
 }
 
 // NameJaHasPrefix applies the HasPrefix predicate on the "name_ja" field.
 func NameJaHasPrefix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldHasPrefix(FieldNameJa, v))
 }
 
 // NameJaHasSuffix applies the HasSuffix predicate on the "name_ja" field.
 func NameJaHasSuffix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldHasSuffix(FieldNameJa, v))
 }
 
 // NameJaEqualFold applies the EqualFold predicate on the "name_ja" field.
 func NameJaEqualFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldEqualFold(FieldNameJa, v))
 }
 
 // NameJaContainsFold applies the ContainsFold predicate on the "name_ja" field.
 func NameJaContainsFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldNameJa), v))
-	})
+	return predicate.Link(sql.FieldContainsFold(FieldNameJa, v))
 }
 
 // SiteURLEQ applies the EQ predicate on the "site_url" field.
 func SiteURLEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldSiteURL, v))
 }
 
 // SiteURLNEQ applies the NEQ predicate on the "site_url" field.
 func SiteURLNEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldSiteURL, v))
 }
 
 // SiteURLIn applies the In predicate on the "site_url" field.
 func SiteURLIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSiteURL), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldSiteURL, vs...))
 }
 
 // SiteURLNotIn applies the NotIn predicate on the "site_url" field.
 func SiteURLNotIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSiteURL), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldSiteURL, vs...))
 }
 
 // SiteURLGT applies the GT predicate on the "site_url" field.
 func SiteURLGT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldSiteURL, v))
 }
 
 // SiteURLGTE applies the GTE predicate on the "site_url" field.
 func SiteURLGTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldSiteURL, v))
 }
 
 // SiteURLLT applies the LT predicate on the "site_url" field.
 func SiteURLLT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldSiteURL, v))
 }
 
 // SiteURLLTE applies the LTE predicate on the "site_url" field.
 func SiteURLLTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldSiteURL, v))
 }
 
 // SiteURLContains applies the Contains predicate on the "site_url" field.
 func SiteURLContains(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldContains(FieldSiteURL, v))
 }
 
 // SiteURLHasPrefix applies the HasPrefix predicate on the "site_url" field.
 func SiteURLHasPrefix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldHasPrefix(FieldSiteURL, v))
 }
 
 // SiteURLHasSuffix applies the HasSuffix predicate on the "site_url" field.
 func SiteURLHasSuffix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldHasSuffix(FieldSiteURL, v))
 }
 
 // SiteURLEqualFold applies the EqualFold predicate on the "site_url" field.
 func SiteURLEqualFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldEqualFold(FieldSiteURL, v))
 }
 
 // SiteURLContainsFold applies the ContainsFold predicate on the "site_url" field.
 func SiteURLContainsFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSiteURL), v))
-	})
+	return predicate.Link(sql.FieldContainsFold(FieldSiteURL, v))
 }
 
 // FaviconURLEQ applies the EQ predicate on the "favicon_url" field.
 func FaviconURLEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldFaviconURL, v))
 }
 
 // FaviconURLNEQ applies the NEQ predicate on the "favicon_url" field.
 func FaviconURLNEQ(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldFaviconURL, v))
 }
 
 // FaviconURLIn applies the In predicate on the "favicon_url" field.
 func FaviconURLIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldFaviconURL), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldFaviconURL, vs...))
 }
 
 // FaviconURLNotIn applies the NotIn predicate on the "favicon_url" field.
 func FaviconURLNotIn(vs ...string) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldFaviconURL), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldFaviconURL, vs...))
 }
 
 // FaviconURLGT applies the GT predicate on the "favicon_url" field.
 func FaviconURLGT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldFaviconURL, v))
 }
 
 // FaviconURLGTE applies the GTE predicate on the "favicon_url" field.
 func FaviconURLGTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldFaviconURL, v))
 }
 
 // FaviconURLLT applies the LT predicate on the "favicon_url" field.
 func FaviconURLLT(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldFaviconURL, v))
 }
 
 // FaviconURLLTE applies the LTE predicate on the "favicon_url" field.
 func FaviconURLLTE(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldFaviconURL, v))
 }
 
 // FaviconURLContains applies the Contains predicate on the "favicon_url" field.
 func FaviconURLContains(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldContains(FieldFaviconURL, v))
 }
 
 // FaviconURLHasPrefix applies the HasPrefix predicate on the "favicon_url" field.
 func FaviconURLHasPrefix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldHasPrefix(FieldFaviconURL, v))
 }
 
 // FaviconURLHasSuffix applies the HasSuffix predicate on the "favicon_url" field.
 func FaviconURLHasSuffix(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldHasSuffix(FieldFaviconURL, v))
 }
 
 // FaviconURLIsNil applies the IsNil predicate on the "favicon_url" field.
 func FaviconURLIsNil() predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldFaviconURL)))
-	})
+	return predicate.Link(sql.FieldIsNull(FieldFaviconURL))
 }
 
 // FaviconURLNotNil applies the NotNil predicate on the "favicon_url" field.
 func FaviconURLNotNil() predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldFaviconURL)))
-	})
+	return predicate.Link(sql.FieldNotNull(FieldFaviconURL))
 }
 
 // FaviconURLEqualFold applies the EqualFold predicate on the "favicon_url" field.
 func FaviconURLEqualFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldEqualFold(FieldFaviconURL, v))
 }
 
 // FaviconURLContainsFold applies the ContainsFold predicate on the "favicon_url" field.
 func FaviconURLContainsFold(v string) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldFaviconURL), v))
-	})
+	return predicate.Link(sql.FieldContainsFold(FieldFaviconURL, v))
 }
 
 // CategoryIDEQ applies the EQ predicate on the "category_id" field.
 func CategoryIDEQ(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCategoryID), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldCategoryID, v))
 }
 
 // CategoryIDNEQ applies the NEQ predicate on the "category_id" field.
 func CategoryIDNEQ(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCategoryID), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldCategoryID, v))
 }
 
 // CategoryIDIn applies the In predicate on the "category_id" field.
 func CategoryIDIn(vs ...uint32) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCategoryID), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldCategoryID, vs...))
 }
 
 // CategoryIDNotIn applies the NotIn predicate on the "category_id" field.
 func CategoryIDNotIn(vs ...uint32) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCategoryID), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldCategoryID, vs...))
 }
 
 // CategoryIDGT applies the GT predicate on the "category_id" field.
 func CategoryIDGT(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldCategoryID), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldCategoryID, v))
 }
 
 // CategoryIDGTE applies the GTE predicate on the "category_id" field.
 func CategoryIDGTE(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldCategoryID), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldCategoryID, v))
 }
 
 // CategoryIDLT applies the LT predicate on the "category_id" field.
 func CategoryIDLT(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldCategoryID), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldCategoryID, v))
 }
 
 // CategoryIDLTE applies the LTE predicate on the "category_id" field.
 func CategoryIDLTE(v uint32) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldCategoryID), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldCategoryID, v))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.
 func CreatedEQ(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCreated), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldCreated, v))
 }
 
 // CreatedNEQ applies the NEQ predicate on the "created" field.
 func CreatedNEQ(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCreated), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldCreated, v))
 }
 
 // CreatedIn applies the In predicate on the "created" field.
 func CreatedIn(vs ...time.Time) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCreated), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldCreated, vs...))
 }
 
 // CreatedNotIn applies the NotIn predicate on the "created" field.
 func CreatedNotIn(vs ...time.Time) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCreated), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldCreated, vs...))
 }
 
 // CreatedGT applies the GT predicate on the "created" field.
 func CreatedGT(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldCreated), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldCreated, v))
 }
 
 // CreatedGTE applies the GTE predicate on the "created" field.
 func CreatedGTE(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldCreated), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldCreated, v))
 }
 
 // CreatedLT applies the LT predicate on the "created" field.
 func CreatedLT(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldCreated), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldCreated, v))
 }
 
 // CreatedLTE applies the LTE predicate on the "created" field.
 func CreatedLTE(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldCreated), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldCreated, v))
 }
 
 // ModifiedEQ applies the EQ predicate on the "modified" field.
 func ModifiedEQ(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldModified), v))
-	})
+	return predicate.Link(sql.FieldEQ(FieldModified, v))
 }
 
 // ModifiedNEQ applies the NEQ predicate on the "modified" field.
 func ModifiedNEQ(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldModified), v))
-	})
+	return predicate.Link(sql.FieldNEQ(FieldModified, v))
 }
 
 // ModifiedIn applies the In predicate on the "modified" field.
 func ModifiedIn(vs ...time.Time) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldModified), v...))
-	})
+	return predicate.Link(sql.FieldIn(FieldModified, vs...))
 }
 
 // ModifiedNotIn applies the NotIn predicate on the "modified" field.
 func ModifiedNotIn(vs ...time.Time) predicate.Link {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldModified), v...))
-	})
+	return predicate.Link(sql.FieldNotIn(FieldModified, vs...))
 }
 
 // ModifiedGT applies the GT predicate on the "modified" field.
 func ModifiedGT(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldModified), v))
-	})
+	return predicate.Link(sql.FieldGT(FieldModified, v))
 }
 
 // ModifiedGTE applies the GTE predicate on the "modified" field.
 func ModifiedGTE(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldModified), v))
-	})
+	return predicate.Link(sql.FieldGTE(FieldModified, v))
 }
 
 // ModifiedLT applies the LT predicate on the "modified" field.
 func ModifiedLT(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldModified), v))
-	})
+	return predicate.Link(sql.FieldLT(FieldModified, v))
 }
 
 // ModifiedLTE applies the LTE predicate on the "modified" field.
 func ModifiedLTE(v time.Time) predicate.Link {
-	return predicate.Link(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldModified), v))
-	})
+	return predicate.Link(sql.FieldLTE(FieldModified, v))
 }
 
 // And groups predicates with the AND operator between them.

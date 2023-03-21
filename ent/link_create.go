@@ -105,50 +105,8 @@ func (lc *LinkCreate) Mutation() *LinkMutation {
 
 // Save creates the Link in the database.
 func (lc *LinkCreate) Save(ctx context.Context) (*Link, error) {
-	var (
-		err  error
-		node *Link
-	)
 	lc.defaults()
-	if len(lc.hooks) == 0 {
-		if err = lc.check(); err != nil {
-			return nil, err
-		}
-		node, err = lc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*LinkMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = lc.check(); err != nil {
-				return nil, err
-			}
-			lc.mutation = mutation
-			if node, err = lc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(lc.hooks) - 1; i >= 0; i-- {
-			if lc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = lc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, lc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Link)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from LinkMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Link, LinkMutation](ctx, lc.sqlSave, lc.mutation, lc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -212,6 +170,9 @@ func (lc *LinkCreate) check() error {
 }
 
 func (lc *LinkCreate) sqlSave(ctx context.Context) (*Link, error) {
+	if err := lc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := lc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, lc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -223,86 +184,50 @@ func (lc *LinkCreate) sqlSave(ctx context.Context) (*Link, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	lc.mutation.id = &_node.ID
+	lc.mutation.done = true
 	return _node, nil
 }
 
 func (lc *LinkCreate) createSpec() (*Link, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Link{config: lc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: link.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: link.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(link.Table, sqlgraph.NewFieldSpec(link.FieldID, field.TypeUint32))
 	)
 	if id, ok := lc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := lc.mutation.UserID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: link.FieldUserID,
-		})
+		_spec.SetField(link.FieldUserID, field.TypeUint32, value)
 		_node.UserID = value
 	}
 	if value, ok := lc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: link.FieldName,
-		})
+		_spec.SetField(link.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := lc.mutation.NameJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: link.FieldNameJa,
-		})
+		_spec.SetField(link.FieldNameJa, field.TypeString, value)
 		_node.NameJa = value
 	}
 	if value, ok := lc.mutation.SiteURL(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: link.FieldSiteURL,
-		})
+		_spec.SetField(link.FieldSiteURL, field.TypeString, value)
 		_node.SiteURL = value
 	}
 	if value, ok := lc.mutation.FaviconURL(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: link.FieldFaviconURL,
-		})
+		_spec.SetField(link.FieldFaviconURL, field.TypeString, value)
 		_node.FaviconURL = value
 	}
 	if value, ok := lc.mutation.CategoryID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: link.FieldCategoryID,
-		})
+		_spec.SetField(link.FieldCategoryID, field.TypeUint32, value)
 		_node.CategoryID = value
 	}
 	if value, ok := lc.mutation.Created(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: link.FieldCreated,
-		})
+		_spec.SetField(link.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
 	if value, ok := lc.mutation.Modified(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: link.FieldModified,
-		})
+		_spec.SetField(link.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
 	return _node, _spec

@@ -41,8 +41,8 @@ type Product struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Product) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*Product) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case product.FieldID, product.FieldUserID:
@@ -60,7 +60,7 @@ func (*Product) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Product fields.
-func (pr *Product) assignValues(columns []string, values []interface{}) error {
+func (pr *Product) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -147,7 +147,7 @@ func (pr *Product) assignValues(columns []string, values []interface{}) error {
 // Note that you need to call Product.Unwrap() before calling this method if this Product
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (pr *Product) Update() *ProductUpdateOne {
-	return (&ProductClient{config: pr.config}).UpdateOne(pr)
+	return NewProductClient(pr.config).UpdateOne(pr)
 }
 
 // Unwrap unwraps the Product entity that was returned from a transaction after it was closed,
@@ -204,9 +204,3 @@ func (pr *Product) String() string {
 
 // Products is a parsable slice of Product.
 type Products []*Product
-
-func (pr Products) config(cfg config) {
-	for _i := range pr {
-		pr[_i].config = cfg
-	}
-}

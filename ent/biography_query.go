@@ -17,11 +17,9 @@ import (
 // BiographyQuery is the builder for querying Biography entities.
 type BiographyQuery struct {
 	config
-	limit      *int
-	offset     *int
-	unique     *bool
+	ctx        *QueryContext
 	order      []OrderFunc
-	fields     []string
+	inters     []Interceptor
 	predicates []predicate.Biography
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -34,26 +32,26 @@ func (bq *BiographyQuery) Where(ps ...predicate.Biography) *BiographyQuery {
 	return bq
 }
 
-// Limit adds a limit step to the query.
+// Limit the number of records to be returned by this query.
 func (bq *BiographyQuery) Limit(limit int) *BiographyQuery {
-	bq.limit = &limit
+	bq.ctx.Limit = &limit
 	return bq
 }
 
-// Offset adds an offset step to the query.
+// Offset to start from.
 func (bq *BiographyQuery) Offset(offset int) *BiographyQuery {
-	bq.offset = &offset
+	bq.ctx.Offset = &offset
 	return bq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
 func (bq *BiographyQuery) Unique(unique bool) *BiographyQuery {
-	bq.unique = &unique
+	bq.ctx.Unique = &unique
 	return bq
 }
 
-// Order adds an order step to the query.
+// Order specifies how the records should be ordered.
 func (bq *BiographyQuery) Order(o ...OrderFunc) *BiographyQuery {
 	bq.order = append(bq.order, o...)
 	return bq
@@ -62,7 +60,7 @@ func (bq *BiographyQuery) Order(o ...OrderFunc) *BiographyQuery {
 // First returns the first Biography entity from the query.
 // Returns a *NotFoundError when no Biography was found.
 func (bq *BiographyQuery) First(ctx context.Context) (*Biography, error) {
-	nodes, err := bq.Limit(1).All(ctx)
+	nodes, err := bq.Limit(1).All(setContextOp(ctx, bq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +83,7 @@ func (bq *BiographyQuery) FirstX(ctx context.Context) *Biography {
 // Returns a *NotFoundError when no Biography ID was found.
 func (bq *BiographyQuery) FirstID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = bq.Limit(1).IDs(ctx); err != nil {
+	if ids, err = bq.Limit(1).IDs(setContextOp(ctx, bq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -108,7 +106,7 @@ func (bq *BiographyQuery) FirstIDX(ctx context.Context) uint32 {
 // Returns a *NotSingularError when more than one Biography entity is found.
 // Returns a *NotFoundError when no Biography entities are found.
 func (bq *BiographyQuery) Only(ctx context.Context) (*Biography, error) {
-	nodes, err := bq.Limit(2).All(ctx)
+	nodes, err := bq.Limit(2).All(setContextOp(ctx, bq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +134,7 @@ func (bq *BiographyQuery) OnlyX(ctx context.Context) *Biography {
 // Returns a *NotFoundError when no entities are found.
 func (bq *BiographyQuery) OnlyID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = bq.Limit(2).IDs(ctx); err != nil {
+	if ids, err = bq.Limit(2).IDs(setContextOp(ctx, bq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -161,10 +159,12 @@ func (bq *BiographyQuery) OnlyIDX(ctx context.Context) uint32 {
 
 // All executes the query and returns a list of Biographies.
 func (bq *BiographyQuery) All(ctx context.Context) ([]*Biography, error) {
+	ctx = setContextOp(ctx, bq.ctx, "All")
 	if err := bq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	return bq.sqlAll(ctx)
+	qr := querierAll[[]*Biography, *BiographyQuery]()
+	return withInterceptors[[]*Biography](ctx, bq, qr, bq.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
@@ -177,9 +177,12 @@ func (bq *BiographyQuery) AllX(ctx context.Context) []*Biography {
 }
 
 // IDs executes the query and returns a list of Biography IDs.
-func (bq *BiographyQuery) IDs(ctx context.Context) ([]uint32, error) {
-	var ids []uint32
-	if err := bq.Select(biography.FieldID).Scan(ctx, &ids); err != nil {
+func (bq *BiographyQuery) IDs(ctx context.Context) (ids []uint32, err error) {
+	if bq.ctx.Unique == nil && bq.path != nil {
+		bq.Unique(true)
+	}
+	ctx = setContextOp(ctx, bq.ctx, "IDs")
+	if err = bq.Select(biography.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
@@ -196,10 +199,11 @@ func (bq *BiographyQuery) IDsX(ctx context.Context) []uint32 {
 
 // Count returns the count of the given query.
 func (bq *BiographyQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, bq.ctx, "Count")
 	if err := bq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return bq.sqlCount(ctx)
+	return withInterceptors[int](ctx, bq, querierCount[*BiographyQuery](), bq.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
@@ -213,10 +217,15 @@ func (bq *BiographyQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (bq *BiographyQuery) Exist(ctx context.Context) (bool, error) {
-	if err := bq.prepareQuery(ctx); err != nil {
-		return false, err
+	ctx = setContextOp(ctx, bq.ctx, "Exist")
+	switch _, err := bq.FirstID(ctx); {
+	case IsNotFound(err):
+		return false, nil
+	case err != nil:
+		return false, fmt.Errorf("ent: check existence: %w", err)
+	default:
+		return true, nil
 	}
-	return bq.sqlExist(ctx)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
@@ -236,14 +245,13 @@ func (bq *BiographyQuery) Clone() *BiographyQuery {
 	}
 	return &BiographyQuery{
 		config:     bq.config,
-		limit:      bq.limit,
-		offset:     bq.offset,
+		ctx:        bq.ctx.Clone(),
 		order:      append([]OrderFunc{}, bq.order...),
+		inters:     append([]Interceptor{}, bq.inters...),
 		predicates: append([]predicate.Biography{}, bq.predicates...),
 		// clone intermediate query.
-		sql:    bq.sql.Clone(),
-		path:   bq.path,
-		unique: bq.unique,
+		sql:  bq.sql.Clone(),
+		path: bq.path,
 	}
 }
 
@@ -262,16 +270,11 @@ func (bq *BiographyQuery) Clone() *BiographyQuery {
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (bq *BiographyQuery) GroupBy(field string, fields ...string) *BiographyGroupBy {
-	grbuild := &BiographyGroupBy{config: bq.config}
-	grbuild.fields = append([]string{field}, fields...)
-	grbuild.path = func(ctx context.Context) (prev *sql.Selector, err error) {
-		if err := bq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		return bq.sqlQuery(ctx), nil
-	}
+	bq.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &BiographyGroupBy{build: bq}
+	grbuild.flds = &bq.ctx.Fields
 	grbuild.label = biography.Label
-	grbuild.flds, grbuild.scan = &grbuild.fields, grbuild.Scan
+	grbuild.scan = grbuild.Scan
 	return grbuild
 }
 
@@ -288,15 +291,30 @@ func (bq *BiographyQuery) GroupBy(field string, fields ...string) *BiographyGrou
 //		Select(biography.FieldUserID).
 //		Scan(ctx, &v)
 func (bq *BiographyQuery) Select(fields ...string) *BiographySelect {
-	bq.fields = append(bq.fields, fields...)
-	selbuild := &BiographySelect{BiographyQuery: bq}
-	selbuild.label = biography.Label
-	selbuild.flds, selbuild.scan = &bq.fields, selbuild.Scan
-	return selbuild
+	bq.ctx.Fields = append(bq.ctx.Fields, fields...)
+	sbuild := &BiographySelect{BiographyQuery: bq}
+	sbuild.label = biography.Label
+	sbuild.flds, sbuild.scan = &bq.ctx.Fields, sbuild.Scan
+	return sbuild
+}
+
+// Aggregate returns a BiographySelect configured with the given aggregations.
+func (bq *BiographyQuery) Aggregate(fns ...AggregateFunc) *BiographySelect {
+	return bq.Select().Aggregate(fns...)
 }
 
 func (bq *BiographyQuery) prepareQuery(ctx context.Context) error {
-	for _, f := range bq.fields {
+	for _, inter := range bq.inters {
+		if inter == nil {
+			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
+		}
+		if trv, ok := inter.(Traverser); ok {
+			if err := trv.Traverse(ctx, bq); err != nil {
+				return err
+			}
+		}
+	}
+	for _, f := range bq.ctx.Fields {
 		if !biography.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
@@ -316,10 +334,10 @@ func (bq *BiographyQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bi
 		nodes = []*Biography{}
 		_spec = bq.querySpec()
 	)
-	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
+	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Biography).scanValues(nil, columns)
 	}
-	_spec.Assign = func(columns []string, values []interface{}) error {
+	_spec.Assign = func(columns []string, values []any) error {
 		node := &Biography{config: bq.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
@@ -338,38 +356,22 @@ func (bq *BiographyQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Bi
 
 func (bq *BiographyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := bq.querySpec()
-	_spec.Node.Columns = bq.fields
-	if len(bq.fields) > 0 {
-		_spec.Unique = bq.unique != nil && *bq.unique
+	_spec.Node.Columns = bq.ctx.Fields
+	if len(bq.ctx.Fields) > 0 {
+		_spec.Unique = bq.ctx.Unique != nil && *bq.ctx.Unique
 	}
 	return sqlgraph.CountNodes(ctx, bq.driver, _spec)
 }
 
-func (bq *BiographyQuery) sqlExist(ctx context.Context) (bool, error) {
-	n, err := bq.sqlCount(ctx)
-	if err != nil {
-		return false, fmt.Errorf("ent: check existence: %w", err)
-	}
-	return n > 0, nil
-}
-
 func (bq *BiographyQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := &sqlgraph.QuerySpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   biography.Table,
-			Columns: biography.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: biography.FieldID,
-			},
-		},
-		From:   bq.sql,
-		Unique: true,
-	}
-	if unique := bq.unique; unique != nil {
+	_spec := sqlgraph.NewQuerySpec(biography.Table, biography.Columns, sqlgraph.NewFieldSpec(biography.FieldID, field.TypeUint32))
+	_spec.From = bq.sql
+	if unique := bq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
+	} else if bq.path != nil {
+		_spec.Unique = true
 	}
-	if fields := bq.fields; len(fields) > 0 {
+	if fields := bq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, biography.FieldID)
 		for i := range fields {
@@ -385,10 +387,10 @@ func (bq *BiographyQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if limit := bq.limit; limit != nil {
+	if limit := bq.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := bq.offset; offset != nil {
+	if offset := bq.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
 	if ps := bq.order; len(ps) > 0 {
@@ -404,7 +406,7 @@ func (bq *BiographyQuery) querySpec() *sqlgraph.QuerySpec {
 func (bq *BiographyQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(bq.driver.Dialect())
 	t1 := builder.Table(biography.Table)
-	columns := bq.fields
+	columns := bq.ctx.Fields
 	if len(columns) == 0 {
 		columns = biography.Columns
 	}
@@ -413,7 +415,7 @@ func (bq *BiographyQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector = bq.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if bq.unique != nil && *bq.unique {
+	if bq.ctx.Unique != nil && *bq.ctx.Unique {
 		selector.Distinct()
 	}
 	for _, p := range bq.predicates {
@@ -422,12 +424,12 @@ func (bq *BiographyQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	for _, p := range bq.order {
 		p(selector)
 	}
-	if offset := bq.offset; offset != nil {
+	if offset := bq.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := bq.limit; limit != nil {
+	if limit := bq.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -435,13 +437,8 @@ func (bq *BiographyQuery) sqlQuery(ctx context.Context) *sql.Selector {
 
 // BiographyGroupBy is the group-by builder for Biography entities.
 type BiographyGroupBy struct {
-	config
 	selector
-	fields []string
-	fns    []AggregateFunc
-	// intermediate query (i.e. traversal path).
-	sql  *sql.Selector
-	path func(context.Context) (*sql.Selector, error)
+	build *BiographyQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
@@ -450,74 +447,77 @@ func (bgb *BiographyGroupBy) Aggregate(fns ...AggregateFunc) *BiographyGroupBy {
 	return bgb
 }
 
-// Scan applies the group-by query and scans the result into the given value.
-func (bgb *BiographyGroupBy) Scan(ctx context.Context, v interface{}) error {
-	query, err := bgb.path(ctx)
-	if err != nil {
+// Scan applies the selector query and scans the result into the given value.
+func (bgb *BiographyGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, bgb.build.ctx, "GroupBy")
+	if err := bgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	bgb.sql = query
-	return bgb.sqlScan(ctx, v)
+	return scanWithInterceptors[*BiographyQuery, *BiographyGroupBy](ctx, bgb.build, bgb, bgb.build.inters, v)
 }
 
-func (bgb *BiographyGroupBy) sqlScan(ctx context.Context, v interface{}) error {
-	for _, f := range bgb.fields {
-		if !biography.ValidColumn(f) {
-			return &ValidationError{Name: f, err: fmt.Errorf("invalid field %q for group-by", f)}
-		}
+func (bgb *BiographyGroupBy) sqlScan(ctx context.Context, root *BiographyQuery, v any) error {
+	selector := root.sqlQuery(ctx).Select()
+	aggregation := make([]string, 0, len(bgb.fns))
+	for _, fn := range bgb.fns {
+		aggregation = append(aggregation, fn(selector))
 	}
-	selector := bgb.sqlQuery()
+	if len(selector.SelectedColumns()) == 0 {
+		columns := make([]string, 0, len(*bgb.flds)+len(bgb.fns))
+		for _, f := range *bgb.flds {
+			columns = append(columns, selector.C(f))
+		}
+		columns = append(columns, aggregation...)
+		selector.Select(columns...)
+	}
+	selector.GroupBy(selector.Columns(*bgb.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := bgb.driver.Query(ctx, query, args, rows); err != nil {
+	if err := bgb.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
 }
 
-func (bgb *BiographyGroupBy) sqlQuery() *sql.Selector {
-	selector := bgb.sql.Select()
-	aggregation := make([]string, 0, len(bgb.fns))
-	for _, fn := range bgb.fns {
-		aggregation = append(aggregation, fn(selector))
-	}
-	// If no columns were selected in a custom aggregation function, the default
-	// selection is the fields used for "group-by", and the aggregation functions.
-	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(bgb.fields)+len(bgb.fns))
-		for _, f := range bgb.fields {
-			columns = append(columns, selector.C(f))
-		}
-		columns = append(columns, aggregation...)
-		selector.Select(columns...)
-	}
-	return selector.GroupBy(selector.Columns(bgb.fields...)...)
-}
-
 // BiographySelect is the builder for selecting fields of Biography entities.
 type BiographySelect struct {
 	*BiographyQuery
 	selector
-	// intermediate query (i.e. traversal path).
-	sql *sql.Selector
+}
+
+// Aggregate adds the given aggregation functions to the selector query.
+func (bs *BiographySelect) Aggregate(fns ...AggregateFunc) *BiographySelect {
+	bs.fns = append(bs.fns, fns...)
+	return bs
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (bs *BiographySelect) Scan(ctx context.Context, v interface{}) error {
+func (bs *BiographySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, bs.ctx, "Select")
 	if err := bs.prepareQuery(ctx); err != nil {
 		return err
 	}
-	bs.sql = bs.BiographyQuery.sqlQuery(ctx)
-	return bs.sqlScan(ctx, v)
+	return scanWithInterceptors[*BiographyQuery, *BiographySelect](ctx, bs.BiographyQuery, bs, bs.inters, v)
 }
 
-func (bs *BiographySelect) sqlScan(ctx context.Context, v interface{}) error {
+func (bs *BiographySelect) sqlScan(ctx context.Context, root *BiographyQuery, v any) error {
+	selector := root.sqlQuery(ctx)
+	aggregation := make([]string, 0, len(bs.fns))
+	for _, fn := range bs.fns {
+		aggregation = append(aggregation, fn(selector))
+	}
+	switch n := len(*bs.selector.flds); {
+	case n == 0 && len(aggregation) > 0:
+		selector.Select(aggregation...)
+	case n != 0 && len(aggregation) > 0:
+		selector.AppendSelect(aggregation...)
+	}
 	rows := &sql.Rows{}
-	query, args := bs.sql.Query()
+	query, args := selector.Query()
 	if err := bs.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}

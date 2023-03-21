@@ -91,50 +91,8 @@ func (lc *LocationCreate) Mutation() *LocationMutation {
 
 // Save creates the Location in the database.
 func (lc *LocationCreate) Save(ctx context.Context) (*Location, error) {
-	var (
-		err  error
-		node *Location
-	)
 	lc.defaults()
-	if len(lc.hooks) == 0 {
-		if err = lc.check(); err != nil {
-			return nil, err
-		}
-		node, err = lc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*LocationMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = lc.check(); err != nil {
-				return nil, err
-			}
-			lc.mutation = mutation
-			if node, err = lc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(lc.hooks) - 1; i >= 0; i-- {
-			if lc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = lc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, lc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Location)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from LocationMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Location, LocationMutation](ctx, lc.sqlSave, lc.mutation, lc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -203,6 +161,9 @@ func (lc *LocationCreate) check() error {
 }
 
 func (lc *LocationCreate) sqlSave(ctx context.Context) (*Location, error) {
+	if err := lc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := lc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, lc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -214,78 +175,46 @@ func (lc *LocationCreate) sqlSave(ctx context.Context) (*Location, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	lc.mutation.id = &_node.ID
+	lc.mutation.done = true
 	return _node, nil
 }
 
 func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Location{config: lc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: location.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: location.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(location.Table, sqlgraph.NewFieldSpec(location.FieldID, field.TypeUint32))
 	)
 	if id, ok := lc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := lc.mutation.GetType(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: location.FieldType,
-		})
+		_spec.SetField(location.FieldType, field.TypeEnum, value)
 		_node.Type = value
 	}
 	if value, ok := lc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: location.FieldName,
-		})
+		_spec.SetField(location.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := lc.mutation.NameJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: location.FieldNameJa,
-		})
+		_spec.SetField(location.FieldNameJa, field.TypeString, value)
 		_node.NameJa = value
 	}
 	if value, ok := lc.mutation.Address(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: location.FieldAddress,
-		})
+		_spec.SetField(location.FieldAddress, field.TypeString, value)
 		_node.Address = value
 	}
 	if value, ok := lc.mutation.AddressJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: location.FieldAddressJa,
-		})
+		_spec.SetField(location.FieldAddressJa, field.TypeString, value)
 		_node.AddressJa = value
 	}
 	if value, ok := lc.mutation.Created(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: location.FieldCreated,
-		})
+		_spec.SetField(location.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
 	if value, ok := lc.mutation.Modified(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: location.FieldModified,
-		})
+		_spec.SetField(location.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
 	return _node, _spec

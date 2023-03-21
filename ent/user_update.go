@@ -149,35 +149,8 @@ func (uu *UserUpdate) Mutation() *UserMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
 	uu.defaults()
-	if len(uu.hooks) == 0 {
-		affected, err = uu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*UserMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			uu.mutation = mutation
-			affected, err = uu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(uu.hooks) - 1; i >= 0; i-- {
-			if uu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = uu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, uu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, UserMutation](ctx, uu.sqlSave, uu.mutation, uu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -211,16 +184,7 @@ func (uu *UserUpdate) defaults() {
 }
 
 func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   user.Table,
-			Columns: user.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: user.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint32))
 	if ps := uu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -229,108 +193,49 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := uu.mutation.GivenName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldGivenName,
-		})
+		_spec.SetField(user.FieldGivenName, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.FamilyName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldFamilyName,
-		})
+		_spec.SetField(user.FieldFamilyName, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.GivenNameJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldGivenNameJa,
-		})
+		_spec.SetField(user.FieldGivenNameJa, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.FamilyNameJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldFamilyNameJa,
-		})
+		_spec.SetField(user.FieldFamilyNameJa, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldUserID,
-		})
+		_spec.SetField(user.FieldUserID, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Mail(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldMail,
-		})
+		_spec.SetField(user.FieldMail, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.BirthDate(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldBirthDate,
-		})
+		_spec.SetField(user.FieldBirthDate, field.TypeTime, value)
 	}
 	if value, ok := uu.mutation.Location(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldLocation,
-		})
+		_spec.SetField(user.FieldLocation, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.LocationJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldLocationJa,
-		})
+		_spec.SetField(user.FieldLocationJa, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.SSOToken(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldSSOToken,
-		})
+		_spec.SetField(user.FieldSSOToken, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.AvatarURL(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldAvatarURL,
-		})
+		_spec.SetField(user.FieldAvatarURL, field.TypeString, value)
 	}
 	if uu.mutation.AvatarURLCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: user.FieldAvatarURL,
-		})
+		_spec.ClearField(user.FieldAvatarURL, field.TypeString)
 	}
 	if value, ok := uu.mutation.Selected(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: user.FieldSelected,
-		})
+		_spec.SetField(user.FieldSelected, field.TypeBool, value)
 	}
 	if value, ok := uu.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldCreated,
-		})
+		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := uu.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldModified,
-		})
+		_spec.SetField(user.FieldModified, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -340,6 +245,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	uu.mutation.done = true
 	return n, nil
 }
 
@@ -470,6 +376,12 @@ func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
 }
 
+// Where appends a list predicates to the UserUpdate builder.
+func (uuo *UserUpdateOne) Where(ps ...predicate.User) *UserUpdateOne {
+	uuo.mutation.Where(ps...)
+	return uuo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (uuo *UserUpdateOne) Select(field string, fields ...string) *UserUpdateOne {
@@ -479,41 +391,8 @@ func (uuo *UserUpdateOne) Select(field string, fields ...string) *UserUpdateOne 
 
 // Save executes the query and returns the updated User entity.
 func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
-	var (
-		err  error
-		node *User
-	)
 	uuo.defaults()
-	if len(uuo.hooks) == 0 {
-		node, err = uuo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*UserMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			uuo.mutation = mutation
-			node, err = uuo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(uuo.hooks) - 1; i >= 0; i-- {
-			if uuo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = uuo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, uuo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*User)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from UserMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*User, UserMutation](ctx, uuo.sqlSave, uuo.mutation, uuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -547,16 +426,7 @@ func (uuo *UserUpdateOne) defaults() {
 }
 
 func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   user.Table,
-			Columns: user.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: user.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint32))
 	id, ok := uuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "User.id" for update`)}
@@ -582,108 +452,49 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 	}
 	if value, ok := uuo.mutation.GivenName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldGivenName,
-		})
+		_spec.SetField(user.FieldGivenName, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.FamilyName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldFamilyName,
-		})
+		_spec.SetField(user.FieldFamilyName, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.GivenNameJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldGivenNameJa,
-		})
+		_spec.SetField(user.FieldGivenNameJa, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.FamilyNameJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldFamilyNameJa,
-		})
+		_spec.SetField(user.FieldFamilyNameJa, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldUserID,
-		})
+		_spec.SetField(user.FieldUserID, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Mail(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldMail,
-		})
+		_spec.SetField(user.FieldMail, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.BirthDate(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldBirthDate,
-		})
+		_spec.SetField(user.FieldBirthDate, field.TypeTime, value)
 	}
 	if value, ok := uuo.mutation.Location(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldLocation,
-		})
+		_spec.SetField(user.FieldLocation, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.LocationJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldLocationJa,
-		})
+		_spec.SetField(user.FieldLocationJa, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.SSOToken(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldSSOToken,
-		})
+		_spec.SetField(user.FieldSSOToken, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.AvatarURL(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldAvatarURL,
-		})
+		_spec.SetField(user.FieldAvatarURL, field.TypeString, value)
 	}
 	if uuo.mutation.AvatarURLCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: user.FieldAvatarURL,
-		})
+		_spec.ClearField(user.FieldAvatarURL, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Selected(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: user.FieldSelected,
-		})
+		_spec.SetField(user.FieldSelected, field.TypeBool, value)
 	}
 	if value, ok := uuo.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldCreated,
-		})
+		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := uuo.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldModified,
-		})
+		_spec.SetField(user.FieldModified, field.TypeTime, value)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues
@@ -696,5 +507,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		return nil, err
 	}
+	uuo.mutation.done = true
 	return _node, nil
 }

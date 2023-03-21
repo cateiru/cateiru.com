@@ -133,35 +133,8 @@ func (bu *BiographyUpdate) Mutation() *BiographyMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (bu *BiographyUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
 	bu.defaults()
-	if len(bu.hooks) == 0 {
-		affected, err = bu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*BiographyMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			bu.mutation = mutation
-			affected, err = bu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(bu.hooks) - 1; i >= 0; i-- {
-			if bu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = bu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, bu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, BiographyMutation](ctx, bu.sqlSave, bu.mutation, bu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -195,16 +168,7 @@ func (bu *BiographyUpdate) defaults() {
 }
 
 func (bu *BiographyUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   biography.Table,
-			Columns: biography.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: biography.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(biography.Table, biography.Columns, sqlgraph.NewFieldSpec(biography.FieldID, field.TypeUint32))
 	if ps := bu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -213,87 +177,40 @@ func (bu *BiographyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := bu.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldUserID,
-		})
+		_spec.SetField(biography.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := bu.mutation.AddedUserID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldUserID,
-		})
+		_spec.AddField(biography.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := bu.mutation.IsPublic(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: biography.FieldIsPublic,
-		})
+		_spec.SetField(biography.FieldIsPublic, field.TypeBool, value)
 	}
 	if value, ok := bu.mutation.LocationID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldLocationID,
-		})
+		_spec.SetField(biography.FieldLocationID, field.TypeUint32, value)
 	}
 	if value, ok := bu.mutation.AddedLocationID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldLocationID,
-		})
+		_spec.AddField(biography.FieldLocationID, field.TypeUint32, value)
 	}
 	if value, ok := bu.mutation.Position(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: biography.FieldPosition,
-		})
+		_spec.SetField(biography.FieldPosition, field.TypeString, value)
 	}
 	if value, ok := bu.mutation.PositionJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: biography.FieldPositionJa,
-		})
+		_spec.SetField(biography.FieldPositionJa, field.TypeString, value)
 	}
 	if value, ok := bu.mutation.Join(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldJoin,
-		})
+		_spec.SetField(biography.FieldJoin, field.TypeTime, value)
 	}
 	if value, ok := bu.mutation.Leave(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldLeave,
-		})
+		_spec.SetField(biography.FieldLeave, field.TypeTime, value)
 	}
 	if bu.mutation.LeaveCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Column: biography.FieldLeave,
-		})
+		_spec.ClearField(biography.FieldLeave, field.TypeTime)
 	}
 	if value, ok := bu.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldCreated,
-		})
+		_spec.SetField(biography.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := bu.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldModified,
-		})
+		_spec.SetField(biography.FieldModified, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -303,6 +220,7 @@ func (bu *BiographyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	bu.mutation.done = true
 	return n, nil
 }
 
@@ -417,6 +335,12 @@ func (buo *BiographyUpdateOne) Mutation() *BiographyMutation {
 	return buo.mutation
 }
 
+// Where appends a list predicates to the BiographyUpdate builder.
+func (buo *BiographyUpdateOne) Where(ps ...predicate.Biography) *BiographyUpdateOne {
+	buo.mutation.Where(ps...)
+	return buo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (buo *BiographyUpdateOne) Select(field string, fields ...string) *BiographyUpdateOne {
@@ -426,41 +350,8 @@ func (buo *BiographyUpdateOne) Select(field string, fields ...string) *Biography
 
 // Save executes the query and returns the updated Biography entity.
 func (buo *BiographyUpdateOne) Save(ctx context.Context) (*Biography, error) {
-	var (
-		err  error
-		node *Biography
-	)
 	buo.defaults()
-	if len(buo.hooks) == 0 {
-		node, err = buo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*BiographyMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			buo.mutation = mutation
-			node, err = buo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(buo.hooks) - 1; i >= 0; i-- {
-			if buo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = buo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, buo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Biography)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from BiographyMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Biography, BiographyMutation](ctx, buo.sqlSave, buo.mutation, buo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -494,16 +385,7 @@ func (buo *BiographyUpdateOne) defaults() {
 }
 
 func (buo *BiographyUpdateOne) sqlSave(ctx context.Context) (_node *Biography, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   biography.Table,
-			Columns: biography.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: biography.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(biography.Table, biography.Columns, sqlgraph.NewFieldSpec(biography.FieldID, field.TypeUint32))
 	id, ok := buo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Biography.id" for update`)}
@@ -529,87 +411,40 @@ func (buo *BiographyUpdateOne) sqlSave(ctx context.Context) (_node *Biography, e
 		}
 	}
 	if value, ok := buo.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldUserID,
-		})
+		_spec.SetField(biography.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := buo.mutation.AddedUserID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldUserID,
-		})
+		_spec.AddField(biography.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := buo.mutation.IsPublic(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: biography.FieldIsPublic,
-		})
+		_spec.SetField(biography.FieldIsPublic, field.TypeBool, value)
 	}
 	if value, ok := buo.mutation.LocationID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldLocationID,
-		})
+		_spec.SetField(biography.FieldLocationID, field.TypeUint32, value)
 	}
 	if value, ok := buo.mutation.AddedLocationID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldLocationID,
-		})
+		_spec.AddField(biography.FieldLocationID, field.TypeUint32, value)
 	}
 	if value, ok := buo.mutation.Position(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: biography.FieldPosition,
-		})
+		_spec.SetField(biography.FieldPosition, field.TypeString, value)
 	}
 	if value, ok := buo.mutation.PositionJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: biography.FieldPositionJa,
-		})
+		_spec.SetField(biography.FieldPositionJa, field.TypeString, value)
 	}
 	if value, ok := buo.mutation.Join(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldJoin,
-		})
+		_spec.SetField(biography.FieldJoin, field.TypeTime, value)
 	}
 	if value, ok := buo.mutation.Leave(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldLeave,
-		})
+		_spec.SetField(biography.FieldLeave, field.TypeTime, value)
 	}
 	if buo.mutation.LeaveCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Column: biography.FieldLeave,
-		})
+		_spec.ClearField(biography.FieldLeave, field.TypeTime)
 	}
 	if value, ok := buo.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldCreated,
-		})
+		_spec.SetField(biography.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := buo.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldModified,
-		})
+		_spec.SetField(biography.FieldModified, field.TypeTime, value)
 	}
 	_node = &Biography{config: buo.config}
 	_spec.Assign = _node.assignValues
@@ -622,5 +457,6 @@ func (buo *BiographyUpdateOne) sqlSave(ctx context.Context) (_node *Biography, e
 		}
 		return nil, err
 	}
+	buo.mutation.done = true
 	return _node, nil
 }

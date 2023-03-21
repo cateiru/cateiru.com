@@ -26,8 +26,8 @@ type Session struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Session) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*Session) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case session.FieldUserID:
@@ -45,7 +45,7 @@ func (*Session) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Session fields.
-func (s *Session) assignValues(columns []string, values []interface{}) error {
+func (s *Session) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -84,7 +84,7 @@ func (s *Session) assignValues(columns []string, values []interface{}) error {
 // Note that you need to call Session.Unwrap() before calling this method if this Session
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (s *Session) Update() *SessionUpdateOne {
-	return (&SessionClient{config: s.config}).UpdateOne(s)
+	return NewSessionClient(s.config).UpdateOne(s)
 }
 
 // Unwrap unwraps the Session entity that was returned from a transaction after it was closed,
@@ -117,9 +117,3 @@ func (s *Session) String() string {
 
 // Sessions is a parsable slice of Session.
 type Sessions []*Session
-
-func (s Sessions) config(cfg config) {
-	for _i := range s {
-		s[_i].config = cfg
-	}
-}

@@ -149,50 +149,8 @@ func (uc *UserCreate) Mutation() *UserMutation {
 
 // Save creates the User in the database.
 func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
-	var (
-		err  error
-		node *User
-	)
 	uc.defaults()
-	if len(uc.hooks) == 0 {
-		if err = uc.check(); err != nil {
-			return nil, err
-		}
-		node, err = uc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*UserMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = uc.check(); err != nil {
-				return nil, err
-			}
-			uc.mutation = mutation
-			if node, err = uc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(uc.hooks) - 1; i >= 0; i-- {
-			if uc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = uc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, uc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*User)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from UserMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*User, UserMutation](ctx, uc.sqlSave, uc.mutation, uc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -278,6 +236,9 @@ func (uc *UserCreate) check() error {
 }
 
 func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
+	if err := uc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := uc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, uc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -289,134 +250,74 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	uc.mutation.id = &_node.ID
+	uc.mutation.done = true
 	return _node, nil
 }
 
 func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	var (
 		_node = &User{config: uc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: user.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: user.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUint32))
 	)
 	if id, ok := uc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := uc.mutation.GivenName(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldGivenName,
-		})
+		_spec.SetField(user.FieldGivenName, field.TypeString, value)
 		_node.GivenName = value
 	}
 	if value, ok := uc.mutation.FamilyName(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldFamilyName,
-		})
+		_spec.SetField(user.FieldFamilyName, field.TypeString, value)
 		_node.FamilyName = value
 	}
 	if value, ok := uc.mutation.GivenNameJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldGivenNameJa,
-		})
+		_spec.SetField(user.FieldGivenNameJa, field.TypeString, value)
 		_node.GivenNameJa = value
 	}
 	if value, ok := uc.mutation.FamilyNameJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldFamilyNameJa,
-		})
+		_spec.SetField(user.FieldFamilyNameJa, field.TypeString, value)
 		_node.FamilyNameJa = value
 	}
 	if value, ok := uc.mutation.UserID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldUserID,
-		})
+		_spec.SetField(user.FieldUserID, field.TypeString, value)
 		_node.UserID = value
 	}
 	if value, ok := uc.mutation.Mail(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldMail,
-		})
+		_spec.SetField(user.FieldMail, field.TypeString, value)
 		_node.Mail = value
 	}
 	if value, ok := uc.mutation.BirthDate(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldBirthDate,
-		})
+		_spec.SetField(user.FieldBirthDate, field.TypeTime, value)
 		_node.BirthDate = value
 	}
 	if value, ok := uc.mutation.Location(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldLocation,
-		})
+		_spec.SetField(user.FieldLocation, field.TypeString, value)
 		_node.Location = value
 	}
 	if value, ok := uc.mutation.LocationJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldLocationJa,
-		})
+		_spec.SetField(user.FieldLocationJa, field.TypeString, value)
 		_node.LocationJa = value
 	}
 	if value, ok := uc.mutation.SSOToken(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldSSOToken,
-		})
+		_spec.SetField(user.FieldSSOToken, field.TypeString, value)
 		_node.SSOToken = value
 	}
 	if value, ok := uc.mutation.AvatarURL(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldAvatarURL,
-		})
+		_spec.SetField(user.FieldAvatarURL, field.TypeString, value)
 		_node.AvatarURL = value
 	}
 	if value, ok := uc.mutation.Selected(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: user.FieldSelected,
-		})
+		_spec.SetField(user.FieldSelected, field.TypeBool, value)
 		_node.Selected = value
 	}
 	if value, ok := uc.mutation.Created(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldCreated,
-		})
+		_spec.SetField(user.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
 	if value, ok := uc.mutation.Modified(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldModified,
-		})
+		_spec.SetField(user.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
 	return _node, _spec

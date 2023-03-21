@@ -11,18 +11,19 @@ import (
 	"github.com/cateiru/cateiru.com/ent/migrate"
 	"github.com/google/uuid"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/ent/category"
 	"github.com/cateiru/cateiru.com/ent/contact"
+	"github.com/cateiru/cateiru.com/ent/contactdefault"
 	"github.com/cateiru/cateiru.com/ent/link"
 	"github.com/cateiru/cateiru.com/ent/location"
 	"github.com/cateiru/cateiru.com/ent/notice"
 	"github.com/cateiru/cateiru.com/ent/product"
 	"github.com/cateiru/cateiru.com/ent/session"
 	"github.com/cateiru/cateiru.com/ent/user"
-
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
 )
 
 // Client is the client that holds all ent builders.
@@ -36,6 +37,8 @@ type Client struct {
 	Category *CategoryClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
+	// ContactDefault is the client for interacting with the ContactDefault builders.
+	ContactDefault *ContactDefaultClient
 	// Link is the client for interacting with the Link builders.
 	Link *LinkClient
 	// Location is the client for interacting with the Location builders.
@@ -52,7 +55,7 @@ type Client struct {
 
 // NewClient creates a new client configured with the given options.
 func NewClient(opts ...Option) *Client {
-	cfg := config{log: log.Println, hooks: &hooks{}}
+	cfg := config{log: log.Println, hooks: &hooks{}, inters: &inters{}}
 	cfg.options(opts...)
 	client := &Client{config: cfg}
 	client.init()
@@ -64,12 +67,62 @@ func (c *Client) init() {
 	c.Biography = NewBiographyClient(c.config)
 	c.Category = NewCategoryClient(c.config)
 	c.Contact = NewContactClient(c.config)
+	c.ContactDefault = NewContactDefaultClient(c.config)
 	c.Link = NewLinkClient(c.config)
 	c.Location = NewLocationClient(c.config)
 	c.Notice = NewNoticeClient(c.config)
 	c.Product = NewProductClient(c.config)
 	c.Session = NewSessionClient(c.config)
 	c.User = NewUserClient(c.config)
+}
+
+type (
+	// config is the configuration for the client and its builder.
+	config struct {
+		// driver used for executing database requests.
+		driver dialect.Driver
+		// debug enable a debug logging.
+		debug bool
+		// log used for logging on debug mode.
+		log func(...any)
+		// hooks to execute on mutations.
+		hooks *hooks
+		// interceptors to execute on queries.
+		inters *inters
+	}
+	// Option function to configure the client.
+	Option func(*config)
+)
+
+// options applies the options on the config object.
+func (c *config) options(opts ...Option) {
+	for _, opt := range opts {
+		opt(c)
+	}
+	if c.debug {
+		c.driver = dialect.Debug(c.driver, c.log)
+	}
+}
+
+// Debug enables debug logging on the ent.Driver.
+func Debug() Option {
+	return func(c *config) {
+		c.debug = true
+	}
+}
+
+// Log sets the logging function for debug mode.
+func Log(fn func(...any)) Option {
+	return func(c *config) {
+		c.log = fn
+	}
+}
+
+// Driver configures the client driver.
+func Driver(driver dialect.Driver) Option {
+	return func(c *config) {
+		c.driver = driver
+	}
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -101,17 +154,18 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:       ctx,
-		config:    cfg,
-		Biography: NewBiographyClient(cfg),
-		Category:  NewCategoryClient(cfg),
-		Contact:   NewContactClient(cfg),
-		Link:      NewLinkClient(cfg),
-		Location:  NewLocationClient(cfg),
-		Notice:    NewNoticeClient(cfg),
-		Product:   NewProductClient(cfg),
-		Session:   NewSessionClient(cfg),
-		User:      NewUserClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		Biography:      NewBiographyClient(cfg),
+		Category:       NewCategoryClient(cfg),
+		Contact:        NewContactClient(cfg),
+		ContactDefault: NewContactDefaultClient(cfg),
+		Link:           NewLinkClient(cfg),
+		Location:       NewLocationClient(cfg),
+		Notice:         NewNoticeClient(cfg),
+		Product:        NewProductClient(cfg),
+		Session:        NewSessionClient(cfg),
+		User:           NewUserClient(cfg),
 	}, nil
 }
 
@@ -129,17 +183,18 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:       ctx,
-		config:    cfg,
-		Biography: NewBiographyClient(cfg),
-		Category:  NewCategoryClient(cfg),
-		Contact:   NewContactClient(cfg),
-		Link:      NewLinkClient(cfg),
-		Location:  NewLocationClient(cfg),
-		Notice:    NewNoticeClient(cfg),
-		Product:   NewProductClient(cfg),
-		Session:   NewSessionClient(cfg),
-		User:      NewUserClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		Biography:      NewBiographyClient(cfg),
+		Category:       NewCategoryClient(cfg),
+		Contact:        NewContactClient(cfg),
+		ContactDefault: NewContactDefaultClient(cfg),
+		Link:           NewLinkClient(cfg),
+		Location:       NewLocationClient(cfg),
+		Notice:         NewNoticeClient(cfg),
+		Product:        NewProductClient(cfg),
+		Session:        NewSessionClient(cfg),
+		User:           NewUserClient(cfg),
 	}, nil
 }
 
@@ -168,15 +223,51 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Biography.Use(hooks...)
-	c.Category.Use(hooks...)
-	c.Contact.Use(hooks...)
-	c.Link.Use(hooks...)
-	c.Location.Use(hooks...)
-	c.Notice.Use(hooks...)
-	c.Product.Use(hooks...)
-	c.Session.Use(hooks...)
-	c.User.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.Biography, c.Category, c.Contact, c.ContactDefault, c.Link, c.Location,
+		c.Notice, c.Product, c.Session, c.User,
+	} {
+		n.Use(hooks...)
+	}
+}
+
+// Intercept adds the query interceptors to all the entity clients.
+// In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
+func (c *Client) Intercept(interceptors ...Interceptor) {
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.Biography, c.Category, c.Contact, c.ContactDefault, c.Link, c.Location,
+		c.Notice, c.Product, c.Session, c.User,
+	} {
+		n.Intercept(interceptors...)
+	}
+}
+
+// Mutate implements the ent.Mutator interface.
+func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
+	switch m := m.(type) {
+	case *BiographyMutation:
+		return c.Biography.mutate(ctx, m)
+	case *CategoryMutation:
+		return c.Category.mutate(ctx, m)
+	case *ContactMutation:
+		return c.Contact.mutate(ctx, m)
+	case *ContactDefaultMutation:
+		return c.ContactDefault.mutate(ctx, m)
+	case *LinkMutation:
+		return c.Link.mutate(ctx, m)
+	case *LocationMutation:
+		return c.Location.mutate(ctx, m)
+	case *NoticeMutation:
+		return c.Notice.mutate(ctx, m)
+	case *ProductMutation:
+		return c.Product.mutate(ctx, m)
+	case *SessionMutation:
+		return c.Session.mutate(ctx, m)
+	case *UserMutation:
+		return c.User.mutate(ctx, m)
+	default:
+		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
 }
 
 // BiographyClient is a client for the Biography schema.
@@ -193,6 +284,12 @@ func NewBiographyClient(c config) *BiographyClient {
 // A call to `Use(f, g, h)` equals to `biography.Hooks(f(g(h())))`.
 func (c *BiographyClient) Use(hooks ...Hook) {
 	c.hooks.Biography = append(c.hooks.Biography, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `biography.Intercept(f(g(h())))`.
+func (c *BiographyClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Biography = append(c.inters.Biography, interceptors...)
 }
 
 // Create returns a builder for creating a Biography entity.
@@ -235,7 +332,7 @@ func (c *BiographyClient) DeleteOne(b *Biography) *BiographyDeleteOne {
 	return c.DeleteOneID(b.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *BiographyClient) DeleteOneID(id uint32) *BiographyDeleteOne {
 	builder := c.Delete().Where(biography.ID(id))
 	builder.mutation.id = &id
@@ -247,6 +344,8 @@ func (c *BiographyClient) DeleteOneID(id uint32) *BiographyDeleteOne {
 func (c *BiographyClient) Query() *BiographyQuery {
 	return &BiographyQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeBiography},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -269,6 +368,26 @@ func (c *BiographyClient) Hooks() []Hook {
 	return c.hooks.Biography
 }
 
+// Interceptors returns the client interceptors.
+func (c *BiographyClient) Interceptors() []Interceptor {
+	return c.inters.Biography
+}
+
+func (c *BiographyClient) mutate(ctx context.Context, m *BiographyMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BiographyCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BiographyUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BiographyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BiographyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Biography mutation op: %q", m.Op())
+	}
+}
+
 // CategoryClient is a client for the Category schema.
 type CategoryClient struct {
 	config
@@ -283,6 +402,12 @@ func NewCategoryClient(c config) *CategoryClient {
 // A call to `Use(f, g, h)` equals to `category.Hooks(f(g(h())))`.
 func (c *CategoryClient) Use(hooks ...Hook) {
 	c.hooks.Category = append(c.hooks.Category, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `category.Intercept(f(g(h())))`.
+func (c *CategoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Category = append(c.inters.Category, interceptors...)
 }
 
 // Create returns a builder for creating a Category entity.
@@ -325,7 +450,7 @@ func (c *CategoryClient) DeleteOne(ca *Category) *CategoryDeleteOne {
 	return c.DeleteOneID(ca.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *CategoryClient) DeleteOneID(id uint32) *CategoryDeleteOne {
 	builder := c.Delete().Where(category.ID(id))
 	builder.mutation.id = &id
@@ -337,6 +462,8 @@ func (c *CategoryClient) DeleteOneID(id uint32) *CategoryDeleteOne {
 func (c *CategoryClient) Query() *CategoryQuery {
 	return &CategoryQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeCategory},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -359,6 +486,26 @@ func (c *CategoryClient) Hooks() []Hook {
 	return c.hooks.Category
 }
 
+// Interceptors returns the client interceptors.
+func (c *CategoryClient) Interceptors() []Interceptor {
+	return c.inters.Category
+}
+
+func (c *CategoryClient) mutate(ctx context.Context, m *CategoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CategoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CategoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CategoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Category mutation op: %q", m.Op())
+	}
+}
+
 // ContactClient is a client for the Contact schema.
 type ContactClient struct {
 	config
@@ -373,6 +520,12 @@ func NewContactClient(c config) *ContactClient {
 // A call to `Use(f, g, h)` equals to `contact.Hooks(f(g(h())))`.
 func (c *ContactClient) Use(hooks ...Hook) {
 	c.hooks.Contact = append(c.hooks.Contact, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `contact.Intercept(f(g(h())))`.
+func (c *ContactClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Contact = append(c.inters.Contact, interceptors...)
 }
 
 // Create returns a builder for creating a Contact entity.
@@ -415,7 +568,7 @@ func (c *ContactClient) DeleteOne(co *Contact) *ContactDeleteOne {
 	return c.DeleteOneID(co.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *ContactClient) DeleteOneID(id uint32) *ContactDeleteOne {
 	builder := c.Delete().Where(contact.ID(id))
 	builder.mutation.id = &id
@@ -427,6 +580,8 @@ func (c *ContactClient) DeleteOneID(id uint32) *ContactDeleteOne {
 func (c *ContactClient) Query() *ContactQuery {
 	return &ContactQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeContact},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -449,6 +604,144 @@ func (c *ContactClient) Hooks() []Hook {
 	return c.hooks.Contact
 }
 
+// Interceptors returns the client interceptors.
+func (c *ContactClient) Interceptors() []Interceptor {
+	return c.inters.Contact
+}
+
+func (c *ContactClient) mutate(ctx context.Context, m *ContactMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ContactCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ContactUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ContactUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ContactDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Contact mutation op: %q", m.Op())
+	}
+}
+
+// ContactDefaultClient is a client for the ContactDefault schema.
+type ContactDefaultClient struct {
+	config
+}
+
+// NewContactDefaultClient returns a client for the ContactDefault from the given config.
+func NewContactDefaultClient(c config) *ContactDefaultClient {
+	return &ContactDefaultClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `contactdefault.Hooks(f(g(h())))`.
+func (c *ContactDefaultClient) Use(hooks ...Hook) {
+	c.hooks.ContactDefault = append(c.hooks.ContactDefault, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `contactdefault.Intercept(f(g(h())))`.
+func (c *ContactDefaultClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ContactDefault = append(c.inters.ContactDefault, interceptors...)
+}
+
+// Create returns a builder for creating a ContactDefault entity.
+func (c *ContactDefaultClient) Create() *ContactDefaultCreate {
+	mutation := newContactDefaultMutation(c.config, OpCreate)
+	return &ContactDefaultCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ContactDefault entities.
+func (c *ContactDefaultClient) CreateBulk(builders ...*ContactDefaultCreate) *ContactDefaultCreateBulk {
+	return &ContactDefaultCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ContactDefault.
+func (c *ContactDefaultClient) Update() *ContactDefaultUpdate {
+	mutation := newContactDefaultMutation(c.config, OpUpdate)
+	return &ContactDefaultUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ContactDefaultClient) UpdateOne(cd *ContactDefault) *ContactDefaultUpdateOne {
+	mutation := newContactDefaultMutation(c.config, OpUpdateOne, withContactDefault(cd))
+	return &ContactDefaultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ContactDefaultClient) UpdateOneID(id uint32) *ContactDefaultUpdateOne {
+	mutation := newContactDefaultMutation(c.config, OpUpdateOne, withContactDefaultID(id))
+	return &ContactDefaultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ContactDefault.
+func (c *ContactDefaultClient) Delete() *ContactDefaultDelete {
+	mutation := newContactDefaultMutation(c.config, OpDelete)
+	return &ContactDefaultDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ContactDefaultClient) DeleteOne(cd *ContactDefault) *ContactDefaultDeleteOne {
+	return c.DeleteOneID(cd.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ContactDefaultClient) DeleteOneID(id uint32) *ContactDefaultDeleteOne {
+	builder := c.Delete().Where(contactdefault.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ContactDefaultDeleteOne{builder}
+}
+
+// Query returns a query builder for ContactDefault.
+func (c *ContactDefaultClient) Query() *ContactDefaultQuery {
+	return &ContactDefaultQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeContactDefault},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ContactDefault entity by its id.
+func (c *ContactDefaultClient) Get(ctx context.Context, id uint32) (*ContactDefault, error) {
+	return c.Query().Where(contactdefault.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ContactDefaultClient) GetX(ctx context.Context, id uint32) *ContactDefault {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ContactDefaultClient) Hooks() []Hook {
+	return c.hooks.ContactDefault
+}
+
+// Interceptors returns the client interceptors.
+func (c *ContactDefaultClient) Interceptors() []Interceptor {
+	return c.inters.ContactDefault
+}
+
+func (c *ContactDefaultClient) mutate(ctx context.Context, m *ContactDefaultMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ContactDefaultCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ContactDefaultUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ContactDefaultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ContactDefaultDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ContactDefault mutation op: %q", m.Op())
+	}
+}
+
 // LinkClient is a client for the Link schema.
 type LinkClient struct {
 	config
@@ -463,6 +756,12 @@ func NewLinkClient(c config) *LinkClient {
 // A call to `Use(f, g, h)` equals to `link.Hooks(f(g(h())))`.
 func (c *LinkClient) Use(hooks ...Hook) {
 	c.hooks.Link = append(c.hooks.Link, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `link.Intercept(f(g(h())))`.
+func (c *LinkClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Link = append(c.inters.Link, interceptors...)
 }
 
 // Create returns a builder for creating a Link entity.
@@ -505,7 +804,7 @@ func (c *LinkClient) DeleteOne(l *Link) *LinkDeleteOne {
 	return c.DeleteOneID(l.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *LinkClient) DeleteOneID(id uint32) *LinkDeleteOne {
 	builder := c.Delete().Where(link.ID(id))
 	builder.mutation.id = &id
@@ -517,6 +816,8 @@ func (c *LinkClient) DeleteOneID(id uint32) *LinkDeleteOne {
 func (c *LinkClient) Query() *LinkQuery {
 	return &LinkQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeLink},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -539,6 +840,26 @@ func (c *LinkClient) Hooks() []Hook {
 	return c.hooks.Link
 }
 
+// Interceptors returns the client interceptors.
+func (c *LinkClient) Interceptors() []Interceptor {
+	return c.inters.Link
+}
+
+func (c *LinkClient) mutate(ctx context.Context, m *LinkMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LinkCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LinkUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LinkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LinkDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Link mutation op: %q", m.Op())
+	}
+}
+
 // LocationClient is a client for the Location schema.
 type LocationClient struct {
 	config
@@ -553,6 +874,12 @@ func NewLocationClient(c config) *LocationClient {
 // A call to `Use(f, g, h)` equals to `location.Hooks(f(g(h())))`.
 func (c *LocationClient) Use(hooks ...Hook) {
 	c.hooks.Location = append(c.hooks.Location, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `location.Intercept(f(g(h())))`.
+func (c *LocationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Location = append(c.inters.Location, interceptors...)
 }
 
 // Create returns a builder for creating a Location entity.
@@ -595,7 +922,7 @@ func (c *LocationClient) DeleteOne(l *Location) *LocationDeleteOne {
 	return c.DeleteOneID(l.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *LocationClient) DeleteOneID(id uint32) *LocationDeleteOne {
 	builder := c.Delete().Where(location.ID(id))
 	builder.mutation.id = &id
@@ -607,6 +934,8 @@ func (c *LocationClient) DeleteOneID(id uint32) *LocationDeleteOne {
 func (c *LocationClient) Query() *LocationQuery {
 	return &LocationQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeLocation},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -629,6 +958,26 @@ func (c *LocationClient) Hooks() []Hook {
 	return c.hooks.Location
 }
 
+// Interceptors returns the client interceptors.
+func (c *LocationClient) Interceptors() []Interceptor {
+	return c.inters.Location
+}
+
+func (c *LocationClient) mutate(ctx context.Context, m *LocationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LocationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LocationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LocationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LocationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Location mutation op: %q", m.Op())
+	}
+}
+
 // NoticeClient is a client for the Notice schema.
 type NoticeClient struct {
 	config
@@ -643,6 +992,12 @@ func NewNoticeClient(c config) *NoticeClient {
 // A call to `Use(f, g, h)` equals to `notice.Hooks(f(g(h())))`.
 func (c *NoticeClient) Use(hooks ...Hook) {
 	c.hooks.Notice = append(c.hooks.Notice, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `notice.Intercept(f(g(h())))`.
+func (c *NoticeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Notice = append(c.inters.Notice, interceptors...)
 }
 
 // Create returns a builder for creating a Notice entity.
@@ -685,7 +1040,7 @@ func (c *NoticeClient) DeleteOne(n *Notice) *NoticeDeleteOne {
 	return c.DeleteOneID(n.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *NoticeClient) DeleteOneID(id uint32) *NoticeDeleteOne {
 	builder := c.Delete().Where(notice.ID(id))
 	builder.mutation.id = &id
@@ -697,6 +1052,8 @@ func (c *NoticeClient) DeleteOneID(id uint32) *NoticeDeleteOne {
 func (c *NoticeClient) Query() *NoticeQuery {
 	return &NoticeQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeNotice},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -719,6 +1076,26 @@ func (c *NoticeClient) Hooks() []Hook {
 	return c.hooks.Notice
 }
 
+// Interceptors returns the client interceptors.
+func (c *NoticeClient) Interceptors() []Interceptor {
+	return c.inters.Notice
+}
+
+func (c *NoticeClient) mutate(ctx context.Context, m *NoticeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NoticeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NoticeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NoticeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NoticeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Notice mutation op: %q", m.Op())
+	}
+}
+
 // ProductClient is a client for the Product schema.
 type ProductClient struct {
 	config
@@ -733,6 +1110,12 @@ func NewProductClient(c config) *ProductClient {
 // A call to `Use(f, g, h)` equals to `product.Hooks(f(g(h())))`.
 func (c *ProductClient) Use(hooks ...Hook) {
 	c.hooks.Product = append(c.hooks.Product, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `product.Intercept(f(g(h())))`.
+func (c *ProductClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Product = append(c.inters.Product, interceptors...)
 }
 
 // Create returns a builder for creating a Product entity.
@@ -775,7 +1158,7 @@ func (c *ProductClient) DeleteOne(pr *Product) *ProductDeleteOne {
 	return c.DeleteOneID(pr.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *ProductClient) DeleteOneID(id uint32) *ProductDeleteOne {
 	builder := c.Delete().Where(product.ID(id))
 	builder.mutation.id = &id
@@ -787,6 +1170,8 @@ func (c *ProductClient) DeleteOneID(id uint32) *ProductDeleteOne {
 func (c *ProductClient) Query() *ProductQuery {
 	return &ProductQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeProduct},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -809,6 +1194,26 @@ func (c *ProductClient) Hooks() []Hook {
 	return c.hooks.Product
 }
 
+// Interceptors returns the client interceptors.
+func (c *ProductClient) Interceptors() []Interceptor {
+	return c.inters.Product
+}
+
+func (c *ProductClient) mutate(ctx context.Context, m *ProductMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProductCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProductUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProductDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Product mutation op: %q", m.Op())
+	}
+}
+
 // SessionClient is a client for the Session schema.
 type SessionClient struct {
 	config
@@ -823,6 +1228,12 @@ func NewSessionClient(c config) *SessionClient {
 // A call to `Use(f, g, h)` equals to `session.Hooks(f(g(h())))`.
 func (c *SessionClient) Use(hooks ...Hook) {
 	c.hooks.Session = append(c.hooks.Session, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `session.Intercept(f(g(h())))`.
+func (c *SessionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Session = append(c.inters.Session, interceptors...)
 }
 
 // Create returns a builder for creating a Session entity.
@@ -865,7 +1276,7 @@ func (c *SessionClient) DeleteOne(s *Session) *SessionDeleteOne {
 	return c.DeleteOneID(s.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *SessionClient) DeleteOneID(id uuid.UUID) *SessionDeleteOne {
 	builder := c.Delete().Where(session.ID(id))
 	builder.mutation.id = &id
@@ -877,6 +1288,8 @@ func (c *SessionClient) DeleteOneID(id uuid.UUID) *SessionDeleteOne {
 func (c *SessionClient) Query() *SessionQuery {
 	return &SessionQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeSession},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -899,6 +1312,26 @@ func (c *SessionClient) Hooks() []Hook {
 	return c.hooks.Session
 }
 
+// Interceptors returns the client interceptors.
+func (c *SessionClient) Interceptors() []Interceptor {
+	return c.inters.Session
+}
+
+func (c *SessionClient) mutate(ctx context.Context, m *SessionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SessionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SessionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SessionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SessionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Session mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -913,6 +1346,12 @@ func NewUserClient(c config) *UserClient {
 // A call to `Use(f, g, h)` equals to `user.Hooks(f(g(h())))`.
 func (c *UserClient) Use(hooks ...Hook) {
 	c.hooks.User = append(c.hooks.User, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `user.Intercept(f(g(h())))`.
+func (c *UserClient) Intercept(interceptors ...Interceptor) {
+	c.inters.User = append(c.inters.User, interceptors...)
 }
 
 // Create returns a builder for creating a User entity.
@@ -955,7 +1394,7 @@ func (c *UserClient) DeleteOne(u *User) *UserDeleteOne {
 	return c.DeleteOneID(u.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *UserClient) DeleteOneID(id uint32) *UserDeleteOne {
 	builder := c.Delete().Where(user.ID(id))
 	builder.mutation.id = &id
@@ -967,6 +1406,8 @@ func (c *UserClient) DeleteOneID(id uint32) *UserDeleteOne {
 func (c *UserClient) Query() *UserQuery {
 	return &UserQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeUser},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -988,3 +1429,35 @@ func (c *UserClient) GetX(ctx context.Context, id uint32) *User {
 func (c *UserClient) Hooks() []Hook {
 	return c.hooks.User
 }
+
+// Interceptors returns the client interceptors.
+func (c *UserClient) Interceptors() []Interceptor {
+	return c.inters.User
+}
+
+func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown User mutation op: %q", m.Op())
+	}
+}
+
+// hooks and interceptors per client, for fast access.
+type (
+	hooks struct {
+		Biography, Category, Contact, ContactDefault, Link, Location, Notice, Product,
+		Session, User []ent.Hook
+	}
+	inters struct {
+		Biography, Category, Contact, ContactDefault, Link, Location, Notice, Product,
+		Session, User []ent.Interceptor
+	}
+)

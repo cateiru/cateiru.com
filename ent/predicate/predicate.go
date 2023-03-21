@@ -15,6 +15,9 @@ type Category func(*sql.Selector)
 // Contact is the predicate function for contact builders.
 type Contact func(*sql.Selector)
 
+// ContactDefault is the predicate function for contactdefault builders.
+type ContactDefault func(*sql.Selector)
+
 // Link is the predicate function for link builders.
 type Link func(*sql.Selector)
 

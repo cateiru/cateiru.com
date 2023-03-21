@@ -131,50 +131,8 @@ func (pc *ProductCreate) Mutation() *ProductMutation {
 
 // Save creates the Product in the database.
 func (pc *ProductCreate) Save(ctx context.Context) (*Product, error) {
-	var (
-		err  error
-		node *Product
-	)
 	pc.defaults()
-	if len(pc.hooks) == 0 {
-		if err = pc.check(); err != nil {
-			return nil, err
-		}
-		node, err = pc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*ProductMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = pc.check(); err != nil {
-				return nil, err
-			}
-			pc.mutation = mutation
-			if node, err = pc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(pc.hooks) - 1; i >= 0; i-- {
-			if pc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = pc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, pc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Product)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from ProductMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Product, ProductMutation](ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -244,6 +202,9 @@ func (pc *ProductCreate) check() error {
 }
 
 func (pc *ProductCreate) sqlSave(ctx context.Context) (*Product, error) {
+	if err := pc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := pc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, pc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -255,110 +216,62 @@ func (pc *ProductCreate) sqlSave(ctx context.Context) (*Product, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	pc.mutation.id = &_node.ID
+	pc.mutation.done = true
 	return _node, nil
 }
 
 func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Product{config: pc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: product.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: product.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(product.Table, sqlgraph.NewFieldSpec(product.FieldID, field.TypeUint32))
 	)
 	if id, ok := pc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := pc.mutation.UserID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: product.FieldUserID,
-		})
+		_spec.SetField(product.FieldUserID, field.TypeUint32, value)
 		_node.UserID = value
 	}
 	if value, ok := pc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: product.FieldName,
-		})
+		_spec.SetField(product.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := pc.mutation.NameJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: product.FieldNameJa,
-		})
+		_spec.SetField(product.FieldNameJa, field.TypeString, value)
 		_node.NameJa = value
 	}
 	if value, ok := pc.mutation.Detail(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: product.FieldDetail,
-		})
+		_spec.SetField(product.FieldDetail, field.TypeString, value)
 		_node.Detail = value
 	}
 	if value, ok := pc.mutation.DetailJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: product.FieldDetailJa,
-		})
+		_spec.SetField(product.FieldDetailJa, field.TypeString, value)
 		_node.DetailJa = value
 	}
 	if value, ok := pc.mutation.SiteURL(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: product.FieldSiteURL,
-		})
+		_spec.SetField(product.FieldSiteURL, field.TypeString, value)
 		_node.SiteURL = value
 	}
 	if value, ok := pc.mutation.GithubURL(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: product.FieldGithubURL,
-		})
+		_spec.SetField(product.FieldGithubURL, field.TypeString, value)
 		_node.GithubURL = value
 	}
 	if value, ok := pc.mutation.DevTime(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: product.FieldDevTime,
-		})
+		_spec.SetField(product.FieldDevTime, field.TypeTime, value)
 		_node.DevTime = value
 	}
 	if value, ok := pc.mutation.Thumbnail(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: product.FieldThumbnail,
-		})
+		_spec.SetField(product.FieldThumbnail, field.TypeString, value)
 		_node.Thumbnail = value
 	}
 	if value, ok := pc.mutation.Created(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: product.FieldCreated,
-		})
+		_spec.SetField(product.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
 	if value, ok := pc.mutation.Modified(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: product.FieldModified,
-		})
+		_spec.SetField(product.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
 	return _node, _spec

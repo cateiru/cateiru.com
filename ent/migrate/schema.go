@@ -88,6 +88,24 @@ var (
 			},
 		},
 	}
+	// ContactDefaultsColumns holds the columns for the "contact_defaults" table.
+	ContactDefaultsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint32, Increment: true},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "email", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "category", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "custom_title", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "description", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
+		{Name: "created", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "modified", Type: field.TypeTime, Default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", SchemaType: map[string]string{"mysql": "datetime"}},
+	}
+	// ContactDefaultsTable holds the schema information for the "contact_defaults" table.
+	ContactDefaultsTable = &schema.Table{
+		Name:       "contact_defaults",
+		Columns:    ContactDefaultsColumns,
+		PrimaryKey: []*schema.Column{ContactDefaultsColumns[0]},
+	}
 	// LinksColumns holds the columns for the "links" table.
 	LinksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint32, Increment: true},
@@ -228,6 +246,7 @@ var (
 		BiographiesTable,
 		CategoriesTable,
 		ContactsTable,
+		ContactDefaultsTable,
 		LinksTable,
 		LocationsTable,
 		NoticesTable,

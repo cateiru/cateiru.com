@@ -31,8 +31,8 @@ type Notice struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Notice) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*Notice) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case notice.FieldID, notice.FieldUserID:
@@ -50,7 +50,7 @@ func (*Notice) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Notice fields.
-func (n *Notice) assignValues(columns []string, values []interface{}) error {
+func (n *Notice) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -107,7 +107,7 @@ func (n *Notice) assignValues(columns []string, values []interface{}) error {
 // Note that you need to call Notice.Unwrap() before calling this method if this Notice
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (n *Notice) Update() *NoticeUpdateOne {
-	return (&NoticeClient{config: n.config}).UpdateOne(n)
+	return NewNoticeClient(n.config).UpdateOne(n)
 }
 
 // Unwrap unwraps the Notice entity that was returned from a transaction after it was closed,
@@ -149,9 +149,3 @@ func (n *Notice) String() string {
 
 // Notices is a parsable slice of Notice.
 type Notices []*Notice
-
-func (n Notices) config(cfg config) {
-	for _i := range n {
-		n[_i].config = cfg
-	}
-}

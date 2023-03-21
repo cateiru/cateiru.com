@@ -73,35 +73,8 @@ func (cu *CategoryUpdate) Mutation() *CategoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *CategoryUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
 	cu.defaults()
-	if len(cu.hooks) == 0 {
-		affected, err = cu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CategoryMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			cu.mutation = mutation
-			affected, err = cu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(cu.hooks) - 1; i >= 0; i-- {
-			if cu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = cu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, cu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, CategoryMutation](ctx, cu.sqlSave, cu.mutation, cu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -135,16 +108,7 @@ func (cu *CategoryUpdate) defaults() {
 }
 
 func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   category.Table,
-			Columns: category.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: category.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(category.Table, category.Columns, sqlgraph.NewFieldSpec(category.FieldID, field.TypeUint32))
 	if ps := cu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -153,39 +117,19 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := cu.mutation.Name(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: category.FieldName,
-		})
+		_spec.SetField(category.FieldName, field.TypeString, value)
 	}
 	if value, ok := cu.mutation.NameJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: category.FieldNameJa,
-		})
+		_spec.SetField(category.FieldNameJa, field.TypeString, value)
 	}
 	if value, ok := cu.mutation.Emoji(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: category.FieldEmoji,
-		})
+		_spec.SetField(category.FieldEmoji, field.TypeString, value)
 	}
 	if value, ok := cu.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: category.FieldCreated,
-		})
+		_spec.SetField(category.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := cu.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: category.FieldModified,
-		})
+		_spec.SetField(category.FieldModified, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -195,6 +139,7 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	cu.mutation.done = true
 	return n, nil
 }
 
@@ -249,6 +194,12 @@ func (cuo *CategoryUpdateOne) Mutation() *CategoryMutation {
 	return cuo.mutation
 }
 
+// Where appends a list predicates to the CategoryUpdate builder.
+func (cuo *CategoryUpdateOne) Where(ps ...predicate.Category) *CategoryUpdateOne {
+	cuo.mutation.Where(ps...)
+	return cuo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (cuo *CategoryUpdateOne) Select(field string, fields ...string) *CategoryUpdateOne {
@@ -258,41 +209,8 @@ func (cuo *CategoryUpdateOne) Select(field string, fields ...string) *CategoryUp
 
 // Save executes the query and returns the updated Category entity.
 func (cuo *CategoryUpdateOne) Save(ctx context.Context) (*Category, error) {
-	var (
-		err  error
-		node *Category
-	)
 	cuo.defaults()
-	if len(cuo.hooks) == 0 {
-		node, err = cuo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CategoryMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			cuo.mutation = mutation
-			node, err = cuo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(cuo.hooks) - 1; i >= 0; i-- {
-			if cuo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = cuo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, cuo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Category)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from CategoryMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Category, CategoryMutation](ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -326,16 +244,7 @@ func (cuo *CategoryUpdateOne) defaults() {
 }
 
 func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   category.Table,
-			Columns: category.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: category.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(category.Table, category.Columns, sqlgraph.NewFieldSpec(category.FieldID, field.TypeUint32))
 	id, ok := cuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Category.id" for update`)}
@@ -361,39 +270,19 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 		}
 	}
 	if value, ok := cuo.mutation.Name(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: category.FieldName,
-		})
+		_spec.SetField(category.FieldName, field.TypeString, value)
 	}
 	if value, ok := cuo.mutation.NameJa(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: category.FieldNameJa,
-		})
+		_spec.SetField(category.FieldNameJa, field.TypeString, value)
 	}
 	if value, ok := cuo.mutation.Emoji(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: category.FieldEmoji,
-		})
+		_spec.SetField(category.FieldEmoji, field.TypeString, value)
 	}
 	if value, ok := cuo.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: category.FieldCreated,
-		})
+		_spec.SetField(category.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := cuo.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: category.FieldModified,
-		})
+		_spec.SetField(category.FieldModified, field.TypeTime, value)
 	}
 	_node = &Category{config: cuo.config}
 	_spec.Assign = _node.assignValues
@@ -406,5 +295,6 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 		}
 		return nil, err
 	}
+	cuo.mutation.done = true
 	return _node, nil
 }

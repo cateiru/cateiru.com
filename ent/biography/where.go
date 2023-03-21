@@ -11,746 +11,482 @@ import (
 
 // ID filters vertices based on their ID field.
 func ID(id uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
 func IDEQ(id uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
 func IDNEQ(id uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldID), id))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
 func IDIn(ids ...uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.In(s.C(FieldID), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
 func IDNotIn(ids ...uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.NotIn(s.C(FieldID), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
 func IDGT(id uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldID), id))
-	})
+	return predicate.Biography(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
 func IDGTE(id uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldID), id))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
 func IDLT(id uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldID), id))
-	})
+	return predicate.Biography(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldID), id))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldID, id))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
 func UserID(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserID), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldUserID, v))
 }
 
 // IsPublic applies equality check predicate on the "is_public" field. It's identical to IsPublicEQ.
 func IsPublic(v bool) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldIsPublic), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldIsPublic, v))
 }
 
 // LocationID applies equality check predicate on the "location_id" field. It's identical to LocationIDEQ.
 func LocationID(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLocationID), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldLocationID, v))
 }
 
 // Position applies equality check predicate on the "position" field. It's identical to PositionEQ.
 func Position(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldPosition, v))
 }
 
 // PositionJa applies equality check predicate on the "position_ja" field. It's identical to PositionJaEQ.
 func PositionJa(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldPositionJa, v))
 }
 
 // Join applies equality check predicate on the "join" field. It's identical to JoinEQ.
 func Join(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldJoin), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldJoin, v))
 }
 
 // Leave applies equality check predicate on the "leave" field. It's identical to LeaveEQ.
 func Leave(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLeave), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldLeave, v))
 }
 
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCreated), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldCreated, v))
 }
 
 // Modified applies equality check predicate on the "modified" field. It's identical to ModifiedEQ.
 func Modified(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldModified), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldModified, v))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
 func UserIDEQ(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserID), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
 func UserIDNEQ(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldUserID), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
 func UserIDIn(vs ...uint32) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldUserID), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
 func UserIDNotIn(vs ...uint32) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldUserID), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
 func UserIDGT(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldUserID), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
 func UserIDGTE(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldUserID), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
 func UserIDLT(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldUserID), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
 func UserIDLTE(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldUserID), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldUserID, v))
 }
 
 // IsPublicEQ applies the EQ predicate on the "is_public" field.
 func IsPublicEQ(v bool) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldIsPublic), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldIsPublic, v))
 }
 
 // IsPublicNEQ applies the NEQ predicate on the "is_public" field.
 func IsPublicNEQ(v bool) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldIsPublic), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldIsPublic, v))
 }
 
 // LocationIDEQ applies the EQ predicate on the "location_id" field.
 func LocationIDEQ(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLocationID), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldLocationID, v))
 }
 
 // LocationIDNEQ applies the NEQ predicate on the "location_id" field.
 func LocationIDNEQ(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldLocationID), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldLocationID, v))
 }
 
 // LocationIDIn applies the In predicate on the "location_id" field.
 func LocationIDIn(vs ...uint32) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldLocationID), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldLocationID, vs...))
 }
 
 // LocationIDNotIn applies the NotIn predicate on the "location_id" field.
 func LocationIDNotIn(vs ...uint32) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldLocationID), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldLocationID, vs...))
 }
 
 // LocationIDGT applies the GT predicate on the "location_id" field.
 func LocationIDGT(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldLocationID), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldLocationID, v))
 }
 
 // LocationIDGTE applies the GTE predicate on the "location_id" field.
 func LocationIDGTE(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldLocationID), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldLocationID, v))
 }
 
 // LocationIDLT applies the LT predicate on the "location_id" field.
 func LocationIDLT(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldLocationID), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldLocationID, v))
 }
 
 // LocationIDLTE applies the LTE predicate on the "location_id" field.
 func LocationIDLTE(v uint32) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldLocationID), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldLocationID, v))
 }
 
 // PositionEQ applies the EQ predicate on the "position" field.
 func PositionEQ(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldPosition, v))
 }
 
 // PositionNEQ applies the NEQ predicate on the "position" field.
 func PositionNEQ(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldPosition, v))
 }
 
 // PositionIn applies the In predicate on the "position" field.
 func PositionIn(vs ...string) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldPosition), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldPosition, vs...))
 }
 
 // PositionNotIn applies the NotIn predicate on the "position" field.
 func PositionNotIn(vs ...string) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldPosition), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldPosition, vs...))
 }
 
 // PositionGT applies the GT predicate on the "position" field.
 func PositionGT(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldPosition, v))
 }
 
 // PositionGTE applies the GTE predicate on the "position" field.
 func PositionGTE(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldPosition, v))
 }
 
 // PositionLT applies the LT predicate on the "position" field.
 func PositionLT(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldPosition, v))
 }
 
 // PositionLTE applies the LTE predicate on the "position" field.
 func PositionLTE(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldPosition, v))
 }
 
 // PositionContains applies the Contains predicate on the "position" field.
 func PositionContains(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldContains(FieldPosition, v))
 }
 
 // PositionHasPrefix applies the HasPrefix predicate on the "position" field.
 func PositionHasPrefix(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldHasPrefix(FieldPosition, v))
 }
 
 // PositionHasSuffix applies the HasSuffix predicate on the "position" field.
 func PositionHasSuffix(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldHasSuffix(FieldPosition, v))
 }
 
 // PositionEqualFold applies the EqualFold predicate on the "position" field.
 func PositionEqualFold(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldEqualFold(FieldPosition, v))
 }
 
 // PositionContainsFold applies the ContainsFold predicate on the "position" field.
 func PositionContainsFold(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldPosition), v))
-	})
+	return predicate.Biography(sql.FieldContainsFold(FieldPosition, v))
 }
 
 // PositionJaEQ applies the EQ predicate on the "position_ja" field.
 func PositionJaEQ(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldPositionJa, v))
 }
 
 // PositionJaNEQ applies the NEQ predicate on the "position_ja" field.
 func PositionJaNEQ(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldPositionJa, v))
 }
 
 // PositionJaIn applies the In predicate on the "position_ja" field.
 func PositionJaIn(vs ...string) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldPositionJa), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldPositionJa, vs...))
 }
 
 // PositionJaNotIn applies the NotIn predicate on the "position_ja" field.
 func PositionJaNotIn(vs ...string) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldPositionJa), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldPositionJa, vs...))
 }
 
 // PositionJaGT applies the GT predicate on the "position_ja" field.
 func PositionJaGT(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldPositionJa, v))
 }
 
 // PositionJaGTE applies the GTE predicate on the "position_ja" field.
 func PositionJaGTE(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldPositionJa, v))
 }
 
 // PositionJaLT applies the LT predicate on the "position_ja" field.
 func PositionJaLT(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldPositionJa, v))
 }
 
 // PositionJaLTE applies the LTE predicate on the "position_ja" field.
 func PositionJaLTE(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldPositionJa, v))
 }
 
 // PositionJaContains applies the Contains predicate on the "position_ja" field.
 func PositionJaContains(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldContains(FieldPositionJa, v))
 }
 
 // PositionJaHasPrefix applies the HasPrefix predicate on the "position_ja" field.
 func PositionJaHasPrefix(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldHasPrefix(FieldPositionJa, v))
 }
 
 // PositionJaHasSuffix applies the HasSuffix predicate on the "position_ja" field.
 func PositionJaHasSuffix(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldHasSuffix(FieldPositionJa, v))
 }
 
 // PositionJaEqualFold applies the EqualFold predicate on the "position_ja" field.
 func PositionJaEqualFold(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldEqualFold(FieldPositionJa, v))
 }
 
 // PositionJaContainsFold applies the ContainsFold predicate on the "position_ja" field.
 func PositionJaContainsFold(v string) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldPositionJa), v))
-	})
+	return predicate.Biography(sql.FieldContainsFold(FieldPositionJa, v))
 }
 
 // JoinEQ applies the EQ predicate on the "join" field.
 func JoinEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldJoin), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldJoin, v))
 }
 
 // JoinNEQ applies the NEQ predicate on the "join" field.
 func JoinNEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldJoin), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldJoin, v))
 }
 
 // JoinIn applies the In predicate on the "join" field.
 func JoinIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldJoin), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldJoin, vs...))
 }
 
 // JoinNotIn applies the NotIn predicate on the "join" field.
 func JoinNotIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldJoin), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldJoin, vs...))
 }
 
 // JoinGT applies the GT predicate on the "join" field.
 func JoinGT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldJoin), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldJoin, v))
 }
 
 // JoinGTE applies the GTE predicate on the "join" field.
 func JoinGTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldJoin), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldJoin, v))
 }
 
 // JoinLT applies the LT predicate on the "join" field.
 func JoinLT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldJoin), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldJoin, v))
 }
 
 // JoinLTE applies the LTE predicate on the "join" field.
 func JoinLTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldJoin), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldJoin, v))
 }
 
 // LeaveEQ applies the EQ predicate on the "leave" field.
 func LeaveEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLeave), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldLeave, v))
 }
 
 // LeaveNEQ applies the NEQ predicate on the "leave" field.
 func LeaveNEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldLeave), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldLeave, v))
 }
 
 // LeaveIn applies the In predicate on the "leave" field.
 func LeaveIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldLeave), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldLeave, vs...))
 }
 
 // LeaveNotIn applies the NotIn predicate on the "leave" field.
 func LeaveNotIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldLeave), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldLeave, vs...))
 }
 
 // LeaveGT applies the GT predicate on the "leave" field.
 func LeaveGT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldLeave), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldLeave, v))
 }
 
 // LeaveGTE applies the GTE predicate on the "leave" field.
 func LeaveGTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldLeave), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldLeave, v))
 }
 
 // LeaveLT applies the LT predicate on the "leave" field.
 func LeaveLT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldLeave), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldLeave, v))
 }
 
 // LeaveLTE applies the LTE predicate on the "leave" field.
 func LeaveLTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldLeave), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldLeave, v))
 }
 
 // LeaveIsNil applies the IsNil predicate on the "leave" field.
 func LeaveIsNil() predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldLeave)))
-	})
+	return predicate.Biography(sql.FieldIsNull(FieldLeave))
 }
 
 // LeaveNotNil applies the NotNil predicate on the "leave" field.
 func LeaveNotNil() predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldLeave)))
-	})
+	return predicate.Biography(sql.FieldNotNull(FieldLeave))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.
 func CreatedEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCreated), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldCreated, v))
 }
 
 // CreatedNEQ applies the NEQ predicate on the "created" field.
 func CreatedNEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCreated), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldCreated, v))
 }
 
 // CreatedIn applies the In predicate on the "created" field.
 func CreatedIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCreated), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldCreated, vs...))
 }
 
 // CreatedNotIn applies the NotIn predicate on the "created" field.
 func CreatedNotIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCreated), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldCreated, vs...))
 }
 
 // CreatedGT applies the GT predicate on the "created" field.
 func CreatedGT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldCreated), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldCreated, v))
 }
 
 // CreatedGTE applies the GTE predicate on the "created" field.
 func CreatedGTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldCreated), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldCreated, v))
 }
 
 // CreatedLT applies the LT predicate on the "created" field.
 func CreatedLT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldCreated), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldCreated, v))
 }
 
 // CreatedLTE applies the LTE predicate on the "created" field.
 func CreatedLTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldCreated), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldCreated, v))
 }
 
 // ModifiedEQ applies the EQ predicate on the "modified" field.
 func ModifiedEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldModified), v))
-	})
+	return predicate.Biography(sql.FieldEQ(FieldModified, v))
 }
 
 // ModifiedNEQ applies the NEQ predicate on the "modified" field.
 func ModifiedNEQ(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldModified), v))
-	})
+	return predicate.Biography(sql.FieldNEQ(FieldModified, v))
 }
 
 // ModifiedIn applies the In predicate on the "modified" field.
 func ModifiedIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldModified), v...))
-	})
+	return predicate.Biography(sql.FieldIn(FieldModified, vs...))
 }
 
 // ModifiedNotIn applies the NotIn predicate on the "modified" field.
 func ModifiedNotIn(vs ...time.Time) predicate.Biography {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldModified), v...))
-	})
+	return predicate.Biography(sql.FieldNotIn(FieldModified, vs...))
 }
 
 // ModifiedGT applies the GT predicate on the "modified" field.
 func ModifiedGT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldModified), v))
-	})
+	return predicate.Biography(sql.FieldGT(FieldModified, v))
 }
 
 // ModifiedGTE applies the GTE predicate on the "modified" field.
 func ModifiedGTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldModified), v))
-	})
+	return predicate.Biography(sql.FieldGTE(FieldModified, v))
 }
 
 // ModifiedLT applies the LT predicate on the "modified" field.
 func ModifiedLT(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldModified), v))
-	})
+	return predicate.Biography(sql.FieldLT(FieldModified, v))
 }
 
 // ModifiedLTE applies the LTE predicate on the "modified" field.
 func ModifiedLTE(v time.Time) predicate.Biography {
-	return predicate.Biography(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldModified), v))
-	})
+	return predicate.Biography(sql.FieldLTE(FieldModified, v))
 }
 
 // And groups predicates with the AND operator between them.

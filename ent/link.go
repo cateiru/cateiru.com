@@ -35,8 +35,8 @@ type Link struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Link) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*Link) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case link.FieldID, link.FieldUserID, link.FieldCategoryID:
@@ -54,7 +54,7 @@ func (*Link) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Link fields.
-func (l *Link) assignValues(columns []string, values []interface{}) error {
+func (l *Link) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -123,7 +123,7 @@ func (l *Link) assignValues(columns []string, values []interface{}) error {
 // Note that you need to call Link.Unwrap() before calling this method if this Link
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (l *Link) Update() *LinkUpdateOne {
-	return (&LinkClient{config: l.config}).UpdateOne(l)
+	return NewLinkClient(l.config).UpdateOne(l)
 }
 
 // Unwrap unwraps the Link entity that was returned from a transaction after it was closed,
@@ -171,9 +171,3 @@ func (l *Link) String() string {
 
 // Links is a parsable slice of Link.
 type Links []*Link
-
-func (l Links) config(cfg config) {
-	for _i := range l {
-		l[_i].config = cfg
-	}
-}

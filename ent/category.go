@@ -29,8 +29,8 @@ type Category struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Category) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*Category) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case category.FieldID:
@@ -48,7 +48,7 @@ func (*Category) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Category fields.
-func (c *Category) assignValues(columns []string, values []interface{}) error {
+func (c *Category) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -99,7 +99,7 @@ func (c *Category) assignValues(columns []string, values []interface{}) error {
 // Note that you need to call Category.Unwrap() before calling this method if this Category
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (c *Category) Update() *CategoryUpdateOne {
-	return (&CategoryClient{config: c.config}).UpdateOne(c)
+	return NewCategoryClient(c.config).UpdateOne(c)
 }
 
 // Unwrap unwraps the Category entity that was returned from a transaction after it was closed,
@@ -138,9 +138,3 @@ func (c *Category) String() string {
 
 // Categories is a parsable slice of Category.
 type Categories []*Category
-
-func (c Categories) config(cfg config) {
-	for _i := range c {
-		c[_i].config = cfg
-	}
-}

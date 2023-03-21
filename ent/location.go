@@ -33,8 +33,8 @@ type Location struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Location) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*Location) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case location.FieldID:
@@ -52,7 +52,7 @@ func (*Location) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Location fields.
-func (l *Location) assignValues(columns []string, values []interface{}) error {
+func (l *Location) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -115,7 +115,7 @@ func (l *Location) assignValues(columns []string, values []interface{}) error {
 // Note that you need to call Location.Unwrap() before calling this method if this Location
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (l *Location) Update() *LocationUpdateOne {
-	return (&LocationClient{config: l.config}).UpdateOne(l)
+	return NewLocationClient(l.config).UpdateOne(l)
 }
 
 // Unwrap unwraps the Location entity that was returned from a transaction after it was closed,
@@ -160,9 +160,3 @@ func (l *Location) String() string {
 
 // Locations is a parsable slice of Location.
 type Locations []*Location
-
-func (l Locations) config(cfg config) {
-	for _i := range l {
-		l[_i].config = cfg
-	}
-}

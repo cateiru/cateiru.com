@@ -12,286 +12,182 @@ import (
 
 // ID filters vertices based on their ID field.
 func ID(id uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Session(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
 func IDEQ(id uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Session(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
 func IDNEQ(id uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldID), id))
-	})
+	return predicate.Session(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
 func IDIn(ids ...uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.In(s.C(FieldID), v...))
-	})
+	return predicate.Session(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
 func IDNotIn(ids ...uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.NotIn(s.C(FieldID), v...))
-	})
+	return predicate.Session(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
 func IDGT(id uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldID), id))
-	})
+	return predicate.Session(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
 func IDGTE(id uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldID), id))
-	})
+	return predicate.Session(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
 func IDLT(id uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldID), id))
-	})
+	return predicate.Session(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id uuid.UUID) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldID), id))
-	})
+	return predicate.Session(sql.FieldLTE(FieldID, id))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
 func UserID(v uint32) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserID), v))
-	})
+	return predicate.Session(sql.FieldEQ(FieldUserID, v))
 }
 
 // Created applies equality check predicate on the "created" field. It's identical to CreatedEQ.
 func Created(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCreated), v))
-	})
+	return predicate.Session(sql.FieldEQ(FieldCreated, v))
 }
 
 // Period applies equality check predicate on the "period" field. It's identical to PeriodEQ.
 func Period(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPeriod), v))
-	})
+	return predicate.Session(sql.FieldEQ(FieldPeriod, v))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
 func UserIDEQ(v uint32) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserID), v))
-	})
+	return predicate.Session(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
 func UserIDNEQ(v uint32) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldUserID), v))
-	})
+	return predicate.Session(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
 func UserIDIn(vs ...uint32) predicate.Session {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldUserID), v...))
-	})
+	return predicate.Session(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
 func UserIDNotIn(vs ...uint32) predicate.Session {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldUserID), v...))
-	})
+	return predicate.Session(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
 func UserIDGT(v uint32) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldUserID), v))
-	})
+	return predicate.Session(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
 func UserIDGTE(v uint32) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldUserID), v))
-	})
+	return predicate.Session(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
 func UserIDLT(v uint32) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldUserID), v))
-	})
+	return predicate.Session(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
 func UserIDLTE(v uint32) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldUserID), v))
-	})
+	return predicate.Session(sql.FieldLTE(FieldUserID, v))
 }
 
 // CreatedEQ applies the EQ predicate on the "created" field.
 func CreatedEQ(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCreated), v))
-	})
+	return predicate.Session(sql.FieldEQ(FieldCreated, v))
 }
 
 // CreatedNEQ applies the NEQ predicate on the "created" field.
 func CreatedNEQ(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCreated), v))
-	})
+	return predicate.Session(sql.FieldNEQ(FieldCreated, v))
 }
 
 // CreatedIn applies the In predicate on the "created" field.
 func CreatedIn(vs ...time.Time) predicate.Session {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCreated), v...))
-	})
+	return predicate.Session(sql.FieldIn(FieldCreated, vs...))
 }
 
 // CreatedNotIn applies the NotIn predicate on the "created" field.
 func CreatedNotIn(vs ...time.Time) predicate.Session {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCreated), v...))
-	})
+	return predicate.Session(sql.FieldNotIn(FieldCreated, vs...))
 }
 
 // CreatedGT applies the GT predicate on the "created" field.
 func CreatedGT(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldCreated), v))
-	})
+	return predicate.Session(sql.FieldGT(FieldCreated, v))
 }
 
 // CreatedGTE applies the GTE predicate on the "created" field.
 func CreatedGTE(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldCreated), v))
-	})
+	return predicate.Session(sql.FieldGTE(FieldCreated, v))
 }
 
 // CreatedLT applies the LT predicate on the "created" field.
 func CreatedLT(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldCreated), v))
-	})
+	return predicate.Session(sql.FieldLT(FieldCreated, v))
 }
 
 // CreatedLTE applies the LTE predicate on the "created" field.
 func CreatedLTE(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldCreated), v))
-	})
+	return predicate.Session(sql.FieldLTE(FieldCreated, v))
 }
 
 // PeriodEQ applies the EQ predicate on the "period" field.
 func PeriodEQ(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPeriod), v))
-	})
+	return predicate.Session(sql.FieldEQ(FieldPeriod, v))
 }
 
 // PeriodNEQ applies the NEQ predicate on the "period" field.
 func PeriodNEQ(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPeriod), v))
-	})
+	return predicate.Session(sql.FieldNEQ(FieldPeriod, v))
 }
 
 // PeriodIn applies the In predicate on the "period" field.
 func PeriodIn(vs ...time.Time) predicate.Session {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldPeriod), v...))
-	})
+	return predicate.Session(sql.FieldIn(FieldPeriod, vs...))
 }
 
 // PeriodNotIn applies the NotIn predicate on the "period" field.
 func PeriodNotIn(vs ...time.Time) predicate.Session {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldPeriod), v...))
-	})
+	return predicate.Session(sql.FieldNotIn(FieldPeriod, vs...))
 }
 
 // PeriodGT applies the GT predicate on the "period" field.
 func PeriodGT(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPeriod), v))
-	})
+	return predicate.Session(sql.FieldGT(FieldPeriod, v))
 }
 
 // PeriodGTE applies the GTE predicate on the "period" field.
 func PeriodGTE(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPeriod), v))
-	})
+	return predicate.Session(sql.FieldGTE(FieldPeriod, v))
 }
 
 // PeriodLT applies the LT predicate on the "period" field.
 func PeriodLT(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPeriod), v))
-	})
+	return predicate.Session(sql.FieldLT(FieldPeriod, v))
 }
 
 // PeriodLTE applies the LTE predicate on the "period" field.
 func PeriodLTE(v time.Time) predicate.Session {
-	return predicate.Session(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPeriod), v))
-	})
+	return predicate.Session(sql.FieldLTE(FieldPeriod, v))
 }
 
 // And groups predicates with the AND operator between them.

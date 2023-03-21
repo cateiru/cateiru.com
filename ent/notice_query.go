@@ -17,11 +17,9 @@ import (
 // NoticeQuery is the builder for querying Notice entities.
 type NoticeQuery struct {
 	config
-	limit      *int
-	offset     *int
-	unique     *bool
+	ctx        *QueryContext
 	order      []OrderFunc
-	fields     []string
+	inters     []Interceptor
 	predicates []predicate.Notice
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -34,26 +32,26 @@ func (nq *NoticeQuery) Where(ps ...predicate.Notice) *NoticeQuery {
 	return nq
 }
 
-// Limit adds a limit step to the query.
+// Limit the number of records to be returned by this query.
 func (nq *NoticeQuery) Limit(limit int) *NoticeQuery {
-	nq.limit = &limit
+	nq.ctx.Limit = &limit
 	return nq
 }
 
-// Offset adds an offset step to the query.
+// Offset to start from.
 func (nq *NoticeQuery) Offset(offset int) *NoticeQuery {
-	nq.offset = &offset
+	nq.ctx.Offset = &offset
 	return nq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
 func (nq *NoticeQuery) Unique(unique bool) *NoticeQuery {
-	nq.unique = &unique
+	nq.ctx.Unique = &unique
 	return nq
 }
 
-// Order adds an order step to the query.
+// Order specifies how the records should be ordered.
 func (nq *NoticeQuery) Order(o ...OrderFunc) *NoticeQuery {
 	nq.order = append(nq.order, o...)
 	return nq
@@ -62,7 +60,7 @@ func (nq *NoticeQuery) Order(o ...OrderFunc) *NoticeQuery {
 // First returns the first Notice entity from the query.
 // Returns a *NotFoundError when no Notice was found.
 func (nq *NoticeQuery) First(ctx context.Context) (*Notice, error) {
-	nodes, err := nq.Limit(1).All(ctx)
+	nodes, err := nq.Limit(1).All(setContextOp(ctx, nq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +83,7 @@ func (nq *NoticeQuery) FirstX(ctx context.Context) *Notice {
 // Returns a *NotFoundError when no Notice ID was found.
 func (nq *NoticeQuery) FirstID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = nq.Limit(1).IDs(ctx); err != nil {
+	if ids, err = nq.Limit(1).IDs(setContextOp(ctx, nq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -108,7 +106,7 @@ func (nq *NoticeQuery) FirstIDX(ctx context.Context) uint32 {
 // Returns a *NotSingularError when more than one Notice entity is found.
 // Returns a *NotFoundError when no Notice entities are found.
 func (nq *NoticeQuery) Only(ctx context.Context) (*Notice, error) {
-	nodes, err := nq.Limit(2).All(ctx)
+	nodes, err := nq.Limit(2).All(setContextOp(ctx, nq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +134,7 @@ func (nq *NoticeQuery) OnlyX(ctx context.Context) *Notice {
 // Returns a *NotFoundError when no entities are found.
 func (nq *NoticeQuery) OnlyID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = nq.Limit(2).IDs(ctx); err != nil {
+	if ids, err = nq.Limit(2).IDs(setContextOp(ctx, nq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -161,10 +159,12 @@ func (nq *NoticeQuery) OnlyIDX(ctx context.Context) uint32 {
 
 // All executes the query and returns a list of Notices.
 func (nq *NoticeQuery) All(ctx context.Context) ([]*Notice, error) {
+	ctx = setContextOp(ctx, nq.ctx, "All")
 	if err := nq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	return nq.sqlAll(ctx)
+	qr := querierAll[[]*Notice, *NoticeQuery]()
+	return withInterceptors[[]*Notice](ctx, nq, qr, nq.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
@@ -177,9 +177,12 @@ func (nq *NoticeQuery) AllX(ctx context.Context) []*Notice {
 }
 
 // IDs executes the query and returns a list of Notice IDs.
-func (nq *NoticeQuery) IDs(ctx context.Context) ([]uint32, error) {
-	var ids []uint32
-	if err := nq.Select(notice.FieldID).Scan(ctx, &ids); err != nil {
+func (nq *NoticeQuery) IDs(ctx context.Context) (ids []uint32, err error) {
+	if nq.ctx.Unique == nil && nq.path != nil {
+		nq.Unique(true)
+	}
+	ctx = setContextOp(ctx, nq.ctx, "IDs")
+	if err = nq.Select(notice.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
@@ -196,10 +199,11 @@ func (nq *NoticeQuery) IDsX(ctx context.Context) []uint32 {
 
 // Count returns the count of the given query.
 func (nq *NoticeQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, nq.ctx, "Count")
 	if err := nq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return nq.sqlCount(ctx)
+	return withInterceptors[int](ctx, nq, querierCount[*NoticeQuery](), nq.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
@@ -213,10 +217,15 @@ func (nq *NoticeQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (nq *NoticeQuery) Exist(ctx context.Context) (bool, error) {
-	if err := nq.prepareQuery(ctx); err != nil {
-		return false, err
+	ctx = setContextOp(ctx, nq.ctx, "Exist")
+	switch _, err := nq.FirstID(ctx); {
+	case IsNotFound(err):
+		return false, nil
+	case err != nil:
+		return false, fmt.Errorf("ent: check existence: %w", err)
+	default:
+		return true, nil
 	}
-	return nq.sqlExist(ctx)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
@@ -236,14 +245,13 @@ func (nq *NoticeQuery) Clone() *NoticeQuery {
 	}
 	return &NoticeQuery{
 		config:     nq.config,
-		limit:      nq.limit,
-		offset:     nq.offset,
+		ctx:        nq.ctx.Clone(),
 		order:      append([]OrderFunc{}, nq.order...),
+		inters:     append([]Interceptor{}, nq.inters...),
 		predicates: append([]predicate.Notice{}, nq.predicates...),
 		// clone intermediate query.
-		sql:    nq.sql.Clone(),
-		path:   nq.path,
-		unique: nq.unique,
+		sql:  nq.sql.Clone(),
+		path: nq.path,
 	}
 }
 
@@ -262,16 +270,11 @@ func (nq *NoticeQuery) Clone() *NoticeQuery {
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (nq *NoticeQuery) GroupBy(field string, fields ...string) *NoticeGroupBy {
-	grbuild := &NoticeGroupBy{config: nq.config}
-	grbuild.fields = append([]string{field}, fields...)
-	grbuild.path = func(ctx context.Context) (prev *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		return nq.sqlQuery(ctx), nil
-	}
+	nq.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &NoticeGroupBy{build: nq}
+	grbuild.flds = &nq.ctx.Fields
 	grbuild.label = notice.Label
-	grbuild.flds, grbuild.scan = &grbuild.fields, grbuild.Scan
+	grbuild.scan = grbuild.Scan
 	return grbuild
 }
 
@@ -288,15 +291,30 @@ func (nq *NoticeQuery) GroupBy(field string, fields ...string) *NoticeGroupBy {
 //		Select(notice.FieldUserID).
 //		Scan(ctx, &v)
 func (nq *NoticeQuery) Select(fields ...string) *NoticeSelect {
-	nq.fields = append(nq.fields, fields...)
-	selbuild := &NoticeSelect{NoticeQuery: nq}
-	selbuild.label = notice.Label
-	selbuild.flds, selbuild.scan = &nq.fields, selbuild.Scan
-	return selbuild
+	nq.ctx.Fields = append(nq.ctx.Fields, fields...)
+	sbuild := &NoticeSelect{NoticeQuery: nq}
+	sbuild.label = notice.Label
+	sbuild.flds, sbuild.scan = &nq.ctx.Fields, sbuild.Scan
+	return sbuild
+}
+
+// Aggregate returns a NoticeSelect configured with the given aggregations.
+func (nq *NoticeQuery) Aggregate(fns ...AggregateFunc) *NoticeSelect {
+	return nq.Select().Aggregate(fns...)
 }
 
 func (nq *NoticeQuery) prepareQuery(ctx context.Context) error {
-	for _, f := range nq.fields {
+	for _, inter := range nq.inters {
+		if inter == nil {
+			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
+		}
+		if trv, ok := inter.(Traverser); ok {
+			if err := trv.Traverse(ctx, nq); err != nil {
+				return err
+			}
+		}
+	}
+	for _, f := range nq.ctx.Fields {
 		if !notice.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
@@ -316,10 +334,10 @@ func (nq *NoticeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Notic
 		nodes = []*Notice{}
 		_spec = nq.querySpec()
 	)
-	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
+	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Notice).scanValues(nil, columns)
 	}
-	_spec.Assign = func(columns []string, values []interface{}) error {
+	_spec.Assign = func(columns []string, values []any) error {
 		node := &Notice{config: nq.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
@@ -338,38 +356,22 @@ func (nq *NoticeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Notic
 
 func (nq *NoticeQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := nq.querySpec()
-	_spec.Node.Columns = nq.fields
-	if len(nq.fields) > 0 {
-		_spec.Unique = nq.unique != nil && *nq.unique
+	_spec.Node.Columns = nq.ctx.Fields
+	if len(nq.ctx.Fields) > 0 {
+		_spec.Unique = nq.ctx.Unique != nil && *nq.ctx.Unique
 	}
 	return sqlgraph.CountNodes(ctx, nq.driver, _spec)
 }
 
-func (nq *NoticeQuery) sqlExist(ctx context.Context) (bool, error) {
-	n, err := nq.sqlCount(ctx)
-	if err != nil {
-		return false, fmt.Errorf("ent: check existence: %w", err)
-	}
-	return n > 0, nil
-}
-
 func (nq *NoticeQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := &sqlgraph.QuerySpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   notice.Table,
-			Columns: notice.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: notice.FieldID,
-			},
-		},
-		From:   nq.sql,
-		Unique: true,
-	}
-	if unique := nq.unique; unique != nil {
+	_spec := sqlgraph.NewQuerySpec(notice.Table, notice.Columns, sqlgraph.NewFieldSpec(notice.FieldID, field.TypeUint32))
+	_spec.From = nq.sql
+	if unique := nq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
+	} else if nq.path != nil {
+		_spec.Unique = true
 	}
-	if fields := nq.fields; len(fields) > 0 {
+	if fields := nq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, notice.FieldID)
 		for i := range fields {
@@ -385,10 +387,10 @@ func (nq *NoticeQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if limit := nq.limit; limit != nil {
+	if limit := nq.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := nq.offset; offset != nil {
+	if offset := nq.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
 	if ps := nq.order; len(ps) > 0 {
@@ -404,7 +406,7 @@ func (nq *NoticeQuery) querySpec() *sqlgraph.QuerySpec {
 func (nq *NoticeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(nq.driver.Dialect())
 	t1 := builder.Table(notice.Table)
-	columns := nq.fields
+	columns := nq.ctx.Fields
 	if len(columns) == 0 {
 		columns = notice.Columns
 	}
@@ -413,7 +415,7 @@ func (nq *NoticeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector = nq.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if nq.unique != nil && *nq.unique {
+	if nq.ctx.Unique != nil && *nq.ctx.Unique {
 		selector.Distinct()
 	}
 	for _, p := range nq.predicates {
@@ -422,12 +424,12 @@ func (nq *NoticeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	for _, p := range nq.order {
 		p(selector)
 	}
-	if offset := nq.offset; offset != nil {
+	if offset := nq.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := nq.limit; limit != nil {
+	if limit := nq.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -435,13 +437,8 @@ func (nq *NoticeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 
 // NoticeGroupBy is the group-by builder for Notice entities.
 type NoticeGroupBy struct {
-	config
 	selector
-	fields []string
-	fns    []AggregateFunc
-	// intermediate query (i.e. traversal path).
-	sql  *sql.Selector
-	path func(context.Context) (*sql.Selector, error)
+	build *NoticeQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
@@ -450,74 +447,77 @@ func (ngb *NoticeGroupBy) Aggregate(fns ...AggregateFunc) *NoticeGroupBy {
 	return ngb
 }
 
-// Scan applies the group-by query and scans the result into the given value.
-func (ngb *NoticeGroupBy) Scan(ctx context.Context, v interface{}) error {
-	query, err := ngb.path(ctx)
-	if err != nil {
+// Scan applies the selector query and scans the result into the given value.
+func (ngb *NoticeGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, ngb.build.ctx, "GroupBy")
+	if err := ngb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	ngb.sql = query
-	return ngb.sqlScan(ctx, v)
+	return scanWithInterceptors[*NoticeQuery, *NoticeGroupBy](ctx, ngb.build, ngb, ngb.build.inters, v)
 }
 
-func (ngb *NoticeGroupBy) sqlScan(ctx context.Context, v interface{}) error {
-	for _, f := range ngb.fields {
-		if !notice.ValidColumn(f) {
-			return &ValidationError{Name: f, err: fmt.Errorf("invalid field %q for group-by", f)}
-		}
+func (ngb *NoticeGroupBy) sqlScan(ctx context.Context, root *NoticeQuery, v any) error {
+	selector := root.sqlQuery(ctx).Select()
+	aggregation := make([]string, 0, len(ngb.fns))
+	for _, fn := range ngb.fns {
+		aggregation = append(aggregation, fn(selector))
 	}
-	selector := ngb.sqlQuery()
+	if len(selector.SelectedColumns()) == 0 {
+		columns := make([]string, 0, len(*ngb.flds)+len(ngb.fns))
+		for _, f := range *ngb.flds {
+			columns = append(columns, selector.C(f))
+		}
+		columns = append(columns, aggregation...)
+		selector.Select(columns...)
+	}
+	selector.GroupBy(selector.Columns(*ngb.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ngb.driver.Query(ctx, query, args, rows); err != nil {
+	if err := ngb.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
 }
 
-func (ngb *NoticeGroupBy) sqlQuery() *sql.Selector {
-	selector := ngb.sql.Select()
-	aggregation := make([]string, 0, len(ngb.fns))
-	for _, fn := range ngb.fns {
-		aggregation = append(aggregation, fn(selector))
-	}
-	// If no columns were selected in a custom aggregation function, the default
-	// selection is the fields used for "group-by", and the aggregation functions.
-	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(ngb.fields)+len(ngb.fns))
-		for _, f := range ngb.fields {
-			columns = append(columns, selector.C(f))
-		}
-		columns = append(columns, aggregation...)
-		selector.Select(columns...)
-	}
-	return selector.GroupBy(selector.Columns(ngb.fields...)...)
-}
-
 // NoticeSelect is the builder for selecting fields of Notice entities.
 type NoticeSelect struct {
 	*NoticeQuery
 	selector
-	// intermediate query (i.e. traversal path).
-	sql *sql.Selector
+}
+
+// Aggregate adds the given aggregation functions to the selector query.
+func (ns *NoticeSelect) Aggregate(fns ...AggregateFunc) *NoticeSelect {
+	ns.fns = append(ns.fns, fns...)
+	return ns
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ns *NoticeSelect) Scan(ctx context.Context, v interface{}) error {
+func (ns *NoticeSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, ns.ctx, "Select")
 	if err := ns.prepareQuery(ctx); err != nil {
 		return err
 	}
-	ns.sql = ns.NoticeQuery.sqlQuery(ctx)
-	return ns.sqlScan(ctx, v)
+	return scanWithInterceptors[*NoticeQuery, *NoticeSelect](ctx, ns.NoticeQuery, ns, ns.inters, v)
 }
 
-func (ns *NoticeSelect) sqlScan(ctx context.Context, v interface{}) error {
+func (ns *NoticeSelect) sqlScan(ctx context.Context, root *NoticeQuery, v any) error {
+	selector := root.sqlQuery(ctx)
+	aggregation := make([]string, 0, len(ns.fns))
+	for _, fn := range ns.fns {
+		aggregation = append(aggregation, fn(selector))
+	}
+	switch n := len(*ns.selector.flds); {
+	case n == 0 && len(aggregation) > 0:
+		selector.Select(aggregation...)
+	case n != 0 && len(aggregation) > 0:
+		selector.AppendSelect(aggregation...)
+	}
 	rows := &sql.Rows{}
-	query, args := ns.sql.Query()
+	query, args := selector.Query()
 	if err := ns.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}

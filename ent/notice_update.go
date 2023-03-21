@@ -128,35 +128,8 @@ func (nu *NoticeUpdate) Mutation() *NoticeMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (nu *NoticeUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
 	nu.defaults()
-	if len(nu.hooks) == 0 {
-		affected, err = nu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*NoticeMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			nu.mutation = mutation
-			affected, err = nu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(nu.hooks) - 1; i >= 0; i-- {
-			if nu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = nu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, nu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, NoticeMutation](ctx, nu.sqlSave, nu.mutation, nu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -190,16 +163,7 @@ func (nu *NoticeUpdate) defaults() {
 }
 
 func (nu *NoticeUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   notice.Table,
-			Columns: notice.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: notice.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(notice.Table, notice.Columns, sqlgraph.NewFieldSpec(notice.FieldID, field.TypeUint32))
 	if ps := nu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -208,71 +172,34 @@ func (nu *NoticeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := nu.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: notice.FieldUserID,
-		})
+		_spec.SetField(notice.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := nu.mutation.AddedUserID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: notice.FieldUserID,
-		})
+		_spec.AddField(notice.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := nu.mutation.DiscordWebhook(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldDiscordWebhook,
-		})
+		_spec.SetField(notice.FieldDiscordWebhook, field.TypeString, value)
 	}
 	if nu.mutation.DiscordWebhookCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: notice.FieldDiscordWebhook,
-		})
+		_spec.ClearField(notice.FieldDiscordWebhook, field.TypeString)
 	}
 	if value, ok := nu.mutation.SlackWebhook(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldSlackWebhook,
-		})
+		_spec.SetField(notice.FieldSlackWebhook, field.TypeString, value)
 	}
 	if nu.mutation.SlackWebhookCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: notice.FieldSlackWebhook,
-		})
+		_spec.ClearField(notice.FieldSlackWebhook, field.TypeString)
 	}
 	if value, ok := nu.mutation.Mail(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldMail,
-		})
+		_spec.SetField(notice.FieldMail, field.TypeString, value)
 	}
 	if nu.mutation.MailCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: notice.FieldMail,
-		})
+		_spec.ClearField(notice.FieldMail, field.TypeString)
 	}
 	if value, ok := nu.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: notice.FieldCreated,
-		})
+		_spec.SetField(notice.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := nu.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: notice.FieldModified,
-		})
+		_spec.SetField(notice.FieldModified, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -282,6 +209,7 @@ func (nu *NoticeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	nu.mutation.done = true
 	return n, nil
 }
 
@@ -391,6 +319,12 @@ func (nuo *NoticeUpdateOne) Mutation() *NoticeMutation {
 	return nuo.mutation
 }
 
+// Where appends a list predicates to the NoticeUpdate builder.
+func (nuo *NoticeUpdateOne) Where(ps ...predicate.Notice) *NoticeUpdateOne {
+	nuo.mutation.Where(ps...)
+	return nuo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (nuo *NoticeUpdateOne) Select(field string, fields ...string) *NoticeUpdateOne {
@@ -400,41 +334,8 @@ func (nuo *NoticeUpdateOne) Select(field string, fields ...string) *NoticeUpdate
 
 // Save executes the query and returns the updated Notice entity.
 func (nuo *NoticeUpdateOne) Save(ctx context.Context) (*Notice, error) {
-	var (
-		err  error
-		node *Notice
-	)
 	nuo.defaults()
-	if len(nuo.hooks) == 0 {
-		node, err = nuo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*NoticeMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			nuo.mutation = mutation
-			node, err = nuo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(nuo.hooks) - 1; i >= 0; i-- {
-			if nuo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = nuo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, nuo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Notice)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from NoticeMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Notice, NoticeMutation](ctx, nuo.sqlSave, nuo.mutation, nuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -468,16 +369,7 @@ func (nuo *NoticeUpdateOne) defaults() {
 }
 
 func (nuo *NoticeUpdateOne) sqlSave(ctx context.Context) (_node *Notice, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   notice.Table,
-			Columns: notice.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: notice.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(notice.Table, notice.Columns, sqlgraph.NewFieldSpec(notice.FieldID, field.TypeUint32))
 	id, ok := nuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Notice.id" for update`)}
@@ -503,71 +395,34 @@ func (nuo *NoticeUpdateOne) sqlSave(ctx context.Context) (_node *Notice, err err
 		}
 	}
 	if value, ok := nuo.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: notice.FieldUserID,
-		})
+		_spec.SetField(notice.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := nuo.mutation.AddedUserID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: notice.FieldUserID,
-		})
+		_spec.AddField(notice.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := nuo.mutation.DiscordWebhook(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldDiscordWebhook,
-		})
+		_spec.SetField(notice.FieldDiscordWebhook, field.TypeString, value)
 	}
 	if nuo.mutation.DiscordWebhookCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: notice.FieldDiscordWebhook,
-		})
+		_spec.ClearField(notice.FieldDiscordWebhook, field.TypeString)
 	}
 	if value, ok := nuo.mutation.SlackWebhook(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldSlackWebhook,
-		})
+		_spec.SetField(notice.FieldSlackWebhook, field.TypeString, value)
 	}
 	if nuo.mutation.SlackWebhookCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: notice.FieldSlackWebhook,
-		})
+		_spec.ClearField(notice.FieldSlackWebhook, field.TypeString)
 	}
 	if value, ok := nuo.mutation.Mail(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldMail,
-		})
+		_spec.SetField(notice.FieldMail, field.TypeString, value)
 	}
 	if nuo.mutation.MailCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: notice.FieldMail,
-		})
+		_spec.ClearField(notice.FieldMail, field.TypeString)
 	}
 	if value, ok := nuo.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: notice.FieldCreated,
-		})
+		_spec.SetField(notice.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := nuo.mutation.Modified(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: notice.FieldModified,
-		})
+		_spec.SetField(notice.FieldModified, field.TypeTime, value)
 	}
 	_node = &Notice{config: nuo.config}
 	_spec.Assign = _node.assignValues
@@ -580,5 +435,6 @@ func (nuo *NoticeUpdateOne) sqlSave(ctx context.Context) (_node *Notice, err err
 		}
 		return nil, err
 	}
+	nuo.mutation.done = true
 	return _node, nil
 }

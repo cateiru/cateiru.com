@@ -215,50 +215,8 @@ func (cc *ContactCreate) Mutation() *ContactMutation {
 
 // Save creates the Contact in the database.
 func (cc *ContactCreate) Save(ctx context.Context) (*Contact, error) {
-	var (
-		err  error
-		node *Contact
-	)
 	cc.defaults()
-	if len(cc.hooks) == 0 {
-		if err = cc.check(); err != nil {
-			return nil, err
-		}
-		node, err = cc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*ContactMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = cc.check(); err != nil {
-				return nil, err
-			}
-			cc.mutation = mutation
-			if node, err = cc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(cc.hooks) - 1; i >= 0; i-- {
-			if cc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = cc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, cc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Contact)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from ContactMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Contact, ContactMutation](ctx, cc.sqlSave, cc.mutation, cc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -328,6 +286,9 @@ func (cc *ContactCreate) check() error {
 }
 
 func (cc *ContactCreate) sqlSave(ctx context.Context) (*Contact, error) {
+	if err := cc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := cc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, cc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -339,158 +300,86 @@ func (cc *ContactCreate) sqlSave(ctx context.Context) (*Contact, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	cc.mutation.id = &_node.ID
+	cc.mutation.done = true
 	return _node, nil
 }
 
 func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Contact{config: cc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: contact.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: contact.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(contact.Table, sqlgraph.NewFieldSpec(contact.FieldID, field.TypeUint32))
 	)
 	if id, ok := cc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := cc.mutation.ToUserID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: contact.FieldToUserID,
-		})
+		_spec.SetField(contact.FieldToUserID, field.TypeUint32, value)
 		_node.ToUserID = value
 	}
 	if value, ok := cc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldName,
-		})
+		_spec.SetField(contact.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := cc.mutation.Title(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldTitle,
-		})
+		_spec.SetField(contact.FieldTitle, field.TypeString, value)
 		_node.Title = value
 	}
 	if value, ok := cc.mutation.Detail(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldDetail,
-		})
+		_spec.SetField(contact.FieldDetail, field.TypeString, value)
 		_node.Detail = value
 	}
 	if value, ok := cc.mutation.Mail(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldMail,
-		})
+		_spec.SetField(contact.FieldMail, field.TypeString, value)
 		_node.Mail = value
 	}
 	if value, ok := cc.mutation.IP(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldIP,
-		})
+		_spec.SetField(contact.FieldIP, field.TypeString, value)
 		_node.IP = value
 	}
 	if value, ok := cc.mutation.Lang(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldLang,
-		})
+		_spec.SetField(contact.FieldLang, field.TypeString, value)
 		_node.Lang = value
 	}
 	if value, ok := cc.mutation.URL(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldURL,
-		})
+		_spec.SetField(contact.FieldURL, field.TypeString, value)
 		_node.URL = value
 	}
 	if value, ok := cc.mutation.Category(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldCategory,
-		})
+		_spec.SetField(contact.FieldCategory, field.TypeString, value)
 		_node.Category = value
 	}
 	if value, ok := cc.mutation.CustomTitle(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldCustomTitle,
-		})
+		_spec.SetField(contact.FieldCustomTitle, field.TypeString, value)
 		_node.CustomTitle = value
 	}
 	if value, ok := cc.mutation.CustomValue(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldCustomValue,
-		})
+		_spec.SetField(contact.FieldCustomValue, field.TypeString, value)
 		_node.CustomValue = value
 	}
 	if value, ok := cc.mutation.DeviceName(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldDeviceName,
-		})
+		_spec.SetField(contact.FieldDeviceName, field.TypeString, value)
 		_node.DeviceName = value
 	}
 	if value, ok := cc.mutation.Os(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldOs,
-		})
+		_spec.SetField(contact.FieldOs, field.TypeString, value)
 		_node.Os = value
 	}
 	if value, ok := cc.mutation.BrowserName(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: contact.FieldBrowserName,
-		})
+		_spec.SetField(contact.FieldBrowserName, field.TypeString, value)
 		_node.BrowserName = value
 	}
 	if value, ok := cc.mutation.IsMobile(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: contact.FieldIsMobile,
-		})
+		_spec.SetField(contact.FieldIsMobile, field.TypeBool, value)
 		_node.IsMobile = value
 	}
 	if value, ok := cc.mutation.Created(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: contact.FieldCreated,
-		})
+		_spec.SetField(contact.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
 	if value, ok := cc.mutation.Modified(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: contact.FieldModified,
-		})
+		_spec.SetField(contact.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
 	return _node, _spec

@@ -19,7 +19,7 @@ go generate ./ent
 
 ```bash
 # start local mysql server
-docker-compose up -d
+docker compose up -d
 
 # export
 go run ./scripts/main.go export

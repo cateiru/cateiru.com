@@ -119,50 +119,8 @@ func (bc *BiographyCreate) Mutation() *BiographyMutation {
 
 // Save creates the Biography in the database.
 func (bc *BiographyCreate) Save(ctx context.Context) (*Biography, error) {
-	var (
-		err  error
-		node *Biography
-	)
 	bc.defaults()
-	if len(bc.hooks) == 0 {
-		if err = bc.check(); err != nil {
-			return nil, err
-		}
-		node, err = bc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*BiographyMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = bc.check(); err != nil {
-				return nil, err
-			}
-			bc.mutation = mutation
-			if node, err = bc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(bc.hooks) - 1; i >= 0; i-- {
-			if bc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = bc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, bc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Biography)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from BiographyMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Biography, BiographyMutation](ctx, bc.sqlSave, bc.mutation, bc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -233,6 +191,9 @@ func (bc *BiographyCreate) check() error {
 }
 
 func (bc *BiographyCreate) sqlSave(ctx context.Context) (*Biography, error) {
+	if err := bc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := bc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, bc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -244,94 +205,54 @@ func (bc *BiographyCreate) sqlSave(ctx context.Context) (*Biography, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	bc.mutation.id = &_node.ID
+	bc.mutation.done = true
 	return _node, nil
 }
 
 func (bc *BiographyCreate) createSpec() (*Biography, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Biography{config: bc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: biography.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: biography.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(biography.Table, sqlgraph.NewFieldSpec(biography.FieldID, field.TypeUint32))
 	)
 	if id, ok := bc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := bc.mutation.UserID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldUserID,
-		})
+		_spec.SetField(biography.FieldUserID, field.TypeUint32, value)
 		_node.UserID = value
 	}
 	if value, ok := bc.mutation.IsPublic(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: biography.FieldIsPublic,
-		})
+		_spec.SetField(biography.FieldIsPublic, field.TypeBool, value)
 		_node.IsPublic = value
 	}
 	if value, ok := bc.mutation.LocationID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: biography.FieldLocationID,
-		})
+		_spec.SetField(biography.FieldLocationID, field.TypeUint32, value)
 		_node.LocationID = value
 	}
 	if value, ok := bc.mutation.Position(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: biography.FieldPosition,
-		})
+		_spec.SetField(biography.FieldPosition, field.TypeString, value)
 		_node.Position = value
 	}
 	if value, ok := bc.mutation.PositionJa(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: biography.FieldPositionJa,
-		})
+		_spec.SetField(biography.FieldPositionJa, field.TypeString, value)
 		_node.PositionJa = value
 	}
 	if value, ok := bc.mutation.Join(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldJoin,
-		})
+		_spec.SetField(biography.FieldJoin, field.TypeTime, value)
 		_node.Join = value
 	}
 	if value, ok := bc.mutation.Leave(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldLeave,
-		})
+		_spec.SetField(biography.FieldLeave, field.TypeTime, value)
 		_node.Leave = value
 	}
 	if value, ok := bc.mutation.Created(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldCreated,
-		})
+		_spec.SetField(biography.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
 	if value, ok := bc.mutation.Modified(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: biography.FieldModified,
-		})
+		_spec.SetField(biography.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
 	return _node, _spec

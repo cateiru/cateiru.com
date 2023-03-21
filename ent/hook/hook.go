@@ -15,11 +15,10 @@ type BiographyFunc func(context.Context, *ent.BiographyMutation) (ent.Value, err
 
 // Mutate calls f(ctx, m).
 func (f BiographyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.BiographyMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BiographyMutation", m)
+	if mv, ok := m.(*ent.BiographyMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BiographyMutation", m)
 }
 
 // The CategoryFunc type is an adapter to allow the use of ordinary
@@ -28,11 +27,10 @@ type CategoryFunc func(context.Context, *ent.CategoryMutation) (ent.Value, error
 
 // Mutate calls f(ctx, m).
 func (f CategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.CategoryMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CategoryMutation", m)
+	if mv, ok := m.(*ent.CategoryMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CategoryMutation", m)
 }
 
 // The ContactFunc type is an adapter to allow the use of ordinary
@@ -41,11 +39,22 @@ type ContactFunc func(context.Context, *ent.ContactMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f ContactFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.ContactMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ContactMutation", m)
+	if mv, ok := m.(*ent.ContactMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ContactMutation", m)
+}
+
+// The ContactDefaultFunc type is an adapter to allow the use of ordinary
+// function as ContactDefault mutator.
+type ContactDefaultFunc func(context.Context, *ent.ContactDefaultMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ContactDefaultFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ContactDefaultMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ContactDefaultMutation", m)
 }
 
 // The LinkFunc type is an adapter to allow the use of ordinary
@@ -54,11 +63,10 @@ type LinkFunc func(context.Context, *ent.LinkMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f LinkFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.LinkMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LinkMutation", m)
+	if mv, ok := m.(*ent.LinkMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LinkMutation", m)
 }
 
 // The LocationFunc type is an adapter to allow the use of ordinary
@@ -67,11 +75,10 @@ type LocationFunc func(context.Context, *ent.LocationMutation) (ent.Value, error
 
 // Mutate calls f(ctx, m).
 func (f LocationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.LocationMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LocationMutation", m)
+	if mv, ok := m.(*ent.LocationMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LocationMutation", m)
 }
 
 // The NoticeFunc type is an adapter to allow the use of ordinary
@@ -80,11 +87,10 @@ type NoticeFunc func(context.Context, *ent.NoticeMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f NoticeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.NoticeMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NoticeMutation", m)
+	if mv, ok := m.(*ent.NoticeMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NoticeMutation", m)
 }
 
 // The ProductFunc type is an adapter to allow the use of ordinary
@@ -93,11 +99,10 @@ type ProductFunc func(context.Context, *ent.ProductMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f ProductFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.ProductMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductMutation", m)
+	if mv, ok := m.(*ent.ProductMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductMutation", m)
 }
 
 // The SessionFunc type is an adapter to allow the use of ordinary
@@ -106,11 +111,10 @@ type SessionFunc func(context.Context, *ent.SessionMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f SessionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.SessionMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SessionMutation", m)
+	if mv, ok := m.(*ent.SessionMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SessionMutation", m)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary
@@ -119,11 +123,10 @@ type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.UserMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+	if mv, ok := m.(*ent.UserMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
 }
 
 // Condition is a hook condition function.

@@ -9,9 +9,12 @@ import (
 	"sync"
 	"time"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/ent/category"
 	"github.com/cateiru/cateiru.com/ent/contact"
+	"github.com/cateiru/cateiru.com/ent/contactdefault"
 	"github.com/cateiru/cateiru.com/ent/link"
 	"github.com/cateiru/cateiru.com/ent/location"
 	"github.com/cateiru/cateiru.com/ent/notice"
@@ -20,8 +23,6 @@ import (
 	"github.com/cateiru/cateiru.com/ent/session"
 	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/google/uuid"
-
-	"entgo.io/ent"
 )
 
 const (
@@ -33,15 +34,16 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeBiography = "Biography"
-	TypeCategory  = "Category"
-	TypeContact   = "Contact"
-	TypeLink      = "Link"
-	TypeLocation  = "Location"
-	TypeNotice    = "Notice"
-	TypeProduct   = "Product"
-	TypeSession   = "Session"
-	TypeUser      = "User"
+	TypeBiography      = "Biography"
+	TypeCategory       = "Category"
+	TypeContact        = "Contact"
+	TypeContactDefault = "ContactDefault"
+	TypeLink           = "Link"
+	TypeLocation       = "Location"
+	TypeNotice         = "Notice"
+	TypeProduct        = "Product"
+	TypeSession        = "Session"
+	TypeUser           = "User"
 )
 
 // BiographyMutation represents an operation that mutates the Biography nodes in the graph.
@@ -553,9 +555,24 @@ func (m *BiographyMutation) Where(ps ...predicate.Biography) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the BiographyMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *BiographyMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Biography, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *BiographyMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *BiographyMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Biography).
@@ -1190,9 +1207,24 @@ func (m *CategoryMutation) Where(ps ...predicate.Category) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the CategoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *CategoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Category, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *CategoryMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *CategoryMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Category).
@@ -2292,9 +2324,24 @@ func (m *ContactMutation) Where(ps ...predicate.Contact) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the ContactMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ContactMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Contact, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *ContactMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ContactMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Contact).
@@ -2789,6 +2836,716 @@ func (m *ContactMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Contact edge %s", name)
 }
 
+// ContactDefaultMutation represents an operation that mutates the ContactDefault nodes in the graph.
+type ContactDefaultMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uint32
+	name          *string
+	email         *string
+	url           *string
+	category      *string
+	custom_title  *string
+	description   *string
+	created       *time.Time
+	modified      *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ContactDefault, error)
+	predicates    []predicate.ContactDefault
+}
+
+var _ ent.Mutation = (*ContactDefaultMutation)(nil)
+
+// contactdefaultOption allows management of the mutation configuration using functional options.
+type contactdefaultOption func(*ContactDefaultMutation)
+
+// newContactDefaultMutation creates new mutation for the ContactDefault entity.
+func newContactDefaultMutation(c config, op Op, opts ...contactdefaultOption) *ContactDefaultMutation {
+	m := &ContactDefaultMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeContactDefault,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withContactDefaultID sets the ID field of the mutation.
+func withContactDefaultID(id uint32) contactdefaultOption {
+	return func(m *ContactDefaultMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ContactDefault
+		)
+		m.oldValue = func(ctx context.Context) (*ContactDefault, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ContactDefault.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withContactDefault sets the old ContactDefault of the mutation.
+func withContactDefault(node *ContactDefault) contactdefaultOption {
+	return func(m *ContactDefaultMutation) {
+		m.oldValue = func(context.Context) (*ContactDefault, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ContactDefaultMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ContactDefaultMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ContactDefault entities.
+func (m *ContactDefaultMutation) SetID(id uint32) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ContactDefaultMutation) ID() (id uint32, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ContactDefaultMutation) IDs(ctx context.Context) ([]uint32, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uint32{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ContactDefault.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *ContactDefaultMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ContactDefaultMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldName(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ContactDefaultMutation) ResetName() {
+	m.name = nil
+}
+
+// SetEmail sets the "email" field.
+func (m *ContactDefaultMutation) SetEmail(s string) {
+	m.email = &s
+}
+
+// Email returns the value of the "email" field in the mutation.
+func (m *ContactDefaultMutation) Email() (r string, exists bool) {
+	v := m.email
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmail returns the old "email" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldEmail(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmail requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
+	}
+	return oldValue.Email, nil
+}
+
+// ResetEmail resets all changes to the "email" field.
+func (m *ContactDefaultMutation) ResetEmail() {
+	m.email = nil
+}
+
+// SetURL sets the "url" field.
+func (m *ContactDefaultMutation) SetURL(s string) {
+	m.url = &s
+}
+
+// URL returns the value of the "url" field in the mutation.
+func (m *ContactDefaultMutation) URL() (r string, exists bool) {
+	v := m.url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldURL returns the old "url" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldURL(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+	}
+	return oldValue.URL, nil
+}
+
+// ResetURL resets all changes to the "url" field.
+func (m *ContactDefaultMutation) ResetURL() {
+	m.url = nil
+}
+
+// SetCategory sets the "category" field.
+func (m *ContactDefaultMutation) SetCategory(s string) {
+	m.category = &s
+}
+
+// Category returns the value of the "category" field in the mutation.
+func (m *ContactDefaultMutation) Category() (r string, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategory returns the old "category" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldCategory(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategory: %w", err)
+	}
+	return oldValue.Category, nil
+}
+
+// ResetCategory resets all changes to the "category" field.
+func (m *ContactDefaultMutation) ResetCategory() {
+	m.category = nil
+}
+
+// SetCustomTitle sets the "custom_title" field.
+func (m *ContactDefaultMutation) SetCustomTitle(s string) {
+	m.custom_title = &s
+}
+
+// CustomTitle returns the value of the "custom_title" field in the mutation.
+func (m *ContactDefaultMutation) CustomTitle() (r string, exists bool) {
+	v := m.custom_title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCustomTitle returns the old "custom_title" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldCustomTitle(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCustomTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCustomTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCustomTitle: %w", err)
+	}
+	return oldValue.CustomTitle, nil
+}
+
+// ResetCustomTitle resets all changes to the "custom_title" field.
+func (m *ContactDefaultMutation) ResetCustomTitle() {
+	m.custom_title = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *ContactDefaultMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ContactDefaultMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldDescription(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ContactDefaultMutation) ResetDescription() {
+	m.description = nil
+}
+
+// SetCreated sets the "created" field.
+func (m *ContactDefaultMutation) SetCreated(t time.Time) {
+	m.created = &t
+}
+
+// Created returns the value of the "created" field in the mutation.
+func (m *ContactDefaultMutation) Created() (r time.Time, exists bool) {
+	v := m.created
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreated returns the old "created" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldCreated(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreated is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreated requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreated: %w", err)
+	}
+	return oldValue.Created, nil
+}
+
+// ResetCreated resets all changes to the "created" field.
+func (m *ContactDefaultMutation) ResetCreated() {
+	m.created = nil
+}
+
+// SetModified sets the "modified" field.
+func (m *ContactDefaultMutation) SetModified(t time.Time) {
+	m.modified = &t
+}
+
+// Modified returns the value of the "modified" field in the mutation.
+func (m *ContactDefaultMutation) Modified() (r time.Time, exists bool) {
+	v := m.modified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModified returns the old "modified" field's value of the ContactDefault entity.
+// If the ContactDefault object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactDefaultMutation) OldModified(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModified: %w", err)
+	}
+	return oldValue.Modified, nil
+}
+
+// ResetModified resets all changes to the "modified" field.
+func (m *ContactDefaultMutation) ResetModified() {
+	m.modified = nil
+}
+
+// Where appends a list predicates to the ContactDefaultMutation builder.
+func (m *ContactDefaultMutation) Where(ps ...predicate.ContactDefault) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ContactDefaultMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ContactDefaultMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ContactDefault, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ContactDefaultMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ContactDefaultMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ContactDefault).
+func (m *ContactDefaultMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ContactDefaultMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.name != nil {
+		fields = append(fields, contactdefault.FieldName)
+	}
+	if m.email != nil {
+		fields = append(fields, contactdefault.FieldEmail)
+	}
+	if m.url != nil {
+		fields = append(fields, contactdefault.FieldURL)
+	}
+	if m.category != nil {
+		fields = append(fields, contactdefault.FieldCategory)
+	}
+	if m.custom_title != nil {
+		fields = append(fields, contactdefault.FieldCustomTitle)
+	}
+	if m.description != nil {
+		fields = append(fields, contactdefault.FieldDescription)
+	}
+	if m.created != nil {
+		fields = append(fields, contactdefault.FieldCreated)
+	}
+	if m.modified != nil {
+		fields = append(fields, contactdefault.FieldModified)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ContactDefaultMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case contactdefault.FieldName:
+		return m.Name()
+	case contactdefault.FieldEmail:
+		return m.Email()
+	case contactdefault.FieldURL:
+		return m.URL()
+	case contactdefault.FieldCategory:
+		return m.Category()
+	case contactdefault.FieldCustomTitle:
+		return m.CustomTitle()
+	case contactdefault.FieldDescription:
+		return m.Description()
+	case contactdefault.FieldCreated:
+		return m.Created()
+	case contactdefault.FieldModified:
+		return m.Modified()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ContactDefaultMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case contactdefault.FieldName:
+		return m.OldName(ctx)
+	case contactdefault.FieldEmail:
+		return m.OldEmail(ctx)
+	case contactdefault.FieldURL:
+		return m.OldURL(ctx)
+	case contactdefault.FieldCategory:
+		return m.OldCategory(ctx)
+	case contactdefault.FieldCustomTitle:
+		return m.OldCustomTitle(ctx)
+	case contactdefault.FieldDescription:
+		return m.OldDescription(ctx)
+	case contactdefault.FieldCreated:
+		return m.OldCreated(ctx)
+	case contactdefault.FieldModified:
+		return m.OldModified(ctx)
+	}
+	return nil, fmt.Errorf("unknown ContactDefault field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactDefaultMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case contactdefault.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case contactdefault.FieldEmail:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmail(v)
+		return nil
+	case contactdefault.FieldURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetURL(v)
+		return nil
+	case contactdefault.FieldCategory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategory(v)
+		return nil
+	case contactdefault.FieldCustomTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCustomTitle(v)
+		return nil
+	case contactdefault.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case contactdefault.FieldCreated:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreated(v)
+		return nil
+	case contactdefault.FieldModified:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModified(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ContactDefault field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ContactDefaultMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ContactDefaultMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactDefaultMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ContactDefault numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ContactDefaultMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ContactDefaultMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ContactDefaultMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ContactDefault nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ContactDefaultMutation) ResetField(name string) error {
+	switch name {
+	case contactdefault.FieldName:
+		m.ResetName()
+		return nil
+	case contactdefault.FieldEmail:
+		m.ResetEmail()
+		return nil
+	case contactdefault.FieldURL:
+		m.ResetURL()
+		return nil
+	case contactdefault.FieldCategory:
+		m.ResetCategory()
+		return nil
+	case contactdefault.FieldCustomTitle:
+		m.ResetCustomTitle()
+		return nil
+	case contactdefault.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case contactdefault.FieldCreated:
+		m.ResetCreated()
+		return nil
+	case contactdefault.FieldModified:
+		m.ResetModified()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactDefault field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ContactDefaultMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ContactDefaultMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ContactDefaultMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ContactDefaultMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ContactDefaultMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ContactDefaultMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ContactDefaultMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ContactDefault unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ContactDefaultMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ContactDefault edge %s", name)
+}
+
 // LinkMutation represents an operation that mutates the Link nodes in the graph.
 type LinkMutation struct {
 	config
@@ -3261,9 +4018,24 @@ func (m *LinkMutation) Where(ps ...predicate.Link) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the LinkMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *LinkMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Link, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *LinkMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *LinkMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Link).
@@ -3955,9 +4727,24 @@ func (m *LocationMutation) Where(ps ...predicate.Location) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the LocationMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *LocationMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Location, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *LocationMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *LocationMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Location).
@@ -4619,9 +5406,24 @@ func (m *NoticeMutation) Where(ps ...predicate.Notice) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the NoticeMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *NoticeMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Notice, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *NoticeMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *NoticeMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Notice).
@@ -5474,9 +6276,24 @@ func (m *ProductMutation) Where(ps ...predicate.Product) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the ProductMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProductMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Product, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *ProductMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProductMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Product).
@@ -6086,9 +6903,24 @@ func (m *SessionMutation) Where(ps ...predicate.Session) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the SessionMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SessionMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Session, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *SessionMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SessionMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Session).
@@ -6946,9 +7778,24 @@ func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the UserMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *UserMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.User, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *UserMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *UserMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (User).

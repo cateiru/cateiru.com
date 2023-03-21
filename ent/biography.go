@@ -37,8 +37,8 @@ type Biography struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*Biography) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*Biography) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case biography.FieldIsPublic:
@@ -58,7 +58,7 @@ func (*Biography) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Biography fields.
-func (b *Biography) assignValues(columns []string, values []interface{}) error {
+func (b *Biography) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -133,7 +133,7 @@ func (b *Biography) assignValues(columns []string, values []interface{}) error {
 // Note that you need to call Biography.Unwrap() before calling this method if this Biography
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (b *Biography) Update() *BiographyUpdateOne {
-	return (&BiographyClient{config: b.config}).UpdateOne(b)
+	return NewBiographyClient(b.config).UpdateOne(b)
 }
 
 // Unwrap unwraps the Biography entity that was returned from a transaction after it was closed,
@@ -184,9 +184,3 @@ func (b *Biography) String() string {
 
 // Biographies is a parsable slice of Biography.
 type Biographies []*Biography
-
-func (b Biographies) config(cfg config) {
-	for _i := range b {
-		b[_i].config = cfg
-	}
-}

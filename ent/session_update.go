@@ -68,34 +68,7 @@ func (su *SessionUpdate) Mutation() *SessionMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (su *SessionUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(su.hooks) == 0 {
-		affected, err = su.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*SessionMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			su.mutation = mutation
-			affected, err = su.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(su.hooks) - 1; i >= 0; i-- {
-			if su.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = su.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, su.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, SessionMutation](ctx, su.sqlSave, su.mutation, su.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -121,16 +94,7 @@ func (su *SessionUpdate) ExecX(ctx context.Context) {
 }
 
 func (su *SessionUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   session.Table,
-			Columns: session.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUUID,
-				Column: session.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(session.Table, session.Columns, sqlgraph.NewFieldSpec(session.FieldID, field.TypeUUID))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -139,32 +103,16 @@ func (su *SessionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := su.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: session.FieldUserID,
-		})
+		_spec.SetField(session.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := su.mutation.AddedUserID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: session.FieldUserID,
-		})
+		_spec.AddField(session.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := su.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: session.FieldCreated,
-		})
+		_spec.SetField(session.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := su.mutation.Period(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: session.FieldPeriod,
-		})
+		_spec.SetField(session.FieldPeriod, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -174,6 +122,7 @@ func (su *SessionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	su.mutation.done = true
 	return n, nil
 }
 
@@ -223,6 +172,12 @@ func (suo *SessionUpdateOne) Mutation() *SessionMutation {
 	return suo.mutation
 }
 
+// Where appends a list predicates to the SessionUpdate builder.
+func (suo *SessionUpdateOne) Where(ps ...predicate.Session) *SessionUpdateOne {
+	suo.mutation.Where(ps...)
+	return suo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (suo *SessionUpdateOne) Select(field string, fields ...string) *SessionUpdateOne {
@@ -232,40 +187,7 @@ func (suo *SessionUpdateOne) Select(field string, fields ...string) *SessionUpda
 
 // Save executes the query and returns the updated Session entity.
 func (suo *SessionUpdateOne) Save(ctx context.Context) (*Session, error) {
-	var (
-		err  error
-		node *Session
-	)
-	if len(suo.hooks) == 0 {
-		node, err = suo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*SessionMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			suo.mutation = mutation
-			node, err = suo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(suo.hooks) - 1; i >= 0; i-- {
-			if suo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = suo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, suo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Session)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from SessionMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Session, SessionMutation](ctx, suo.sqlSave, suo.mutation, suo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -291,16 +213,7 @@ func (suo *SessionUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (suo *SessionUpdateOne) sqlSave(ctx context.Context) (_node *Session, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   session.Table,
-			Columns: session.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUUID,
-				Column: session.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(session.Table, session.Columns, sqlgraph.NewFieldSpec(session.FieldID, field.TypeUUID))
 	id, ok := suo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Session.id" for update`)}
@@ -326,32 +239,16 @@ func (suo *SessionUpdateOne) sqlSave(ctx context.Context) (_node *Session, err e
 		}
 	}
 	if value, ok := suo.mutation.UserID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: session.FieldUserID,
-		})
+		_spec.SetField(session.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := suo.mutation.AddedUserID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: session.FieldUserID,
-		})
+		_spec.AddField(session.FieldUserID, field.TypeUint32, value)
 	}
 	if value, ok := suo.mutation.Created(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: session.FieldCreated,
-		})
+		_spec.SetField(session.FieldCreated, field.TypeTime, value)
 	}
 	if value, ok := suo.mutation.Period(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: session.FieldPeriod,
-		})
+		_spec.SetField(session.FieldPeriod, field.TypeTime, value)
 	}
 	_node = &Session{config: suo.config}
 	_spec.Assign = _node.assignValues
@@ -364,5 +261,6 @@ func (suo *SessionUpdateOne) sqlSave(ctx context.Context) (_node *Session, err e
 		}
 		return nil, err
 	}
+	suo.mutation.done = true
 	return _node, nil
 }

@@ -154,8 +154,8 @@ export const ContactBuilder = () => {
             <FormControl isInvalid={Boolean(errors.description)} mt=".5rem">
               <FormLabel htmlFor="description">
                 {convertLang({
-                  ja: 'カスタムタイトル',
-                  en: 'Custom Title',
+                  ja: '詳細説明',
+                  en: 'Description',
                 })}
               </FormLabel>
               <Textarea

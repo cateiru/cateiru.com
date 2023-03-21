@@ -109,50 +109,8 @@ func (nc *NoticeCreate) Mutation() *NoticeMutation {
 
 // Save creates the Notice in the database.
 func (nc *NoticeCreate) Save(ctx context.Context) (*Notice, error) {
-	var (
-		err  error
-		node *Notice
-	)
 	nc.defaults()
-	if len(nc.hooks) == 0 {
-		if err = nc.check(); err != nil {
-			return nil, err
-		}
-		node, err = nc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*NoticeMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = nc.check(); err != nil {
-				return nil, err
-			}
-			nc.mutation = mutation
-			if node, err = nc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(nc.hooks) - 1; i >= 0; i-- {
-			if nc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = nc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, nc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Notice)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from NoticeMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Notice, NoticeMutation](ctx, nc.sqlSave, nc.mutation, nc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -204,6 +162,9 @@ func (nc *NoticeCreate) check() error {
 }
 
 func (nc *NoticeCreate) sqlSave(ctx context.Context) (*Notice, error) {
+	if err := nc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := nc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, nc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -215,70 +176,42 @@ func (nc *NoticeCreate) sqlSave(ctx context.Context) (*Notice, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	nc.mutation.id = &_node.ID
+	nc.mutation.done = true
 	return _node, nil
 }
 
 func (nc *NoticeCreate) createSpec() (*Notice, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Notice{config: nc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: notice.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: notice.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(notice.Table, sqlgraph.NewFieldSpec(notice.FieldID, field.TypeUint32))
 	)
 	if id, ok := nc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
 	if value, ok := nc.mutation.UserID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: notice.FieldUserID,
-		})
+		_spec.SetField(notice.FieldUserID, field.TypeUint32, value)
 		_node.UserID = value
 	}
 	if value, ok := nc.mutation.DiscordWebhook(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldDiscordWebhook,
-		})
+		_spec.SetField(notice.FieldDiscordWebhook, field.TypeString, value)
 		_node.DiscordWebhook = value
 	}
 	if value, ok := nc.mutation.SlackWebhook(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldSlackWebhook,
-		})
+		_spec.SetField(notice.FieldSlackWebhook, field.TypeString, value)
 		_node.SlackWebhook = value
 	}
 	if value, ok := nc.mutation.Mail(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: notice.FieldMail,
-		})
+		_spec.SetField(notice.FieldMail, field.TypeString, value)
 		_node.Mail = value
 	}
 	if value, ok := nc.mutation.Created(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: notice.FieldCreated,
-		})
+		_spec.SetField(notice.FieldCreated, field.TypeTime, value)
 		_node.Created = value
 	}
 	if value, ok := nc.mutation.Modified(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: notice.FieldModified,
-		})
+		_spec.SetField(notice.FieldModified, field.TypeTime, value)
 		_node.Modified = value
 	}
 	return _node, _spec

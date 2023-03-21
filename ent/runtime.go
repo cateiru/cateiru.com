@@ -8,6 +8,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/ent/category"
 	"github.com/cateiru/cateiru.com/ent/contact"
+	"github.com/cateiru/cateiru.com/ent/contactdefault"
 	"github.com/cateiru/cateiru.com/ent/link"
 	"github.com/cateiru/cateiru.com/ent/location"
 	"github.com/cateiru/cateiru.com/ent/notice"
@@ -62,6 +63,18 @@ func init() {
 	contact.DefaultModified = contactDescModified.Default.(func() time.Time)
 	// contact.UpdateDefaultModified holds the default value on update for the modified field.
 	contact.UpdateDefaultModified = contactDescModified.UpdateDefault.(func() time.Time)
+	contactdefaultFields := schema.ContactDefault{}.Fields()
+	_ = contactdefaultFields
+	// contactdefaultDescCreated is the schema descriptor for created field.
+	contactdefaultDescCreated := contactdefaultFields[7].Descriptor()
+	// contactdefault.DefaultCreated holds the default value on creation for the created field.
+	contactdefault.DefaultCreated = contactdefaultDescCreated.Default.(func() time.Time)
+	// contactdefaultDescModified is the schema descriptor for modified field.
+	contactdefaultDescModified := contactdefaultFields[8].Descriptor()
+	// contactdefault.DefaultModified holds the default value on creation for the modified field.
+	contactdefault.DefaultModified = contactdefaultDescModified.Default.(func() time.Time)
+	// contactdefault.UpdateDefaultModified holds the default value on update for the modified field.
+	contactdefault.UpdateDefaultModified = contactdefaultDescModified.UpdateDefault.(func() time.Time)
 	linkFields := schema.Link{}.Fields()
 	_ = linkFields
 	// linkDescCreated is the schema descriptor for created field.
