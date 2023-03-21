@@ -39,7 +39,7 @@ export const PreviewUserData = () => {
         w="100%"
         py="1rem"
         px=".5rem"
-        bgColor={colorMode === 'dark' ? 'red.700' : 'red.100'}
+        bgColor={colorMode === 'dark' ? '#5c2428' : 'red.100'}
         borderRadius="5px"
         borderLeftWidth="4px"
         borderLeftColor={colorMode === 'dark' ? 'red.400' : 'red.400'}
