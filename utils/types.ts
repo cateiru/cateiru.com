@@ -187,6 +187,20 @@ export const UserDataSchema = z.object({
   is_mobile: z.boolean(),
 });
 
+export const ContactDefaultSchema = z.object({
+  id: z.number(),
+
+  name: z.string().optional(),
+  email: z.string().optional(),
+  url: z.string().optional(),
+  category: z.string().optional(),
+  custom_title: z.string().optional(),
+  description: z.string().optional(),
+
+  created: z.string(),
+  modified: z.string(),
+});
+
 export type User = typeof UserSchema._type;
 export type Bio = typeof BioSchema._type;
 export type AllUsers = typeof UsersListSchema._type;
@@ -206,3 +220,4 @@ export type PublicProduct = typeof PublicProductSchema._type;
 export type PublicBio = typeof PublicBioSchema._type;
 export type PublicLink = typeof PublicLinkSchema._type;
 export type UserData = typeof UserDataSchema._type;
+export type ContactDefault = typeof ContactDefaultSchema._type;

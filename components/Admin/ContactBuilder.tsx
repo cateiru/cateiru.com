@@ -127,7 +127,7 @@ export const ContactBuilder = () => {
               <FormLabel htmlFor="category">
                 {convertLang({
                   ja: 'カテゴリ',
-                  en: 'category',
+                  en: 'Category',
                 })}
               </FormLabel>
               <Input id="category" type="category" {...register('category')} />

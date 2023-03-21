@@ -127,28 +127,21 @@ func (h *Handler) UpdateContactDefaultHandler(c echo.Context) error {
 	customTitle := c.FormValue("custom_title")
 	description := c.FormValue("description")
 
-	d := h.DB.Client.ContactDefault.Update().Where(contactdefault.ID(uint32(id)))
+	d := h.DB.Client.ContactDefault.
+		Update().
+		Where(contactdefault.ID(uint32(id))).
+		SetName(name).
+		SetEmail(email).
+		SetURL(url).
+		SetCategory(category).
+		SetCustomTitle(customTitle).
+		SetDescription(description)
 
-	if name != "" {
-		d = d.SetName(name)
-	}
-	if email != "" {
-		d = d.SetEmail(email)
-	}
-	if url != "" {
-		d = d.SetURL(url)
-	}
-	if category != "" {
-		d = d.SetCategory(category)
-	}
-	if customTitle != "" {
-		d = d.SetCustomTitle(customTitle)
-	}
-	if description != "" {
-		d = d.SetDescription(description)
+	if err := d.Exec(ctx); err != nil {
+		return err
 	}
 
-	contactDefault, err := d.Save(ctx)
+	contactDefault, err := h.DB.Client.ContactDefault.Get(ctx, uint32(id))
 	if err != nil {
 		return err
 	}

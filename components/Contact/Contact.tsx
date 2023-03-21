@@ -5,9 +5,12 @@ import {
   Skeleton,
   Text,
   useColorMode,
+  useToast,
 } from '@chakra-ui/react';
 import {useRouter} from 'next/router';
 import React from 'react';
+import {api} from '../../utils/api';
+import {ContactDefaultSchema} from '../../utils/types';
 import {Back} from '../Back';
 import useLanguage from '../useLanguage';
 import {ContactForm, ContactFormProps} from './ContactForm';
@@ -19,6 +22,8 @@ const Contact = () => {
   const {convertLang} = useLanguage();
   const [data, setData] = React.useState<ContactFormProps | null>(null);
   const [description, setDescription] = React.useState<string>();
+
+  const toast = useToast();
 
   React.useEffect(() => {
     if (!router.isReady) return;
@@ -46,8 +51,42 @@ const Contact = () => {
     if (typeof query['description'] === 'string') {
       setDescription(query['description']);
     }
+    if (typeof query['id'] === 'string') {
+      getCustom(query['id']);
+      return;
+    }
     setData(d);
   }, [router.isReady, router.query]);
+
+  const getCustom = async (id: string) => {
+    try {
+      const r = await fetch(api(`/contact/default?id=${id}`));
+
+      if (r.status !== 200) {
+        throw new Error((await r.json()).message);
+      }
+
+      const resData = ContactDefaultSchema.parse(await r.json());
+
+      const d: ContactFormProps = {
+        url: resData.url,
+        name: resData.name,
+        mail: resData.email,
+        category: resData.category,
+        custom_title: resData.custom_title,
+      };
+      setData(d);
+
+      resData.description && setDescription(resData.description);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast({
+          status: 'error',
+          title: e.message,
+        });
+      }
+    }
+  };
 
   return (
     <Center minHeight="100vh">
