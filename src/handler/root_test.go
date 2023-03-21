@@ -6,7 +6,7 @@ import (
 
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,7 +14,7 @@ func TestRootHandler(t *testing.T) {
 	test.Init()
 
 	t.Run("can access", func(t *testing.T) {
-		m, err := mock.NewMock("", http.MethodGet, "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		tool, err := test.NewTestTool()

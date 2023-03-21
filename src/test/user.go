@@ -10,7 +10,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/db"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/google/uuid"
 )
 
@@ -98,7 +98,7 @@ func (c *TestUser) CreateDB(ctx context.Context, db *db.DB) error {
 	return nil
 }
 
-func (c *TestUser) HandlerSession(ctx context.Context, db *db.DB, m *mock.MockHandler) error {
+func (c *TestUser) HandlerSession(ctx context.Context, db *db.DB, m *easy.MockHandler) error {
 	sessionToken, err := c.CreateSession(ctx, db)
 	if err != nil {
 		return err

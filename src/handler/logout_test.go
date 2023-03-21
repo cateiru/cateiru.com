@@ -7,7 +7,7 @@ import (
 
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/stretchr/testify/require"
 )
 
@@ -23,7 +23,7 @@ func TestLogout(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		u.HandlerSession(ctx, tool.DB, m)

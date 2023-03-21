@@ -11,8 +11,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent/biography"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/contents"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -38,7 +37,7 @@ func TestBioHandler(t *testing.T) {
 		_, err = bio.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -84,7 +83,7 @@ func TestCreateBioHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("is_public", "true")
 		form.Insert("location_id", strconv.Itoa(int(loc.ID)))
 		form.Insert("position", "web application engineer")
@@ -92,7 +91,7 @@ func TestCreateBioHandler(t *testing.T) {
 		form.Insert("join_date", "2022-11-12T07:00:29.967Z")
 		form.Insert("leave_date", "2120-01-31T07:00:29.967Z")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -141,14 +140,14 @@ func TestCreateBioHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("is_public", "true")
 		form.Insert("location_id", strconv.Itoa(int(loc.ID)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
 		form.Insert("join_date", "2022-11-12T07:00:29.967Z")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -193,14 +192,14 @@ func TestCreateBioHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("is_public", "true")
 		form.Insert("location_id", "123456")
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
 		form.Insert("join_date", "2022-11-15T07:00:29.967Z")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -236,12 +235,12 @@ func TestUpdateBioHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("bio_id", strconv.Itoa(int(bio.Biography.ID)))
 		form.Insert("position", "web application engineer")
 		form.Insert("position_ja", "Webアプリケーションエンジニア")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -286,7 +285,7 @@ func TestUpdateBioHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("bio_id", strconv.Itoa(int(bio.Biography.ID)))
 		form.Insert("is_public", "true")
 		form.Insert("location_id", strconv.Itoa(int(bioUsedLoc.LocationId)))
@@ -295,7 +294,7 @@ func TestUpdateBioHandler(t *testing.T) {
 		form.Insert("join_date", "2022-11-15T07:00:29.967Z")
 		form.Insert("leave_date", "2120-11-15T07:00:29.967Z")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -339,10 +338,10 @@ func TestUpdateBioHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("bio_id", strconv.Itoa(int(bio.Biography.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -380,7 +379,7 @@ func TestDeleteBioHandler(t *testing.T) {
 		_, err = bio.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewMock("", http.MethodDelete, fmt.Sprintf("/?bio_id=%v", bio.Biography.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?bio_id=%v", bio.Biography.ID), http.MethodDelete, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -423,7 +422,7 @@ func TestDeleteBioHandler(t *testing.T) {
 		_, err = bio2.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewMock("", http.MethodDelete, fmt.Sprintf("/?bio_id=%v", bio2.Biography.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?bio_id=%v", bio2.Biography.ID), http.MethodDelete, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)

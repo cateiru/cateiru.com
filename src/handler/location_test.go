@@ -11,8 +11,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent/location"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/contents"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -47,7 +46,7 @@ func TestLocationHandler(t *testing.T) {
 		_, err = secondBio.CreateLocationDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -87,14 +86,14 @@ func TestCreateLocationHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("type", "univ")
 		form.Insert("name", "cateiru")
 		form.Insert("name_ja", "cateiru")
 		form.Insert("address", "Saitama")
 		form.Insert("address_ja", "埼玉県")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -134,14 +133,14 @@ func TestCreateLocationHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("type", "univ")
 		form.Insert("name", "cateiru")
 		form.Insert("name_ja", "cateiru")
 		form.Insert("address", "Saitama")
 		// form.Insert("address_ja", "埼玉県")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -177,12 +176,12 @@ func TestUpdateLocationHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("location_id", strconv.Itoa(int(bio.LocationId)))
 		form.Insert("name", "cateiru")
 		form.Insert("name_ja", "cateiru")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -222,7 +221,7 @@ func TestUpdateLocationHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("location_id", strconv.Itoa(int(bio.LocationId)))
 		form.Insert("type", "corp")
 		form.Insert("name", "cateiru")
@@ -230,7 +229,7 @@ func TestUpdateLocationHandler(t *testing.T) {
 		form.Insert("address", "Saitama")
 		form.Insert("address_ja", "埼玉県")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -273,9 +272,9 @@ func TestUpdateLocationHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		// create post form
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -312,7 +311,7 @@ func TestDeleteLocationHandler(t *testing.T) {
 		_, err = bio.CreateLocationDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", fmt.Sprintf("/?location_id=%v", bio.LocationId))
+		m, err := easy.NewMock(fmt.Sprintf("/?location_id=%v", bio.LocationId), http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -348,7 +347,7 @@ func TestDeleteLocationHandler(t *testing.T) {
 		_, err = bio.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", fmt.Sprintf("/?location_id=%v", bio.LocationId))
+		m, err := easy.NewMock(fmt.Sprintf("/?location_id=%v", bio.LocationId), http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)

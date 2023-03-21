@@ -11,8 +11,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent/category"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/contents"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -41,7 +40,7 @@ func TestCategoryHandler(t *testing.T) {
 		_, err = l.CreateCategoryDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -84,12 +83,12 @@ func TestCreateCategoryHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("name", "hoge")
 		form.Insert("name_ja", "あああ")
 		form.Insert("emoji", "🍙")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -137,11 +136,11 @@ func TestUpdateCategoryHandler(t *testing.T) {
 		_, err = l.CreateCategoryDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 		form.Insert("name", "nyaaa")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -178,13 +177,13 @@ func TestUpdateCategoryHandler(t *testing.T) {
 		_, err = l.CreateCategoryDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 		form.Insert("name", "nyaaa")
 		form.Insert("name_ja", "ああああ")
 		form.Insert("emoji", "🥑")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -223,10 +222,10 @@ func TestUpdateCategoryHandler(t *testing.T) {
 		_, err = l.CreateCategoryDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -266,7 +265,7 @@ func TestDeleteCategoryHandler(t *testing.T) {
 		_, err = l.CreateCategoryDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", fmt.Sprintf("/?category_id=%v", l.Category.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?category_id=%v", l.Category.ID), http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)

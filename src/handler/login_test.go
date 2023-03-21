@@ -18,7 +18,7 @@ import (
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/golang-jwt/jwt"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/require"
@@ -165,7 +165,7 @@ func TestLoginHandler(t *testing.T) {
 		require.NoError(t, err)
 		defer base.Close()
 
-		m, err := mock.NewGet("", fmt.Sprintf("/login?code=%s", code))
+		m, err := easy.NewMock(fmt.Sprintf("/login?code=%s", code), http.MethodGet, "")
 		require.NoError(t, err)
 
 		h, err := base.Handler()
@@ -306,7 +306,7 @@ func TestLoginAlreadyExistUser(t *testing.T) {
 		// Insert DB
 		testUser.CreateDB(ctx, base.DB)
 
-		m, err := mock.NewGet("", fmt.Sprintf("/login?code=%s", code))
+		m, err := easy.NewMock(fmt.Sprintf("/login?code=%s", code), http.MethodGet, "")
 		require.NoError(t, err)
 
 		h, err := base.Handler()
@@ -442,7 +442,7 @@ func TestLoginNoAdminUser(t *testing.T) {
 		require.NoError(t, err)
 		defer base.Close()
 
-		m, err := mock.NewGet("", fmt.Sprintf("/login?code=%s", code))
+		m, err := easy.NewMock(fmt.Sprintf("/login?code=%s", code), http.MethodGet, "")
 		require.NoError(t, err)
 
 		h, err := base.Handler()

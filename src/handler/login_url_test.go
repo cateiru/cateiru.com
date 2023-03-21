@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,7 +17,7 @@ func TestLoginURLHandler(t *testing.T) {
 	tool, err := test.NewTestTool()
 	require.NoError(t, err)
 
-	m, err := mock.NewMock("", http.MethodGet, "/")
+	m, err := easy.NewMock("/", http.MethodGet, "")
 	require.NoError(t, err)
 
 	h, err := tool.Handler()

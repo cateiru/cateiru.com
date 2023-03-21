@@ -11,8 +11,7 @@ import (
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/sender"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/contents"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -33,14 +32,14 @@ func TestContactHandler(t *testing.T) {
 		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("name", "Yuto Watanabe")
 		form.Insert("mail", "test@cateiru.com")
 		form.Insert("lang", "ja")
 		form.Insert("subject", "ああああについて")
 		form.Insert("detail", "あああはいいいいでしょうか？\naaa")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		h, err := tool.Handler()
@@ -72,14 +71,14 @@ func TestContactHandler(t *testing.T) {
 		err = u.SelectStatus(ctx, tool.DB, true)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("name", "Yuto Watanabe")
 		// form.Insert("mail", "test@cateiru.com")
 		form.Insert("lang", "ja")
 		form.Insert("subject", "ああああについて")
 		form.Insert("detail", "あああはいいいいでしょうか？\naaa")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		h, err := tool.Handler()
@@ -117,7 +116,7 @@ func TestContactGetHandler(t *testing.T) {
 		_, err = form.InsertDB(ctx, tool.DB, u.User.ID)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -164,7 +163,7 @@ func TestContactDeleteHandler(t *testing.T) {
 		c, err := form.InsertDB(ctx, tool.DB, u.User.ID)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", fmt.Sprintf("/?contact_id=%v", c.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?contact_id=%v", c.ID), http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -205,7 +204,7 @@ func TestContactPreviewUserDataHandler(t *testing.T) {
 	err = u.SelectStatus(ctx, tool.DB, true)
 	require.NoError(t, err)
 
-	m, err := mock.NewGet("", "/")
+	m, err := easy.NewMock("/", http.MethodGet, "")
 	require.NoError(t, err)
 
 	// writer ua

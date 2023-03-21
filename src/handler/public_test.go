@@ -3,11 +3,12 @@ package handler_test
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -49,7 +50,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 
@@ -81,7 +82,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 
@@ -99,7 +100,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 
@@ -134,7 +135,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 
@@ -181,7 +182,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 
@@ -228,7 +229,7 @@ func TestPublicProfileHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 
@@ -268,7 +269,7 @@ func TestPublicProductHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", fmt.Sprintf("/?product_id=%v", p1.Product.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?product_id=%v", p1.Product.ID), http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 
@@ -291,7 +292,7 @@ func TestPublicProductHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/?product_id=123456")
+		m, err := easy.NewMock("/?product_id=123456", http.MethodGet, "")
 		require.NoError(t, err)
 		e := m.Echo()
 

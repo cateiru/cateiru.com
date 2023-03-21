@@ -13,7 +13,7 @@ import (
 	"github.com/cateiru/cateiru.com/src/db"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/sender"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
@@ -185,7 +185,7 @@ func LoginTestGet(t *testing.T, o func(h *handler.Handler, e echo.Context) error
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		e := m.Echo()
@@ -203,7 +203,7 @@ func LoginTestGet(t *testing.T, o func(h *handler.Handler, e echo.Context) error
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		m.Cookie([]*http.Cookie{
@@ -228,7 +228,7 @@ func LoginTestGet(t *testing.T, o func(h *handler.Handler, e echo.Context) error
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		uuid := uuid.New()

@@ -11,8 +11,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent/link"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/contents"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/jarcoal/httpmock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
@@ -42,7 +41,7 @@ func TestLinkHandler(t *testing.T) {
 		_, err = l.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -113,13 +112,13 @@ func TestCreateLinkHandler(t *testing.T) {
 		_, err = l.CreateCategoryDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("name", "hoge")
 		form.Insert("name_ja", "あああ")
 		form.Insert("site_url", "https://cateiru.com")
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -166,13 +165,13 @@ func TestCreateLinkHandler(t *testing.T) {
 		_, err = l.CreateCategoryDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("name", "hoge")
 		form.Insert("name_ja", "あああ")
 		// form.Insert("site_url", "https://cateiru.com")
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -231,11 +230,11 @@ func TestUpdateLinkHandler(t *testing.T) {
 		_, err = l.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
 		form.Insert("name", "nyancat")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -277,14 +276,14 @@ func TestUpdateLinkHandler(t *testing.T) {
 		_, err = l.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
 		form.Insert("name", "hoge")
 		form.Insert("name_ja", "あああ")
 		form.Insert("site_url", "https://cateiru.com")
 		form.Insert("category_id", strconv.Itoa(int(l.Category.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -330,11 +329,11 @@ func TestUpdateLinkHandler(t *testing.T) {
 		_, err = l.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
 		form.Insert("update_favicon", "true")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -369,10 +368,10 @@ func TestUpdateLinkHandler(t *testing.T) {
 		_, err = l.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("link_id", strconv.Itoa(int(l.Link.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -418,7 +417,7 @@ func TestDeleteLinkHandler(t *testing.T) {
 		_, err = l.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", fmt.Sprintf("/?link_id=%v", l.Link.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?link_id=%v", l.Link.ID), http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)

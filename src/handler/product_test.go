@@ -11,8 +11,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent/product"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/contents"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -45,7 +44,7 @@ func TestProductHandler(t *testing.T) {
 		_, err = secondProd.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -84,7 +83,7 @@ func TestCreateProductHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("name", "cateiru.com")
 		form.Insert("name_ja", "cateiru.com")
 		form.Insert("detail", "my portfolio")
@@ -92,7 +91,7 @@ func TestCreateProductHandler(t *testing.T) {
 		form.Insert("site_url", "https://cateiru.com")
 		form.Insert("dev_time", "2022-11-15T07:00:29.967Z")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -130,7 +129,7 @@ func TestCreateProductHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("name", "cateiru.com")
 		form.Insert("name_ja", "cateiru.com")
 		form.Insert("detail", "my portfolio")
@@ -140,7 +139,7 @@ func TestCreateProductHandler(t *testing.T) {
 		form.Insert("thumbnail", "https://caiteiru.com/ogp.png")
 		form.Insert("dev_time", "2022-11-15T07:00:29.967Z")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -189,11 +188,11 @@ func TestUpdateProductHandler(t *testing.T) {
 		_, err = p.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("product_id", strconv.Itoa(int(p.Product.ID)))
 		form.Insert("name", "cateiru--aaaa")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -226,7 +225,7 @@ func TestUpdateProductHandler(t *testing.T) {
 		_, err = p.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("product_id", strconv.Itoa(int(p.Product.ID)))
 		form.Insert("name", "cateiru.com")
 		form.Insert("name_ja", "cateiru.com")
@@ -237,7 +236,7 @@ func TestUpdateProductHandler(t *testing.T) {
 		form.Insert("thumbnail", "https://caiteiru.com/ogp.png")
 		form.Insert("dev_time", "2022-11-25T07:00:29.967Z")
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -277,10 +276,10 @@ func TestUpdateProductHandler(t *testing.T) {
 		_, err = p.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("product_id", strconv.Itoa(int(p.Product.ID)))
 
-		m, err := mock.NewFormData("/", form, http.MethodPut)
+		m, err := easy.NewFormData("/", http.MethodPut, form)
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -314,7 +313,7 @@ func TestDeleteProductHandler(t *testing.T) {
 		_, err = p.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewMock("", http.MethodDelete, fmt.Sprintf("/?product_id=%v", p.Product.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?product_id=%v", p.Product.ID), http.MethodDelete, "")
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)
@@ -349,7 +348,7 @@ func TestDeleteProductHandler(t *testing.T) {
 		_, err = p2.CreateDB(ctx, tool.DB)
 		require.NoError(t, err)
 
-		m, err := mock.NewMock("", http.MethodDelete, fmt.Sprintf("/?product_id=%v", p2.Product.ID))
+		m, err := easy.NewMock(fmt.Sprintf("/?product_id=%v", p2.Product.ID), http.MethodDelete, "")
 		require.NoError(t, err)
 		err = u.HandlerSession(ctx, tool.DB, m)
 		require.NoError(t, err)

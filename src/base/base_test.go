@@ -9,7 +9,7 @@ import (
 	"github.com/cateiru/cateiru.com/src/base"
 	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -43,7 +43,7 @@ func TestBase(t *testing.T) {
 		require.NoError(t, err)
 
 		t.Run("exist token in cookies", func(t *testing.T) {
-			m, err := mock.NewMock("", http.MethodGet, "/")
+			m, err := easy.NewMock("/", http.MethodGet, "")
 			require.NoError(t, err)
 
 			sessionCookie := &http.Cookie{
@@ -62,7 +62,7 @@ func TestBase(t *testing.T) {
 		})
 
 		t.Run("no exist", func(t *testing.T) {
-			m, err := mock.NewMock("", http.MethodGet, "/")
+			m, err := easy.NewMock("/", http.MethodGet, "")
 			require.NoError(t, err)
 
 			c := m.Echo()
@@ -91,7 +91,7 @@ func TestBase(t *testing.T) {
 			Save(ctx)
 		require.NoError(t, err)
 
-		m, err := mock.NewMock("", http.MethodGet, "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		sessionCookie := &http.Cookie{
@@ -117,7 +117,7 @@ func TestBase(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		m, err := mock.NewMock("", http.MethodGet, "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		c := m.Echo()
@@ -144,7 +144,7 @@ func TestBase(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		m, err := mock.NewMock("", http.MethodGet, "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		u.HandlerSession(ctx, tool.DB, m)

@@ -11,8 +11,7 @@ import (
 	"github.com/cateiru/cateiru.com/ent/user"
 	"github.com/cateiru/cateiru.com/src/handler"
 	"github.com/cateiru/cateiru.com/src/test"
-	"github.com/cateiru/go-http-easy-test/contents"
-	"github.com/cateiru/go-http-easy-test/handler/mock"
+	"github.com/cateiru/go-http-easy-test/v2/easy"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -34,7 +33,7 @@ func TestMeHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/user/me")
+		m, err := easy.NewMock("/user/me", http.MethodGet, "")
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -66,7 +65,7 @@ func TestUpdateUserHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("family_name", "naaaaa")
 		form.Insert("given_name", "givennnnn")
 		form.Insert("family_name_ja", "いいい")
@@ -79,7 +78,7 @@ func TestUpdateUserHandler(t *testing.T) {
 		form.Insert("location", "locattttttt")
 		form.Insert("location_ja", "ロケーション")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -115,10 +114,10 @@ func TestUpdateUserHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("location", "locattttttt")
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -155,9 +154,9 @@ func TestUpdateUserHandler(t *testing.T) {
 		u, err := tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		err = u.HandlerSession(ctx, tool.DB, m)
@@ -194,7 +193,7 @@ func TestAllUsersHandler(t *testing.T) {
 		_, err = tool.NewUser(ctx)
 		require.NoError(t, err)
 
-		m, err := mock.NewGet("", "/")
+		m, err := easy.NewMock("/", http.MethodGet, "")
 		require.NoError(t, err)
 
 		h, err := tool.Handler()
@@ -247,10 +246,10 @@ func TestChangeSelectHandler(t *testing.T) {
 		require.NoError(t, err)
 		require.True(t, u2Changed.Selected)
 
-		form := contents.NewMultipart()
+		form := easy.NewMultipart()
 		form.Insert("id", fmt.Sprintf("%d", u.User.ID))
 
-		m, err := mock.NewFormData("/", form, http.MethodPost)
+		m, err := easy.NewFormData("/", http.MethodPost, form)
 		require.NoError(t, err)
 
 		h, err := tool.Handler()
