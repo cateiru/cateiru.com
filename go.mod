@@ -3,10 +3,10 @@ module github.com/cateiru/cateiru.com
 go 1.19
 
 require (
-	entgo.io/ent v0.11.8
+	entgo.io/ent v0.11.10
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/cateiru/cateiru-sso/pkg/go v0.0.0-20220928234848-f28940e76bfa
-	github.com/cateiru/go-client-hints/v2 v2.0.2
+	github.com/cateiru/go-client-hints/v2 v2.1.0
 	github.com/cateiru/go-http-easy-test v1.1.2
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -18,19 +18,19 @@ require (
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/mailgun/mailgun-go v2.0.0+incompatible
 	github.com/mileusna/useragent v1.2.1
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	go.uber.org/zap v1.24.0
 	golang.org/x/net v0.7.0
 	golang.org/x/sync v0.1.0
 )
 
 require (
-	ariga.io/atlas v0.9.1-0.20230119145809-92243f7c55cb // indirect
+	ariga.io/atlas v0.9.2-0.20230303073438-03a4779a6338 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dunglas/httpsfv v1.0.0 // indirect
+	github.com/dunglas/httpsfv v1.0.1 // indirect
 	github.com/facebookgo/ensure v0.0.0-20200202191622-63f1cf65ac4c // indirect
 	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 // indirect
 	github.com/facebookgo/subset v0.0.0-20200203212716-c811ad88dec4 // indirect
@@ -54,7 +54,7 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.6.0 // indirect
-	golang.org/x/mod v0.7.0 // indirect
+	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
