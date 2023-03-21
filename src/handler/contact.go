@@ -171,7 +171,7 @@ func GetUserAgent(e echo.Context) (*sender.UserData, error) {
 		return &sender.UserData{
 			Browser:  ch.Brand.Brand,
 			OS:       string(ch.Platform),
-			Device:   "Unknown",
+			Device:   "",
 			IsMobile: ch.IsMobile,
 		}, nil
 	}
