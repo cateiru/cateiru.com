@@ -149,6 +149,16 @@ func NameHasSuffix(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldHasSuffix(FieldName, v))
 }
 
+// NameIsNil applies the IsNil predicate on the "name" field.
+func NameIsNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldIsNull(FieldName))
+}
+
+// NameNotNil applies the NotNil predicate on the "name" field.
+func NameNotNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldNotNull(FieldName))
+}
+
 // NameEqualFold applies the EqualFold predicate on the "name" field.
 func NameEqualFold(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldEqualFold(FieldName, v))
@@ -212,6 +222,16 @@ func EmailHasPrefix(v string) predicate.ContactDefault {
 // EmailHasSuffix applies the HasSuffix predicate on the "email" field.
 func EmailHasSuffix(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldHasSuffix(FieldEmail, v))
+}
+
+// EmailIsNil applies the IsNil predicate on the "email" field.
+func EmailIsNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldIsNull(FieldEmail))
+}
+
+// EmailNotNil applies the NotNil predicate on the "email" field.
+func EmailNotNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldNotNull(FieldEmail))
 }
 
 // EmailEqualFold applies the EqualFold predicate on the "email" field.
@@ -279,6 +299,16 @@ func URLHasSuffix(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldHasSuffix(FieldURL, v))
 }
 
+// URLIsNil applies the IsNil predicate on the "url" field.
+func URLIsNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldIsNull(FieldURL))
+}
+
+// URLNotNil applies the NotNil predicate on the "url" field.
+func URLNotNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldNotNull(FieldURL))
+}
+
 // URLEqualFold applies the EqualFold predicate on the "url" field.
 func URLEqualFold(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldEqualFold(FieldURL, v))
@@ -342,6 +372,16 @@ func CategoryHasPrefix(v string) predicate.ContactDefault {
 // CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
 func CategoryHasSuffix(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldHasSuffix(FieldCategory, v))
+}
+
+// CategoryIsNil applies the IsNil predicate on the "category" field.
+func CategoryIsNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldIsNull(FieldCategory))
+}
+
+// CategoryNotNil applies the NotNil predicate on the "category" field.
+func CategoryNotNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldNotNull(FieldCategory))
 }
 
 // CategoryEqualFold applies the EqualFold predicate on the "category" field.
@@ -409,6 +449,16 @@ func CustomTitleHasSuffix(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldHasSuffix(FieldCustomTitle, v))
 }
 
+// CustomTitleIsNil applies the IsNil predicate on the "custom_title" field.
+func CustomTitleIsNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldIsNull(FieldCustomTitle))
+}
+
+// CustomTitleNotNil applies the NotNil predicate on the "custom_title" field.
+func CustomTitleNotNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldNotNull(FieldCustomTitle))
+}
+
 // CustomTitleEqualFold applies the EqualFold predicate on the "custom_title" field.
 func CustomTitleEqualFold(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldEqualFold(FieldCustomTitle, v))
@@ -472,6 +522,16 @@ func DescriptionHasPrefix(v string) predicate.ContactDefault {
 // DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
 func DescriptionHasSuffix(v string) predicate.ContactDefault {
 	return predicate.ContactDefault(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.ContactDefault {
+	return predicate.ContactDefault(sql.FieldNotNull(FieldDescription))
 }
 
 // DescriptionEqualFold applies the EqualFold predicate on the "description" field.

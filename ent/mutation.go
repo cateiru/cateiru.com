@@ -2991,9 +2991,22 @@ func (m *ContactDefaultMutation) OldName(ctx context.Context) (v *string, err er
 	return oldValue.Name, nil
 }
 
+// ClearName clears the value of the "name" field.
+func (m *ContactDefaultMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[contactdefault.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *ContactDefaultMutation) NameCleared() bool {
+	_, ok := m.clearedFields[contactdefault.FieldName]
+	return ok
+}
+
 // ResetName resets all changes to the "name" field.
 func (m *ContactDefaultMutation) ResetName() {
 	m.name = nil
+	delete(m.clearedFields, contactdefault.FieldName)
 }
 
 // SetEmail sets the "email" field.
@@ -3027,9 +3040,22 @@ func (m *ContactDefaultMutation) OldEmail(ctx context.Context) (v *string, err e
 	return oldValue.Email, nil
 }
 
+// ClearEmail clears the value of the "email" field.
+func (m *ContactDefaultMutation) ClearEmail() {
+	m.email = nil
+	m.clearedFields[contactdefault.FieldEmail] = struct{}{}
+}
+
+// EmailCleared returns if the "email" field was cleared in this mutation.
+func (m *ContactDefaultMutation) EmailCleared() bool {
+	_, ok := m.clearedFields[contactdefault.FieldEmail]
+	return ok
+}
+
 // ResetEmail resets all changes to the "email" field.
 func (m *ContactDefaultMutation) ResetEmail() {
 	m.email = nil
+	delete(m.clearedFields, contactdefault.FieldEmail)
 }
 
 // SetURL sets the "url" field.
@@ -3063,9 +3089,22 @@ func (m *ContactDefaultMutation) OldURL(ctx context.Context) (v *string, err err
 	return oldValue.URL, nil
 }
 
+// ClearURL clears the value of the "url" field.
+func (m *ContactDefaultMutation) ClearURL() {
+	m.url = nil
+	m.clearedFields[contactdefault.FieldURL] = struct{}{}
+}
+
+// URLCleared returns if the "url" field was cleared in this mutation.
+func (m *ContactDefaultMutation) URLCleared() bool {
+	_, ok := m.clearedFields[contactdefault.FieldURL]
+	return ok
+}
+
 // ResetURL resets all changes to the "url" field.
 func (m *ContactDefaultMutation) ResetURL() {
 	m.url = nil
+	delete(m.clearedFields, contactdefault.FieldURL)
 }
 
 // SetCategory sets the "category" field.
@@ -3099,9 +3138,22 @@ func (m *ContactDefaultMutation) OldCategory(ctx context.Context) (v *string, er
 	return oldValue.Category, nil
 }
 
+// ClearCategory clears the value of the "category" field.
+func (m *ContactDefaultMutation) ClearCategory() {
+	m.category = nil
+	m.clearedFields[contactdefault.FieldCategory] = struct{}{}
+}
+
+// CategoryCleared returns if the "category" field was cleared in this mutation.
+func (m *ContactDefaultMutation) CategoryCleared() bool {
+	_, ok := m.clearedFields[contactdefault.FieldCategory]
+	return ok
+}
+
 // ResetCategory resets all changes to the "category" field.
 func (m *ContactDefaultMutation) ResetCategory() {
 	m.category = nil
+	delete(m.clearedFields, contactdefault.FieldCategory)
 }
 
 // SetCustomTitle sets the "custom_title" field.
@@ -3135,9 +3187,22 @@ func (m *ContactDefaultMutation) OldCustomTitle(ctx context.Context) (v *string,
 	return oldValue.CustomTitle, nil
 }
 
+// ClearCustomTitle clears the value of the "custom_title" field.
+func (m *ContactDefaultMutation) ClearCustomTitle() {
+	m.custom_title = nil
+	m.clearedFields[contactdefault.FieldCustomTitle] = struct{}{}
+}
+
+// CustomTitleCleared returns if the "custom_title" field was cleared in this mutation.
+func (m *ContactDefaultMutation) CustomTitleCleared() bool {
+	_, ok := m.clearedFields[contactdefault.FieldCustomTitle]
+	return ok
+}
+
 // ResetCustomTitle resets all changes to the "custom_title" field.
 func (m *ContactDefaultMutation) ResetCustomTitle() {
 	m.custom_title = nil
+	delete(m.clearedFields, contactdefault.FieldCustomTitle)
 }
 
 // SetDescription sets the "description" field.
@@ -3171,9 +3236,22 @@ func (m *ContactDefaultMutation) OldDescription(ctx context.Context) (v *string,
 	return oldValue.Description, nil
 }
 
+// ClearDescription clears the value of the "description" field.
+func (m *ContactDefaultMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[contactdefault.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ContactDefaultMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[contactdefault.FieldDescription]
+	return ok
+}
+
 // ResetDescription resets all changes to the "description" field.
 func (m *ContactDefaultMutation) ResetDescription() {
 	m.description = nil
+	delete(m.clearedFields, contactdefault.FieldDescription)
 }
 
 // SetCreated sets the "created" field.
@@ -3450,7 +3528,26 @@ func (m *ContactDefaultMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ContactDefaultMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(contactdefault.FieldName) {
+		fields = append(fields, contactdefault.FieldName)
+	}
+	if m.FieldCleared(contactdefault.FieldEmail) {
+		fields = append(fields, contactdefault.FieldEmail)
+	}
+	if m.FieldCleared(contactdefault.FieldURL) {
+		fields = append(fields, contactdefault.FieldURL)
+	}
+	if m.FieldCleared(contactdefault.FieldCategory) {
+		fields = append(fields, contactdefault.FieldCategory)
+	}
+	if m.FieldCleared(contactdefault.FieldCustomTitle) {
+		fields = append(fields, contactdefault.FieldCustomTitle)
+	}
+	if m.FieldCleared(contactdefault.FieldDescription) {
+		fields = append(fields, contactdefault.FieldDescription)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3463,6 +3560,26 @@ func (m *ContactDefaultMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ContactDefaultMutation) ClearField(name string) error {
+	switch name {
+	case contactdefault.FieldName:
+		m.ClearName()
+		return nil
+	case contactdefault.FieldEmail:
+		m.ClearEmail()
+		return nil
+	case contactdefault.FieldURL:
+		m.ClearURL()
+		return nil
+	case contactdefault.FieldCategory:
+		m.ClearCategory()
+		return nil
+	case contactdefault.FieldCustomTitle:
+		m.ClearCustomTitle()
+		return nil
+	case contactdefault.FieldDescription:
+		m.ClearDescription()
+		return nil
+	}
 	return fmt.Errorf("unknown ContactDefault nullable field %s", name)
 }
 

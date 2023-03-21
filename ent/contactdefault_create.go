@@ -26,9 +26,25 @@ func (cdc *ContactDefaultCreate) SetName(s string) *ContactDefaultCreate {
 	return cdc
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (cdc *ContactDefaultCreate) SetNillableName(s *string) *ContactDefaultCreate {
+	if s != nil {
+		cdc.SetName(*s)
+	}
+	return cdc
+}
+
 // SetEmail sets the "email" field.
 func (cdc *ContactDefaultCreate) SetEmail(s string) *ContactDefaultCreate {
 	cdc.mutation.SetEmail(s)
+	return cdc
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (cdc *ContactDefaultCreate) SetNillableEmail(s *string) *ContactDefaultCreate {
+	if s != nil {
+		cdc.SetEmail(*s)
+	}
 	return cdc
 }
 
@@ -38,9 +54,25 @@ func (cdc *ContactDefaultCreate) SetURL(s string) *ContactDefaultCreate {
 	return cdc
 }
 
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (cdc *ContactDefaultCreate) SetNillableURL(s *string) *ContactDefaultCreate {
+	if s != nil {
+		cdc.SetURL(*s)
+	}
+	return cdc
+}
+
 // SetCategory sets the "category" field.
 func (cdc *ContactDefaultCreate) SetCategory(s string) *ContactDefaultCreate {
 	cdc.mutation.SetCategory(s)
+	return cdc
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cdc *ContactDefaultCreate) SetNillableCategory(s *string) *ContactDefaultCreate {
+	if s != nil {
+		cdc.SetCategory(*s)
+	}
 	return cdc
 }
 
@@ -50,9 +82,25 @@ func (cdc *ContactDefaultCreate) SetCustomTitle(s string) *ContactDefaultCreate 
 	return cdc
 }
 
+// SetNillableCustomTitle sets the "custom_title" field if the given value is not nil.
+func (cdc *ContactDefaultCreate) SetNillableCustomTitle(s *string) *ContactDefaultCreate {
+	if s != nil {
+		cdc.SetCustomTitle(*s)
+	}
+	return cdc
+}
+
 // SetDescription sets the "description" field.
 func (cdc *ContactDefaultCreate) SetDescription(s string) *ContactDefaultCreate {
 	cdc.mutation.SetDescription(s)
+	return cdc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cdc *ContactDefaultCreate) SetNillableDescription(s *string) *ContactDefaultCreate {
+	if s != nil {
+		cdc.SetDescription(*s)
+	}
 	return cdc
 }
 
@@ -137,24 +185,6 @@ func (cdc *ContactDefaultCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cdc *ContactDefaultCreate) check() error {
-	if _, ok := cdc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "ContactDefault.name"`)}
-	}
-	if _, ok := cdc.mutation.Email(); !ok {
-		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "ContactDefault.email"`)}
-	}
-	if _, ok := cdc.mutation.URL(); !ok {
-		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "ContactDefault.url"`)}
-	}
-	if _, ok := cdc.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New(`ent: missing required field "ContactDefault.category"`)}
-	}
-	if _, ok := cdc.mutation.CustomTitle(); !ok {
-		return &ValidationError{Name: "custom_title", err: errors.New(`ent: missing required field "ContactDefault.custom_title"`)}
-	}
-	if _, ok := cdc.mutation.Description(); !ok {
-		return &ValidationError{Name: "description", err: errors.New(`ent: missing required field "ContactDefault.description"`)}
-	}
 	if _, ok := cdc.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "ContactDefault.created"`)}
 	}

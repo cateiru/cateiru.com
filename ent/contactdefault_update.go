@@ -34,9 +34,37 @@ func (cdu *ContactDefaultUpdate) SetName(s string) *ContactDefaultUpdate {
 	return cdu
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (cdu *ContactDefaultUpdate) SetNillableName(s *string) *ContactDefaultUpdate {
+	if s != nil {
+		cdu.SetName(*s)
+	}
+	return cdu
+}
+
+// ClearName clears the value of the "name" field.
+func (cdu *ContactDefaultUpdate) ClearName() *ContactDefaultUpdate {
+	cdu.mutation.ClearName()
+	return cdu
+}
+
 // SetEmail sets the "email" field.
 func (cdu *ContactDefaultUpdate) SetEmail(s string) *ContactDefaultUpdate {
 	cdu.mutation.SetEmail(s)
+	return cdu
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (cdu *ContactDefaultUpdate) SetNillableEmail(s *string) *ContactDefaultUpdate {
+	if s != nil {
+		cdu.SetEmail(*s)
+	}
+	return cdu
+}
+
+// ClearEmail clears the value of the "email" field.
+func (cdu *ContactDefaultUpdate) ClearEmail() *ContactDefaultUpdate {
+	cdu.mutation.ClearEmail()
 	return cdu
 }
 
@@ -46,9 +74,37 @@ func (cdu *ContactDefaultUpdate) SetURL(s string) *ContactDefaultUpdate {
 	return cdu
 }
 
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (cdu *ContactDefaultUpdate) SetNillableURL(s *string) *ContactDefaultUpdate {
+	if s != nil {
+		cdu.SetURL(*s)
+	}
+	return cdu
+}
+
+// ClearURL clears the value of the "url" field.
+func (cdu *ContactDefaultUpdate) ClearURL() *ContactDefaultUpdate {
+	cdu.mutation.ClearURL()
+	return cdu
+}
+
 // SetCategory sets the "category" field.
 func (cdu *ContactDefaultUpdate) SetCategory(s string) *ContactDefaultUpdate {
 	cdu.mutation.SetCategory(s)
+	return cdu
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cdu *ContactDefaultUpdate) SetNillableCategory(s *string) *ContactDefaultUpdate {
+	if s != nil {
+		cdu.SetCategory(*s)
+	}
+	return cdu
+}
+
+// ClearCategory clears the value of the "category" field.
+func (cdu *ContactDefaultUpdate) ClearCategory() *ContactDefaultUpdate {
+	cdu.mutation.ClearCategory()
 	return cdu
 }
 
@@ -58,9 +114,37 @@ func (cdu *ContactDefaultUpdate) SetCustomTitle(s string) *ContactDefaultUpdate 
 	return cdu
 }
 
+// SetNillableCustomTitle sets the "custom_title" field if the given value is not nil.
+func (cdu *ContactDefaultUpdate) SetNillableCustomTitle(s *string) *ContactDefaultUpdate {
+	if s != nil {
+		cdu.SetCustomTitle(*s)
+	}
+	return cdu
+}
+
+// ClearCustomTitle clears the value of the "custom_title" field.
+func (cdu *ContactDefaultUpdate) ClearCustomTitle() *ContactDefaultUpdate {
+	cdu.mutation.ClearCustomTitle()
+	return cdu
+}
+
 // SetDescription sets the "description" field.
 func (cdu *ContactDefaultUpdate) SetDescription(s string) *ContactDefaultUpdate {
 	cdu.mutation.SetDescription(s)
+	return cdu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cdu *ContactDefaultUpdate) SetNillableDescription(s *string) *ContactDefaultUpdate {
+	if s != nil {
+		cdu.SetDescription(*s)
+	}
+	return cdu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (cdu *ContactDefaultUpdate) ClearDescription() *ContactDefaultUpdate {
+	cdu.mutation.ClearDescription()
 	return cdu
 }
 
@@ -137,20 +221,38 @@ func (cdu *ContactDefaultUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if value, ok := cdu.mutation.Name(); ok {
 		_spec.SetField(contactdefault.FieldName, field.TypeString, value)
 	}
+	if cdu.mutation.NameCleared() {
+		_spec.ClearField(contactdefault.FieldName, field.TypeString)
+	}
 	if value, ok := cdu.mutation.Email(); ok {
 		_spec.SetField(contactdefault.FieldEmail, field.TypeString, value)
+	}
+	if cdu.mutation.EmailCleared() {
+		_spec.ClearField(contactdefault.FieldEmail, field.TypeString)
 	}
 	if value, ok := cdu.mutation.URL(); ok {
 		_spec.SetField(contactdefault.FieldURL, field.TypeString, value)
 	}
+	if cdu.mutation.URLCleared() {
+		_spec.ClearField(contactdefault.FieldURL, field.TypeString)
+	}
 	if value, ok := cdu.mutation.Category(); ok {
 		_spec.SetField(contactdefault.FieldCategory, field.TypeString, value)
+	}
+	if cdu.mutation.CategoryCleared() {
+		_spec.ClearField(contactdefault.FieldCategory, field.TypeString)
 	}
 	if value, ok := cdu.mutation.CustomTitle(); ok {
 		_spec.SetField(contactdefault.FieldCustomTitle, field.TypeString, value)
 	}
+	if cdu.mutation.CustomTitleCleared() {
+		_spec.ClearField(contactdefault.FieldCustomTitle, field.TypeString)
+	}
 	if value, ok := cdu.mutation.Description(); ok {
 		_spec.SetField(contactdefault.FieldDescription, field.TypeString, value)
+	}
+	if cdu.mutation.DescriptionCleared() {
+		_spec.ClearField(contactdefault.FieldDescription, field.TypeString)
 	}
 	if value, ok := cdu.mutation.Created(); ok {
 		_spec.SetField(contactdefault.FieldCreated, field.TypeTime, value)
@@ -184,9 +286,37 @@ func (cduo *ContactDefaultUpdateOne) SetName(s string) *ContactDefaultUpdateOne 
 	return cduo
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (cduo *ContactDefaultUpdateOne) SetNillableName(s *string) *ContactDefaultUpdateOne {
+	if s != nil {
+		cduo.SetName(*s)
+	}
+	return cduo
+}
+
+// ClearName clears the value of the "name" field.
+func (cduo *ContactDefaultUpdateOne) ClearName() *ContactDefaultUpdateOne {
+	cduo.mutation.ClearName()
+	return cduo
+}
+
 // SetEmail sets the "email" field.
 func (cduo *ContactDefaultUpdateOne) SetEmail(s string) *ContactDefaultUpdateOne {
 	cduo.mutation.SetEmail(s)
+	return cduo
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (cduo *ContactDefaultUpdateOne) SetNillableEmail(s *string) *ContactDefaultUpdateOne {
+	if s != nil {
+		cduo.SetEmail(*s)
+	}
+	return cduo
+}
+
+// ClearEmail clears the value of the "email" field.
+func (cduo *ContactDefaultUpdateOne) ClearEmail() *ContactDefaultUpdateOne {
+	cduo.mutation.ClearEmail()
 	return cduo
 }
 
@@ -196,9 +326,37 @@ func (cduo *ContactDefaultUpdateOne) SetURL(s string) *ContactDefaultUpdateOne {
 	return cduo
 }
 
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (cduo *ContactDefaultUpdateOne) SetNillableURL(s *string) *ContactDefaultUpdateOne {
+	if s != nil {
+		cduo.SetURL(*s)
+	}
+	return cduo
+}
+
+// ClearURL clears the value of the "url" field.
+func (cduo *ContactDefaultUpdateOne) ClearURL() *ContactDefaultUpdateOne {
+	cduo.mutation.ClearURL()
+	return cduo
+}
+
 // SetCategory sets the "category" field.
 func (cduo *ContactDefaultUpdateOne) SetCategory(s string) *ContactDefaultUpdateOne {
 	cduo.mutation.SetCategory(s)
+	return cduo
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (cduo *ContactDefaultUpdateOne) SetNillableCategory(s *string) *ContactDefaultUpdateOne {
+	if s != nil {
+		cduo.SetCategory(*s)
+	}
+	return cduo
+}
+
+// ClearCategory clears the value of the "category" field.
+func (cduo *ContactDefaultUpdateOne) ClearCategory() *ContactDefaultUpdateOne {
+	cduo.mutation.ClearCategory()
 	return cduo
 }
 
@@ -208,9 +366,37 @@ func (cduo *ContactDefaultUpdateOne) SetCustomTitle(s string) *ContactDefaultUpd
 	return cduo
 }
 
+// SetNillableCustomTitle sets the "custom_title" field if the given value is not nil.
+func (cduo *ContactDefaultUpdateOne) SetNillableCustomTitle(s *string) *ContactDefaultUpdateOne {
+	if s != nil {
+		cduo.SetCustomTitle(*s)
+	}
+	return cduo
+}
+
+// ClearCustomTitle clears the value of the "custom_title" field.
+func (cduo *ContactDefaultUpdateOne) ClearCustomTitle() *ContactDefaultUpdateOne {
+	cduo.mutation.ClearCustomTitle()
+	return cduo
+}
+
 // SetDescription sets the "description" field.
 func (cduo *ContactDefaultUpdateOne) SetDescription(s string) *ContactDefaultUpdateOne {
 	cduo.mutation.SetDescription(s)
+	return cduo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cduo *ContactDefaultUpdateOne) SetNillableDescription(s *string) *ContactDefaultUpdateOne {
+	if s != nil {
+		cduo.SetDescription(*s)
+	}
+	return cduo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (cduo *ContactDefaultUpdateOne) ClearDescription() *ContactDefaultUpdateOne {
+	cduo.mutation.ClearDescription()
 	return cduo
 }
 
@@ -317,20 +503,38 @@ func (cduo *ContactDefaultUpdateOne) sqlSave(ctx context.Context) (_node *Contac
 	if value, ok := cduo.mutation.Name(); ok {
 		_spec.SetField(contactdefault.FieldName, field.TypeString, value)
 	}
+	if cduo.mutation.NameCleared() {
+		_spec.ClearField(contactdefault.FieldName, field.TypeString)
+	}
 	if value, ok := cduo.mutation.Email(); ok {
 		_spec.SetField(contactdefault.FieldEmail, field.TypeString, value)
+	}
+	if cduo.mutation.EmailCleared() {
+		_spec.ClearField(contactdefault.FieldEmail, field.TypeString)
 	}
 	if value, ok := cduo.mutation.URL(); ok {
 		_spec.SetField(contactdefault.FieldURL, field.TypeString, value)
 	}
+	if cduo.mutation.URLCleared() {
+		_spec.ClearField(contactdefault.FieldURL, field.TypeString)
+	}
 	if value, ok := cduo.mutation.Category(); ok {
 		_spec.SetField(contactdefault.FieldCategory, field.TypeString, value)
+	}
+	if cduo.mutation.CategoryCleared() {
+		_spec.ClearField(contactdefault.FieldCategory, field.TypeString)
 	}
 	if value, ok := cduo.mutation.CustomTitle(); ok {
 		_spec.SetField(contactdefault.FieldCustomTitle, field.TypeString, value)
 	}
+	if cduo.mutation.CustomTitleCleared() {
+		_spec.ClearField(contactdefault.FieldCustomTitle, field.TypeString)
+	}
 	if value, ok := cduo.mutation.Description(); ok {
 		_spec.SetField(contactdefault.FieldDescription, field.TypeString, value)
+	}
+	if cduo.mutation.DescriptionCleared() {
+		_spec.ClearField(contactdefault.FieldDescription, field.TypeString)
 	}
 	if value, ok := cduo.mutation.Created(); ok {
 		_spec.SetField(contactdefault.FieldCreated, field.TypeTime, value)

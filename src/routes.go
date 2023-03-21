@@ -63,10 +63,16 @@ func Routes(e *echo.Echo, handler *handler.Handler) {
 	e.GET("/user/contact", handler.ContactGetHandler)
 	e.DELETE("/user/contact", handler.ContactDeleteHandler)
 
+	e.GET("/user/contact/default", handler.ContactDefaultHandler)
+	e.POST("/user/contact/default", handler.CreateContactDefaultHandler)
+	e.PUT("/user/contact/default", handler.UpdateContactDefaultHandler)
+	e.DELETE("/user/contact/default", handler.DeleteContactDefaultHandler)
+
 	// Public endpoints
 	e.GET("/public/profile", handler.PublicProfileHandler)
 	e.GET("/public/product", handler.PublicProductsHandler)
 
 	e.POST("/contact", handler.ContactHandler)
 	e.GET("/contact/preview", handler.ContactPreviewUserDataHandler)
+	e.GET("/contact/default", handler.PublicContactDefaultHandler)
 }

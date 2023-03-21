@@ -25,6 +25,7 @@ func (ContactDefault) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.MySQL: "text",
 			}).
+			Optional().
 			Nillable(),
 
 		// `email` TEXT
@@ -32,6 +33,7 @@ func (ContactDefault) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.MySQL: "text",
 			}).
+			Optional().
 			Nillable(),
 
 		// `category` TEXT
@@ -39,6 +41,7 @@ func (ContactDefault) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.MySQL: "text",
 			}).
+			Optional().
 			Nillable(),
 
 		// `category` TEXT
@@ -46,6 +49,7 @@ func (ContactDefault) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.MySQL: "text",
 			}).
+			Optional().
 			Nillable(),
 
 		// `custom_title` TEXT
@@ -53,6 +57,7 @@ func (ContactDefault) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.MySQL: "text",
 			}).
+			Optional().
 			Nillable(),
 
 		// `description` TEXT
@@ -60,6 +65,7 @@ func (ContactDefault) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.MySQL: "text",
 			}).
+			Optional().
 			Nillable(),
 
 		// `created` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
