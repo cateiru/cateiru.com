@@ -17,7 +17,7 @@ export const Head: React.FC<Props> = props => {
       <title>{convertLang(props.title)}</title>
       <meta
         name="theme-color"
-        content={colorMode === 'dark' ? '#1A202C' : '#fff'}
+        content={colorMode === 'dark' ? '#0e121c' : '#fff'}
       />
     </NextHead>
   );

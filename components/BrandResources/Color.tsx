@@ -60,7 +60,7 @@ export const Color = () => {
             />
             <ColorTile color="#ffffff" title={{ja: '背景', en: 'Background'}} />
             <ColorTile
-              color="#1a202c"
+              color="#0e121c"
               title={{ja: 'ダークモード背景', en: 'DarkMode Background'}}
             />
             <ColorTile color="#0f0f0f" title={{ja: '文字', en: 'Text'}} />

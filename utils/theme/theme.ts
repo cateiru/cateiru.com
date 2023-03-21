@@ -57,6 +57,7 @@ const theme = extendTheme({
       },
       body: {
         width: '100vw',
+        background: props.colorMode === 'dark' ? '#0e121c' : '#ffffff',
       },
     }),
   },
