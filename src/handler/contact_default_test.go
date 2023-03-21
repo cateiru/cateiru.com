@@ -28,6 +28,9 @@ func TestPublicContactDefaultHandler(t *testing.T) {
 		h, err := tool.Handler()
 		require.NoError(t, err)
 
+		_, err = tool.DB.Client.ContactDefault.Delete().Exec(ctx)
+		require.NoError(t, err)
+
 		c, err := tool.DB.Client.ContactDefault.Create().
 			SetName("hoge").
 			Save(ctx)
@@ -63,6 +66,9 @@ func TestContactDefaultHandler(t *testing.T) {
 		require.NoError(t, err)
 
 		u, err := tool.NewUser(ctx)
+		require.NoError(t, err)
+
+		_, err = tool.DB.Client.ContactDefault.Delete().Exec(ctx)
 		require.NoError(t, err)
 
 		c, err := tool.DB.Client.ContactDefault.Create().
