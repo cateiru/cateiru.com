@@ -59,7 +59,7 @@ export async function generateSitemap(): Promise<Gzip> {
 
   for (const product of d.products) {
     smStream.write({
-      url: `/products/${product.id}`,
+      url: `/product/${product.id}`,
       changefreq: EnumChangefreq.MONTHLY,
       priority: 0.8,
       img: [],
