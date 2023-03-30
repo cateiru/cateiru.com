@@ -30,8 +30,8 @@ export const Section: React.FC<{
             _hover={{
               bgColor: props.heading
                 ? colorMode === 'dark'
-                  ? 'gray.600'
-                  : 'gray.200'
+                  ? 'brand.600'
+                  : 'brand.200'
                 : 'rgba(255, 255, 255, 0.2)',
             }}
             transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"

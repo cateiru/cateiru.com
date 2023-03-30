@@ -1,7 +1,6 @@
 import {
   Center,
   Box,
-  Heading,
   Flex,
   Switch,
   useColorMode,
@@ -12,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import {Gantt, ViewMode} from 'gantt-task-react';
 import React from 'react';
-import {IoCaretDown} from 'react-icons/io5';
 import {getTasks, parseShotDate} from '../../utils/parse';
 import {Public} from '../../utils/types';
 import {Section} from '../Common/Section';

@@ -8,10 +8,12 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
+import {color} from 'framer-motion';
 import React from 'react';
 import {TbCheck} from 'react-icons/tb';
 import {MultiLang} from '../../utils/config/lang';
 import {textColor} from '../../utils/theme/color';
+import {colorTheme} from '../../utils/theme/theme';
 import useLanguage from '../useLanguage';
 
 export const Color = () => {
@@ -58,12 +60,22 @@ export const Color = () => {
               color="#cf2ba1"
               title={{ja: 'アクセント', en: 'Accent'}}
             />
-            <ColorTile color="#ffffff" title={{ja: '背景', en: 'Background'}} />
             <ColorTile
-              color="#0e121c"
-              title={{ja: 'ダークモード背景', en: 'DarkMode Background'}}
+              color={colorTheme.lightBackground}
+              title={{ja: '背景', en: 'Background'}}
             />
-            <ColorTile color="#0f0f0f" title={{ja: '文字', en: 'Text'}} />
+            <ColorTile
+              color={colorTheme.darkBackground}
+              title={{ja: 'ダークテーマ背景', en: 'DarkMode Background'}}
+            />
+            <ColorTile
+              color={colorTheme.lightText}
+              title={{ja: '文字', en: 'Text'}}
+            />
+            <ColorTile
+              color={colorTheme.darkText}
+              title={{ja: 'ダークテーマ文字', en: 'Text'}}
+            />
           </SimpleGrid>
         </Box>
       </Center>

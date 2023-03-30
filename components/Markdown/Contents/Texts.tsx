@@ -16,7 +16,7 @@ export const Code: CodeComponent = ({children}) => {
       as="span"
       fontWeight="medium"
       fontSize="1rem"
-      backgroundColor={colorMode === 'dark' ? 'gray.600' : 'gray.100'}
+      backgroundColor={colorMode === 'dark' ? 'brand.600' : 'gray.100'}
       borderRadius="3px"
       padding="0rem .4rem 0rem .4rem"
     >

@@ -1,5 +1,12 @@
 import {z} from 'zod';
 
+export interface ColorThemes {
+  darkBackground: string;
+  lightBackground: string;
+  darkText: string;
+  lightText: string;
+}
+
 export const UserSchema = z.object({
   id: z.number(),
   given_name: z.string(),

@@ -22,6 +22,7 @@ const Contact = () => {
   const {convertLang} = useLanguage();
   const [data, setData] = React.useState<ContactFormProps | null>(null);
   const [description, setDescription] = React.useState<string>();
+  const [externalBack, setExternalBack] = React.useState<boolean>(false);
 
   const toast = useToast();
 
@@ -76,6 +77,7 @@ const Contact = () => {
         custom_title: resData.custom_title,
       };
       setData(d);
+      setExternalBack(true);
 
       resData.description && setDescription(resData.description);
     } catch (e) {
@@ -91,7 +93,7 @@ const Contact = () => {
   return (
     <Center minHeight="100vh">
       <Box width={{base: '95%', md: '500px'}} mb="4rem" mt="3rem">
-        <Back href="/" />
+        <Back href={externalBack ? undefined : '/'} />
         <Heading mb="2rem" textAlign="center" mt="1.5rem">
           {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
         </Heading>

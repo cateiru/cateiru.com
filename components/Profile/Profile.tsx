@@ -52,6 +52,10 @@ const Profile: React.FC<{next: () => void; data: Public}> = ({next, data}) => {
         zoom: 0.5,
       })
     );
+
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
   }, [colorMode]);
 
   return (

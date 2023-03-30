@@ -26,11 +26,11 @@ export const ProductCard: React.FC<{prod: PublicProduct}> = ({prod}) => {
             ? '0px 1px 26px -3px #a0acc0'
             : '0px 1px 26px -3px #000'
         }
-        borderRadius="56px"
+        borderRadius="35px"
         p="1rem"
         position="relative"
         _hover={{
-          bgColor: colorMode === 'light' ? 'gray.100' : 'gray.700',
+          bgColor: colorMode === 'light' ? 'brand.200' : 'brand.600',
         }}
         transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
       >
@@ -57,11 +57,16 @@ export const ProductCard: React.FC<{prod: PublicProduct}> = ({prod}) => {
           )}
         </Center>
         <Box mt={{base: '0', md: '1rem'}}>
-          <Center>
-            <Text fontWeight="bold" fontSize="1.2rem">
-              {convertLang({ja: prod.name_ja, en: prod.name})}
-            </Text>
-          </Center>
+          <Text
+            fontWeight="bold"
+            fontSize="1.2rem"
+            textAlign="center"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+            overflow="hidden"
+          >
+            {convertLang({ja: prod.name_ja, en: prod.name})}
+          </Text>
           <Divider my=".5rem" />
           <Text
             textAlign="center"

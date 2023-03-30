@@ -45,19 +45,24 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
                 py=".5rem"
                 cursor="pointer"
                 fontSize={{base: '1rem', sm: '1rem'}}
-                bgColor={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
+                bgColor={colorMode === 'dark' ? 'brand.600' : 'brand.200'}
                 borderRadius="25"
                 pl="1rem"
                 fontWeight={{base: 'bold', sm: 'medium'}}
                 _hover={{
-                  bgColor: colorMode === 'dark' ? 'gray.500' : 'gray.300',
+                  bgColor: colorMode === 'dark' ? 'brand.500' : 'brand.300',
                 }}
                 transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
               >
                 <Flex alignItems="center">
                   {v.favicon_url ? (
                     <Box mr=".5rem">
-                      <Image src={v.favicon_url} width="20px" alt="favicon" />
+                      <Image
+                        src={v.favicon_url}
+                        width="20px"
+                        alt="favicon"
+                        loading="lazy"
+                      />
                     </Box>
                   ) : (
                     <Center mr=".5rem">

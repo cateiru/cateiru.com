@@ -3,7 +3,9 @@ import {useRouter} from 'next/router';
 import {TbArrowBigLeft} from 'react-icons/tb';
 import useLanguage from './useLanguage';
 
-export const Back: React.FC<{href?: string}> = props => {
+export const Back: React.FC<{
+  href?: string;
+}> = props => {
   const {convertLang} = useLanguage();
   const router = useRouter();
 
