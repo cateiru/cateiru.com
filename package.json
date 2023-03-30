@@ -32,6 +32,7 @@
         "react-icons": "^4.8.0",
         "react-markdown": "^8.0.6",
         "recoil": "^0.7.7",
+        "sitemap": "^7.1.1",
         "string-to-color": "^2.2.2",
         "swr": "^2.1.0",
         "vanta": "^0.5.24",
