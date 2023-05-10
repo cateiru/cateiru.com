@@ -1,7 +1,6 @@
 import {Center, Avatar, useColorMode} from '@chakra-ui/react';
 import React from 'react';
 import FOG from 'vanta/dist/vanta.fog.min';
-import type {VantaEffect} from '../../@types/vanta';
 import {Public} from '../../utils/types';
 import {Section} from '../Common/Section';
 import ProfileText from './ProfileText';
