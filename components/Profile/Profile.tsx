@@ -8,53 +8,22 @@ import ProfileText from './ProfileText';
 
 const Profile: React.FC<{next: () => void; data: Public}> = ({next, data}) => {
   const {colorMode} = useColorMode();
-  const [vantaEffect, setVantaEffect] = React.useState<VantaEffect | null>(
-    null
-  );
   const myRef = React.useRef<HTMLDivElement>(null!);
 
   React.useEffect(() => {
-    if (!vantaEffect) {
-      setVantaEffect(
-        FOG({
-          el: myRef.current,
-          baseColor: colorMode === 'dark' ? 0x0e121c : 0xffffff,
-          highlightColor: 0x2bc4cf,
-          midtoneColor: 0x572bcf,
-          lowlightColor: 0xcf2ba1,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          zoom: 0.5,
-        })
-      );
-    }
+    const effect = FOG({
+      el: myRef.current,
+      baseColor: colorMode === 'dark' ? 0x0e121c : 0xffffff,
+      highlightColor: 0x2bc4cf,
+      midtoneColor: 0x572bcf,
+      lowlightColor: 0xcf2ba1,
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      zoom: 0.5,
+    });
     return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, []);
-
-  React.useEffect(() => {
-    if (!vantaEffect) return;
-
-    vantaEffect.destroy();
-
-    setVantaEffect(
-      FOG({
-        el: myRef.current,
-        baseColor: colorMode === 'dark' ? 0x0e121c : 0xffffff,
-        highlightColor: 0x2bc4cf,
-        midtoneColor: 0x572bcf,
-        lowlightColor: 0xcf2ba1,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        zoom: 0.5,
-      })
-    );
-
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
+      effect.destroy();
     };
   }, [colorMode]);
 
