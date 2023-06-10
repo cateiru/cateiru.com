@@ -87,7 +87,7 @@ func (cmd *Migration) Execute(args []string) error {
 	case "local":
 		dbName = "cateiru"
 	case "test":
-		dbName = "cateiru_test"
+		dbName = "test"
 	default:
 		return errors.New("invalid mode")
 	}
