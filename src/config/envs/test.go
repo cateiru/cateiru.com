@@ -39,7 +39,7 @@ var TestConfig = ConfigDefs{
 		SameSite: http.SameSiteStrictMode,
 		Path:     "/",
 	},
-	SessionConfirmationCookieName: "cateirusso-issession",
+	SessionConfirmationCookieName: "cateirucom-issession",
 	SessionConfirmationCookieConfig: http.Cookie{
 		HttpOnly: false,
 		Secure:   false, // ローカルであるためfalse

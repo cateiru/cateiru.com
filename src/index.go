@@ -69,6 +69,7 @@ func Server() {
 	handler, err := handler.NewHandler(db)
 	if err != nil {
 		logging.Sugar.Fatal(err)
+		return
 	}
 
 	// setting routes

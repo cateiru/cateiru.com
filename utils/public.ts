@@ -1,4 +1,4 @@
-import {api} from './api';
+import {backendApi} from './api';
 import {
   Public,
   PublicProduct,
@@ -10,7 +10,7 @@ import {
  * get public data
  */
 export async function getPublicProfile(): Promise<Public> {
-  const res = await fetch(api('/public/profile'), {method: 'GET'});
+  const res = await fetch(backendApi('/public/profile'), {method: 'GET'});
 
   if (res.ok) {
     return PublicSchema.parse(await res.json());
@@ -21,11 +21,10 @@ export async function getPublicProfile(): Promise<Public> {
 
 /**
  * get public products
- *
  * @param {number} id - product id
  */
 export async function getPublicProduct(id: number): Promise<PublicProduct> {
-  const res = await fetch(api(`/public/product?product_id=${id}`), {
+  const res = await fetch(backendApi(`/public/product?product_id=${id}`), {
     method: 'GET',
   });
 

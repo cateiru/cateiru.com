@@ -1,6 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-};
+const withInterceptStdout = require('next-intercept-stdout');
 
-module.exports = nextConfig;
+/** @type {import('next').NextConfig} */
+module.exports = withInterceptStdout(
+  {
+    reactStrictMode: true,
+  },
+  text => (text.includes('Duplicate atom key') ? '' : text)
+);

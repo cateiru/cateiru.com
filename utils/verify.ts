@@ -38,7 +38,7 @@ export class Verify {
   }
 
   private checkLoginFromCookie(): boolean {
-    const isSession = Cookies.get('cateirusso-issession');
+    const isSession = Cookies.get('cateirucom-issession');
 
     return typeof isSession === 'string';
   }

@@ -82,6 +82,18 @@ func (cmd *Migration) Execute(args []string) error {
 		return cmd.migrationProd(ctx, cmd.Env)
 	}
 
+	// ローカルはAddrがdocker内部のものになるので上書き
+	if cmd.Mode == "local" {
+		config.Config.DBConfig = mysql.Config{
+			DBName:    "cateiru",
+			User:      "docker",
+			Passwd:    "docker",
+			Addr:      "127.0.0.1:3306",
+			Net:       "tcp",
+			ParseTime: true,
+		}
+	}
+
 	db, err := db.NewConnectMySQL()
 	if err != nil {
 		return err

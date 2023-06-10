@@ -48,7 +48,7 @@ var ProdConfig = ConfigDefs{
 		SameSite: http.SameSiteDefaultMode,
 		Path:     "/",
 	},
-	SessionConfirmationCookieName: "cateirusso-issession",
+	SessionConfirmationCookieName: "cateirucom-issession",
 	SessionConfirmationCookieConfig: http.Cookie{
 		HttpOnly: false,
 		Secure:   true,
