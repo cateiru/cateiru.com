@@ -1,5 +1,6 @@
-version: "3"
-
+# Google Cloud Datastoreをローカルで実行します
+#
+# docker compose -f ./docker/docker-compose.db.yaml up を使用してコンテナを実行してください
 services:
   db:
     image: mysql:8.0
@@ -12,8 +13,8 @@ services:
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - ./db/.data:/var/lib/mysql
-      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./db/sql:/docker-entrypoint-initdb.d
+      - ../db/.data:/var/lib/mysql
+      - ../db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ../db/sql:/docker-entrypoint-initdb.d
     ports:
       - "127.0.0.1:3306:3306"

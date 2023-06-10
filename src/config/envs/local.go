@@ -1,7 +1,6 @@
 package envs
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"os"
@@ -12,31 +11,20 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-var HOST = GetURL()
-
-func GetURL() string {
-	u := os.Getenv("URL")
-	fmt.Println("URL: " + u)
-	if u == "" {
-		return "localhost"
-	}
-	return u
-}
-
 var LocalConfig = ConfigDefs{
 	Mode: "local",
 
 	ApiDomain: url.URL{
-		Host:   fmt.Sprintf("%s:8080", HOST),
+		Host:   "localhost:8080",
 		Scheme: "http",
 	},
 	PageDomain: url.URL{
-		Host:   fmt.Sprintf("%s:3000", HOST),
+		Host:   "localhost:3000",
 		Scheme: "http",
 	},
 
 	Cors: middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{fmt.Sprintf("http://%s:3000", HOST)},
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}),
@@ -46,7 +34,7 @@ var LocalConfig = ConfigDefs{
 		DBName:    "cateiru",
 		User:      "docker",
 		Passwd:    "docker",
-		Addr:      "localhost:3306",
+		Addr:      "db:3306",
 		Net:       "tcp",
 		ParseTime: true,
 	},
@@ -69,7 +57,7 @@ var LocalConfig = ConfigDefs{
 
 	SSOTokenSecret: "2974d92793c53756ec347fe2a8246fd9f91a2dde291147f081292907cc20b385",
 	SSORedirectURI: url.URL{
-		Host:   fmt.Sprintf("%s:8080", HOST),
+		Host:   "localhost:8080",
 		Scheme: "http",
 		Path:   "/login",
 	},
