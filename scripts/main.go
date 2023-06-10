@@ -6,8 +6,6 @@ import (
 	"os"
 
 	"github.com/cateiru/cateiru.com/ent"
-	"github.com/cateiru/cateiru.com/src"
-	"github.com/cateiru/cateiru.com/src/config"
 	"github.com/go-sql-driver/mysql"
 	"github.com/jessevdk/go-flags"
 )
@@ -27,10 +25,6 @@ var opts Options
 var export Export
 var migration Migration
 
-func init() {
-	src.Init("local")
-}
-
 func main() {
 	parser := flags.NewParser(&opts, flags.Default)
 	parser.Name = "go run ./script/main.go"
@@ -48,7 +42,7 @@ func main() {
 func (cmd *Export) Execute(args []string) error {
 	ctx := context.Background()
 
-	config.Config.DBConfig = mysql.Config{
+	config := mysql.Config{
 		DBName:    "em",
 		User:      "docker",
 		Passwd:    "docker",
@@ -57,7 +51,7 @@ func (cmd *Export) Execute(args []string) error {
 		ParseTime: true,
 	}
 
-	client, err := ent.Open("mysql", config.Config.DBConfig.FormatDSN())
+	client, err := ent.Open("mysql", config.FormatDSN())
 	if err != nil {
 		return err
 	}
@@ -92,7 +86,7 @@ func (cmd *Migration) Execute(args []string) error {
 		return errors.New("invalid mode")
 	}
 
-	config.Config.DBConfig = mysql.Config{
+	config := mysql.Config{
 		DBName:    dbName,
 		User:      "docker",
 		Passwd:    "docker",
@@ -101,7 +95,7 @@ func (cmd *Migration) Execute(args []string) error {
 		ParseTime: true,
 	}
 
-	client, err := ent.Open("mysql", config.Config.DBConfig.FormatDSN())
+	client, err := ent.Open("mysql", config.FormatDSN())
 	if err != nil {
 		return err
 	}
