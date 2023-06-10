@@ -45,7 +45,7 @@ jobs:
       with:
         go-version: 1.19
     - name: Run SQL
-      run: ./script/docker-compose-db.sh up -d
+      run: ./scripts/docker-compose-db.sh up -d
     - name: Migration Test DB
       run: go run ./scripts/main.go migration -m test
     - name: Build

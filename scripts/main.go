@@ -2,16 +2,14 @@ package main
 
 import (
 	"context"
+	"errors"
 	"os"
-	"path/filepath"
 
+	"github.com/cateiru/cateiru.com/ent"
 	"github.com/cateiru/cateiru.com/src"
 	"github.com/cateiru/cateiru.com/src/config"
-	"github.com/cateiru/cateiru.com/src/db"
-	"github.com/cateiru/cateiru.com/src/logging"
 	"github.com/go-sql-driver/mysql"
 	"github.com/jessevdk/go-flags"
-	"github.com/joho/godotenv"
 )
 
 type Export struct {
@@ -50,11 +48,20 @@ func main() {
 func (cmd *Export) Execute(args []string) error {
 	ctx := context.Background()
 
-	db, err := db.NewEmptySQL()
+	config.Config.DBConfig = mysql.Config{
+		DBName:    "em",
+		User:      "docker",
+		Passwd:    "docker",
+		Addr:      "127.0.0.1:3306",
+		Net:       "tcp",
+		ParseTime: true,
+	}
+
+	client, err := ent.Open("mysql", config.Config.DBConfig.FormatDSN())
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer client.Close()
 
 	f, err := os.Create("schema.sql")
 	if err != nil {
@@ -62,11 +69,9 @@ func (cmd *Export) Execute(args []string) error {
 	}
 	defer f.Close()
 
-	if err := db.WriteSchema(ctx, f); err != nil {
+	if err := client.Schema.WriteTo(ctx, f); err != nil {
 		return err
 	}
-
-	logging.Sugar.Infoln("Success export SQL schema.sql")
 
 	return nil
 }
@@ -75,86 +80,36 @@ func (cmd *Export) Execute(args []string) error {
 func (cmd *Migration) Execute(args []string) error {
 	ctx := context.Background()
 
-	// Overwrite config
-	config.Init(cmd.Mode)
+	mode := cmd.Mode
 
-	if cmd.Mode == "prod" && cmd.Env != "" {
-		return cmd.migrationProd(ctx, cmd.Env)
-	}
-
-	// ローカルはAddrがdocker内部のものになるので上書き
-	if cmd.Mode == "local" {
-		config.Config.DBConfig = mysql.Config{
-			DBName:    "cateiru",
-			User:      "docker",
-			Passwd:    "docker",
-			Addr:      "127.0.0.1:3306",
-			Net:       "tcp",
-			ParseTime: true,
-		}
-	}
-
-	db, err := db.NewConnectMySQL()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	if err := db.Client.Schema.Create(ctx); err != nil {
-		return err
-	}
-
-	logging.Sugar.Infof("Success migration! DATABASE: %s\n", config.Config.DBConfig)
-
-	return nil
-}
-
-func (cmd *Migration) migrationProd(ctx context.Context, envPath string) error {
-	if !filepath.IsAbs(envPath) {
-		p, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-
-		envAbsPath := filepath.Join(p, envPath)
-
-		if _, err := os.Stat(envPath); err != nil {
-			return err
-		}
-
-		envPath = envAbsPath
-	}
-
-	if err := godotenv.Load(envPath); err != nil {
-		return err
+	dbName := ""
+	switch mode {
+	case "local":
+		dbName = "cateiru"
+	case "test":
+		dbName = "cateiru_test"
+	default:
+		return errors.New("invalid mode")
 	}
 
 	config.Config.DBConfig = mysql.Config{
-		DBName:    "cateirucom",
-		User:      os.Getenv("MYSQL_USER"),
-		Passwd:    os.Getenv("MYSQL_PASSWORD"),
+		DBName:    dbName,
+		User:      "docker",
+		Passwd:    "docker",
 		Addr:      "127.0.0.1:3306",
 		Net:       "tcp",
 		ParseTime: true,
 	}
 
-	db, err := db.NewConnectMySQL()
+	client, err := ent.Open("mysql", config.Config.DBConfig.FormatDSN())
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer client.Close()
 
-	f, err := os.Create("migration_diff.sql")
-	if err != nil {
+	if err := client.Schema.Create(ctx); err != nil {
 		return err
 	}
-	defer f.Close()
-
-	if err := db.WriteSchema(ctx, f); err != nil {
-		return err
-	}
-
-	logging.Sugar.Infof("Success migration prod!\n")
 
 	return nil
 }
