@@ -102,6 +102,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
         <Input
           id="name"
           type="text"
+          autoComplete="name"
           {...register('name', {
             required: convertLang({
               ja: 'この項目は必須です',
@@ -120,6 +121,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
         <Input
           id="mail"
           type="mail"
+          autoComplete="email"
           {...register('mail', {
             required: convertLang({
               ja: 'この項目は必須です',
