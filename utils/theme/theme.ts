@@ -24,6 +24,22 @@ const theme = extendTheme({
       500: '#404663',
       600: '#343952',
     },
+    my: {
+      primary: '#572bcf',
+      secondary: '#2bc4cf',
+      accent: '#cf2ba1',
+    },
+    cateiru: {
+      100: '#b7ecf0',
+      200: '#93e3e9',
+      300: '#6fdae1',
+      400: '#4cd0da',
+      500: '#2bc4cf',
+      600: '#24a3ad',
+      700: '#1d838a',
+      800: '#166268',
+      900: '#0e4145',
+    },
   },
 
   fonts: {
@@ -38,6 +54,36 @@ const theme = extendTheme({
         },
       },
     }),
+    Input: {
+      defaultProps: {
+        focusBorderColor: 'my.secondary',
+      },
+    },
+    Textarea: {
+      defaultProps: {
+        focusBorderColor: 'my.secondary',
+      },
+    },
+    NumberInput: {
+      defaultProps: {
+        focusBorderColor: 'my.secondary',
+      },
+    },
+    PinInput: {
+      defaultProps: {
+        focusBorderColor: 'my.secondary',
+      },
+    },
+    Checkbox: {
+      defaultProps: {
+        colorScheme: 'cateiru',
+      },
+    },
+    Select: {
+      defaultProps: {
+        focusBorderColor: 'my.secondary',
+      },
+    },
     Text: defineStyleConfig({
       baseStyle: {
         fontWeight: 'normal',

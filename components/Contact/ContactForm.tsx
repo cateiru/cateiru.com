@@ -224,8 +224,8 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
         mt={4}
         isLoading={isSubmitting}
         type="submit"
-        colorScheme="green"
-        width={{base: '100%', md: 'auto'}}
+        colorScheme="cateiru"
+        width="100%"
       >
         {convertLang({ja: '送信する', en: 'Submit'})}
       </Button>

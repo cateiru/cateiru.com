@@ -101,7 +101,6 @@ const Contact = () => {
           <Text
             as="pre"
             w="100%"
-            minH="100px"
             py="1rem"
             px=".5rem"
             bgColor={colorMode === 'dark' ? 'gray.700' : 'gray.100'}

@@ -326,7 +326,7 @@ export const Generator = () => {
           <Button
             mt={4}
             w="100%"
-            colorScheme="blue"
+            colorScheme="cateiru"
             isLoading={isSubmitting}
             type="submit"
             size="sm"
@@ -338,10 +338,4 @@ export const Generator = () => {
       {generatedURL && <PreviewImage src={generatedURL} download={download} />}
     </>
   );
-};
-
-const toImageFile = (b: Blob): Blob => {
-  const binaryData = [];
-  binaryData.push(b);
-  return new Blob(binaryData, {type: 'image/*'});
 };
