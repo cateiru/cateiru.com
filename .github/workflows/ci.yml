@@ -19,24 +19,24 @@ jobs:
     name: next build and lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env: 
+    env:
       TZ: "Asia/Tokyo"
     steps:
       - uses: actions/checkout@v1
-      
+
       - name: Install packages
         run: yarn install
-        
+
       - name: Lint
         run: yarn lint
-        
+
       - name: Build
         run: yarn build
   go:
     name: go build and test
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env: 
+    env:
       TZ: "Asia/Tokyo"
     steps:
     - uses: actions/checkout@v2
@@ -45,7 +45,7 @@ jobs:
       with:
         go-version: 1.19
     - name: Run SQL
-      run: docker-compose up -d
+      run: ./script/docker-compose-db.sh up -d
     - name: Migration Test DB
       run: go run ./scripts/main.go migration -m test
     - name: Build
