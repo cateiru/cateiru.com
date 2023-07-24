@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"strconv"
 
@@ -309,7 +310,12 @@ func GetFavicon(siteUrl string) (string, error) {
 		return "", err
 	}
 
-	client := &http.Client{}
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		return "", err
+	}
+
+	client := &http.Client{Jar: jar}
 	req, err := http.NewRequest("GET", site.String(), nil)
 	if err != nil {
 		return "", err
