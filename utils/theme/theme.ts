@@ -117,10 +117,8 @@ const theme = extendTheme({
       html: {
         scrollbarWidth: 'thin',
         scrollbarColor: props.colorMode === 'dark' ? 'brand.600' : 'gray.400',
-        overflow: 'overlay',
       },
       body: {
-        width: '100vw',
         background:
           props.colorMode === 'dark'
             ? colorTheme.darkBackground
