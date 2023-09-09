@@ -221,7 +221,7 @@ export const NewLink: React.FC<{
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {convertLang({ja: '制作物を新規作成', en: 'Create new Product'})}
+          {convertLang({ja: 'リンクを新規作成', en: 'Create new Link'})}
         </ModalHeader>
         <ModalCloseButton size="lg" />
         <ModalBody mb="1rem">
@@ -408,7 +408,7 @@ const UpdateLink: React.FC<{
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {convertLang({ja: '場所を新規作成', en: 'Create new Location'})}
+          {convertLang({ja: 'リンクを新規作成', en: 'Create new Link'})}
         </ModalHeader>
         <ModalCloseButton size="lg" />
         <ModalBody mb="1rem">
