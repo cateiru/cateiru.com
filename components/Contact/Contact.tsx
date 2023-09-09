@@ -1,3 +1,4 @@
+import {ParsedUrlQuery} from 'querystring';
 import {
   Center,
   Box,
@@ -29,26 +30,8 @@ const Contact = () => {
   React.useEffect(() => {
     if (!router.isReady) return;
     const query = router.query;
-    const d: ContactFormProps = {};
 
-    if (typeof query['subject'] === 'string') {
-      d.subject = query['subject'];
-    }
-    if (typeof query['url'] === 'string') {
-      d.url = query['url'];
-    }
-    if (typeof query['name'] === 'string') {
-      d.name = query['name'];
-    }
-    if (typeof query['mail'] === 'string') {
-      d.mail = query['mail'];
-    }
-    if (typeof query['category'] === 'string') {
-      d.category = query['category'];
-    }
-    if (typeof query['custom_title'] === 'string') {
-      d.custom_title = query['custom_title'];
-    }
+    const d = buildData(query);
     if (typeof query['description'] === 'string') {
       setDescription(query['description']);
     }
@@ -69,12 +52,15 @@ const Contact = () => {
 
       const resData = ContactDefaultSchema.parse(await r.json());
 
+      const defaultData = buildData(router.query);
+
       const d: ContactFormProps = {
         url: resData.url,
         name: resData.name,
         mail: resData.email,
         category: resData.category,
         custom_title: resData.custom_title,
+        ...defaultData,
       };
       setData(d);
       setExternalBack(true);
@@ -127,5 +113,35 @@ const Contact = () => {
     </Center>
   );
 };
+
+/**
+ *
+ * @param {ParsedUrlQuery} query - クエリ
+ * @returns {ContactFormProps} フォームのデフォルト値
+ */
+function buildData(query: ParsedUrlQuery): ContactFormProps {
+  const d: ContactFormProps = {};
+
+  if (typeof query['subject'] === 'string') {
+    d.subject = query['subject'];
+  }
+  if (typeof query['url'] === 'string') {
+    d.url = query['url'];
+  }
+  if (typeof query['name'] === 'string') {
+    d.name = query['name'];
+  }
+  if (typeof query['mail'] === 'string') {
+    d.mail = query['mail'];
+  }
+  if (typeof query['category'] === 'string') {
+    d.category = query['category'];
+  }
+  if (typeof query['custom_title'] === 'string') {
+    d.custom_title = query['custom_title'];
+  }
+
+  return d;
+}
 
 export default Contact;
