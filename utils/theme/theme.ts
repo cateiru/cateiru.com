@@ -79,6 +79,11 @@ const theme = extendTheme({
         colorScheme: 'cateiru',
       },
     },
+    Switch: {
+      defaultProps: {
+        colorScheme: 'cateiru',
+      },
+    },
     Select: {
       defaultProps: {
         focusBorderColor: 'my.secondary',
