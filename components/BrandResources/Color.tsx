@@ -8,40 +8,30 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
-import {color} from 'framer-motion';
 import React from 'react';
 import {TbCheck} from 'react-icons/tb';
 import {MultiLang} from '../../utils/config/lang';
 import {textColor} from '../../utils/theme/color';
 import {colorTheme} from '../../utils/theme/theme';
 import useLanguage from '../useLanguage';
+import {ColorCircle} from './CorloCircle';
 
 export const Color = () => {
   const {convertLang} = useLanguage();
 
   return (
     <Box>
-      <Heading textAlign="center" mb="1rem" id="colors">
-        {convertLang({ja: 'カラーパレット', en: 'Color Palettes'})}
-      </Heading>
+      <Center>
+        <Heading textAlign="center" mb="1rem" id="colors">
+          {convertLang({ja: 'カラーパレット', en: 'Color Palettes'})}
+        </Heading>
+      </Center>
       <Center>
         <Box w={{base: '96%', md: '700px'}}>
-          <Box
-            h="20px"
-            background="linear-gradient(90deg, #2bc4cf, #572bcf, #cf2ba1)"
-            borderRadius="25px"
-          ></Box>
-          <SimpleGrid columns={3} spacing={10} mt=".5rem" fontSize="1.2rem">
-            <Box textAlign="left">
-              <ColorCode>#2bc4cf</ColorCode>
-            </Box>
-            <Box textAlign="center">
-              <ColorCode>#572bcf</ColorCode>
-            </Box>
-            <Box textAlign="right">
-              <ColorCode>#cf2ba1</ColorCode>
-            </Box>
-          </SimpleGrid>
+          <ColorCircle color1="#2bc4cf" color2="#572bcf" color3="#cf2ba1" />
+          <ColorCircle color1="#17c9c9" color2="#336cff" />
+          <ColorCircle color1="#e23d3d" color2="#ec44bd" />
+
           <SimpleGrid
             columns={{base: 1, sm: 2, md: 3}}
             spacing="3rem"
@@ -80,20 +70,6 @@ export const Color = () => {
         </Box>
       </Center>
     </Box>
-  );
-};
-
-const ColorCode: React.FC<{children: string}> = props => {
-  const {onCopy, hasCopied} = useClipboard(props.children);
-
-  return (
-    <Button variant="ghost" color={props.children} onClick={onCopy}>
-      {hasCopied ? (
-        <TbCheck color={props.children} size="25px" />
-      ) : (
-        props.children
-      )}
-    </Button>
   );
 };
 

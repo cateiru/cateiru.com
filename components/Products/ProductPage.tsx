@@ -55,9 +55,16 @@ export const ProductPage: React.FC<{
           </Center>
         )}
         <Back href="/" />
-        <Heading textAlign="center" mt="1rem">
-          {convertLang({ja: product.name_ja, en: product.name})}
-        </Heading>
+        <Center>
+          <Heading
+            textAlign="center"
+            mt="1rem"
+            background="linear-gradient(128deg, #E23D3D 0%, #EC44BD 100%)"
+            backgroundClip="text"
+          >
+            {convertLang({ja: product.name_ja, en: product.name})}
+          </Heading>
+        </Center>
         <Text
           textAlign="center"
           fontSize=".8rem"

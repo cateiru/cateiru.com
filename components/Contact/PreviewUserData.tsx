@@ -47,12 +47,12 @@ export const PreviewUserData = () => {
         whiteSpace="pre-wrap"
         fontSize="1rem"
       >
-        <Heading fontSize="1rem">
+        <Text fontSize="1rem" fontWeight="bold">
           {convertLang({
             ja: 'うまく送信できない場合があるかもしれません。',
             en: 'You may not be able to send the message properly.',
           })}
-        </Heading>
+        </Text>
         <Text mt=".5rem">
           {convertLang({
             ja: 'サーバーとの接続を試みましたが、何らかの問題が発生したため失敗しました。もう一度ページをロードしてみてください。',
@@ -77,12 +77,12 @@ export const PreviewUserData = () => {
       whiteSpace="pre-wrap"
       fontSize="1rem"
     >
-      <Heading fontSize="1rem">
+      <Text fontSize="1rem" fontWeight="bold">
         {convertLang({
           ja: '以下のユーザ情報も一緒に送信されます。',
           en: 'The following user information is also sent together.',
         })}
-      </Heading>
+      </Text>
       <UnorderedList mt=".5rem">
         <ListItem>{`${convertLang({
           ja: 'ブラウザ',

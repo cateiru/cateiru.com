@@ -8,9 +8,11 @@ export const IconGenerator = () => {
   return (
     <Center>
       <Box w={{base: '96%', md: '500px'}} mb="5rem">
-        <Heading textAlign="center" mt="3rem" mb="2rem">
-          {convertLang({ja: 'アイコンジェネレーター', en: 'Icon Generator'})}
-        </Heading>
+        <Center>
+          <Heading textAlign="center" mt="3rem" mb="2rem">
+            {convertLang({ja: 'アイコンジェネレーター', en: 'Icon Generator'})}
+          </Heading>
+        </Center>
         <Text textAlign="center" mb="1rem">
           {convertLang({
             ja: 'アイコンジェネレーターを使用すると、アイコンのサイズ、背景、円形のマスクなどが可能です。',

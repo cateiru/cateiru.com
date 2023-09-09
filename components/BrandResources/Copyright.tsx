@@ -24,9 +24,11 @@ export const Copyright = () => {
 
   return (
     <Box>
-      <Heading textAlign="center" mb="1rem" id="copyright">
-        {convertLang({ja: 'コピーライト表記', en: 'Copyright Statement'})}
-      </Heading>
+      <Center>
+        <Heading textAlign="center" mb="1rem" id="copyright">
+          {convertLang({ja: 'コピーライト表記', en: 'Copyright Statement'})}
+        </Heading>
+      </Center>
       <Text textAlign="center" mb="1.5rem" mx=".5rem">
         {convertLang({
           ja: 'Cateiruが作成したソフトウェアをライセンス下のもとに使用する場合などにご使用ください。',

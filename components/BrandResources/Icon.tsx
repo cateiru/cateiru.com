@@ -8,9 +8,11 @@ export const Icon = () => {
 
   return (
     <Box>
-      <Heading textAlign="center" mb="1rem" id="icons">
-        {convertLang({ja: 'アイコン', en: 'Icons'})}
-      </Heading>
+      <Center>
+        <Heading textAlign="center" mb="1rem" id="icons">
+          {convertLang({ja: 'アイコン', en: 'Icons'})}
+        </Heading>
+      </Center>
       <Center mx=".5rem">
         <IconContent
           src="https://storage.googleapis.com/cateiru/brand_resource/icon.png"

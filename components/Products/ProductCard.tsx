@@ -57,16 +57,20 @@ export const ProductCard: React.FC<{prod: PublicProduct}> = ({prod}) => {
           )}
         </Center>
         <Box mt={{base: '0', md: '1rem'}}>
-          <Text
-            fontWeight="bold"
-            fontSize="1.2rem"
-            textAlign="center"
-            whiteSpace="nowrap"
-            textOverflow="ellipsis"
-            overflow="hidden"
-          >
-            {convertLang({ja: prod.name_ja, en: prod.name})}
-          </Text>
+          <Center>
+            <Text
+              fontWeight="bold"
+              fontSize="1.2rem"
+              textAlign="center"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+              overflow="hidden"
+              background="linear-gradient(128deg, #E23D3D 0%, #EC44BD 100%)"
+              backgroundClip="text"
+            >
+              {convertLang({ja: prod.name_ja, en: prod.name})}
+            </Text>
+          </Center>
           <Divider my=".5rem" />
           <Text
             textAlign="center"
