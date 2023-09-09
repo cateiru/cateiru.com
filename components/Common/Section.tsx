@@ -17,9 +17,11 @@ export const Section: React.FC<{
     <Center minHeight="100vh" ref={props.r} mb={{base: '150px', md: '25px'}}>
       <Box width={{base: '90%', md: '600px', lg: '900px'}}>
         {props.heading && (
-          <Heading textAlign="center" mb="2rem" id={props.heading.en}>
-            {convertLang(props.heading)}
-          </Heading>
+          <Center>
+            <Heading textAlign="center" mb="2rem" id={props.heading.en}>
+              {convertLang(props.heading)}
+            </Heading>
+          </Center>
         )}
         {props.children}
         <Center mt="1.5rem">

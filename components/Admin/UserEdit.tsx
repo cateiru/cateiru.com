@@ -265,7 +265,7 @@ export const UserEdit = () => {
             <Button
               mt={4}
               w={{base: '100%', md: 'auto'}}
-              colorScheme="blue"
+              colorScheme="cateiru"
               isLoading={isSubmitting}
               type="submit"
             >

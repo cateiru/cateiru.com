@@ -387,7 +387,7 @@ export const NewProduct: React.FC<{
             <Button
               mt={4}
               w="100%"
-              colorScheme="blue"
+              colorScheme="cateiru"
               isLoading={isSubmitting}
               type="submit"
             >
@@ -621,7 +621,7 @@ const UpdateProduct: React.FC<{
             <Button
               mt={4}
               w="100%"
-              colorScheme="blue"
+              colorScheme="cateiru"
               isLoading={isSubmitting}
               type="submit"
             >

@@ -92,6 +92,8 @@ const theme = extendTheme({
     Heading: defineStyleConfig({
       baseStyle: {
         fontWeight: '800',
+        background: 'linear-gradient(132deg, #17C9C9 0%, #336CFF 100%);',
+        backgroundClip: 'text',
       },
     }),
   },

@@ -7,13 +7,15 @@ import useLanguage from '../useLanguage';
 const ProfileText: React.FC<{data: Public}> = ({data}) => {
   const {lang, convertLang} = useLanguage();
   return (
-    <Box textAlign="center">
-      <Heading>
-        {convertLang({
-          ja: `${data.family_name_ja} ${data.given_name_ja}`,
-          en: `${data.given_name} ${data.family_name}`,
-        })}
-      </Heading>
+    <Box>
+      <Center>
+        <Heading textAlign="center">
+          {convertLang({
+            ja: `${data.family_name_ja} ${data.given_name_ja}`,
+            en: `${data.given_name} ${data.family_name}`,
+          })}
+        </Heading>
+      </Center>
       <Center mt="1rem">
         <FaBirthdayCake />
         <Text ml=".2rem">

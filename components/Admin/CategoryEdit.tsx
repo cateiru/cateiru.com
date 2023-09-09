@@ -208,7 +208,7 @@ export const NewCategory: React.FC<{
               <Button
                 mt={4}
                 w="100%"
-                colorScheme="blue"
+                colorScheme="cateiru"
                 isLoading={isSubmitting}
                 type="submit"
               >
@@ -334,7 +334,7 @@ const UpdateCategory: React.FC<{
               <Button
                 mt={4}
                 w="100%"
-                colorScheme="blue"
+                colorScheme="cateiru"
                 isLoading={isSubmitting}
                 type="submit"
               >
