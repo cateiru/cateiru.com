@@ -34,9 +34,6 @@ services:
         FROM node:alpine
 
         WORKDIR /app
-
-        COPY package.json yarn.lock ./
-        RUN yarn --frozen-lockfile
     ports:
       - "3000:3000"
     environment:
@@ -47,4 +44,4 @@ services:
     depends_on:
       - db
       - backend_app
-    command: yarn dev
+    command: sh -c "yarn --frozen-lockfile && yarn dev"
