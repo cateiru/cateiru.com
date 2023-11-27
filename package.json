@@ -21,7 +21,7 @@
         "framer-motion": "^10.12.16",
         "gantt-task-react": "^0.3.9",
         "js-cookie": "^3.0.5",
-        "next": "13.4.4",
+        "next": "13.5.0",
         "next-intercept-stdout": "^1.0.1",
         "node-fetch": "^3.3.1",
         "noto-sans-cjk-jp": "^1.0.1",
