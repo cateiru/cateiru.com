@@ -37,7 +37,7 @@
         "string-to-color": "^2.2.2",
         "swr": "^2.1.5",
         "vanta": "^0.5.24",
-        "zod": "^3.21.4"
+        "zod": "^3.22.3"
     },
     "devDependencies": {
         "@types/gtag.js": "^0.0.12",
