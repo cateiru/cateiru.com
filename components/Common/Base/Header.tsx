@@ -1,4 +1,4 @@
-import { Flex, IconButton, useColorMode } from "@chakra-ui/react";
+import { Flex, IconButton, Text, useColorMode } from "@chakra-ui/react";
 import React from "react";
 import { IoMoon, IoSunny } from "react-icons/io5";
 import { useRecoilState } from "recoil";
@@ -8,10 +8,10 @@ const Header = React.memo(() => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [lang, setLang] = useRecoilState(langState);
 
+  // biome-ignore lint:
   React.useEffect(() => {
     const language =
-      (window.navigator.languages?.[0]) ||
-      window.navigator.language;
+      window.navigator.languages?.[0] || window.navigator.language;
 
     if (!/^ja\b/.test(language)) {
       // change english
@@ -58,7 +58,7 @@ const Header = React.memo(() => {
       />
       <IconButton
         aria-label="switch color mode"
-        icon={lang === "ja" ? "🇺🇸" : "🇯🇵"}
+        icon={<Text>{lang === "ja" ? "🇺🇸" : "🇯🇵"}</Text>}
         onClick={toggleLang}
         variant="ghost"
         my=".5rem"

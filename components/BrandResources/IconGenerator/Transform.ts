@@ -1,5 +1,3 @@
-import { rejects } from "node:assert";
-
 export class Transform {
   private context: CanvasRenderingContext2D | null;
 
@@ -108,7 +106,7 @@ export class Transform {
    */
   public async export(type: string, quality = 1.0): Promise<Blob | null> {
     return await new Promise<Blob | null>((resolve) => {
-      if (!this.context) return rejects;
+      if (!this.context) return null;
       this.context.canvas.toBlob(resolve, type, quality);
     });
   }
