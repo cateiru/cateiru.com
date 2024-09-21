@@ -6,13 +6,13 @@ import {
   FormErrorMessage,
   FormLabel,
   useColorMode,
-} from '@chakra-ui/react';
-import React from 'react';
-import {ColorPicker, useColor} from 'react-color-palette';
-import {useFormContext, useWatch} from 'react-hook-form';
+} from "@chakra-ui/react";
+import React from "react";
+import { ColorPicker, useColor } from "react-color-palette";
+import { useFormContext, useWatch } from "react-hook-form";
 
-import 'react-color-palette/lib/css/styles.css';
-import useLanguage from '../../useLanguage';
+import "react-color-palette/lib/css/styles.css";
+import useLanguage from "../../useLanguage";
 
 export interface ColorPickerFormType {
   isTransparent: boolean;
@@ -26,21 +26,24 @@ export const ColorPickerForm = () => {
     setValue,
     register,
     control,
-    formState: {errors},
+    formState: { errors },
   } = useFormContext<ColorPickerFormType>();
-  const [color, setColor] = useColor('hex', '#fff');
+  const [color, setColor] = useColor("hex", "#fff");
   const isTransparent = useWatch({
     control,
-    name: 'isTransparent',
+    name: "isTransparent",
   });
-  const {convertLang} = useLanguage();
-  const {colorMode} = useColorMode();
+  const { convertLang } = useLanguage();
+  const { colorMode } = useColorMode();
 
   return (
     <>
       <FormControl mt="1rem" isInvalid={Boolean(errors.isTransparent)}>
-        <Checkbox id="isTransparent" {...register('isTransparent')}>
-          {convertLang({ja: '背景を塗りつぶす', en: 'fill in the background'})}
+        <Checkbox id="isTransparent" {...register("isTransparent")}>
+          {convertLang({
+            ja: "背景を塗りつぶす",
+            en: "fill in the background",
+          })}
         </Checkbox>
         <FormErrorMessage>
           {errors.isTransparent && errors.isTransparent.message}
@@ -51,9 +54,9 @@ export const ColorPickerForm = () => {
           <Box
             mt=".5rem"
             boxShadow={
-              colorMode === 'light'
-                ? '0px 1px 26px -3px #a0acc0'
-                : '0px 1px 26px -3px #000'
+              colorMode === "light"
+                ? "0px 1px 26px -3px #a0acc0"
+                : "0px 1px 26px -3px #000"
             }
             w="300px"
             borderRadius="10px"
@@ -62,16 +65,16 @@ export const ColorPickerForm = () => {
               width={300}
               height={228}
               color={color}
-              onChange={color => {
+              onChange={(color) => {
                 setColor(color);
               }}
-              onChangeComplete={color => {
-                setValue('r', color.rgb.r);
-                setValue('g', color.rgb.g);
-                setValue('b', color.rgb.b);
+              onChangeComplete={(color) => {
+                setValue("r", color.rgb.r);
+                setValue("g", color.rgb.g);
+                setValue("b", color.rgb.b);
               }}
               hideHSV
-              dark={colorMode === 'dark'}
+              dark={colorMode === "dark"}
             />
           </Box>
         </Center>

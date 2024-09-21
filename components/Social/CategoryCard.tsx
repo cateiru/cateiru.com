@@ -7,23 +7,23 @@ import {
   Link,
   Text,
   useColorMode,
-} from '@chakra-ui/react';
-import {TbPhoto} from 'react-icons/tb';
-import {PublicLink} from '../../utils/types';
-import useLanguage from '../useLanguage';
+} from "@chakra-ui/react";
+import { TbPhoto } from "react-icons/tb";
+import { PublicLink } from "../../utils/types";
+import useLanguage from "../useLanguage";
 
-export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
-  const {colorMode} = useColorMode();
-  const {convertLang} = useLanguage();
+export const CategoryCard: React.FC<{ links: PublicLink }> = ({ links }) => {
+  const { colorMode } = useColorMode();
+  const { convertLang } = useLanguage();
 
   return (
     <Box
       w="100%"
       minH="350px"
       boxShadow={
-        colorMode === 'light'
-          ? '0px 1px 26px -3px #a0acc0'
-          : '0px 1px 26px -3px #000'
+        colorMode === "light"
+          ? "0px 1px 26px -3px #a0acc0"
+          : "0px 1px 26px -3px #000"
       }
       borderRadius="56px"
       p="1rem"
@@ -38,7 +38,7 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
           background="linear-gradient(128deg, #E23D3D 0%, #EC44BD 100%)"
           backgroundClip="text"
         >
-          {convertLang({ja: links.category_name_ja, en: links.category_name})}
+          {convertLang({ ja: links.category_name_ja, en: links.category_name })}
         </Text>
       </Flex>
       <Divider my="1rem" />
@@ -50,13 +50,13 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
                 mt="1rem"
                 py=".5rem"
                 cursor="pointer"
-                fontSize={{base: '1rem', sm: '1rem'}}
-                bgColor={colorMode === 'dark' ? 'brand.600' : 'brand.200'}
+                fontSize={{ base: "1rem", sm: "1rem" }}
+                bgColor={colorMode === "dark" ? "brand.600" : "brand.200"}
                 borderRadius="25"
                 pl="1rem"
-                fontWeight={{base: 'bold', sm: 'medium'}}
+                fontWeight={{ base: "bold", sm: "medium" }}
                 _hover={{
-                  bgColor: colorMode === 'dark' ? 'brand.500' : 'brand.300',
+                  bgColor: colorMode === "dark" ? "brand.500" : "brand.300",
                 }}
                 transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
               >
@@ -76,7 +76,7 @@ export const CategoryCard: React.FC<{links: PublicLink}> = ({links}) => {
                     </Center>
                   )}
                   <Text maxW="calc(100% - 4rem)">
-                    {convertLang({ja: v.name_ja, en: v.name})}
+                    {convertLang({ ja: v.name_ja, en: v.name })}
                   </Text>
                 </Flex>
               </Box>

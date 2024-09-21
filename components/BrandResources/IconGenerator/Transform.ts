@@ -1,4 +1,4 @@
-import {rejects} from 'assert';
+import { rejects } from "assert";
 
 export class Transform {
   private context: CanvasRenderingContext2D | null;
@@ -9,7 +9,7 @@ export class Transform {
   private afterHeight: number | undefined;
 
   constructor(width?: number, height?: number) {
-    this.context = document.createElement('canvas').getContext('2d');
+    this.context = document.createElement("canvas").getContext("2d");
 
     this.afterWidth = width;
     this.afterHeight = height;
@@ -34,15 +34,15 @@ export class Transform {
    * @param {number} b - blue
    */
   public setBg(r: number, g: number, b: number) {
-    if (!this.context) throw new Error('context is null');
-    if (typeof this.image === 'undefined')
-      throw new Error('image is undefined');
+    if (!this.context) throw new Error("context is null");
+    if (typeof this.image === "undefined")
+      throw new Error("image is undefined");
 
     const imageData = this.context.getImageData(
       0,
       0,
       this.context.canvas.width,
-      this.context.canvas.height
+      this.context.canvas.height,
     );
 
     for (let i = 0; i < imageData.width * imageData.height; i++) {
@@ -57,11 +57,11 @@ export class Transform {
   }
 
   public setCircle() {
-    if (!this.context) throw new Error('context is null');
-    if (typeof this.image === 'undefined')
-      throw new Error('image is undefined');
+    if (!this.context) throw new Error("context is null");
+    if (typeof this.image === "undefined")
+      throw new Error("image is undefined");
 
-    this.context.globalCompositeOperation = 'destination-in';
+    this.context.globalCompositeOperation = "destination-in";
 
     const size = this.context.canvas.width / 2;
 
@@ -70,15 +70,15 @@ export class Transform {
       this.context.canvas.height / 2,
       size,
       0,
-      Math.PI * 2
+      Math.PI * 2,
     );
     this.context.fill();
   }
 
   private draw() {
-    if (!this.context) throw new Error('context is null');
-    if (typeof this.image === 'undefined')
-      throw new Error('image is undefined');
+    if (!this.context) throw new Error("context is null");
+    if (typeof this.image === "undefined")
+      throw new Error("image is undefined");
 
     const w = this.afterWidth ?? this.image.naturalWidth;
     const h = this.afterHeight ?? this.image.naturalHeight;
@@ -95,7 +95,7 @@ export class Transform {
       0,
       0,
       w,
-      h
+      h,
     );
   }
 
@@ -107,7 +107,7 @@ export class Transform {
    * @returns {Blob} - 画像データ
    */
   public async export(type: string, quality = 1.0): Promise<Blob | null> {
-    return await new Promise<Blob | null>(resolve => {
+    return await new Promise<Blob | null>((resolve) => {
       if (!this.context) return rejects;
       this.context.canvas.toBlob(resolve, type, quality);
     });
@@ -129,7 +129,7 @@ export async function getSize(b: File): Promise<[number, number]> {
 export const loadImage = async (src: string): Promise<HTMLImageElement> =>
   await new Promise((resolve, reject) => {
     const image = new Image();
-    image.addEventListener('load', () => resolve(image));
-    image.addEventListener('error', reject);
+    image.addEventListener("load", () => resolve(image));
+    image.addEventListener("error", reject);
     image.src = src;
   });

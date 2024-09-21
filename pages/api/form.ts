@@ -1,12 +1,12 @@
-import {NextApiRequest, NextApiResponse} from 'next';
-import {Form} from '../../utils/form';
+import { NextApiRequest, NextApiResponse } from "next";
+import { Form } from "../../utils/form";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('OK');
+  console.log("OK");
   let status = 400;
-  if (req.method === 'POST') {
+  if (req.method === "POST") {
     const form = req.body as Form;
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "";
     status = await sendDiscord(form, ip);
   }
 
@@ -16,11 +16,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const sendDiscord = async (
   form: Form,
-  ip: string[] | string
+  ip: string[] | string,
 ): Promise<number> => {
-  const token = process.env.DISCORD_TOKEN || '';
-  if (typeof ip !== 'string') {
-    ip = ip.join(' ');
+  const token = process.env.DISCORD_TOKEN || "";
+  if (typeof ip !== "string") {
+    ip = ip.join(" ");
   }
 
   let status = 200;
@@ -28,7 +28,7 @@ const sendDiscord = async (
   const text = `【新着問い合わせ】
 * お名前: ${form.name}
 * メールアドレス: ${form.mail}
-* URL: ${form.url || 'Null'}
+* URL: ${form.url || "Null"}
 * 送信日時: ${form.date}
 * IPアドレス: ${ip}
 * 言語: ${form.lang}
@@ -40,9 +40,9 @@ ${form.body}
 
   try {
     const r = await fetch(token, {
-      method: 'POST',
-      body: JSON.stringify({content: text}),
-      headers: {'Content-Type': 'application/json'},
+      method: "POST",
+      body: JSON.stringify({ content: text }),
+      headers: { "Content-Type": "application/json" },
     });
     if (!r.ok) {
       throw new Error(r.statusText);

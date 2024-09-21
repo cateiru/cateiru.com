@@ -1,7 +1,7 @@
-import React from 'react';
-import {useRecoilValue} from 'recoil';
-import type {MultiLang} from '../utils/config/lang';
-import {langState} from '../utils/state/atoms';
+import React from "react";
+import { useRecoilValue } from "recoil";
+import type { MultiLang } from "../utils/config/lang";
+import { langState } from "../utils/state/atoms";
 
 interface ReturnValue {
   lang: string;
@@ -13,15 +13,15 @@ const useLanguage = (): ReturnValue => {
 
   const convertLang = React.useCallback(
     (e: MultiLang) => {
-      if (lang === 'ja') {
+      if (lang === "ja") {
         return e.ja;
       }
       return e.en;
     },
-    [lang]
+    [lang],
   );
 
-  return {lang, convertLang};
+  return { lang, convertLang };
 };
 
 export default useLanguage;

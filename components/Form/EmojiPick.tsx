@@ -7,12 +7,12 @@ import {
   Input,
   useColorMode,
   Skeleton,
-} from '@chakra-ui/react';
-import EmojiPicker from 'emoji-picker-react';
-import {Theme as EmojiTheme, EmojiStyle} from 'emoji-picker-react';
-import React from 'react';
-import {useFormContext} from 'react-hook-form';
-import {MultiLang} from '../../utils/config/lang';
+} from "@chakra-ui/react";
+import EmojiPicker from "emoji-picker-react";
+import { Theme as EmojiTheme, EmojiStyle } from "emoji-picker-react";
+import React from "react";
+import { useFormContext } from "react-hook-form";
+import { MultiLang } from "../../utils/config/lang";
 
 interface EmojiForm {
   emoji: string;
@@ -20,19 +20,19 @@ interface EmojiForm {
 
 export const EmojiPick = React.memo<{
   convertLang: (e: MultiLang) => string;
-}>(({convertLang}) => {
+}>(({ convertLang }) => {
   const {
     register,
     setValue,
     getValues,
-    formState: {errors},
+    formState: { errors },
   } = useFormContext<EmojiForm>();
-  const {colorMode} = useColorMode();
-  const [previewEmoji, setPreviewEmoji] = React.useState('');
+  const { colorMode } = useColorMode();
+  const [previewEmoji, setPreviewEmoji] = React.useState("");
   const [showEmojiSearch, setShowEmojiSearch] = React.useState(false);
 
   React.useEffect(() => {
-    const e = getValues('emoji');
+    const e = getValues("emoji");
     if (e.length !== 0) {
       setPreviewEmoji(e);
     }
@@ -43,14 +43,14 @@ export const EmojiPick = React.memo<{
   }, []);
 
   const setEmoji = (emoji: string) => {
-    setValue('emoji', emoji);
+    setValue("emoji", emoji);
     setPreviewEmoji(emoji);
   };
 
   return (
     <FormControl mt=".5rem" isInvalid={Boolean(errors.emoji)}>
       <FormLabel htmlFor="emoji">
-        {convertLang({ja: '絵文字', en: 'Emoji'})}
+        {convertLang({ ja: "絵文字", en: "Emoji" })}
       </FormLabel>
       <Input
         as={Box}
@@ -64,10 +64,10 @@ export const EmojiPick = React.memo<{
       <Input
         display="none"
         id="emoji"
-        {...register('emoji', {
+        {...register("emoji", {
           required: convertLang({
-            ja: 'この項目は必須です',
-            en: 'This is required',
+            ja: "この項目は必須です",
+            en: "This is required",
           }),
         })}
       />
@@ -78,8 +78,8 @@ export const EmojiPick = React.memo<{
         <Center>
           {showEmojiSearch && (
             <EmojiPicker
-              onEmojiClick={e => setEmoji(e.emoji)}
-              theme={colorMode === 'dark' ? EmojiTheme.DARK : EmojiTheme.LIGHT}
+              onEmojiClick={(e) => setEmoji(e.emoji)}
+              theme={colorMode === "dark" ? EmojiTheme.DARK : EmojiTheme.LIGHT}
               emojiStyle={EmojiStyle.NATIVE}
               lazyLoadEmojis
               width="100%"
@@ -91,4 +91,4 @@ export const EmojiPick = React.memo<{
   );
 });
 
-EmojiPick.displayName = 'EmojiPick';
+EmojiPick.displayName = "EmojiPick";

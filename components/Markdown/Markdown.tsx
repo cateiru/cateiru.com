@@ -6,10 +6,10 @@
  *
  * Copyright (C) 2021 hello-slide
  **********************************************************/
-import ReactMarkdown from 'react-markdown';
-import {components} from './Contents';
+import ReactMarkdown from "react-markdown";
+import { components } from "./Contents";
 
-const Markdown: React.FC<{children: string}> = ({children}) => {
+const Markdown: React.FC<{ children: string }> = ({ children }) => {
   return <ReactMarkdown components={components}>{children}</ReactMarkdown>;
 };
 

@@ -1,5 +1,5 @@
-import type {Area} from './area';
-import type {MultiLang} from './lang';
+import type { Area } from "./area";
+import type { MultiLang } from "./lang";
 
 export interface Biography {
   primarySchool?: BiographyDetail;

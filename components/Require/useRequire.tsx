@@ -1,8 +1,8 @@
-import {useRouter} from 'next/router';
-import React from 'react';
-import {useRecoilState} from 'recoil';
-import {UserState} from '../../utils/state/atoms';
-import {Verify} from '../../utils/verify';
+import { useRouter } from "next/router";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { UserState } from "../../utils/state/atoms";
+import { Verify } from "../../utils/verify";
 
 export interface ReturnValues {
   show: boolean;
@@ -10,7 +10,7 @@ export interface ReturnValues {
 
 export const useRequire = (
   isRedirect: boolean,
-  redirectPath?: string
+  redirectPath?: string,
 ): ReturnValues => {
   const [user, setUser] = useRecoilState(UserState);
   const router = useRouter();
@@ -25,9 +25,9 @@ export const useRequire = (
 
       const verify = new Verify(
         isRedirect,
-        u => setUser(u),
+        (u) => setUser(u),
         router,
-        redirectPath
+        redirectPath,
       );
 
       await verify.exec(() => {

@@ -5,7 +5,7 @@
  * @returns {string} - 補色のHEXカラーコード
  */
 export function complementary(color: string): string {
-  color = color.replace('#', '');
+  color = color.replace("#", "");
 
   const r = parseInt(color.substring(0, 2), 16);
   const g = parseInt(color.substring(2, 4), 16);
@@ -28,13 +28,13 @@ export function complementary(color: string): string {
  * @returns {string} - 文字色
  */
 export function textColor(color: string): string {
-  const t = parseInt(color.replace('#', ''), 16);
+  const t = parseInt(color.replace("#", ""), 16);
 
   return +(
     (299 * ((t >> 16) & 255) + 587 * ((t >> 8) & 255) + 114 * (255 & t)) /
     1e3 /
     255
   ).toFixed(2) < 0.6
-    ? 'white'
-    : 'black';
+    ? "white"
+    : "black";
 }

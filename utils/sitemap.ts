@@ -1,15 +1,15 @@
-import {createGzip, Gzip} from 'zlib';
+import { createGzip, Gzip } from "zlib";
 import {
   SitemapItem,
   SitemapStream,
   EnumChangefreq,
   streamToPromise,
-} from 'sitemap';
-import {getPublicProfile} from '../utils/public';
+} from "sitemap";
+import { getPublicProfile } from "../utils/public";
 
 const defaultLinks: SitemapItem[] = [
   {
-    url: '/',
+    url: "/",
     changefreq: EnumChangefreq.NEVER,
     priority: 1.0,
     img: [],
@@ -17,7 +17,7 @@ const defaultLinks: SitemapItem[] = [
     links: [],
   },
   {
-    url: '/contact',
+    url: "/contact",
     changefreq: EnumChangefreq.NEVER,
     priority: 1.0,
     img: [],
@@ -25,7 +25,7 @@ const defaultLinks: SitemapItem[] = [
     links: [],
   },
   {
-    url: '/brand_resources',
+    url: "/brand_resources",
     changefreq: EnumChangefreq.NEVER,
     priority: 1.0,
     img: [],
@@ -33,7 +33,7 @@ const defaultLinks: SitemapItem[] = [
     links: [],
   },
   {
-    url: '/brand_resources/icon_generator',
+    url: "/brand_resources/icon_generator",
     changefreq: EnumChangefreq.NEVER,
     priority: 1.0,
     img: [],
@@ -50,7 +50,7 @@ const defaultLinks: SitemapItem[] = [
 export async function generateSitemap(): Promise<Gzip> {
   const d = await getPublicProfile();
 
-  const smStream = new SitemapStream({hostname: 'https://cateiru.com/'});
+  const smStream = new SitemapStream({ hostname: "https://cateiru.com/" });
   const pipeline = smStream.pipe(createGzip());
 
   for (const link of defaultLinks) {

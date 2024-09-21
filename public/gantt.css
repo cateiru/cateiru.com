@@ -1,28 +1,28 @@
-#gantt svg>g>rect {
-    fill: var(--background-color) !important;
-    stroke: var(--background-color) !important;
+#gantt svg > g > rect {
+  fill: var(--background-color) !important;
+  stroke: var(--background-color) !important;
 }
 
 #gantt svg line {
-    stroke: var(--background-color) !important;
+  stroke: var(--background-color) !important;
 }
 
-#gantt svg>g>g>g>rect {
-    fill: var(--background-color) !important;
+#gantt svg > g > g > g > rect {
+  fill: var(--background-color) !important;
 }
 
-#gantt svg .calendar>text {
-    fill: var(--text-color) !important;
+#gantt svg .calendar > text {
+  fill: var(--text-color) !important;
 }
 
-#gantt svg .calendarTop>text {
-    fill: var(--text-color) !important;
+#gantt svg .calendarTop > text {
+  fill: var(--text-color) !important;
 }
 
 #gantt svg .bar text {
-    fill: var(--text-color) !important;
+  fill: var(--text-color) !important;
 }
 
 #gantt b {
-    color: black;
+  color: black;
 }

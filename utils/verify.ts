@@ -1,7 +1,7 @@
-import Cookies from 'js-cookie';
-import {NextRouter} from 'next/router';
-import {api} from './api';
-import {User, UserSchema} from './types';
+import Cookies from "js-cookie";
+import { NextRouter } from "next/router";
+import { api } from "./api";
+import { User, UserSchema } from "./types";
 
 export class Verify {
   private isRedirect: boolean;
@@ -14,7 +14,7 @@ export class Verify {
     isRedirect: boolean,
     setUser: (u: User | null) => void,
     router: NextRouter,
-    redirectPath?: string
+    redirectPath?: string,
   ) {
     this.isRedirect = isRedirect;
     this.setUser = setUser;
@@ -24,9 +24,9 @@ export class Verify {
   }
 
   private async me(): Promise<User | null> {
-    const res = await fetch(api('/user/me'), {
-      credentials: 'include',
-      mode: 'cors',
+    const res = await fetch(api("/user/me"), {
+      credentials: "include",
+      mode: "cors",
     });
 
     if (res.ok) {
@@ -38,14 +38,14 @@ export class Verify {
   }
 
   private checkLoginFromCookie(): boolean {
-    const isSession = Cookies.get('cateirucom-issession');
+    const isSession = Cookies.get("cateirucom-issession");
 
-    return typeof isSession === 'string';
+    return typeof isSession === "string";
   }
 
   private after(handler: () => void) {
     if (this.failed && this.isRedirect) {
-      this.router.push(this.redirectPath ?? '/');
+      this.router.push(this.redirectPath ?? "/");
     }
     handler();
   }

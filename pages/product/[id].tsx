@@ -1,10 +1,10 @@
-import {GetStaticPaths, GetStaticProps, NextPage} from 'next';
-import {useRouter} from 'next/router';
-import React from 'react';
-import {Head} from '../../components/Common/Head';
-import {ProductPage} from '../../components/Products/ProductPage';
-import {getPublicProduct} from '../../utils/public';
-import {PublicProduct} from '../../utils/types';
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useRouter } from "next/router";
+import React from "react";
+import { Head } from "../../components/Common/Head";
+import { ProductPage } from "../../components/Products/ProductPage";
+import { getPublicProduct } from "../../utils/public";
+import { PublicProduct } from "../../utils/types";
 
 const CACHE_TIME = 60; // 1 min
 
@@ -12,7 +12,7 @@ type Props = {
   product?: PublicProduct;
 };
 
-const Product: NextPage<Props> = props => {
+const Product: NextPage<Props> = (props) => {
   const router = useRouter();
 
   if (router.isFallback && !props.product) return <></>;
@@ -21,8 +21,8 @@ const Product: NextPage<Props> = props => {
     <>
       <Head
         title={{
-          ja: props.product?.name_ja ?? '',
-          en: props.product?.name ?? '',
+          ja: props.product?.name_ja ?? "",
+          en: props.product?.name ?? "",
         }}
       />
       {props.product && <ProductPage product={props.product} />}
@@ -30,13 +30,12 @@ const Product: NextPage<Props> = props => {
   );
 };
 
-export const getStaticProps: GetStaticProps<
-  Props,
-  {id: string}
-> = async context => {
+export const getStaticProps: GetStaticProps<Props, { id: string }> = async (
+  context,
+) => {
   const id = context.params?.id;
 
-  if (typeof id === 'undefined') {
+  if (typeof id === "undefined") {
     return {
       notFound: true,
     };

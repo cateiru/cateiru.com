@@ -1,5 +1,5 @@
-import {Center, Divider, Box, Text, Link} from '@chakra-ui/react';
-import NextLink from 'next/link';
+import { Center, Divider, Box, Text, Link } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 const Footer = () => {
   return (
@@ -10,13 +10,13 @@ const Footer = () => {
         </Box>
       </Center>
       <Text textAlign="center" mb="1.5rem">
-        &copy; {new Date().getFullYear()}{' '}
+        &copy; {new Date().getFullYear()}{" "}
         <NextLink href="/">
-          <Text as="span" _hover={{borderBottom: '1px'}}>
+          <Text as="span" _hover={{ borderBottom: "1px" }}>
             cateiru
           </Text>
-        </NextLink>{' '}
-        -{' '}
+        </NextLink>{" "}
+        -{" "}
         <Link href="https://github.com/cateiru/cateiru.com" isExternal>
           GitHub
         </Link>

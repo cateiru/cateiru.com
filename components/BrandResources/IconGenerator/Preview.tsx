@@ -1,13 +1,13 @@
-import {Box, Center, Image, useColorMode} from '@chakra-ui/react';
-import React from 'react';
-import {TbDownload} from 'react-icons/tb';
+import { Box, Center, Image, useColorMode } from "@chakra-ui/react";
+import React from "react";
+import { TbDownload } from "react-icons/tb";
 
-export const PreviewImage: React.FC<{src: string; download: () => void}> = ({
+export const PreviewImage: React.FC<{ src: string; download: () => void }> = ({
   src,
   download,
 }) => {
   const [hover, setHover] = React.useState(false);
-  const {colorMode} = useColorMode();
+  const { colorMode } = useColorMode();
 
   return (
     <Center mt="1rem">
@@ -15,9 +15,9 @@ export const PreviewImage: React.FC<{src: string; download: () => void}> = ({
         width="fit-content"
         height="fit-content"
         boxShadow={
-          colorMode === 'light'
-            ? '0px 1px 26px -3px #a0acc0'
-            : '0px 1px 26px -3px #000'
+          colorMode === "light"
+            ? "0px 1px 26px -3px #a0acc0"
+            : "0px 1px 26px -3px #000"
         }
         onClick={download}
         cursor="pointer"
@@ -33,7 +33,7 @@ export const PreviewImage: React.FC<{src: string; download: () => void}> = ({
           borderRadius="50%"
           bgColor="white"
           p=".5rem"
-          visibility={hover ? 'visible' : 'hidden'}
+          visibility={hover ? "visible" : "hidden"}
           opacity={hover ? 1 : 0}
           transition=".2s cubic-bezier(0.45, 0, 0.55, 1)"
         >

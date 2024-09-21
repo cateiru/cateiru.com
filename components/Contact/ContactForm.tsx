@@ -6,11 +6,11 @@ import {
   FormErrorMessage,
   Textarea,
   useToast,
-} from '@chakra-ui/react';
-import React from 'react';
-import {useForm} from 'react-hook-form';
-import {api} from '../../utils/api';
-import useLanguage from '../useLanguage';
+} from "@chakra-ui/react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { api } from "../../utils/api";
+import useLanguage from "../useLanguage";
 
 export interface ContactFormProps {
   name?: string;
@@ -33,41 +33,41 @@ interface FormValue {
   custom_value?: string;
 }
 
-export const ContactForm: React.FC<ContactFormProps> = props => {
-  const {convertLang, lang} = useLanguage();
+export const ContactForm: React.FC<ContactFormProps> = (props) => {
+  const { convertLang, lang } = useLanguage();
   const toast = useToast();
   const {
     handleSubmit,
     register,
-    formState: {errors, isSubmitting},
+    formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormValue>({defaultValues: props});
+  } = useForm<FormValue>({ defaultValues: props });
 
   const onSubmit = async (v: FormValue) => {
     const form = new FormData();
-    form.append('name', v.name);
-    form.append('subject', v.subject);
-    form.append('mail', v.mail);
-    form.append('detail', v.details);
+    form.append("name", v.name);
+    form.append("subject", v.subject);
+    form.append("mail", v.mail);
+    form.append("detail", v.details);
 
-    form.append('lang', lang);
+    form.append("lang", lang);
 
     if (v.url) {
-      form.append('url', v.url);
+      form.append("url", v.url);
     }
     if (v.category) {
-      form.append('category', v.category);
+      form.append("category", v.category);
     }
     if (v.custom_title && v.custom_value) {
-      form.append('custom_title', v.custom_title);
-      form.append('custom_value', v.custom_value);
+      form.append("custom_title", v.custom_title);
+      form.append("custom_value", v.custom_value);
     }
 
     try {
-      const r = await fetch(api('/contact'), {
-        method: 'POST',
-        credentials: 'include',
-        mode: 'cors',
+      const r = await fetch(api("/contact"), {
+        method: "POST",
+        credentials: "include",
+        mode: "cors",
         body: form,
       });
 
@@ -76,15 +76,15 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
       }
 
       toast({
-        status: 'success',
-        title: convertLang({ja: '送信しました', en: 'Submitted.'}),
+        status: "success",
+        title: convertLang({ ja: "送信しました", en: "Submitted." }),
       });
 
       reset();
     } catch (e) {
       if (e instanceof Error) {
         toast({
-          status: 'error',
+          status: "error",
           title: e.message,
         });
       }
@@ -97,16 +97,16 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl isInvalid={Boolean(errors.name)}>
         <FormLabel htmlFor="name">
-          {convertLang({ja: 'お名前', en: 'Your Name'})}
+          {convertLang({ ja: "お名前", en: "Your Name" })}
         </FormLabel>
         <Input
           id="name"
           type="text"
           autoComplete="name"
-          {...register('name', {
+          {...register("name", {
             required: convertLang({
-              ja: 'この項目は必須です',
-              en: 'This is required',
+              ja: "この項目は必須です",
+              en: "This is required",
             }),
           })}
         />
@@ -116,23 +116,23 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
       </FormControl>
       <FormControl isInvalid={Boolean(errors.mail)} mt="1rem">
         <FormLabel htmlFor="mail">
-          {convertLang({ja: 'メールアドレス', en: 'mail Address'})}
+          {convertLang({ ja: "メールアドレス", en: "mail Address" })}
         </FormLabel>
         <Input
           id="mail"
           type="mail"
           autoComplete="email"
-          {...register('mail', {
+          {...register("mail", {
             required: convertLang({
-              ja: 'この項目は必須です',
-              en: 'This is required',
+              ja: "この項目は必須です",
+              en: "This is required",
             }),
             pattern: {
               value:
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
               message: convertLang({
-                ja: '正しいメールアドレスを入力してください。',
-                en: 'Please enter your correct mail address.',
+                ja: "正しいメールアドレスを入力してください。",
+                en: "Please enter your correct mail address.",
               }),
             },
           })}
@@ -143,13 +143,13 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
       </FormControl>
       <FormControl isInvalid={Boolean(errors.url)} mt="1rem">
         <FormLabel htmlFor="url">
-          {convertLang({ja: 'URL（オプション）', en: 'URL (Optional)'})}
+          {convertLang({ ja: "URL（オプション）", en: "URL (Optional)" })}
         </FormLabel>
         <Input
           id="url"
           placeholder="https://"
           type="url"
-          {...register('url')}
+          {...register("url")}
         />
         <FormErrorMessage>{errors.url && errors.url.message}</FormErrorMessage>
       </FormControl>
@@ -157,15 +157,15 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
         <FormControl isInvalid={Boolean(errors.category)} mt="1rem">
           <FormLabel htmlFor="category">
             {convertLang({
-              ja: 'カテゴリ',
-              en: 'category',
+              ja: "カテゴリ",
+              en: "category",
             })}
           </FormLabel>
           <Input
             id="category"
             type="category"
             isDisabled
-            {...register('category')}
+            {...register("category")}
           />
           <FormErrorMessage>
             {errors.category && errors.category.message}
@@ -178,7 +178,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
           <Input
             id="custom_value"
             type="custom_value"
-            {...register('custom_value')}
+            {...register("custom_value")}
           />
           <FormErrorMessage>
             {errors.custom_value && errors.custom_value.message}
@@ -187,15 +187,15 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
       )}
       <FormControl isInvalid={Boolean(errors.subject)} mt="1rem">
         <FormLabel htmlFor="subject">
-          {convertLang({ja: '件名', en: 'Subject'})}
+          {convertLang({ ja: "件名", en: "Subject" })}
         </FormLabel>
         <Input
           id="subject"
           type="text"
-          {...register('subject', {
+          {...register("subject", {
             required: convertLang({
-              ja: 'この項目は必須です',
-              en: 'This is required',
+              ja: "この項目は必須です",
+              en: "This is required",
             }),
           })}
         />
@@ -205,16 +205,16 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
       </FormControl>
       <FormControl isInvalid={Boolean(errors.details)} mt="1rem">
         <FormLabel htmlFor="details">
-          {convertLang({ja: 'お問い合わせ内容', en: 'Inquiry Details'})}
+          {convertLang({ ja: "お問い合わせ内容", en: "Inquiry Details" })}
         </FormLabel>
         <Textarea
           id="details"
           resize="vertical"
           height="150px"
-          {...register('details', {
+          {...register("details", {
             required: convertLang({
-              ja: 'この項目は必須です',
-              en: 'This is required',
+              ja: "この項目は必須です",
+              en: "This is required",
             }),
           })}
         />
@@ -229,7 +229,7 @@ export const ContactForm: React.FC<ContactFormProps> = props => {
         colorScheme="cateiru"
         width="100%"
       >
-        {convertLang({ja: '送信する', en: 'Submit'})}
+        {convertLang({ ja: "送信する", en: "Submit" })}
       </Button>
     </form>
   );

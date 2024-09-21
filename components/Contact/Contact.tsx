@@ -1,4 +1,4 @@
-import {ParsedUrlQuery} from 'querystring';
+import { ParsedUrlQuery } from "querystring";
 import {
   Center,
   Box,
@@ -7,20 +7,20 @@ import {
   Text,
   useColorMode,
   useToast,
-} from '@chakra-ui/react';
-import {useRouter} from 'next/router';
-import React from 'react';
-import {api} from '../../utils/api';
-import {ContactDefaultSchema} from '../../utils/types';
-import {Back} from '../Back';
-import useLanguage from '../useLanguage';
-import {ContactForm, ContactFormProps} from './ContactForm';
-import {PreviewUserData} from './PreviewUserData';
+} from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import React from "react";
+import { api } from "../../utils/api";
+import { ContactDefaultSchema } from "../../utils/types";
+import { Back } from "../Back";
+import useLanguage from "../useLanguage";
+import { ContactForm, ContactFormProps } from "./ContactForm";
+import { PreviewUserData } from "./PreviewUserData";
 
 const Contact = () => {
   const router = useRouter();
-  const {colorMode} = useColorMode();
-  const {convertLang} = useLanguage();
+  const { colorMode } = useColorMode();
+  const { convertLang } = useLanguage();
   const [data, setData] = React.useState<ContactFormProps | null>(null);
   const [description, setDescription] = React.useState<string>();
   const [externalBack, setExternalBack] = React.useState<boolean>(false);
@@ -32,11 +32,11 @@ const Contact = () => {
     const query = router.query;
 
     const d = buildData(query);
-    if (typeof query['description'] === 'string') {
-      setDescription(query['description']);
+    if (typeof query["description"] === "string") {
+      setDescription(query["description"]);
     }
-    if (typeof query['id'] === 'string') {
-      getCustom(query['id']);
+    if (typeof query["id"] === "string") {
+      getCustom(query["id"]);
       return;
     }
     setData(d);
@@ -69,7 +69,7 @@ const Contact = () => {
     } catch (e) {
       if (e instanceof Error) {
         toast({
-          status: 'error',
+          status: "error",
           title: e.message,
         });
       }
@@ -78,10 +78,10 @@ const Contact = () => {
 
   return (
     <Center minHeight="100vh">
-      <Box width={{base: '95%', md: '500px'}} mb="4rem" mt="3rem">
-        <Back href={externalBack ? undefined : '/'} />
+      <Box width={{ base: "95%", md: "500px" }} mb="4rem" mt="3rem">
+        <Back href={externalBack ? undefined : "/"} />
         <Heading mb="2rem" textAlign="center" mt="1.5rem">
-          {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
+          {convertLang({ ja: "お問い合わせ", en: "Contact Us" })}
         </Heading>
         {description && (
           <Text
@@ -89,10 +89,10 @@ const Contact = () => {
             w="100%"
             py="1rem"
             px=".5rem"
-            bgColor={colorMode === 'dark' ? 'gray.700' : 'gray.100'}
+            bgColor={colorMode === "dark" ? "gray.700" : "gray.100"}
             borderRadius="5px"
             borderLeftWidth="4px"
-            borderLeftColor={colorMode === 'dark' ? 'gray.500' : 'gray.400'}
+            borderLeftColor={colorMode === "dark" ? "gray.500" : "gray.400"}
             mb="1.5rem"
             whiteSpace="pre-wrap"
             fontSize="1rem"
@@ -122,23 +122,23 @@ const Contact = () => {
 function buildData(query: ParsedUrlQuery): ContactFormProps {
   const d: ContactFormProps = {};
 
-  if (typeof query['subject'] === 'string') {
-    d.subject = query['subject'];
+  if (typeof query["subject"] === "string") {
+    d.subject = query["subject"];
   }
-  if (typeof query['url'] === 'string') {
-    d.url = query['url'];
+  if (typeof query["url"] === "string") {
+    d.url = query["url"];
   }
-  if (typeof query['name'] === 'string') {
-    d.name = query['name'];
+  if (typeof query["name"] === "string") {
+    d.name = query["name"];
   }
-  if (typeof query['mail'] === 'string') {
-    d.mail = query['mail'];
+  if (typeof query["mail"] === "string") {
+    d.mail = query["mail"];
   }
-  if (typeof query['category'] === 'string') {
-    d.category = query['category'];
+  if (typeof query["category"] === "string") {
+    d.category = query["category"];
   }
-  if (typeof query['custom_title'] === 'string') {
-    d.custom_title = query['custom_title'];
+  if (typeof query["custom_title"] === "string") {
+    d.custom_title = query["custom_title"];
   }
 
   return d;

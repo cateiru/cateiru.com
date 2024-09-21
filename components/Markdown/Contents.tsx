@@ -6,10 +6,10 @@
  *
  * Copyright (C) 2021 hello-slide
  **********************************************************/
-import type {Components} from 'react-markdown';
-import * as headers from './Contents/Heading';
-import * as lists from './Contents/Lists';
-import * as texts from './Contents/Texts';
+import type { Components } from "react-markdown";
+import * as headers from "./Contents/Heading";
+import * as lists from "./Contents/Lists";
+import * as texts from "./Contents/Texts";
 
 export const components: Components = {
   h1: headers.H1,

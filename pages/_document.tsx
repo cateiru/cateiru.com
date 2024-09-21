@@ -1,6 +1,6 @@
-import {ColorModeScript} from '@chakra-ui/react';
-import Document, {Html, Head, Main, NextScript} from 'next/document';
-import {GA_TRACKING_ID} from '../utils/ga/gtag';
+import { ColorModeScript } from "@chakra-ui/react";
+import Document, { Html, Head, Main, NextScript } from "next/document";
+import { GA_TRACKING_ID } from "../utils/ga/gtag";
 
 export default class MyDocument extends Document {
   render(): JSX.Element {

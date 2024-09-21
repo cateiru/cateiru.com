@@ -1,4 +1,4 @@
-import {api} from './api';
+import { api } from "./api";
 
 export interface SWRError extends Error {
   message: string;
@@ -11,13 +11,13 @@ export interface SWRError extends Error {
  */
 export async function fetcher(url: string) {
   const res = await fetch(api(url), {
-    credentials: 'include',
-    mode: 'cors',
+    credentials: "include",
+    mode: "cors",
   });
 
   if (!res.ok) {
     const error: SWRError = new Error(
-      'An error occurred while fetching the data.'
+      "An error occurred while fetching the data.",
     );
     const m = (await res.json()).message;
     error.message = `${res.status} : ${m}`;

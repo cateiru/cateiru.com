@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import { z } from "zod";
 
 export interface ColorThemes {
   darkBackground: string;
@@ -40,7 +40,7 @@ export const BioSchema = z.object({
 });
 export const LocationSchema = z.object({
   id: z.number(),
-  type: z.enum(['univ', 'corp']),
+  type: z.enum(["univ", "corp"]),
   name: z.string(),
   name_ja: z.string(),
   address: z.string(),
@@ -133,12 +133,12 @@ export const PublicBioSchema = z.array(
     position_ja: z.string(),
     join: z.string(),
     leave: z.string(),
-    type: z.enum(['univ', 'corp']),
+    type: z.enum(["univ", "corp"]),
     name: z.string(),
     name_ja: z.string(),
     address: z.string(),
     address_ja: z.string(),
-  })
+  }),
 );
 
 export const PublicLinkSchema = z.object({
@@ -153,7 +153,7 @@ export const PublicLinkSchema = z.object({
       name_ja: z.string(),
       site_url: z.string(),
       favicon_url: z.string().optional(),
-    })
+    }),
   ),
 });
 

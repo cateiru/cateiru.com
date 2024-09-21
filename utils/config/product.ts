@@ -1,4 +1,4 @@
-import type {MultiLang} from './lang';
+import type { MultiLang } from "./lang";
 
 export interface Product {
   name: MultiLang;

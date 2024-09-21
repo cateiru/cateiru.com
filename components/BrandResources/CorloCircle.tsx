@@ -1,6 +1,6 @@
-import {Box, Button, SimpleGrid, useClipboard} from '@chakra-ui/react';
-import React from 'react';
-import {TbCheck} from 'react-icons/tb';
+import { Box, Button, SimpleGrid, useClipboard } from "@chakra-ui/react";
+import React from "react";
+import { TbCheck } from "react-icons/tb";
 
 interface Props {
   color1: string;
@@ -8,7 +8,7 @@ interface Props {
   color3?: string;
 }
 
-export const ColorCircle: React.FC<Props> = props => {
+export const ColorCircle: React.FC<Props> = (props) => {
   return (
     <>
       <Box
@@ -30,7 +30,7 @@ export const ColorCircle: React.FC<Props> = props => {
         <Box textAlign="left">
           <ColorCode>{props.color1}</ColorCode>
         </Box>
-        <Box textAlign={props.color3 ? 'center' : 'right'}>
+        <Box textAlign={props.color3 ? "center" : "right"}>
           <ColorCode>{props.color2}</ColorCode>
         </Box>
         {props.color3 && (
@@ -43,8 +43,8 @@ export const ColorCircle: React.FC<Props> = props => {
   );
 };
 
-const ColorCode: React.FC<{children: string}> = props => {
-  const {onCopy, hasCopied} = useClipboard(props.children);
+const ColorCode: React.FC<{ children: string }> = (props) => {
+  const { onCopy, hasCopied } = useClipboard(props.children);
 
   return (
     <Button variant="ghost" color={props.children} onClick={onCopy}>

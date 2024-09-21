@@ -1,14 +1,14 @@
-import React from 'react';
-import {Public} from '../utils/types';
-import Bio from './Bio/Bio';
-import ContactLink from './Contact/ContactLink';
-import Products from './Products/Products';
-import Profile from './Profile/Profile';
-import Social from './Social/Social';
+import React from "react";
+import { Public } from "../utils/types";
+import Bio from "./Bio/Bio";
+import ContactLink from "./Contact/ContactLink";
+import Products from "./Products/Products";
+import Profile from "./Profile/Profile";
+import Social from "./Social/Social";
 
 const Index = React.memo<{
   profile: Public;
-}>(props => {
+}>((props) => {
   const bioRef = React.useRef<HTMLDivElement>(null!);
   const productsRef = React.useRef<HTMLDivElement>(null!);
   const socialRef = React.useRef<HTMLDivElement>(null!);
@@ -16,29 +16,29 @@ const Index = React.memo<{
 
   const scrollToBio = React.useCallback(() => {
     bioRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
+      behavior: "smooth",
+      block: "start",
     });
   }, [bioRef]);
 
   const scrollToProducts = React.useCallback(() => {
     productsRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
+      behavior: "smooth",
+      block: "start",
     });
   }, [productsRef]);
 
   const scrollToSocial = React.useCallback(() => {
     socialRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
+      behavior: "smooth",
+      block: "start",
     });
   }, [socialRef]);
 
   const scrollToContact = React.useCallback(() => {
     contactRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
+      behavior: "smooth",
+      block: "start",
     });
   }, [contactRef]);
 
@@ -76,6 +76,6 @@ const Index = React.memo<{
   );
 });
 
-Index.displayName = 'Index';
+Index.displayName = "Index";
 
 export default Index;

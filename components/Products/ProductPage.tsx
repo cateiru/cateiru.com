@@ -7,24 +7,24 @@ import {
   Link,
   Text,
   useColorMode,
-} from '@chakra-ui/react';
-import React from 'react';
-import {TbBrandGithub, TbLink} from 'react-icons/tb';
-import {parseShotDate} from '../../utils/parse';
-import {PublicProduct} from '../../utils/types';
-import {Back} from '../Back';
-import Markdown from '../Markdown/Markdown';
-import useLanguage from '../useLanguage';
+} from "@chakra-ui/react";
+import React from "react";
+import { TbBrandGithub, TbLink } from "react-icons/tb";
+import { parseShotDate } from "../../utils/parse";
+import { PublicProduct } from "../../utils/types";
+import { Back } from "../Back";
+import Markdown from "../Markdown/Markdown";
+import useLanguage from "../useLanguage";
 
 export const ProductPage: React.FC<{
   product: PublicProduct;
-}> = ({product}) => {
-  const {convertLang, lang} = useLanguage();
-  const {colorMode} = useColorMode();
+}> = ({ product }) => {
+  const { convertLang, lang } = useLanguage();
+  const { colorMode } = useColorMode();
 
   return (
     <Center minH="100vh">
-      <Box w={{base: '95%', md: '500px'}} minH="700px" mt="4rem">
+      <Box w={{ base: "95%", md: "500px" }} minH="700px" mt="4rem">
         {product.thumbnail ? (
           <Image
             src={product.thumbnail}
@@ -32,25 +32,25 @@ export const ProductPage: React.FC<{
             alt="thumbnail"
             borderRadius="25"
             boxShadow={
-              colorMode === 'light'
-                ? '0px 1px 26px -3px #a0acc0'
-                : '0px 1px 26px -3px #000'
+              colorMode === "light"
+                ? "0px 1px 26px -3px #a0acc0"
+                : "0px 1px 26px -3px #000"
             }
           />
         ) : (
           <Center
             w="100%"
             h="300px"
-            bgColor={colorMode === 'dark' ? 'gray.700' : 'gray.100'}
+            bgColor={colorMode === "dark" ? "gray.700" : "gray.100"}
             borderRadius="25"
             boxShadow={
-              colorMode === 'light'
-                ? '0px 1px 26px -3px #a0acc0'
-                : '0px 1px 26px -3px #000'
+              colorMode === "light"
+                ? "0px 1px 26px -3px #a0acc0"
+                : "0px 1px 26px -3px #000"
             }
           >
             <Text fontSize="1.2rem" color="gray.400">
-              {convertLang({ja: '画像なし', en: 'No Image'})}
+              {convertLang({ ja: "画像なし", en: "No Image" })}
             </Text>
           </Center>
         )}
@@ -62,7 +62,7 @@ export const ProductPage: React.FC<{
             background="linear-gradient(128deg, #E23D3D 0%, #EC44BD 100%)"
             backgroundClip="text"
           >
-            {convertLang({ja: product.name_ja, en: product.name})}
+            {convertLang({ ja: product.name_ja, en: product.name })}
           </Heading>
         </Center>
         <Text
@@ -73,9 +73,14 @@ export const ProductPage: React.FC<{
         >
           {parseShotDate(product.dev_time, lang)}
         </Text>
-        <Box mb="1rem" mt=".5rem" overflow="auto" mx={{base: '.5rem', md: '0'}}>
+        <Box
+          mb="1rem"
+          mt=".5rem"
+          overflow="auto"
+          mx={{ base: ".5rem", md: "0" }}
+        >
           <Markdown>
-            {convertLang({ja: product.detail_ja, en: product.detail})}
+            {convertLang({ ja: product.detail_ja, en: product.detail })}
           </Markdown>
         </Box>
         <Center mt="1rem">

@@ -1,12 +1,12 @@
-import {Center, Button} from '@chakra-ui/react';
-import {useRouter} from 'next/router';
-import React from 'react';
-import useLanguage from '../useLanguage';
+import { Center, Button } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import React from "react";
+import useLanguage from "../useLanguage";
 
 const ContactLink: React.FC<{
   r: React.MutableRefObject<HTMLDivElement>;
-}> = ({r}) => {
-  const {convertLang} = useLanguage();
+}> = ({ r }) => {
+  const { convertLang } = useLanguage();
   const router = useRouter();
 
   return (
@@ -14,19 +14,19 @@ const ContactLink: React.FC<{
       <Button
         variant="outline"
         onClick={() => {
-          router.push('/contact');
+          router.push("/contact");
         }}
       >
-        {convertLang({ja: 'お問い合わせ', en: 'Contact Us'})}
+        {convertLang({ ja: "お問い合わせ", en: "Contact Us" })}
       </Button>
       <Button
         variant="outline"
         onClick={() => {
-          router.push('/brand_resources');
+          router.push("/brand_resources");
         }}
         ml=".5rem"
       >
-        {convertLang({ja: 'ブランドリソース', en: 'Brand Resources'})}
+        {convertLang({ ja: "ブランドリソース", en: "Brand Resources" })}
       </Button>
     </Center>
   );

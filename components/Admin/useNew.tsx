@@ -1,15 +1,15 @@
-import {useToast} from '@chakra-ui/react';
-import {useForm} from 'react-hook-form';
+import { useToast } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 import type {
   FieldValues,
   FormState,
   UseFormHandleSubmit,
   UseFormRegister,
   UseFormReturn,
-} from 'react-hook-form';
-import {api} from '../../utils/api';
-import {MultiLang} from '../../utils/config/lang';
-import {UpdateHandler} from './useList';
+} from "react-hook-form";
+import { api } from "../../utils/api";
+import { MultiLang } from "../../utils/config/lang";
+import { UpdateHandler } from "./useList";
 
 interface Args<T, V extends FieldValues> {
   path: string;
@@ -35,10 +35,10 @@ interface ReturnValues<V extends FieldValues> {
  * @returns {ReturnValues} - return
  */
 export function useNew<T, V extends FieldValues>(
-  a: Args<T, V>
+  a: Args<T, V>,
 ): ReturnValues<V> {
   const methods = useForm<V>();
-  const {handleSubmit, register, reset, formState} = methods;
+  const { handleSubmit, register, reset, formState } = methods;
   const toast = useToast();
 
   const wrapperOnClose = () => {
@@ -50,22 +50,22 @@ export function useNew<T, V extends FieldValues>(
     const form = a.formFunc(d);
 
     const res = await fetch(api(a.path), {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
+      method: "POST",
+      credentials: "include",
+      mode: "cors",
       body: form,
     });
 
     if (res.ok) {
       toast({
-        status: 'success',
-        title: a.convertLang({ja: '作成しました', en: 'Success created'}),
+        status: "success",
+        title: a.convertLang({ ja: "作成しました", en: "Success created" }),
       });
       const responseData = a.parse(await res.json());
-      a.update(responseData, 'cre');
+      a.update(responseData, "cre");
     } else {
       toast({
-        status: 'error',
+        status: "error",
         title: (await res.json()).message,
       });
     }
@@ -75,5 +75,12 @@ export function useNew<T, V extends FieldValues>(
     return () => {};
   };
 
-  return {onSubmit, handleSubmit, register, formState, wrapperOnClose, methods};
+  return {
+    onSubmit,
+    handleSubmit,
+    register,
+    formState,
+    wrapperOnClose,
+    methods,
+  };
 }

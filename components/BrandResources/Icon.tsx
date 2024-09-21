@@ -1,16 +1,16 @@
-import {Box, Button, Center, Heading, Image, Link} from '@chakra-ui/react';
-import NextLink from 'next/link';
-import React from 'react';
-import useLanguage from '../useLanguage';
+import { Box, Button, Center, Heading, Image, Link } from "@chakra-ui/react";
+import NextLink from "next/link";
+import React from "react";
+import useLanguage from "../useLanguage";
 
 export const Icon = () => {
-  const {convertLang} = useLanguage();
+  const { convertLang } = useLanguage();
 
   return (
     <Box>
       <Center>
         <Heading textAlign="center" mb="1rem" id="icons">
-          {convertLang({ja: 'アイコン', en: 'Icons'})}
+          {convertLang({ ja: "アイコン", en: "Icons" })}
         </Heading>
       </Center>
       <Center mx=".5rem">
@@ -32,7 +32,10 @@ export const Icon = () => {
       <Center mt="1.5rem">
         <NextLink href="/brand_resources/icon_generator" passHref>
           <Button as="p">
-            {convertLang({ja: 'アイコンジェネレーター', en: 'Icon Generator'})}
+            {convertLang({
+              ja: "アイコンジェネレーター",
+              en: "Icon Generator",
+            })}
           </Button>
         </NextLink>
       </Center>
@@ -44,10 +47,10 @@ const IconContent: React.FC<{
   src: string;
   alt: string;
   ml?: boolean;
-}> = props => {
+}> = (props) => {
   return (
     <Link
-      ml={props.ml ? {base: '.5rem', sm: '1.5rem', md: '2.5rem'} : undefined}
+      ml={props.ml ? { base: ".5rem", sm: "1.5rem", md: "2.5rem" } : undefined}
       href={props.src}
       isExternal
     >

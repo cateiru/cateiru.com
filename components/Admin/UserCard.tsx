@@ -11,16 +11,16 @@ import {
   TableContainer,
   Badge,
   Button,
-} from '@chakra-ui/react';
-import NextLink from 'next/link';
-import {useRecoilValue} from 'recoil';
-import {parseDate} from '../../utils/parse';
-import {UserState} from '../../utils/state/atoms';
-import useLanguage from '../useLanguage';
-import {CardFrame} from './CardFrame';
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+import { useRecoilValue } from "recoil";
+import { parseDate } from "../../utils/parse";
+import { UserState } from "../../utils/state/atoms";
+import useLanguage from "../useLanguage";
+import { CardFrame } from "./CardFrame";
 
 export const UserCard = () => {
-  const {lang, convertLang} = useLanguage();
+  const { lang, convertLang } = useLanguage();
   const user = useRecoilValue(UserState);
 
   return (
@@ -28,19 +28,19 @@ export const UserCard = () => {
       <Box position="absolute" top="20" right="20">
         <NextLink passHref href="/admin/user">
           <Button size="sm" as="a">
-            {convertLang({ja: '編集', en: 'edit'})}
+            {convertLang({ ja: "編集", en: "edit" })}
           </Button>
         </NextLink>
       </Box>
       {user?.selected && (
         <Box position="absolute" top="20" left="20">
           <Badge variant="subtle" colorScheme="green">
-            {convertLang({ja: '選択済み', en: 'selected'})}
+            {convertLang({ ja: "選択済み", en: "selected" })}
           </Badge>
         </Box>
       )}
       <Heading fontSize="1.2rem" textAlign="center" fontWeight="bold">
-        {convertLang({ja: 'ユーザ', en: 'User Card'})}
+        {convertLang({ ja: "ユーザ", en: "User Card" })}
       </Heading>
       <Box mt="1rem">
         <Center>
@@ -58,55 +58,55 @@ export const UserCard = () => {
             <Tbody>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: 'ユーザID', en: 'User ID'})}
+                  {convertLang({ ja: "ユーザID", en: "User ID" })}
                 </Td>
                 <Td>{user?.user_id}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: '名字', en: 'Family Name'})}
+                  {convertLang({ ja: "名字", en: "Family Name" })}
                 </Td>
                 <Td>
-                  {lang === 'ja' ? user?.family_name_ja : user?.family_name}
+                  {lang === "ja" ? user?.family_name_ja : user?.family_name}
                 </Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: '名前', en: 'Given Name'})}
+                  {convertLang({ ja: "名前", en: "Given Name" })}
                 </Td>
                 <Td>
-                  {lang === 'ja' ? user?.given_name_ja : user?.given_name}
+                  {lang === "ja" ? user?.given_name_ja : user?.given_name}
                 </Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: 'メールアドレス', en: 'Mail Address'})}
+                  {convertLang({ ja: "メールアドレス", en: "Mail Address" })}
                 </Td>
                 <Td>{user?.mail}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: '誕生日', en: 'Birth Date'})}
+                  {convertLang({ ja: "誕生日", en: "Birth Date" })}
                 </Td>
-                <Td>{parseDate(user?.birth_date ?? '', lang)}</Td>
+                <Td>{parseDate(user?.birth_date ?? "", lang)}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: '在住', en: 'Location'})}
+                  {convertLang({ ja: "在住", en: "Location" })}
                 </Td>
-                <Td>{lang === 'ja' ? user?.location_ja : user?.location}</Td>
+                <Td>{lang === "ja" ? user?.location_ja : user?.location}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: '作成日時', en: 'Created'})}
+                  {convertLang({ ja: "作成日時", en: "Created" })}
                 </Td>
-                <Td>{parseDate(user?.created ?? '', lang)}</Td>
+                <Td>{parseDate(user?.created ?? "", lang)}</Td>
               </Tr>
               <Tr>
                 <Td fontWeight="bold">
-                  {convertLang({ja: '編集日時', en: 'Modified'})}
+                  {convertLang({ ja: "編集日時", en: "Modified" })}
                 </Td>
-                <Td>{parseDate(user?.modified ?? '', lang)}</Td>
+                <Td>{parseDate(user?.modified ?? "", lang)}</Td>
               </Tr>
             </Tbody>
           </Table>

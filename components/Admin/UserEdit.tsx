@@ -7,13 +7,13 @@ import {
   Heading,
   Input,
   useToast,
-} from '@chakra-ui/react';
-import {useForm} from 'react-hook-form';
-import {useRecoilState} from 'recoil';
-import {api} from '../../utils/api';
-import {UserState} from '../../utils/state/atoms';
-import {Back} from '../Back';
-import useLanguage from '../useLanguage';
+} from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import { api } from "../../utils/api";
+import { UserState } from "../../utils/state/atoms";
+import { Back } from "../Back";
+import useLanguage from "../useLanguage";
 
 interface Form {
   given_name: string;
@@ -30,20 +30,20 @@ interface Form {
 }
 
 export const UserEdit = () => {
-  const {convertLang} = useLanguage();
+  const { convertLang } = useLanguage();
   const [user, setUser] = useRecoilState(UserState);
   const toast = useToast();
   const {
     handleSubmit,
     register,
-    formState: {errors, isSubmitting},
+    formState: { errors, isSubmitting },
   } = useForm<Form>({
     defaultValues: {
       given_name: user?.given_name,
       given_name_ja: user?.given_name_ja,
       family_name: user?.family_name,
       family_name_ja: user?.family_name_ja,
-      birth_date: new Date(user?.birth_date ?? '')
+      birth_date: new Date(user?.birth_date ?? "")
         .toISOString()
         .substring(0, 10),
       location: user?.location,
@@ -58,44 +58,44 @@ export const UserEdit = () => {
 
     const form = new FormData();
     let changed = false;
-    const newUser = {...user};
+    const newUser = { ...user };
 
     if (v.family_name !== user?.family_name) {
-      form.append('family_name', v.family_name);
+      form.append("family_name", v.family_name);
       newUser.family_name = v.family_name;
       changed = true;
     }
     if (v.family_name_ja !== user?.family_name_ja) {
-      form.append('family_name_ja', v.family_name_ja);
+      form.append("family_name_ja", v.family_name_ja);
       newUser.family_name_ja = v.family_name_ja;
       changed = true;
     }
     if (v.given_name !== user?.given_name) {
-      form.append('given_name', v.given_name);
+      form.append("given_name", v.given_name);
       newUser.given_name = v.given_name;
       changed = true;
     }
     if (v.given_name_ja !== user?.given_name_ja) {
-      form.append('given_name_ja', v.given_name_ja);
+      form.append("given_name_ja", v.given_name_ja);
       newUser.given_name_ja = v.given_name_ja;
       changed = true;
     }
     if (
       v.birth_date !==
-      new Date(user?.birth_date ?? '').toISOString().substring(0, 10)
+      new Date(user?.birth_date ?? "").toISOString().substring(0, 10)
     ) {
       const d = new Date(v.birth_date);
-      form.append('birth_date', d.toISOString());
+      form.append("birth_date", d.toISOString());
       newUser.birth_date = d.toISOString();
       changed = true;
     }
     if (v.location !== user?.location) {
-      form.append('location', v.location);
+      form.append("location", v.location);
       newUser.location = v.location;
       changed = true;
     }
     if (v.location_ja !== user?.location_ja) {
-      form.append('location_ja', v.location_ja);
+      form.append("location_ja", v.location_ja);
       newUser.location_ja = v.location_ja;
       changed = true;
     }
@@ -104,22 +104,22 @@ export const UserEdit = () => {
       return () => {};
     }
 
-    const res = await fetch(api('/user'), {
-      method: 'PUT',
-      credentials: 'include',
-      mode: 'cors',
+    const res = await fetch(api("/user"), {
+      method: "PUT",
+      credentials: "include",
+      mode: "cors",
       body: form,
     });
 
     if (res.ok) {
       setUser(newUser);
       toast({
-        status: 'success',
-        title: convertLang({ja: '更新しました', en: 'Success Updated'}),
+        status: "success",
+        title: convertLang({ ja: "更新しました", en: "Success Updated" }),
       });
     } else {
       toast({
-        status: 'error',
+        status: "error",
         title: (await res.json()).message,
       });
     }
@@ -130,27 +130,27 @@ export const UserEdit = () => {
   return (
     <Box mt="3rem">
       <Heading textAlign="center">
-        {convertLang({ja: 'ユーザ編集', en: 'User Edit'})}
+        {convertLang({ ja: "ユーザ編集", en: "User Edit" })}
       </Heading>
       <Box
-        mx={{base: '.5rem', sm: '1.5rem', md: '0'}}
-        display={{base: 'block', md: 'flex'}}
+        mx={{ base: ".5rem", sm: "1.5rem", md: "0" }}
+        display={{ base: "block", md: "flex" }}
         alignItems="center"
         flexDirection="column"
       >
-        <Box width={{base: 'auto', md: '500px'}}>
+        <Box width={{ base: "auto", md: "500px" }}>
           <Back href="/admin" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.given_name)}>
               <FormLabel htmlFor="given_name">
-                {convertLang({ja: '名前(英語)', en: 'Given Name'})}
+                {convertLang({ ja: "名前(英語)", en: "Given Name" })}
               </FormLabel>
               <Input
                 id="given_name"
-                {...register('given_name', {
+                {...register("given_name", {
                   required: convertLang({
-                    ja: 'この項目は必須です',
-                    en: 'This is required',
+                    ja: "この項目は必須です",
+                    en: "This is required",
                   }),
                 })}
               />
@@ -160,14 +160,14 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.given_name_ja)}>
               <FormLabel htmlFor="given_name_ja">
-                {convertLang({ja: '名前', en: 'Given Name (japanese)'})}
+                {convertLang({ ja: "名前", en: "Given Name (japanese)" })}
               </FormLabel>
               <Input
                 id="given_name_ja"
-                {...register('given_name_ja', {
+                {...register("given_name_ja", {
                   required: convertLang({
-                    ja: 'この項目は必須です',
-                    en: 'This is required',
+                    ja: "この項目は必須です",
+                    en: "This is required",
                   }),
                 })}
               />
@@ -177,14 +177,14 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.family_name)}>
               <FormLabel htmlFor="family_name">
-                {convertLang({ja: '名字(英語)', en: 'Family Name'})}
+                {convertLang({ ja: "名字(英語)", en: "Family Name" })}
               </FormLabel>
               <Input
                 id="family_name"
-                {...register('family_name', {
+                {...register("family_name", {
                   required: convertLang({
-                    ja: 'この項目は必須です',
-                    en: 'This is required',
+                    ja: "この項目は必須です",
+                    en: "This is required",
                   }),
                 })}
               />
@@ -194,14 +194,14 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.family_name_ja)}>
               <FormLabel htmlFor="family_name_ja">
-                {convertLang({ja: '名字', en: 'Family Name (japanese)'})}
+                {convertLang({ ja: "名字", en: "Family Name (japanese)" })}
               </FormLabel>
               <Input
                 id="family_name_ja"
-                {...register('family_name_ja', {
+                {...register("family_name_ja", {
                   required: convertLang({
-                    ja: 'この項目は必須です',
-                    en: 'This is required',
+                    ja: "この項目は必須です",
+                    en: "This is required",
                   }),
                 })}
               />
@@ -211,15 +211,15 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.birth_date)}>
               <FormLabel htmlFor="birth_date">
-                {convertLang({ja: '誕生日', en: 'Birth Date'})}
+                {convertLang({ ja: "誕生日", en: "Birth Date" })}
               </FormLabel>
               <Input
                 id="birth_date"
                 type="date"
-                {...register('birth_date', {
+                {...register("birth_date", {
                   required: convertLang({
-                    ja: 'この項目は必須です',
-                    en: 'This is required',
+                    ja: "この項目は必須です",
+                    en: "This is required",
                   }),
                 })}
               />
@@ -229,14 +229,14 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location)}>
               <FormLabel htmlFor="location">
-                {convertLang({ja: '在住(英語)', en: 'Location'})}
+                {convertLang({ ja: "在住(英語)", en: "Location" })}
               </FormLabel>
               <Input
                 id="location"
-                {...register('location', {
+                {...register("location", {
                   required: convertLang({
-                    ja: 'この項目は必須です',
-                    en: 'This is required',
+                    ja: "この項目は必須です",
+                    en: "This is required",
                   }),
                 })}
               />
@@ -246,14 +246,14 @@ export const UserEdit = () => {
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location_ja)}>
               <FormLabel htmlFor="location_ja">
-                {convertLang({ja: '在住', en: 'Location (japanese)'})}
+                {convertLang({ ja: "在住", en: "Location (japanese)" })}
               </FormLabel>
               <Input
                 id="location_ja"
-                {...register('location_ja', {
+                {...register("location_ja", {
                   required: convertLang({
-                    ja: 'この項目は必須です',
-                    en: 'This is required',
+                    ja: "この項目は必須です",
+                    en: "This is required",
                   }),
                 })}
               />
@@ -264,12 +264,12 @@ export const UserEdit = () => {
 
             <Button
               mt={4}
-              w={{base: '100%', md: 'auto'}}
+              w={{ base: "100%", md: "auto" }}
               colorScheme="cateiru"
               isLoading={isSubmitting}
               type="submit"
             >
-              {convertLang({ja: '更新', en: 'Submit'})}
+              {convertLang({ ja: "更新", en: "Submit" })}
             </Button>
           </form>
         </Box>

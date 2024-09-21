@@ -1,10 +1,10 @@
-import {useDisclosure} from '@chakra-ui/react';
-import React from 'react';
-import type {KeyedMutator} from 'swr';
-import useSWR from 'swr';
-import {fetcher, SWRError} from '../../utils/swr';
+import { useDisclosure } from "@chakra-ui/react";
+import React from "react";
+import type { KeyedMutator } from "swr";
+import useSWR from "swr";
+import { fetcher, SWRError } from "../../utils/swr";
 
-type OperationType = 'cre' | 'upd' | 'del';
+type OperationType = "cre" | "upd" | "del";
 export type UpdateHandler<T> = (l: T, type: OperationType) => void;
 type Equal<T> = (t: T, v: T) => boolean;
 
@@ -36,9 +36,9 @@ interface ReturnValues<T> {
  * @returns {ReturnValues} - tools
  */
 export function useList<T = any>(path: string, e: Equal<T>): ReturnValues<T> {
-  const {data, error, mutate} = useSWR<T[], SWRError>(path, fetcher);
+  const { data, error, mutate } = useSWR<T[], SWRError>(path, fetcher);
   const [updateValue, setUpdateValue] = React.useState<T | undefined>(
-    undefined
+    undefined,
   );
 
   const createModal = useDisclosure();
@@ -52,11 +52,11 @@ export function useList<T = any>(path: string, e: Equal<T>): ReturnValues<T> {
         }
 
         const d = [...data];
-        const i = d.findIndex(v => e(l, v));
+        const i = d.findIndex((v) => e(l, v));
 
         switch (type) {
-          case 'cre':
-          case 'upd':
+          case "cre":
+          case "upd":
             if (i !== -1) {
               d[i] = l;
             } else {
@@ -64,22 +64,22 @@ export function useList<T = any>(path: string, e: Equal<T>): ReturnValues<T> {
             }
             mutate(d);
             break;
-          case 'del':
+          case "del":
             mutate(d.slice(i, i + 1));
             break;
         }
       };
       f();
     },
-    [data]
+    [data],
   );
 
   const onUpdate = React.useCallback(
     (v: T) => {
-      setUpdateValue(data?.find(t => e(v, t)));
+      setUpdateValue(data?.find((t) => e(v, t)));
       updateModal.onOpen();
     },
-    [updateModal, data]
+    [updateModal, data],
   );
 
   const closeUpdateModal = React.useCallback(() => {

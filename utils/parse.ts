@@ -1,7 +1,7 @@
-import chalk from 'chalk';
-import type {Task} from 'gantt-task-react';
-import stc from 'string-to-color';
-import {Contact, Public, PublicBio} from './types';
+import chalk from "chalk";
+import type { Task } from "gantt-task-react";
+import stc from "string-to-color";
+import { Contact, Public, PublicBio } from "./types";
 
 /**
  * 日時をフォーマットする
@@ -12,14 +12,14 @@ import {Contact, Public, PublicBio} from './types';
  */
 export function parseDate(d: string, lang: string): string {
   if (d.length === 9) {
-    return lang === 'ja' ? '不明' : 'Unknown';
-  } else if (d === '0001-01-01T00:00:00Z') {
-    return '-';
+    return lang === "ja" ? "不明" : "Unknown";
+  } else if (d === "0001-01-01T00:00:00Z") {
+    return "-";
   }
 
   const date = new Date(d);
 
-  if (lang === 'ja') {
+  if (lang === "ja") {
     return `${date.getFullYear()}年 ${
       date.getMonth() + 1
     }月 ${date.getDate()}日`;
@@ -35,8 +35,8 @@ export function parseDate(d: string, lang: string): string {
  * @returns {string} - formatted date
  */
 export function parseDetailDate(d: string): string {
-  if (d === '0001-01-01T00:00:00Z') {
-    return '-';
+  if (d === "0001-01-01T00:00:00Z") {
+    return "-";
   }
 
   const date = new Date(d);
@@ -51,8 +51,8 @@ export function parseDetailDate(d: string): string {
  * @returns {string} - formatted date
  */
 export function parseAgo(d: string, lang: string): string {
-  if (d === '0001-01-01T00:00:00Z') {
-    return '-';
+  if (d === "0001-01-01T00:00:00Z") {
+    return "-";
   }
 
   const date = new Date(d);
@@ -60,23 +60,23 @@ export function parseAgo(d: string, lang: string): string {
   const diffSec = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (diffSec < 3600) {
-    return lang === 'ja'
+    return lang === "ja"
       ? `${Math.floor(diffSec / 60)}分前`
       : `${Math.floor(diffSec / 60)} min ago`;
   } else if (diffSec < 86400) {
-    return lang === 'ja'
+    return lang === "ja"
       ? `${Math.floor(diffSec / 3600)}時間前`
       : `${Math.floor(diffSec / 3600)} hors ago`;
   } else if (diffSec < 86400 * 7) {
-    return lang === 'ja'
+    return lang === "ja"
       ? `${Math.floor(diffSec / 86400)}日前`
       : `${Math.floor(diffSec / 86400)} day ago`;
   } else if (diffSec < 86400 * 30) {
-    return lang === 'ja'
+    return lang === "ja"
       ? `${Math.floor(diffSec / (86400 * 7))}週間前`
       : `${Math.floor(diffSec / (86400 * 7))} week ago`;
   } else {
-    return lang === 'ja'
+    return lang === "ja"
       ? `${Math.floor(diffSec / (86400 * 30))}ヶ月以上前`
       : `over ${Math.floor(diffSec / (86400 * 30))} months ago`;
   }
@@ -90,13 +90,13 @@ export function parseAgo(d: string, lang: string): string {
  * @returns {string} - formatted date
  */
 export function parseShotDate(d: string, lang: string): string {
-  if (d === '0001-01-01T00:00:00Z') {
-    return '';
+  if (d === "0001-01-01T00:00:00Z") {
+    return "";
   }
 
   const date = new Date(d);
 
-  if (lang === 'ja') {
+  if (lang === "ja") {
     return `${date.getFullYear()}年 ${date.getMonth() + 1}月`;
   }
 
@@ -130,7 +130,7 @@ export const toUnicode = (str: string): string => {
     }
   }
 
-  return utf8.join('-');
+  return utf8.join("-");
 };
 
 export const getAge = (d: string): number => {
@@ -151,7 +151,7 @@ export const getAge = (d: string): number => {
  * @param {Public} d - public data
  */
 export function consolePublic(d: Public) {
-  console.log('ID: ' + chalk.bgHex('#086f83').white(d.user_id));
+  console.log("ID: " + chalk.bgHex("#086f83").white(d.user_id));
 }
 
 /**
@@ -167,7 +167,7 @@ export function getTasks(d: PublicBio, lang: string): Task[] {
   for (let i = 0; d.length > i; i++) {
     const start = new Date(d[i].join);
     let end;
-    if (d[i].leave === '0001-01-01T00:00:00Z') {
+    if (d[i].leave === "0001-01-01T00:00:00Z") {
       end = new Date();
     } else {
       end = new Date(d[i].leave);
@@ -176,9 +176,9 @@ export function getTasks(d: PublicBio, lang: string): Task[] {
 
     tasks.push({
       id: `${i}`,
-      type: 'task',
+      type: "task",
       name:
-        lang === 'ja'
+        lang === "ja"
           ? `${d[i].name_ja} - ${d[i].position_ja}`
           : `${d[i].name} - ${d[i].position}`,
       start: start,
@@ -208,7 +208,7 @@ export function sliceStr(str: string): string {
   }
 
   if (100 < str.length) {
-    return str.slice(0, 100) + '...';
+    return str.slice(0, 100) + "...";
   }
   return str;
 }
@@ -220,15 +220,15 @@ export function sliceStr(str: string): string {
  */
 export function copyElement(form: Contact): string {
   const formTexts: string[] = [
-    '## Inquiry',
+    "## Inquiry",
     `- name: ${form.name}`,
     `- email: ${form.mail}`,
     `- date: ${new Date(form.created).toLocaleString()}`,
-    '',
+    "",
     `### ${form.title}`,
-    '',
-    ...form.detail.split('\n'),
+    "",
+    ...form.detail.split("\n"),
   ];
 
-  return formTexts.map(v => `> ${v}`).join('\n');
+  return formTexts.map((v) => `> ${v}`).join("\n");
 }

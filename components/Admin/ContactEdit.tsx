@@ -23,27 +23,27 @@ import {
   useColorMode,
   useDisclosure,
   useToast,
-} from '@chakra-ui/react';
-import React from 'react';
-import {TbCheck} from 'react-icons/tb';
-import useSWR from 'swr';
-import {api} from '../../utils/api';
-import {MultiLang} from '../../utils/config/lang';
-import {copyElement, parseAgo, parseDetailDate} from '../../utils/parse';
-import {fetcher, SWRError} from '../../utils/swr';
-import {Contact} from '../../utils/types';
-import {Back} from '../Back';
-import useLanguage from '../useLanguage';
+} from "@chakra-ui/react";
+import React from "react";
+import { TbCheck } from "react-icons/tb";
+import useSWR from "swr";
+import { api } from "../../utils/api";
+import { MultiLang } from "../../utils/config/lang";
+import { copyElement, parseAgo, parseDetailDate } from "../../utils/parse";
+import { fetcher, SWRError } from "../../utils/swr";
+import { Contact } from "../../utils/types";
+import { Back } from "../Back";
+import useLanguage from "../useLanguage";
 
 export const ContactEdit = () => {
-  const {convertLang, lang} = useLanguage();
-  const {data, error, mutate} = useSWR<Contact[], SWRError>(
-    '/user/contact',
-    fetcher
+  const { convertLang, lang } = useLanguage();
+  const { data, error, mutate } = useSWR<Contact[], SWRError>(
+    "/user/contact",
+    fetcher,
   );
-  const {isOpen, onClose, onOpen} = useDisclosure();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const toast = useToast();
-  const {colorMode} = useColorMode();
+  const { colorMode } = useColorMode();
 
   const [select, setSelect] = React.useState<Contact>();
 
@@ -59,23 +59,23 @@ export const ContactEdit = () => {
       }
 
       const res = await fetch(api(`/user/contact?contact_id=${select.id}`), {
-        method: 'DELETE',
-        credentials: 'include',
-        mode: 'cors',
+        method: "DELETE",
+        credentials: "include",
+        mode: "cors",
       });
 
       if (res.ok) {
         toast({
-          status: 'success',
-          title: convertLang({ja: '削除しました', en: 'Success deleted'}),
+          status: "success",
+          title: convertLang({ ja: "削除しました", en: "Success deleted" }),
         });
         const d = [...data];
-        const i = d.findIndex(v => v.id === select.id);
+        const i = d.findIndex((v) => v.id === select.id);
         mutate(d.slice(i, i + 1));
         onClose();
       } else {
         toast({
-          status: 'error',
+          status: "error",
           title: (await res.json()).message,
         });
       }
@@ -86,7 +86,7 @@ export const ContactEdit = () => {
   return (
     <Box mt="3rem">
       <Heading textAlign="center">
-        {convertLang({ja: 'リンク編集', en: 'Link Edit'})}
+        {convertLang({ ja: "リンク編集", en: "Link Edit" })}
       </Heading>
       {error ? (
         <Center
@@ -99,32 +99,35 @@ export const ContactEdit = () => {
         </Center>
       ) : (
         <Box
-          mx={{base: '.5rem', sm: '1.5rem', md: '0'}}
-          display={{base: 'block', md: 'flex'}}
+          mx={{ base: ".5rem", sm: "1.5rem", md: "0" }}
+          display={{ base: "block", md: "flex" }}
           alignItems="center"
           flexDirection="column"
         >
-          <Box width={{base: 'auto', md: '700px'}}>
+          <Box width={{ base: "auto", md: "700px" }}>
             <Back href="/admin" />
             <TableContainer>
               <Table variant="simple">
                 <Thead>
                   <Tr>
-                    <Th>{convertLang({ja: '日時', en: 'Date'})}</Th>
-                    <Th>{convertLang({ja: '件名', en: 'Subject'})}</Th>
+                    <Th>{convertLang({ ja: "日時", en: "Date" })}</Th>
+                    <Th>{convertLang({ ja: "件名", en: "Subject" })}</Th>
                     <Th>
-                      {convertLang({ja: 'メールアドレス', en: 'Email Address'})}
+                      {convertLang({
+                        ja: "メールアドレス",
+                        en: "Email Address",
+                      })}
                     </Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data?.map(v => {
+                  {data?.map((v) => {
                     return (
                       <Tr key={v.id}>
                         <Td>
                           <Tooltip
-                            color={colorMode === 'dark' ? 'black' : 'white'}
+                            color={colorMode === "dark" ? "black" : "white"}
                             label={parseDetailDate(v.created)}
                             placement="top"
                             hasArrow
@@ -137,7 +140,7 @@ export const ContactEdit = () => {
                         <Td>{v.mail}</Td>
                         <Td>
                           <Button size="sm" onClick={() => onSelect(v)}>
-                            {convertLang({ja: '詳細', en: 'Detail'})}
+                            {convertLang({ ja: "詳細", en: "Detail" })}
                           </Button>
                         </Td>
                       </Tr>
@@ -153,7 +156,7 @@ export const ContactEdit = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            {convertLang({ja: 'お問い合わせ詳細', en: 'Contact Detail'})}
+            {convertLang({ ja: "お問い合わせ詳細", en: "Contact Detail" })}
           </ModalHeader>
           <ModalCloseButton size="lg" />
           <ModalBody mb="1rem">
@@ -175,8 +178,8 @@ const ContactElement: React.FC<{
   convertLang: (e: MultiLang) => string;
   onDelete: () => void;
   select: Contact;
-}> = ({convertLang, onDelete, select}) => {
-  const {hasCopied, onCopy} = useClipboard(copyElement(select));
+}> = ({ convertLang, onDelete, select }) => {
+  const { hasCopied, onCopy } = useClipboard(copyElement(select));
 
   return (
     <>
@@ -187,7 +190,7 @@ const ContactElement: React.FC<{
           size="sm"
           onClick={onDelete}
         >
-          {convertLang({ja: '削除', en: 'Delete'})}
+          {convertLang({ ja: "削除", en: "Delete" })}
         </Button>
       </Flex>
       <TableContainer>
@@ -195,17 +198,21 @@ const ContactElement: React.FC<{
           <Tbody>
             <Tr>
               <Td fontWeight="bold">
-                {convertLang({ja: '件名', en: 'Subject'})}
+                {convertLang({ ja: "件名", en: "Subject" })}
               </Td>
               <Td>{select?.title}</Td>
             </Tr>
             <Tr>
-              <Td fontWeight="bold">{convertLang({ja: '日時', en: 'Date'})}</Td>
-              <Td>{select?.created ? parseDetailDate(select?.created) : ''}</Td>
+              <Td fontWeight="bold">
+                {convertLang({ ja: "日時", en: "Date" })}
+              </Td>
+              <Td>{select?.created ? parseDetailDate(select?.created) : ""}</Td>
             </Tr>
             {select?.url && (
               <Tr>
-                <Td fontWeight="bold">{convertLang({ja: 'URL', en: 'URL'})}</Td>
+                <Td fontWeight="bold">
+                  {convertLang({ ja: "URL", en: "URL" })}
+                </Td>
                 <Td>{select?.url}</Td>
               </Tr>
             )}
@@ -233,46 +240,48 @@ const ContactElement: React.FC<{
         <Table variant="simple">
           <Tbody>
             <Tr>
-              <Td fontWeight="bold">{convertLang({ja: '名前', en: 'Name'})}</Td>
+              <Td fontWeight="bold">
+                {convertLang({ ja: "名前", en: "Name" })}
+              </Td>
               <Td>{select?.name}</Td>
             </Tr>
             <Tr>
               <Td fontWeight="bold">
-                {convertLang({ja: 'メールアドレス', en: 'Email'})}
+                {convertLang({ ja: "メールアドレス", en: "Email" })}
               </Td>
               <Td>{select?.mail}</Td>
             </Tr>
             <Tr>
-              <Td fontWeight="bold">{convertLang({ja: 'IP', en: 'IP'})}</Td>
+              <Td fontWeight="bold">{convertLang({ ja: "IP", en: "IP" })}</Td>
               <Td>{select?.ip}</Td>
             </Tr>
             <Tr>
               <Td fontWeight="bold">
-                {convertLang({ja: '言語', en: 'Language'})}
+                {convertLang({ ja: "言語", en: "Language" })}
               </Td>
               <Td>{select?.lang}</Td>
             </Tr>
             <Tr>
               <Td fontWeight="bold">
-                {convertLang({ja: 'デバイス', en: 'Device'})}
+                {convertLang({ ja: "デバイス", en: "Device" })}
               </Td>
-              <Td>{select?.device_name ?? '-'}</Td>
+              <Td>{select?.device_name ?? "-"}</Td>
             </Tr>
             <Tr>
-              <Td fontWeight="bold">{convertLang({ja: 'OS', en: 'OS'})}</Td>
-              <Td>{select?.os ?? '-'}</Td>
-            </Tr>
-            <Tr>
-              <Td fontWeight="bold">
-                {convertLang({ja: 'ブラウザ', en: 'Browser'})}
-              </Td>
-              <Td>{select?.browser_name ?? '-'}</Td>
+              <Td fontWeight="bold">{convertLang({ ja: "OS", en: "OS" })}</Td>
+              <Td>{select?.os ?? "-"}</Td>
             </Tr>
             <Tr>
               <Td fontWeight="bold">
-                {convertLang({ja: 'モバイル端末', en: 'Mobile'})}
+                {convertLang({ ja: "ブラウザ", en: "Browser" })}
               </Td>
-              <Td>{select?.is_mobile ? 'true' : 'false'}</Td>
+              <Td>{select?.browser_name ?? "-"}</Td>
+            </Tr>
+            <Tr>
+              <Td fontWeight="bold">
+                {convertLang({ ja: "モバイル端末", en: "Mobile" })}
+              </Td>
+              <Td>{select?.is_mobile ? "true" : "false"}</Td>
             </Tr>
           </Tbody>
         </Table>
@@ -284,7 +293,7 @@ const ContactElement: React.FC<{
         w="100%"
         size="sm"
       >
-        {convertLang({ja: 'コピー', en: 'Copy'})}
+        {convertLang({ ja: "コピー", en: "Copy" })}
       </Button>
     </>
   );

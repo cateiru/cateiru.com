@@ -9,33 +9,33 @@ import {
   Th,
   Thead,
   Tr,
-} from '@chakra-ui/react';
-import NextLink from 'next/link';
-import useSWR from 'swr';
-import {parseDate} from '../../utils/parse';
-import {fetcher, SWRError} from '../../utils/swr';
-import {BioLocArray} from '../../utils/types';
-import useLanguage from '../useLanguage';
-import {CardFrame} from './CardFrame';
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+import useSWR from "swr";
+import { parseDate } from "../../utils/parse";
+import { fetcher, SWRError } from "../../utils/swr";
+import { BioLocArray } from "../../utils/types";
+import useLanguage from "../useLanguage";
+import { CardFrame } from "./CardFrame";
 
 export const BioCard = () => {
-  const {lang, convertLang} = useLanguage();
-  const {data, error} = useSWR<BioLocArray, SWRError>('/user/bio', fetcher);
+  const { lang, convertLang } = useLanguage();
+  const { data, error } = useSWR<BioLocArray, SWRError>("/user/bio", fetcher);
 
   return (
     <CardFrame>
       <Heading fontSize="1.2rem" textAlign="center" fontWeight="bold">
-        {convertLang({ja: '略歴', en: 'Biography'})}
+        {convertLang({ ja: "略歴", en: "Biography" })}
       </Heading>
       <Center my=".5rem">
         <NextLink passHref href="/admin/bio">
           <Button as="a" ml=".5rem">
-            {convertLang({ja: '全て', en: 'All'})}
+            {convertLang({ ja: "全て", en: "All" })}
           </Button>
         </NextLink>
         <NextLink passHref href="/admin/location">
           <Button as="a" ml=".5rem">
-            {convertLang({ja: '場所', en: 'Locations'})}
+            {convertLang({ ja: "場所", en: "Locations" })}
           </Button>
         </NextLink>
       </Center>
@@ -53,21 +53,21 @@ export const BioCard = () => {
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>{convertLang({ja: '場所', en: 'Location'})}</Th>
-                <Th>{convertLang({ja: 'ポジション', en: 'Position'})}</Th>
-                <Th>{convertLang({ja: '参加', en: 'Join'})}</Th>
-                <Th>{convertLang({ja: '退場', en: 'Leave'})}</Th>
+                <Th>{convertLang({ ja: "場所", en: "Location" })}</Th>
+                <Th>{convertLang({ ja: "ポジション", en: "Position" })}</Th>
+                <Th>{convertLang({ ja: "参加", en: "Join" })}</Th>
+                <Th>{convertLang({ ja: "退場", en: "Leave" })}</Th>
               </Tr>
             </Thead>
             <Tbody>
               {data &&
-                data.map(v => {
+                data.map((v) => {
                   return (
                     <Tr key={`bio-${v.biography.id}`}>
                       <Td>
                         {convertLang({
-                          ja: v.location?.name_ja ?? '',
-                          en: v.location?.name ?? '',
+                          ja: v.location?.name_ja ?? "",
+                          en: v.location?.name ?? "",
                         })}
                       </Td>
                       <Td>

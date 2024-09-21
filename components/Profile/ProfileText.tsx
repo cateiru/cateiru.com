@@ -1,11 +1,11 @@
-import {Box, Text, Heading, Center} from '@chakra-ui/react';
-import {FaBirthdayCake} from 'react-icons/fa';
-import {getAge, parseDate} from '../../utils/parse';
-import {Public} from '../../utils/types';
-import useLanguage from '../useLanguage';
+import { Box, Text, Heading, Center } from "@chakra-ui/react";
+import { FaBirthdayCake } from "react-icons/fa";
+import { getAge, parseDate } from "../../utils/parse";
+import { Public } from "../../utils/types";
+import useLanguage from "../useLanguage";
 
-const ProfileText: React.FC<{data: Public}> = ({data}) => {
-  const {lang, convertLang} = useLanguage();
+const ProfileText: React.FC<{ data: Public }> = ({ data }) => {
+  const { lang, convertLang } = useLanguage();
   return (
     <Box>
       <Center>
@@ -23,7 +23,7 @@ const ProfileText: React.FC<{data: Public}> = ({data}) => {
         </Text>
       </Center>
       <Center>
-        <Text>{convertLang({ja: data.location_ja, en: data.location})}</Text>
+        <Text>{convertLang({ ja: data.location_ja, en: data.location })}</Text>
       </Center>
     </Box>
   );

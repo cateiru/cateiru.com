@@ -8,22 +8,22 @@ import {
   UnorderedList,
   ListItem,
   Badge,
-} from '@chakra-ui/react';
-import {Gantt, ViewMode} from 'gantt-task-react';
-import React from 'react';
-import {getTasks, parseShotDate} from '../../utils/parse';
-import {Public} from '../../utils/types';
-import {Section} from '../Common/Section';
-import useLanguage from '../useLanguage';
+} from "@chakra-ui/react";
+import { Gantt, ViewMode } from "gantt-task-react";
+import React from "react";
+import { getTasks, parseShotDate } from "../../utils/parse";
+import { Public } from "../../utils/types";
+import { Section } from "../Common/Section";
+import useLanguage from "../useLanguage";
 
 const Bio: React.FC<{
   next: () => void;
   r: React.MutableRefObject<HTMLDivElement>;
   data: Public;
-}> = ({next, r, data}) => {
-  const {lang, convertLang} = useLanguage();
+}> = ({ next, r, data }) => {
+  const { lang, convertLang } = useLanguage();
   const [viewMode, setViewMode] = React.useState<ViewMode>(ViewMode.Year);
-  const {colorMode} = useColorMode();
+  const { colorMode } = useColorMode();
 
   const tasks = React.useMemo(() => {
     return getTasks(data.biographies, lang);
@@ -37,20 +37,20 @@ const Bio: React.FC<{
     <Section
       next={next}
       r={r}
-      heading={{en: 'Brief personal record', ja: '略歴'}}
+      heading={{ en: "Brief personal record", ja: "略歴" }}
     >
       {data.biographies.length !== 0 ? (
         <>
           <details>
             <Box as="summary" textAlign="center" cursor="pointer">
-              {convertLang({ja: 'タイムライン表示', en: 'Timeline'})}
+              {convertLang({ ja: "タイムライン表示", en: "Timeline" })}
             </Box>
 
             <Box
               boxShadow={
-                colorMode === 'light'
-                  ? '0px 1px 26px -3px #a0acc0'
-                  : '0px 1px 26px -3px #000'
+                colorMode === "light"
+                  ? "0px 1px 26px -3px #a0acc0"
+                  : "0px 1px 26px -3px #000"
               }
               borderRadius="25"
               mt=".5rem"
@@ -59,7 +59,7 @@ const Bio: React.FC<{
             >
               <Flex justifyContent="right" pt=".5rem" pr="1rem">
                 <Switch onChange={handleChange}>
-                  {convertLang({ja: '月ごとで表示する', en: 'View by month'})}
+                  {convertLang({ ja: "月ごとで表示する", en: "View by month" })}
                 </Switch>
               </Flex>
               <Box overflowX="auto">
@@ -78,7 +78,7 @@ const Bio: React.FC<{
                       viewMode={viewMode}
                       columnWidth={100}
                       barCornerRadius={5}
-                      locale={lang === 'ja' ? 'ja' : 'en'}
+                      locale={lang === "ja" ? "ja" : "en"}
                     />
                   </Box>
                 </Box>
@@ -89,7 +89,7 @@ const Bio: React.FC<{
           <Center
             whiteSpace="nowrap"
             overflowX="auto"
-            display={{base: 'block', lg: 'flex'}}
+            display={{ base: "block", lg: "flex" }}
           >
             <UnorderedList mt="1.5rem" paddingLeft=".5rem">
               {data.biographies.map((v, i) => {
@@ -100,19 +100,19 @@ const Bio: React.FC<{
                       {parseShotDate(v.leave, lang)}
                     </Text>
                     <Text as="span" ml="1rem" fontWeight="bold">
-                      {convertLang({ja: v.name_ja, en: v.name})}
+                      {convertLang({ ja: v.name_ja, en: v.name })}
                     </Text>
                     <Text as="span" ml=".5rem">
-                      ({convertLang({ja: v.address_ja, en: v.address})})
+                      ({convertLang({ ja: v.address_ja, en: v.address })})
                     </Text>
                     <Text as="span" ml=".5rem">
-                      - {convertLang({ja: v.position_ja, en: v.position})}
+                      - {convertLang({ ja: v.position_ja, en: v.position })}
                     </Text>
                     <Text as="span" ml=".5rem">
-                      <Badge colorScheme={v.type === 'univ' ? 'blue' : 'green'}>
-                        {v.type === 'univ'
-                          ? convertLang({ja: '大学', en: 'UNIV'})
-                          : convertLang({ja: '会社', en: 'CORP'})}
+                      <Badge colorScheme={v.type === "univ" ? "blue" : "green"}>
+                        {v.type === "univ"
+                          ? convertLang({ ja: "大学", en: "UNIV" })
+                          : convertLang({ ja: "会社", en: "CORP" })}
                       </Badge>
                     </Text>
                   </ListItem>
@@ -124,8 +124,8 @@ const Bio: React.FC<{
       ) : (
         <Text textAlign="center" mt="1rem" color="yellow.500">
           {convertLang({
-            ja: '表示できる略歴がありません。',
-            en: 'There is no biography to display.',
+            ja: "表示できる略歴がありません。",
+            en: "There is no biography to display.",
           })}
         </Text>
       )}

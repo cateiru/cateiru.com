@@ -1,12 +1,12 @@
-import {atom} from 'recoil';
-import {User} from '../types';
+import { atom } from "recoil";
+import { User } from "../types";
 
 export const langState = atom({
-  key: 'langState',
-  default: 'ja',
+  key: "langState",
+  default: "ja",
 });
 
 export const UserState = atom<User | null | undefined>({
-  key: 'userState',
+  key: "userState",
   default: undefined,
 });

@@ -1,4 +1,4 @@
-declare module 'vanta/dist/vanta.fog.min' {
+declare module "vanta/dist/vanta.fog.min" {
   export default function set(c: Config): VantaEffect;
 }
 

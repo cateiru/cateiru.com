@@ -1,18 +1,21 @@
-import {Center, Avatar, useColorMode} from '@chakra-ui/react';
-import React from 'react';
-import FOG from 'vanta/dist/vanta.fog.min';
-import {Public} from '../../utils/types';
-import {Section} from '../Common/Section';
-import ProfileText from './ProfileText';
+import { Center, Avatar, useColorMode } from "@chakra-ui/react";
+import React from "react";
+import FOG from "vanta/dist/vanta.fog.min";
+import { Public } from "../../utils/types";
+import { Section } from "../Common/Section";
+import ProfileText from "./ProfileText";
 
-const Profile: React.FC<{next: () => void; data: Public}> = ({next, data}) => {
-  const {colorMode} = useColorMode();
+const Profile: React.FC<{ next: () => void; data: Public }> = ({
+  next,
+  data,
+}) => {
+  const { colorMode } = useColorMode();
   const myRef = React.useRef<HTMLDivElement>(null!);
 
   React.useEffect(() => {
     const effect = FOG({
       el: myRef.current,
-      baseColor: colorMode === 'dark' ? 0x0e121c : 0xffffff,
+      baseColor: colorMode === "dark" ? 0x0e121c : 0xffffff,
       highlightColor: 0x2bc4cf,
       midtoneColor: 0x572bcf,
       lowlightColor: 0xcf2ba1,

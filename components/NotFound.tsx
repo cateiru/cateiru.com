@@ -1,8 +1,8 @@
-import {Box, Center, Heading, Text} from '@chakra-ui/react';
-import useLanguage from './useLanguage';
+import { Box, Center, Heading, Text } from "@chakra-ui/react";
+import useLanguage from "./useLanguage";
 
 export const NotFound = () => {
-  const {convertLang} = useLanguage();
+  const { convertLang } = useLanguage();
 
   return (
     <Center h="100vh">
@@ -26,8 +26,8 @@ export const NotFound = () => {
         </Center>
         <Heading textAlign="center">
           {convertLang({
-            ja: '404 | お探しのページは見つかりません',
-            en: '404 | Not Found',
+            ja: "404 | お探しのページは見つかりません",
+            en: "404 | Not Found",
           })}
         </Heading>
       </Box>

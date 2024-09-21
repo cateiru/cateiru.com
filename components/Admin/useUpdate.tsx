@@ -1,5 +1,5 @@
-import {useToast} from '@chakra-ui/react';
-import React from 'react';
+import { useToast } from "@chakra-ui/react";
+import React from "react";
 import type {
   FieldValues,
   FormState,
@@ -7,11 +7,11 @@ import type {
   UseFormSetValue,
   UseFormRegister,
   UseFormReturn,
-} from 'react-hook-form';
-import {useForm} from 'react-hook-form';
-import {api} from '../../utils/api';
-import {MultiLang} from '../../utils/config/lang';
-import {UpdateHandler} from './useList';
+} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { api } from "../../utils/api";
+import { MultiLang } from "../../utils/config/lang";
+import { UpdateHandler } from "./useList";
 
 interface Args<T, V extends FieldValues> {
   formFunc(d: V, id: number): [FormData, boolean];
@@ -42,10 +42,10 @@ interface ReturnValues<V extends FieldValues> {
  * @returns {ReturnValues} - return
  */
 export function useUpdate<T, V extends FieldValues>(
-  a: Args<T, V>
+  a: Args<T, V>,
 ): ReturnValues<V> {
   const methods = useForm<V>();
-  const {handleSubmit, register, reset, setValue, formState} = methods;
+  const { handleSubmit, register, reset, setValue, formState } = methods;
   const toast = useToast();
 
   React.useEffect(() => {
@@ -73,22 +73,22 @@ export function useUpdate<T, V extends FieldValues>(
     }
 
     const res = await fetch(api(a.path), {
-      method: 'PUT',
-      credentials: 'include',
-      mode: 'cors',
+      method: "PUT",
+      credentials: "include",
+      mode: "cors",
       body: form,
     });
 
     if (res.ok) {
       const responseData = a.parse(await res.json());
-      a.update(responseData, 'upd');
+      a.update(responseData, "upd");
       toast({
-        status: 'success',
-        title: a.convertLang({ja: '更新しました', en: 'Updated Success'}),
+        status: "success",
+        title: a.convertLang({ ja: "更新しました", en: "Updated Success" }),
       });
     } else {
       toast({
-        status: 'error',
+        status: "error",
         title: (await res.json()).message,
       });
     }
@@ -107,23 +107,23 @@ export function useUpdate<T, V extends FieldValues>(
       const res = await fetch(
         api(`${a.path}?${a.deleteIdName}=${a.targetId(a.target)}`),
         {
-          method: 'DELETE',
-          credentials: 'include',
-          mode: 'cors',
-        }
+          method: "DELETE",
+          credentials: "include",
+          mode: "cors",
+        },
       );
 
       if (res.ok) {
-        a.update(a.target, 'del');
+        a.update(a.target, "del");
         wrapperOnClose();
 
         toast({
-          status: 'success',
-          title: a.convertLang({ja: '削除しました', en: 'Deleted Success'}),
+          status: "success",
+          title: a.convertLang({ ja: "削除しました", en: "Deleted Success" }),
         });
       } else {
         toast({
-          status: 'error',
+          status: "error",
           title: (await res.json()).message,
         });
       }

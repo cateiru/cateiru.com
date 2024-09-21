@@ -22,17 +22,17 @@ import {
   Th,
   Thead,
   Tr,
-} from '@chakra-ui/react';
-import React from 'react';
-import {FormProvider} from 'react-hook-form';
-import {MultiLang} from '../../utils/config/lang';
-import {Category, CategorySchema} from '../../utils/types';
-import {Back} from '../Back';
-import {EmojiPick} from '../Form/EmojiPick';
-import useLanguage from '../useLanguage';
-import {useList} from './useList';
-import {useNew} from './useNew';
-import {useUpdate} from './useUpdate';
+} from "@chakra-ui/react";
+import React from "react";
+import { FormProvider } from "react-hook-form";
+import { MultiLang } from "../../utils/config/lang";
+import { Category, CategorySchema } from "../../utils/types";
+import { Back } from "../Back";
+import { EmojiPick } from "../Form/EmojiPick";
+import useLanguage from "../useLanguage";
+import { useList } from "./useList";
+import { useNew } from "./useNew";
+import { useUpdate } from "./useUpdate";
 
 interface CategoryForm {
   name: string;
@@ -41,7 +41,7 @@ interface CategoryForm {
 }
 
 export const CategoryEdit = () => {
-  const {convertLang} = useLanguage();
+  const { convertLang } = useLanguage();
   const {
     data,
     error,
@@ -51,12 +51,12 @@ export const CategoryEdit = () => {
     closeUpdateModal,
     createModal,
     updateModal,
-  } = useList<Category>('/user/category', (t, v) => t.id === v.id);
+  } = useList<Category>("/user/category", (t, v) => t.id === v.id);
 
   return (
     <Box mt="3rem">
       <Heading textAlign="center">
-        {convertLang({ja: 'カテゴリ編集', en: 'Categories Edit'})}
+        {convertLang({ ja: "カテゴリ編集", en: "Categories Edit" })}
       </Heading>
       {error ? (
         <Center
@@ -69,37 +69,37 @@ export const CategoryEdit = () => {
         </Center>
       ) : (
         <Box
-          mx={{base: '.5rem', sm: '1.5rem', md: '0'}}
-          display={{base: 'block', md: 'flex'}}
+          mx={{ base: ".5rem", sm: "1.5rem", md: "0" }}
+          display={{ base: "block", md: "flex" }}
           alignItems="center"
           flexDirection="column"
         >
-          <Box width={{base: 'auto', md: '700px'}}>
+          <Box width={{ base: "auto", md: "700px" }}>
             <Flex>
               <Back href="/admin" />
               <Spacer />
               <Button my="1rem" onClick={createModal.onOpen}>
-                {convertLang({ja: '新規作成', en: 'New'})}
+                {convertLang({ ja: "新規作成", en: "New" })}
               </Button>
             </Flex>
             <TableContainer>
               <Table variant="simple">
                 <Thead>
                   <Tr>
-                    <Th>{convertLang({ja: '絵文字', en: 'Emoji'})}</Th>
-                    <Th>{convertLang({ja: '名前', en: 'Name'})}</Th>
+                    <Th>{convertLang({ ja: "絵文字", en: "Emoji" })}</Th>
+                    <Th>{convertLang({ ja: "名前", en: "Name" })}</Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data?.map(v => {
+                  {data?.map((v) => {
                     return (
                       <Tr key={v.id}>
                         <Td fontSize="1.5rem">{v.emoji}</Td>
-                        <Td>{convertLang({ja: v.name_ja, en: v.name})}</Td>
+                        <Td>{convertLang({ ja: v.name_ja, en: v.name })}</Td>
                         <Td>
                           <Button size="sm" onClick={() => onUpdate(v)}>
-                            {convertLang({ja: '編集', en: 'Edit'})}
+                            {convertLang({ ja: "編集", en: "Edit" })}
                           </Button>
                         </Td>
                       </Tr>
@@ -132,27 +132,27 @@ export const NewCategory: React.FC<{
   convertLang: (e: MultiLang) => string;
   isOpen: boolean;
   onClose: () => void;
-  update: (newV: Category, type: 'cre' | 'del' | 'upd') => void;
-}> = ({convertLang, isOpen, onClose, update}) => {
+  update: (newV: Category, type: "cre" | "del" | "upd") => void;
+}> = ({ convertLang, isOpen, onClose, update }) => {
   const {
     onSubmit,
     handleSubmit,
     register,
-    formState: {errors, isSubmitting},
+    formState: { errors, isSubmitting },
     wrapperOnClose,
     methods,
   } = useNew<Category, CategoryForm>({
-    path: '/user/category',
-    formFunc: d => {
+    path: "/user/category",
+    formFunc: (d) => {
       const form = new FormData();
-      form.append('name', d.name);
-      form.append('name_ja', d.name_ja);
-      form.append('emoji', d.emoji);
+      form.append("name", d.name);
+      form.append("name_ja", d.name_ja);
+      form.append("emoji", d.emoji);
 
       return form;
     },
     convertLang,
-    parse: r => {
+    parse: (r) => {
       return CategorySchema.parse(r);
     },
     update,
@@ -164,7 +164,7 @@ export const NewCategory: React.FC<{
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {convertLang({ja: 'カテゴリを新規作成', en: 'Create new Category'})}
+          {convertLang({ ja: "カテゴリを新規作成", en: "Create new Category" })}
         </ModalHeader>
         <ModalCloseButton size="lg" />
         <ModalBody mb="1rem">
@@ -172,14 +172,14 @@ export const NewCategory: React.FC<{
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name)}>
                 <FormLabel htmlFor="name">
-                  {convertLang({ja: '名称(英語)', en: 'Name'})}
+                  {convertLang({ ja: "名称(英語)", en: "Name" })}
                 </FormLabel>
                 <Input
                   id="name"
-                  {...register('name', {
+                  {...register("name", {
                     required: convertLang({
-                      ja: 'この項目は必須です',
-                      en: 'This is required',
+                      ja: "この項目は必須です",
+                      en: "This is required",
                     }),
                   })}
                 />
@@ -189,14 +189,14 @@ export const NewCategory: React.FC<{
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
                 <FormLabel htmlFor="name_ja">
-                  {convertLang({ja: '名称', en: 'Name(japanese)'})}
+                  {convertLang({ ja: "名称", en: "Name(japanese)" })}
                 </FormLabel>
                 <Input
                   id="name_ja"
-                  {...register('name_ja', {
+                  {...register("name_ja", {
                     required: convertLang({
-                      ja: 'この項目は必須です',
-                      en: 'This is required',
+                      ja: "この項目は必須です",
+                      en: "This is required",
                     }),
                   })}
                 />
@@ -212,7 +212,7 @@ export const NewCategory: React.FC<{
                 isLoading={isSubmitting}
                 type="submit"
               >
-                {convertLang({ja: '登録', en: 'Submit'})}
+                {convertLang({ ja: "登録", en: "Submit" })}
               </Button>
             </form>
           </FormProvider>
@@ -227,50 +227,50 @@ const UpdateCategory: React.FC<{
   convertLang: (e: MultiLang) => string;
   isOpen: boolean;
   onClose: () => void;
-  update: (newV: Category, type: 'cre' | 'del' | 'upd') => void;
-}> = ({convertLang, target, isOpen, onClose, update}) => {
+  update: (newV: Category, type: "cre" | "del" | "upd") => void;
+}> = ({ convertLang, target, isOpen, onClose, update }) => {
   const {
     onSubmit,
     wrapperOnClose,
     onDelete,
     handleSubmit,
     register,
-    formState: {errors, isSubmitting},
+    formState: { errors, isSubmitting },
     methods,
   } = useUpdate<Category, CategoryForm>({
     convertLang,
-    path: '/user/category',
-    deleteIdName: 'category_id',
+    path: "/user/category",
+    deleteIdName: "category_id",
     formFunc: (d, id) => {
       const form = new FormData();
-      form.append('category_id', `${id}`);
+      form.append("category_id", `${id}`);
       let changed = false;
       if (d.name !== target?.name) {
-        form.append('name', d.name);
+        form.append("name", d.name);
         changed = true;
       }
       if (d.name_ja !== target?.name_ja) {
-        form.append('name_ja', d.name_ja);
+        form.append("name_ja", d.name_ja);
         changed = true;
       }
       if (d.emoji !== target?.emoji) {
-        form.append('emoji', d.emoji);
+        form.append("emoji", d.emoji);
         changed = true;
       }
 
       return [form, changed];
     },
-    parse: r => {
+    parse: (r) => {
       return CategorySchema.parse(r);
     },
     update,
     onClose,
     target,
-    targetId: t => t.id,
+    targetId: (t) => t.id,
     setValues: (t, setValue) => {
-      setValue('name', t.name);
-      setValue('name_ja', t.name_ja);
-      setValue('emoji', t.emoji);
+      setValue("name", t.name);
+      setValue("name_ja", t.name_ja);
+      setValue("emoji", t.emoji);
     },
   });
 
@@ -279,7 +279,7 @@ const UpdateCategory: React.FC<{
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {convertLang({ja: 'カテゴリを編集', en: 'Edit new Location'})}
+          {convertLang({ ja: "カテゴリを編集", en: "Edit new Location" })}
         </ModalHeader>
         <ModalCloseButton size="lg" />
         <ModalBody mb="1rem">
@@ -290,21 +290,21 @@ const UpdateCategory: React.FC<{
               size="sm"
               onClick={onDelete}
             >
-              {convertLang({ja: '削除', en: 'Delete'})}
+              {convertLang({ ja: "削除", en: "Delete" })}
             </Button>
           </Flex>
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name)}>
                 <FormLabel htmlFor="name">
-                  {convertLang({ja: '名称(英語)', en: 'Name'})}
+                  {convertLang({ ja: "名称(英語)", en: "Name" })}
                 </FormLabel>
                 <Input
                   id="name"
-                  {...register('name', {
+                  {...register("name", {
                     required: convertLang({
-                      ja: 'この項目は必須です',
-                      en: 'This is required',
+                      ja: "この項目は必須です",
+                      en: "This is required",
                     }),
                   })}
                 />
@@ -314,14 +314,14 @@ const UpdateCategory: React.FC<{
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
                 <FormLabel htmlFor="name_ja">
-                  {convertLang({ja: '名称', en: 'Name(japanese)'})}
+                  {convertLang({ ja: "名称", en: "Name(japanese)" })}
                 </FormLabel>
                 <Input
                   id="name_ja"
-                  {...register('name_ja', {
+                  {...register("name_ja", {
                     required: convertLang({
-                      ja: 'この項目は必須です',
-                      en: 'This is required',
+                      ja: "この項目は必須です",
+                      en: "This is required",
                     }),
                   })}
                 />
@@ -338,7 +338,7 @@ const UpdateCategory: React.FC<{
                 isLoading={isSubmitting}
                 type="submit"
               >
-                {convertLang({ja: '更新', en: 'Update'})}
+                {convertLang({ ja: "更新", en: "Update" })}
               </Button>
             </form>
           </FormProvider>
