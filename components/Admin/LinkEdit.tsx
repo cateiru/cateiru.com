@@ -37,7 +37,11 @@ import { TbLink, TbPhoto } from "react-icons/tb";
 import useSWR from "swr";
 import type { MultiLang } from "../../utils/config/lang";
 import { fetcher, type SWRError } from "../../utils/swr";
-import { type Category, type LinkCategory, LinkCategorySchema } from "../../utils/types";
+import {
+  type Category,
+  type LinkCategory,
+  LinkCategorySchema,
+} from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 import { useList } from "./useList";
@@ -239,9 +243,7 @@ export const NewLink: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
               <FormLabel htmlFor="name_ja">
@@ -256,9 +258,7 @@ export const NewLink: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.category_id)}>
               <FormLabel htmlFor="category_id">
@@ -294,9 +294,7 @@ export const NewLink: React.FC<{
                   />
                 </NextLink>
               </Flex>
-              <FormErrorMessage>
-                {errors.category_id?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.category_id?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.site_url)}>
               <FormLabel htmlFor="site_url">
@@ -319,9 +317,7 @@ export const NewLink: React.FC<{
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.site_url?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.site_url?.message}</FormErrorMessage>
             </FormControl>
 
             <Button
@@ -436,9 +432,7 @@ const UpdateLink: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
               <FormLabel htmlFor="name_ja">
@@ -453,9 +447,7 @@ const UpdateLink: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.category_id)}>
               <FormLabel htmlFor="category_id">
@@ -491,9 +483,7 @@ const UpdateLink: React.FC<{
                   />
                 </NextLink>
               </Flex>
-              <FormErrorMessage>
-                {errors.category_id?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.category_id?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.site_url)}>
               <FormLabel htmlFor="site_url">
@@ -516,9 +506,7 @@ const UpdateLink: React.FC<{
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.site_url?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.site_url?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.update_favicon)}>
               <Checkbox

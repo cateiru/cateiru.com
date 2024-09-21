@@ -83,9 +83,7 @@ export const ContactBuilder = () => {
                 {convertLang({ ja: "お名前", en: "Your Name" })}
               </FormLabel>
               <Input id="name" type="text" {...register("name")} />
-              <FormErrorMessage>
-                {errors.name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.mail)} mt=".5rem">
               <FormLabel htmlFor="mail">
@@ -105,9 +103,7 @@ export const ContactBuilder = () => {
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.mail?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.mail?.message}</FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.url)} mt=".5rem">
               <FormLabel htmlFor="url">
@@ -119,9 +115,7 @@ export const ContactBuilder = () => {
                 type="url"
                 {...register("url")}
               />
-              <FormErrorMessage>
-                {errors.url?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.category)} mt=".5rem">
               <FormLabel htmlFor="category">
@@ -131,9 +125,7 @@ export const ContactBuilder = () => {
                 })}
               </FormLabel>
               <Input id="category" type="category" {...register("category")} />
-              <FormErrorMessage>
-                {errors.category?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.custom_title)} mt=".5rem">
               <FormLabel htmlFor="custom_title">
@@ -163,9 +155,7 @@ export const ContactBuilder = () => {
                 {...register("description")}
                 h="200px"
               />
-              <FormErrorMessage>
-                {errors.description?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
             </FormControl>
             <Button mt={4} isLoading={isSubmitting} type="submit" width="100%">
               {convertLang({ ja: "URLを作成する", en: "Build URL" })}

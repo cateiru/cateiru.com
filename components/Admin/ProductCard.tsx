@@ -59,21 +59,21 @@ export const ProductCard = () => {
             </Thead>
             <Tbody>
               {data?.map((v) => {
-                  return (
-                    <Tr key={`prod-${v.id}`}>
-                      <Td>{convertLang({ ja: v.name_ja, en: v.name })}</Td>
-                      <Td
-                        whiteSpace="nowrap"
-                        textOverflow="ellipsis"
-                        overflow="hidden"
-                        maxWidth="300px"
-                      >
-                        {convertLang({ ja: v.detail_ja, en: v.detail })}
-                      </Td>
-                      <Td>{parseDate(v.dev_time, lang)}</Td>
-                    </Tr>
-                  );
-                })}
+                return (
+                  <Tr key={`prod-${v.id}`}>
+                    <Td>{convertLang({ ja: v.name_ja, en: v.name })}</Td>
+                    <Td
+                      whiteSpace="nowrap"
+                      textOverflow="ellipsis"
+                      overflow="hidden"
+                      maxWidth="300px"
+                    >
+                      {convertLang({ ja: v.detail_ja, en: v.detail })}
+                    </Td>
+                    <Td>{parseDate(v.dev_time, lang)}</Td>
+                  </Tr>
+                );
+              })}
             </Tbody>
           </Table>
         </TableContainer>

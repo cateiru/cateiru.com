@@ -62,20 +62,20 @@ export const LinkCard = () => {
             </Thead>
             <Tbody>
               {data?.slice(0, 5).map((v) => {
-                  return (
-                    <Tr key={`link-${v.link.id}`}>
-                      <Td>
-                        {convertLang({ ja: v.link.name_ja, en: v.link.name })}
-                      </Td>
-                      <Td>
-                        {convertLang({
-                          ja: v.category.name_ja,
-                          en: v.category.name,
-                        })}
-                      </Td>
-                    </Tr>
-                  );
-                })}
+                return (
+                  <Tr key={`link-${v.link.id}`}>
+                    <Td>
+                      {convertLang({ ja: v.link.name_ja, en: v.link.name })}
+                    </Td>
+                    <Td>
+                      {convertLang({
+                        ja: v.category.name_ja,
+                        en: v.category.name,
+                      })}
+                    </Td>
+                  </Tr>
+                );
+              })}
             </Tbody>
           </Table>
         </TableContainer>

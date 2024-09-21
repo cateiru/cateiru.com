@@ -224,9 +224,7 @@ export const NewContactDefault: React.FC<{
                   {convertLang({ ja: "お名前", en: "Your Name" })}
                 </FormLabel>
                 <Input id="name" type="text" {...register("name")} />
-                <FormErrorMessage>
-                  {errors.name?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.email)}>
                 <FormLabel htmlFor="email">
@@ -245,9 +243,7 @@ export const NewContactDefault: React.FC<{
                     },
                   })}
                 />
-                <FormErrorMessage>
-                  {errors.email?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.url)}>
                 <FormLabel htmlFor="url">
@@ -259,18 +255,14 @@ export const NewContactDefault: React.FC<{
                   type="url"
                   {...register("url")}
                 />
-                <FormErrorMessage>
-                  {errors.url?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.category)}>
                 <FormLabel htmlFor="category">
                   {convertLang({ ja: "カテゴリ", en: "Category" })}
                 </FormLabel>
                 <Input id="category" {...register("category")} />
-                <FormErrorMessage>
-                  {errors.category?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.custom_title)}>
                 <FormLabel htmlFor="custom_title">
@@ -393,9 +385,7 @@ const UpdateContactDefault: React.FC<{
                   {convertLang({ ja: "お名前", en: "Your Name" })}
                 </FormLabel>
                 <Input id="name" type="text" {...register("name")} />
-                <FormErrorMessage>
-                  {errors.name?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.email)}>
                 <FormLabel htmlFor="email">
@@ -414,9 +404,7 @@ const UpdateContactDefault: React.FC<{
                     },
                   })}
                 />
-                <FormErrorMessage>
-                  {errors.email?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.url)}>
                 <FormLabel htmlFor="url">
@@ -428,18 +416,14 @@ const UpdateContactDefault: React.FC<{
                   type="url"
                   {...register("url")}
                 />
-                <FormErrorMessage>
-                  {errors.url?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.category)}>
                 <FormLabel htmlFor="category">
                   {convertLang({ ja: "カテゴリ", en: "Category" })}
                 </FormLabel>
                 <Input id="category" {...register("category")} />
-                <FormErrorMessage>
-                  {errors.category?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.custom_title)}>
                 <FormLabel htmlFor="custom_title">

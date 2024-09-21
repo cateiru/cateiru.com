@@ -183,9 +183,7 @@ export const NewCategory: React.FC<{
                     }),
                   })}
                 />
-                <FormErrorMessage>
-                  {errors.name?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
                 <FormLabel htmlFor="name_ja">
@@ -200,9 +198,7 @@ export const NewCategory: React.FC<{
                     }),
                   })}
                 />
-                <FormErrorMessage>
-                  {errors.name_ja?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
               </FormControl>
               <EmojiPick convertLang={convertLang} />
               <Button
@@ -308,9 +304,7 @@ const UpdateCategory: React.FC<{
                     }),
                   })}
                 />
-                <FormErrorMessage>
-                  {errors.name?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
                 <FormLabel htmlFor="name_ja">
@@ -325,9 +319,7 @@ const UpdateCategory: React.FC<{
                     }),
                   })}
                 />
-                <FormErrorMessage>
-                  {errors.name_ja?.message}
-                </FormErrorMessage>
+                <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
               </FormControl>
               <EmojiPick convertLang={convertLang} />
 

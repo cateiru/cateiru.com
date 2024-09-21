@@ -256,9 +256,7 @@ export const NewProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
               <FormLabel htmlFor="name_ja">
@@ -273,9 +271,7 @@ export const NewProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.detail)}>
               <FormLabel htmlFor="detail">
@@ -290,9 +286,7 @@ export const NewProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.detail?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.detail?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.detail_ja)}>
               <FormLabel htmlFor="detail_ja">
@@ -307,9 +301,7 @@ export const NewProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.detail_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.detail_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.site_url)}>
               <FormLabel htmlFor="site_url">
@@ -332,18 +324,14 @@ export const NewProduct: React.FC<{
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.site_url?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.site_url?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.github_url)}>
               <FormLabel htmlFor="github_url">
                 {convertLang({ ja: "GitHub URL", en: "GitHub URL" })}
               </FormLabel>
               <Input id="github_url" {...register("github_url")} />
-              <FormErrorMessage>
-                {errors.github_url?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.github_url?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.dev_time)}>
               <FormLabel htmlFor="dev_time">
@@ -359,9 +347,7 @@ export const NewProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.dev_time?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.dev_time?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.thumbnail)}>
               <FormLabel htmlFor="thumbnail">
@@ -380,9 +366,7 @@ export const NewProduct: React.FC<{
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.thumbnail?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.thumbnail?.message}</FormErrorMessage>
             </FormControl>
             <Button
               mt={4}
@@ -504,9 +488,7 @@ const UpdateProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
               <FormLabel htmlFor="name_ja">
@@ -521,9 +503,7 @@ const UpdateProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.detail)}>
               <FormLabel htmlFor="detail">
@@ -538,9 +518,7 @@ const UpdateProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.detail?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.detail?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.detail_ja)}>
               <FormLabel htmlFor="detail_ja">
@@ -555,9 +533,7 @@ const UpdateProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.detail_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.detail_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.site_url)}>
               <FormLabel htmlFor="site_url">
@@ -572,9 +548,7 @@ const UpdateProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.site_url?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.site_url?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.github_url)}>
               <FormLabel htmlFor="github_url">
@@ -584,9 +558,7 @@ const UpdateProduct: React.FC<{
                 })}
               </FormLabel>
               <Input id="github_url" {...register("github_url")} />
-              <FormErrorMessage>
-                {errors.github_url?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.github_url?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.dev_time)}>
               <FormLabel htmlFor="dev_time">
@@ -602,9 +574,7 @@ const UpdateProduct: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.dev_time?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.dev_time?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.thumbnail)}>
               <FormLabel htmlFor="thumbnail">
@@ -614,9 +584,7 @@ const UpdateProduct: React.FC<{
                 })}
               </FormLabel>
               <Input id="thumbnail" {...register("thumbnail")} />
-              <FormErrorMessage>
-                {errors.thumbnail?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.thumbnail?.message}</FormErrorMessage>
             </FormControl>
             <Button
               mt={4}

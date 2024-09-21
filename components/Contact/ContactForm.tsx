@@ -110,9 +110,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             }),
           })}
         />
-        <FormErrorMessage>
-          {errors.name?.message}
-        </FormErrorMessage>
+        <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={Boolean(errors.mail)} mt="1rem">
         <FormLabel htmlFor="mail">
@@ -137,9 +135,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             },
           })}
         />
-        <FormErrorMessage>
-          {errors.mail?.message}
-        </FormErrorMessage>
+        <FormErrorMessage>{errors.mail?.message}</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={Boolean(errors.url)} mt="1rem">
         <FormLabel htmlFor="url">
@@ -167,9 +163,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             isDisabled
             {...register("category")}
           />
-          <FormErrorMessage>
-            {errors.category?.message}
-          </FormErrorMessage>
+          <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
         </FormControl>
       )}
       {props.custom_title && (
@@ -180,9 +174,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             type="custom_value"
             {...register("custom_value")}
           />
-          <FormErrorMessage>
-            {errors.custom_value?.message}
-          </FormErrorMessage>
+          <FormErrorMessage>{errors.custom_value?.message}</FormErrorMessage>
         </FormControl>
       )}
       <FormControl isInvalid={Boolean(errors.subject)} mt="1rem">
@@ -199,9 +191,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             }),
           })}
         />
-        <FormErrorMessage>
-          {errors.subject?.message}
-        </FormErrorMessage>
+        <FormErrorMessage>{errors.subject?.message}</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={Boolean(errors.details)} mt="1rem">
         <FormLabel htmlFor="details">
@@ -218,9 +208,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             }),
           })}
         />
-        <FormErrorMessage>
-          {errors.details?.message}
-        </FormErrorMessage>
+        <FormErrorMessage>{errors.details?.message}</FormErrorMessage>
       </FormControl>
       <Button
         mt={4}

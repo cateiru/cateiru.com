@@ -62,17 +62,17 @@ export const ContactDefaultCard = () => {
             </Thead>
             <Tbody>
               {data?.map((v) => {
-                  return (
-                    <Tr key={`bio-${v.id}`}>
-                      <Td>{v.id}</Td>
-                      <Td>{v.name}</Td>
-                      <Td>{v.email}</Td>
-                      <Td>{v.url}</Td>
-                      <Td>{v.category}</Td>
-                      <Td>{v.custom_title}</Td>
-                    </Tr>
-                  );
-                })}
+                return (
+                  <Tr key={`bio-${v.id}`}>
+                    <Td>{v.id}</Td>
+                    <Td>{v.name}</Td>
+                    <Td>{v.email}</Td>
+                    <Td>{v.url}</Td>
+                    <Td>{v.category}</Td>
+                    <Td>{v.custom_title}</Td>
+                  </Tr>
+                );
+              })}
             </Tbody>
           </Table>
         </TableContainer>

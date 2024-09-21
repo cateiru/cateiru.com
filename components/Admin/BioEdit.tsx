@@ -479,9 +479,7 @@ const UpdateBio: React.FC<{
                   />
                 </NextLink>
               </Flex>
-              <FormErrorMessage>
-                {errors.location_id?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.location_id?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.position)}>
               <FormLabel htmlFor="position">
@@ -496,9 +494,7 @@ const UpdateBio: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.position?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.position?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.position_ja)}>
               <FormLabel htmlFor="position_ja">
@@ -516,9 +512,7 @@ const UpdateBio: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.position_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.position_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.is_public)}>
               <FormLabel htmlFor="is_public">
@@ -528,9 +522,7 @@ const UpdateBio: React.FC<{
                 })}
               </FormLabel>
               <Switch id="is_public" {...register("is_public")} />
-              <FormErrorMessage>
-                {errors.is_public?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.is_public?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.join_date)}>
               <FormLabel htmlFor="join_date">
@@ -549,9 +541,7 @@ const UpdateBio: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.join_date?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.join_date?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.leave_date)}>
               <FormLabel htmlFor="leave_date">
@@ -561,9 +551,7 @@ const UpdateBio: React.FC<{
                 })}
               </FormLabel>
               <Input id="leave_date" type="date" {...register("leave_date")} />
-              <FormErrorMessage>
-                {errors.leave_date?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.leave_date?.message}</FormErrorMessage>
             </FormControl>
             <Button
               mt={4}

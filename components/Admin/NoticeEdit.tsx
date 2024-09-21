@@ -153,9 +153,7 @@ export const NoticeEdit = () => {
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.mail?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.mail?.message}</FormErrorMessage>
             </FormControl>
 
             <Button

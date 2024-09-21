@@ -55,13 +55,13 @@ export const ContactCard = () => {
             </Thead>
             <Tbody>
               {data?.slice(0, 8).map((v) => {
-                  return (
-                    <Tr key={`link-${v.id}`}>
-                      <Td>{parseAgo(v.created, lang)}</Td>
-                      <Td>{convertLang({ ja: v.title, en: v.title })}</Td>
-                    </Tr>
-                  );
-                })}
+                return (
+                  <Tr key={`link-${v.id}`}>
+                    <Td>{parseAgo(v.created, lang)}</Td>
+                    <Td>{convertLang({ ja: v.title, en: v.title })}</Td>
+                  </Tr>
+                );
+              })}
             </Tbody>
           </Table>
         </TableContainer>

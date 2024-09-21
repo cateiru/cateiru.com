@@ -71,9 +71,7 @@ export const EmojiPick = React.memo<{
           }),
         })}
       />
-      <FormErrorMessage>
-        {errors.emoji?.message}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors.emoji?.message}</FormErrorMessage>
       <Skeleton isLoaded={showEmojiSearch} h="450px">
         <Center>
           {showEmojiSearch && (

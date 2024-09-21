@@ -175,9 +175,7 @@ export const Generator = () => {
               accept="image/*"
               {...register("image")}
             />
-            <FormErrorMessage>
-              {errors.image?.message}
-            </FormErrorMessage>
+            <FormErrorMessage>{errors.image?.message}</FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.width)}>
             <FormLabel htmlFor="width">
@@ -210,9 +208,7 @@ export const Generator = () => {
                 </NumberInput>
               )}
             />
-            <FormErrorMessage>
-              {errors.width?.message}
-            </FormErrorMessage>
+            <FormErrorMessage>{errors.width?.message}</FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.height)}>
             <FormLabel htmlFor="height">
@@ -245,9 +241,7 @@ export const Generator = () => {
                 </NumberInput>
               )}
             />
-            <FormErrorMessage>
-              {errors.height?.message}
-            </FormErrorMessage>
+            <FormErrorMessage>{errors.height?.message}</FormErrorMessage>
           </FormControl>
           <ColorPickerForm />
           <FormControl mt="1rem" isInvalid={Boolean(errors.isCircle)}>
@@ -257,9 +251,7 @@ export const Generator = () => {
                 en: "Masking with a circle",
               })}
             </Checkbox>
-            <FormErrorMessage>
-              {errors.isCircle?.message}
-            </FormErrorMessage>
+            <FormErrorMessage>{errors.isCircle?.message}</FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.imageType)}>
             <FormLabel htmlFor="imageType">
@@ -282,9 +274,7 @@ export const Generator = () => {
               <option value="image/jpeg">jpeg</option>
               <option value="image/webp">webp</option>
             </Select>
-            <FormErrorMessage>
-              {errors.imageType?.message}
-            </FormErrorMessage>
+            <FormErrorMessage>{errors.imageType?.message}</FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.quality)}>
             <FormLabel htmlFor="quality">
@@ -319,9 +309,7 @@ export const Generator = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-            <FormErrorMessage>
-              {errors.quality?.message}
-            </FormErrorMessage>
+            <FormErrorMessage>{errors.quality?.message}</FormErrorMessage>
           </FormControl>
           <Button
             mt={4}

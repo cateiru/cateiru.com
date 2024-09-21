@@ -203,9 +203,7 @@ const NewForm: React.FC<{
                   {convertLang({ ja: "会社", en: "Corporation" })}
                 </option>
               </Select>
-              <FormErrorMessage>
-                {errors.type?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name)}>
               <FormLabel htmlFor="name">
@@ -220,9 +218,7 @@ const NewForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
               <FormLabel htmlFor="name_ja">
@@ -237,9 +233,7 @@ const NewForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address)}>
               <FormLabel htmlFor="address">
@@ -254,9 +248,7 @@ const NewForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.address?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.address?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address_ja)}>
               <FormLabel htmlFor="address_ja">
@@ -271,9 +263,7 @@ const NewForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.address_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.address_ja?.message}</FormErrorMessage>
             </FormControl>
 
             <Button
@@ -395,9 +385,7 @@ const UpdateForm: React.FC<{
                   {convertLang({ ja: "会社", en: "Corporation" })}
                 </option>
               </Select>
-              <FormErrorMessage>
-                {errors.type?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name)}>
               <FormLabel htmlFor="name">
@@ -412,9 +400,7 @@ const UpdateForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
               <FormLabel htmlFor="name_ja">
@@ -429,9 +415,7 @@ const UpdateForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.name_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.name_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address)}>
               <FormLabel htmlFor="address">
@@ -446,9 +430,7 @@ const UpdateForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.address?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.address?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address_ja)}>
               <FormLabel htmlFor="address_ja">
@@ -463,9 +445,7 @@ const UpdateForm: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.address_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.address_ja?.message}</FormErrorMessage>
             </FormControl>
 
             <Button

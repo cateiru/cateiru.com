@@ -154,9 +154,7 @@ export const UserEdit = () => {
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.given_name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.given_name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.given_name_ja)}>
               <FormLabel htmlFor="given_name_ja">
@@ -188,9 +186,7 @@ export const UserEdit = () => {
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.family_name?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.family_name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.family_name_ja)}>
               <FormLabel htmlFor="family_name_ja">
@@ -223,9 +219,7 @@ export const UserEdit = () => {
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.birth_date?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.birth_date?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location)}>
               <FormLabel htmlFor="location">
@@ -240,9 +234,7 @@ export const UserEdit = () => {
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.location?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.location?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location_ja)}>
               <FormLabel htmlFor="location_ja">
@@ -257,9 +249,7 @@ export const UserEdit = () => {
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.location_ja?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.location_ja?.message}</FormErrorMessage>
             </FormControl>
 
             <Button
