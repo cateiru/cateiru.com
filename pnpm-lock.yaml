@@ -54,8 +54,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1
       react-color-palette:
-        specifier: ^7.3.0
-        version: 7.3.0(react@18.3.1)
+        specifier: ^6.2.0
+        version: 6.2.0(react@18.3.1)
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
@@ -1941,11 +1941,11 @@ packages:
     peerDependencies:
       react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
 
-  react-color-palette@7.3.0:
-    resolution: {integrity: sha512-GCgz+XEcbyFkq5wVvrPiXp8mUnOI3oObtmOtsZBCpDXgzHcDCJdssW8lTtVXbUqodo6pOw6pwYQRlXpi/ekkzQ==}
+  react-color-palette@6.2.0:
+    resolution: {integrity: sha512-9rIboaRJNoeF8aCI2f3J8wgMyhl74SnGmZLDjor3bKf0iDBhP2EBv0/jGmm0hrj6OackGCqtWl5ZvM89XUc3sg==}
     engines: {node: '>=10'}
     peerDependencies:
-      react: '>=16.8'
+      react: '>=16.8.0'
 
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
@@ -4525,7 +4525,7 @@ snapshots:
       '@babel/runtime': 7.25.6
       react: 18.3.1
 
-  react-color-palette@7.3.0(react@18.3.1):
+  react-color-palette@6.2.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 
