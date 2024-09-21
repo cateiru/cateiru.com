@@ -84,7 +84,7 @@ export const ContactBuilder = () => {
               </FormLabel>
               <Input id="name" type="text" {...register("name")} />
               <FormErrorMessage>
-                {errors.name && errors.name.message}
+                {errors.name?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.mail)} mt=".5rem">
@@ -106,7 +106,7 @@ export const ContactBuilder = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.mail && errors.mail.message}
+                {errors.mail?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.url)} mt=".5rem">
@@ -120,7 +120,7 @@ export const ContactBuilder = () => {
                 {...register("url")}
               />
               <FormErrorMessage>
-                {errors.url && errors.url.message}
+                {errors.url?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.category)} mt=".5rem">
@@ -132,7 +132,7 @@ export const ContactBuilder = () => {
               </FormLabel>
               <Input id="category" type="category" {...register("category")} />
               <FormErrorMessage>
-                {errors.category && errors.category.message}
+                {errors.category?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.custom_title)} mt=".5rem">
@@ -148,7 +148,7 @@ export const ContactBuilder = () => {
                 {...register("custom_title")}
               />
               <FormErrorMessage>
-                {errors.custom_title && errors.custom_title.message}
+                {errors.custom_title?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={Boolean(errors.description)} mt=".5rem">
@@ -164,7 +164,7 @@ export const ContactBuilder = () => {
                 h="200px"
               />
               <FormErrorMessage>
-                {errors.description && errors.description.message}
+                {errors.description?.message}
               </FormErrorMessage>
             </FormControl>
             <Button mt={4} isLoading={isSubmitting} type="submit" width="100%">

@@ -61,8 +61,7 @@ export const ContactDefaultCard = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {data &&
-                data.map((v) => {
+              {data?.map((v) => {
                   return (
                     <Tr key={`bio-${v.id}`}>
                       <Td>{v.id}</Td>

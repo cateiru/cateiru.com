@@ -1,4 +1,4 @@
-import type { ParsedUrlQuery } from "querystring";
+import type { ParsedUrlQuery } from "node:querystring";
 import {
   Center,
   Box,
@@ -32,11 +32,11 @@ const Contact = () => {
     const query = router.query;
 
     const d = buildData(query);
-    if (typeof query["description"] === "string") {
-      setDescription(query["description"]);
+    if (typeof query.description === "string") {
+      setDescription(query.description);
     }
-    if (typeof query["id"] === "string") {
-      getCustom(query["id"]);
+    if (typeof query.id === "string") {
+      getCustom(query.id);
       return;
     }
     setData(d);
@@ -122,23 +122,23 @@ const Contact = () => {
 function buildData(query: ParsedUrlQuery): ContactFormProps {
   const d: ContactFormProps = {};
 
-  if (typeof query["subject"] === "string") {
-    d.subject = query["subject"];
+  if (typeof query.subject === "string") {
+    d.subject = query.subject;
   }
-  if (typeof query["url"] === "string") {
-    d.url = query["url"];
+  if (typeof query.url === "string") {
+    d.url = query.url;
   }
-  if (typeof query["name"] === "string") {
-    d.name = query["name"];
+  if (typeof query.name === "string") {
+    d.name = query.name;
   }
-  if (typeof query["mail"] === "string") {
-    d.mail = query["mail"];
+  if (typeof query.mail === "string") {
+    d.mail = query.mail;
   }
-  if (typeof query["category"] === "string") {
-    d.category = query["category"];
+  if (typeof query.category === "string") {
+    d.category = query.category;
   }
-  if (typeof query["custom_title"] === "string") {
-    d.custom_title = query["custom_title"];
+  if (typeof query.custom_title === "string") {
+    d.custom_title = query.custom_title;
   }
 
   return d;

@@ -1,4 +1,4 @@
-import { createGzip, type Gzip } from "zlib";
+import { createGzip, type Gzip } from "node:zlib";
 import {
   type SitemapItem,
   SitemapStream,

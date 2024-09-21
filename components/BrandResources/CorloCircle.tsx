@@ -19,7 +19,7 @@ export const ColorCircle: React.FC<Props> = (props) => {
             : `linear-gradient(90deg, ${props.color1}, ${props.color2})`
         }
         borderRadius="25px"
-      ></Box>
+      />
       <SimpleGrid
         columns={props.color3 ? 3 : 2}
         spacing={10}

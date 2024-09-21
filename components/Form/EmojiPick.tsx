@@ -72,7 +72,7 @@ export const EmojiPick = React.memo<{
         })}
       />
       <FormErrorMessage>
-        {errors.emoji && errors.emoji.message}
+        {errors.emoji?.message}
       </FormErrorMessage>
       <Skeleton isLoaded={showEmojiSearch} h="450px">
         <Center>

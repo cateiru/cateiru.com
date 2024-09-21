@@ -106,7 +106,7 @@ export const ContactDefaultEdit = () => {
                         en: "Description",
                       })}
                     </Th>
-                    <Th></Th>
+                    <Th />
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -225,7 +225,7 @@ export const NewContactDefault: React.FC<{
                 </FormLabel>
                 <Input id="name" type="text" {...register("name")} />
                 <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.name?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.email)}>
@@ -246,7 +246,7 @@ export const NewContactDefault: React.FC<{
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.email && errors.email.message}
+                  {errors.email?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.url)}>
@@ -260,7 +260,7 @@ export const NewContactDefault: React.FC<{
                   {...register("url")}
                 />
                 <FormErrorMessage>
-                  {errors.url && errors.url.message}
+                  {errors.url?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.category)}>
@@ -269,7 +269,7 @@ export const NewContactDefault: React.FC<{
                 </FormLabel>
                 <Input id="category" {...register("category")} />
                 <FormErrorMessage>
-                  {errors.category && errors.category.message}
+                  {errors.category?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.custom_title)}>
@@ -281,7 +281,7 @@ export const NewContactDefault: React.FC<{
                 </FormLabel>
                 <Input id="custom_title" {...register("custom_title")} />
                 <FormErrorMessage>
-                  {errors.custom_title && errors.custom_title.message}
+                  {errors.custom_title?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={Boolean(errors.description)} mt=".5rem">
@@ -297,7 +297,7 @@ export const NewContactDefault: React.FC<{
                   h="200px"
                 />
                 <FormErrorMessage>
-                  {errors.description && errors.description.message}
+                  {errors.description?.message}
                 </FormErrorMessage>
               </FormControl>
               <Button
@@ -394,7 +394,7 @@ const UpdateContactDefault: React.FC<{
                 </FormLabel>
                 <Input id="name" type="text" {...register("name")} />
                 <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.name?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.email)}>
@@ -415,7 +415,7 @@ const UpdateContactDefault: React.FC<{
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.email && errors.email.message}
+                  {errors.email?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.url)}>
@@ -429,7 +429,7 @@ const UpdateContactDefault: React.FC<{
                   {...register("url")}
                 />
                 <FormErrorMessage>
-                  {errors.url && errors.url.message}
+                  {errors.url?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.category)}>
@@ -438,7 +438,7 @@ const UpdateContactDefault: React.FC<{
                 </FormLabel>
                 <Input id="category" {...register("category")} />
                 <FormErrorMessage>
-                  {errors.category && errors.category.message}
+                  {errors.category?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.custom_title)}>
@@ -450,7 +450,7 @@ const UpdateContactDefault: React.FC<{
                 </FormLabel>
                 <Input id="custom_title" {...register("custom_title")} />
                 <FormErrorMessage>
-                  {errors.custom_title && errors.custom_title.message}
+                  {errors.custom_title?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={Boolean(errors.description)} mt=".5rem">
@@ -466,7 +466,7 @@ const UpdateContactDefault: React.FC<{
                   h="200px"
                 />
                 <FormErrorMessage>
-                  {errors.description && errors.description.message}
+                  {errors.description?.message}
                 </FormErrorMessage>
               </FormControl>
 

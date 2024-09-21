@@ -46,7 +46,7 @@ export const ColorPickerForm = () => {
           })}
         </Checkbox>
         <FormErrorMessage>
-          {errors.isTransparent && errors.isTransparent.message}
+          {errors.isTransparent?.message}
         </FormErrorMessage>
       </FormControl>
       {isTransparent && (

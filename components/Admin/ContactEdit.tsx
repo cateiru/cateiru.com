@@ -118,7 +118,7 @@ export const ContactEdit = () => {
                         en: "Email Address",
                       })}
                     </Th>
-                    <Th></Th>
+                    <Th />
                   </Tr>
                 </Thead>
                 <Tbody>

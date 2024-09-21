@@ -58,7 +58,7 @@ export const Generator = () => {
   const handler = async (data: GeneratorForm) => {
     const t = new Transform(data.width, data.height);
 
-    if (data.image && data.image[0]) {
+    if (data.image?.[0]) {
       await t.loadImageFromSrc(URL.createObjectURL(data.image[0]));
     } else {
       await t.loadImageFromSrc(SOURCE_IMAGE);
@@ -176,7 +176,7 @@ export const Generator = () => {
               {...register("image")}
             />
             <FormErrorMessage>
-              {errors.image && errors.image.message}
+              {errors.image?.message}
             </FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.width)}>
@@ -211,7 +211,7 @@ export const Generator = () => {
               )}
             />
             <FormErrorMessage>
-              {errors.width && errors.width.message}
+              {errors.width?.message}
             </FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.height)}>
@@ -246,7 +246,7 @@ export const Generator = () => {
               )}
             />
             <FormErrorMessage>
-              {errors.height && errors.height.message}
+              {errors.height?.message}
             </FormErrorMessage>
           </FormControl>
           <ColorPickerForm />
@@ -258,7 +258,7 @@ export const Generator = () => {
               })}
             </Checkbox>
             <FormErrorMessage>
-              {errors.isCircle && errors.isCircle.message}
+              {errors.isCircle?.message}
             </FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.imageType)}>
@@ -283,7 +283,7 @@ export const Generator = () => {
               <option value="image/webp">webp</option>
             </Select>
             <FormErrorMessage>
-              {errors.imageType && errors.imageType.message}
+              {errors.imageType?.message}
             </FormErrorMessage>
           </FormControl>
           <FormControl mt="1rem" isInvalid={Boolean(errors.quality)}>
@@ -320,7 +320,7 @@ export const Generator = () => {
               </NumberInputStepper>
             </NumberInput>
             <FormErrorMessage>
-              {errors.quality && errors.quality.message}
+              {errors.quality?.message}
             </FormErrorMessage>
           </FormControl>
           <Button

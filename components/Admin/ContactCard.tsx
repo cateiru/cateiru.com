@@ -54,8 +54,7 @@ export const ContactCard = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {data &&
-                data.slice(0, 8).map((v) => {
+              {data?.slice(0, 8).map((v) => {
                   return (
                     <Tr key={`link-${v.id}`}>
                       <Td>{parseAgo(v.created, lang)}</Td>

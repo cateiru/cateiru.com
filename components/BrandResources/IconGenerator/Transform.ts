@@ -1,4 +1,4 @@
-import { rejects } from "assert";
+import { rejects } from "node:assert";
 
 export class Transform {
   private context: CanvasRenderingContext2D | null;

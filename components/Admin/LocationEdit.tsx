@@ -91,7 +91,7 @@ export const LocationEdit = () => {
                     <Th>{convertLang({ ja: "名称", en: "Name" })}</Th>
                     <Th>{convertLang({ ja: "住所", en: "Address" })}</Th>
                     <Th>{convertLang({ ja: "タイプ", en: "Type" })}</Th>
-                    <Th></Th>
+                    <Th />
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -204,7 +204,7 @@ const NewForm: React.FC<{
                 </option>
               </Select>
               <FormErrorMessage>
-                {errors.type && errors.type.message}
+                {errors.type?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name)}>
@@ -221,7 +221,7 @@ const NewForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name && errors.name.message}
+                {errors.name?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
@@ -238,7 +238,7 @@ const NewForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name_ja && errors.name_ja.message}
+                {errors.name_ja?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address)}>
@@ -255,7 +255,7 @@ const NewForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.address && errors.address.message}
+                {errors.address?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address_ja)}>
@@ -272,7 +272,7 @@ const NewForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.address_ja && errors.address_ja.message}
+                {errors.address_ja?.message}
               </FormErrorMessage>
             </FormControl>
 
@@ -396,7 +396,7 @@ const UpdateForm: React.FC<{
                 </option>
               </Select>
               <FormErrorMessage>
-                {errors.type && errors.type.message}
+                {errors.type?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name)}>
@@ -413,7 +413,7 @@ const UpdateForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name && errors.name.message}
+                {errors.name?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
@@ -430,7 +430,7 @@ const UpdateForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name_ja && errors.name_ja.message}
+                {errors.name_ja?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address)}>
@@ -447,7 +447,7 @@ const UpdateForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.address && errors.address.message}
+                {errors.address?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.address_ja)}>
@@ -464,7 +464,7 @@ const UpdateForm: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.address_ja && errors.address_ja.message}
+                {errors.address_ja?.message}
               </FormErrorMessage>
             </FormControl>
 

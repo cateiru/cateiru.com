@@ -155,7 +155,7 @@ export const UserEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.given_name && errors.given_name.message}
+                {errors.given_name?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.given_name_ja)}>
@@ -172,7 +172,7 @@ export const UserEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.given_name_ja && errors.given_name_ja.message}
+                {errors.given_name_ja?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.family_name)}>
@@ -189,7 +189,7 @@ export const UserEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.family_name && errors.family_name.message}
+                {errors.family_name?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.family_name_ja)}>
@@ -206,7 +206,7 @@ export const UserEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.family_name_ja && errors.family_name_ja.message}
+                {errors.family_name_ja?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.birth_date)}>
@@ -224,7 +224,7 @@ export const UserEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.birth_date && errors.birth_date.message}
+                {errors.birth_date?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location)}>
@@ -241,7 +241,7 @@ export const UserEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.location && errors.location.message}
+                {errors.location?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.location_ja)}>
@@ -258,7 +258,7 @@ export const UserEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.location_ja && errors.location_ja.message}
+                {errors.location_ja?.message}
               </FormErrorMessage>
             </FormControl>
 

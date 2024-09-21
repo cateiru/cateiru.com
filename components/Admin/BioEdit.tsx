@@ -36,7 +36,11 @@ import type { SWRResponse } from "swr";
 import type { MultiLang } from "../../utils/config/lang";
 import { parseDate } from "../../utils/parse";
 import { fetcher, type SWRError } from "../../utils/swr";
-import { type BioLoc, BioLocSchema, type LocationArray } from "../../utils/types";
+import {
+  type BioLoc,
+  BioLocSchema,
+  type LocationArray,
+} from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 import { useList } from "./useList";
@@ -106,8 +110,8 @@ export const BioList = () => {
                     <Th>{convertLang({ ja: "参加", en: "Join" })}</Th>
                     <Th>{convertLang({ ja: "脱退", en: "Leave" })}</Th>
                     <Th>{convertLang({ ja: "公開", en: "Public" })}</Th>
-                    <Th></Th>
-                    <Th></Th>
+                    <Th />
+                    <Th />
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -260,9 +264,7 @@ export const NewBio: React.FC<{
                   />
                 </NextLink>
               </Flex>
-              <FormErrorMessage>
-                {errors.location_id && errors.location_id.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.location_id?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.position)}>
               <FormLabel htmlFor="position">
@@ -277,9 +279,7 @@ export const NewBio: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.position && errors.position.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.position?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.position_ja)}>
               <FormLabel htmlFor="position_ja">
@@ -297,9 +297,7 @@ export const NewBio: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.position_ja && errors.position_ja.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.position_ja?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.is_public)}>
               <FormLabel htmlFor="is_public">
@@ -309,9 +307,7 @@ export const NewBio: React.FC<{
                 })}
               </FormLabel>
               <Switch id="is_public" {...register("is_public")} />
-              <FormErrorMessage>
-                {errors.is_public && errors.is_public.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.is_public?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.join_date)}>
               <FormLabel htmlFor="join_date">
@@ -330,9 +326,7 @@ export const NewBio: React.FC<{
                   }),
                 })}
               />
-              <FormErrorMessage>
-                {errors.join_date && errors.join_date.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.join_date?.message}</FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.leave_date)}>
               <FormLabel htmlFor="leave_date">
@@ -342,9 +336,7 @@ export const NewBio: React.FC<{
                 })}
               </FormLabel>
               <Input id="leave_date" type="date" {...register("leave_date")} />
-              <FormErrorMessage>
-                {errors.leave_date && errors.leave_date.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.leave_date?.message}</FormErrorMessage>
             </FormControl>
 
             <Button
@@ -488,7 +480,7 @@ const UpdateBio: React.FC<{
                 </NextLink>
               </Flex>
               <FormErrorMessage>
-                {errors.location_id && errors.location_id.message}
+                {errors.location_id?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.position)}>
@@ -505,7 +497,7 @@ const UpdateBio: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.position && errors.position.message}
+                {errors.position?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.position_ja)}>
@@ -525,7 +517,7 @@ const UpdateBio: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.position_ja && errors.position_ja.message}
+                {errors.position_ja?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.is_public)}>
@@ -537,7 +529,7 @@ const UpdateBio: React.FC<{
               </FormLabel>
               <Switch id="is_public" {...register("is_public")} />
               <FormErrorMessage>
-                {errors.is_public && errors.is_public.message}
+                {errors.is_public?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.join_date)}>
@@ -558,7 +550,7 @@ const UpdateBio: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.join_date && errors.join_date.message}
+                {errors.join_date?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.leave_date)}>
@@ -570,7 +562,7 @@ const UpdateBio: React.FC<{
               </FormLabel>
               <Input id="leave_date" type="date" {...register("leave_date")} />
               <FormErrorMessage>
-                {errors.leave_date && errors.leave_date.message}
+                {errors.leave_date?.message}
               </FormErrorMessage>
             </FormControl>
             <Button

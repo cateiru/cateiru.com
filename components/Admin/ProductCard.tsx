@@ -54,12 +54,11 @@ export const ProductCard = () => {
                 <Th>{convertLang({ ja: "名前", en: "Name" })}</Th>
                 <Th>{convertLang({ ja: "詳細", en: "Detail" })}</Th>
                 <Th>{convertLang({ ja: "開発日時", en: "Dev Time" })}</Th>
-                <Th></Th>
+                <Th />
               </Tr>
             </Thead>
             <Tbody>
-              {data &&
-                data.map((v) => {
+              {data?.map((v) => {
                   return (
                     <Tr key={`prod-${v.id}`}>
                       <Td>{convertLang({ ja: v.name_ja, en: v.name })}</Td>

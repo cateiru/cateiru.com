@@ -60,27 +60,26 @@ export const BioCard = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {data &&
-                data.map((v) => {
-                  return (
-                    <Tr key={`bio-${v.biography.id}`}>
-                      <Td>
-                        {convertLang({
-                          ja: v.location?.name_ja ?? "",
-                          en: v.location?.name ?? "",
-                        })}
-                      </Td>
-                      <Td>
-                        {convertLang({
-                          ja: v.biography.position_ja,
-                          en: v.biography.position,
-                        })}
-                      </Td>
-                      <Td>{parseDate(v.biography.join, lang)}</Td>
-                      <Td>{parseDate(v.biography.leave, lang)}</Td>
-                    </Tr>
-                  );
-                })}
+              {data?.map((v) => {
+                return (
+                  <Tr key={`bio-${v.biography.id}`}>
+                    <Td>
+                      {convertLang({
+                        ja: v.location?.name_ja ?? "",
+                        en: v.location?.name ?? "",
+                      })}
+                    </Td>
+                    <Td>
+                      {convertLang({
+                        ja: v.biography.position_ja,
+                        en: v.biography.position,
+                      })}
+                    </Td>
+                    <Td>{parseDate(v.biography.join, lang)}</Td>
+                    <Td>{parseDate(v.biography.leave, lang)}</Td>
+                  </Tr>
+                );
+              })}
             </Tbody>
           </Table>
         </TableContainer>

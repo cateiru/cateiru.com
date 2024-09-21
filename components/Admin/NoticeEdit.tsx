@@ -112,7 +112,7 @@ export const NoticeEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.discord_webhook && errors.discord_webhook.message}
+                {errors.discord_webhook?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.slack_webhook)}>
@@ -133,7 +133,7 @@ export const NoticeEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.slack_webhook && errors.slack_webhook.message}
+                {errors.slack_webhook?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.mail)}>
@@ -154,7 +154,7 @@ export const NoticeEdit = () => {
                 })}
               />
               <FormErrorMessage>
-                {errors.mail && errors.mail.message}
+                {errors.mail?.message}
               </FormErrorMessage>
             </FormControl>
 

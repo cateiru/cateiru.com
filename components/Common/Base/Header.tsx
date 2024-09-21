@@ -10,7 +10,7 @@ const Header = React.memo(() => {
 
   React.useEffect(() => {
     const language =
-      (window.navigator.languages && window.navigator.languages[0]) ||
+      (window.navigator.languages?.[0]) ||
       window.navigator.language;
 
     if (!/^ja\b/.test(language)) {
@@ -58,7 +58,7 @@ const Header = React.memo(() => {
       />
       <IconButton
         aria-label="switch color mode"
-        icon={<>{lang === "ja" ? "🇺🇸" : "🇯🇵"}</>}
+        icon={lang === "ja" ? "🇺🇸" : "🇯🇵"}
         onClick={toggleLang}
         variant="ghost"
         my=".5rem"

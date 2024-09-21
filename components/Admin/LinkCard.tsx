@@ -61,8 +61,7 @@ export const LinkCard = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {data &&
-                data.slice(0, 5).map((v) => {
+              {data?.slice(0, 5).map((v) => {
                   return (
                     <Tr key={`link-${v.link.id}`}>
                       <Td>

@@ -29,7 +29,7 @@ export const PreviewUserData = () => {
         mb="1.5rem"
         height="150px"
         borderRadius="5px"
-      ></Skeleton>
+      />
     );
   }
 

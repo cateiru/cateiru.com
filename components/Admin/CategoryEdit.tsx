@@ -88,7 +88,7 @@ export const CategoryEdit = () => {
                   <Tr>
                     <Th>{convertLang({ ja: "絵文字", en: "Emoji" })}</Th>
                     <Th>{convertLang({ ja: "名前", en: "Name" })}</Th>
-                    <Th></Th>
+                    <Th />
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -184,7 +184,7 @@ export const NewCategory: React.FC<{
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.name?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
@@ -201,7 +201,7 @@ export const NewCategory: React.FC<{
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.name_ja && errors.name_ja.message}
+                  {errors.name_ja?.message}
                 </FormErrorMessage>
               </FormControl>
               <EmojiPick convertLang={convertLang} />
@@ -309,7 +309,7 @@ const UpdateCategory: React.FC<{
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.name?.message}
                 </FormErrorMessage>
               </FormControl>
               <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
@@ -326,7 +326,7 @@ const UpdateCategory: React.FC<{
                   })}
                 />
                 <FormErrorMessage>
-                  {errors.name_ja && errors.name_ja.message}
+                  {errors.name_ja?.message}
                 </FormErrorMessage>
               </FormControl>
               <EmojiPick convertLang={convertLang} />

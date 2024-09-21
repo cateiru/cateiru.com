@@ -100,13 +100,13 @@ export const LinkEdit = () => {
               <Table variant="simple">
                 <Thead>
                   <Tr>
-                    <Th></Th>
+                    <Th />
                     <Th>{convertLang({ ja: "名前", en: "Name" })}</Th>
                     <Th>
                       {convertLang({ ja: "カテゴリ名", en: "Category Name" })}
                     </Th>
                     <Th>{convertLang({ ja: "URL", en: "URL" })}</Th>
-                    <Th></Th>
+                    <Th />
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -240,7 +240,7 @@ export const NewLink: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name && errors.name.message}
+                {errors.name?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
@@ -257,7 +257,7 @@ export const NewLink: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name_ja && errors.name_ja.message}
+                {errors.name_ja?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.category_id)}>
@@ -295,7 +295,7 @@ export const NewLink: React.FC<{
                 </NextLink>
               </Flex>
               <FormErrorMessage>
-                {errors.category_id && errors.category_id.message}
+                {errors.category_id?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.site_url)}>
@@ -320,7 +320,7 @@ export const NewLink: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.site_url && errors.site_url.message}
+                {errors.site_url?.message}
               </FormErrorMessage>
             </FormControl>
 
@@ -437,7 +437,7 @@ const UpdateLink: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name && errors.name.message}
+                {errors.name?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.name_ja)}>
@@ -454,7 +454,7 @@ const UpdateLink: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.name_ja && errors.name_ja.message}
+                {errors.name_ja?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.category_id)}>
@@ -492,7 +492,7 @@ const UpdateLink: React.FC<{
                 </NextLink>
               </Flex>
               <FormErrorMessage>
-                {errors.category_id && errors.category_id.message}
+                {errors.category_id?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.site_url)}>
@@ -517,7 +517,7 @@ const UpdateLink: React.FC<{
                 })}
               />
               <FormErrorMessage>
-                {errors.site_url && errors.site_url.message}
+                {errors.site_url?.message}
               </FormErrorMessage>
             </FormControl>
             <FormControl mt=".5rem" isInvalid={Boolean(errors.update_favicon)}>
@@ -529,7 +529,7 @@ const UpdateLink: React.FC<{
                 {convertLang({ ja: "Favicon更新", en: "Update Favicon" })}
               </Checkbox>
               <FormErrorMessage>
-                {errors.update_favicon && errors.update_favicon.message}
+                {errors.update_favicon?.message}
               </FormErrorMessage>
             </FormControl>
 

@@ -94,7 +94,7 @@ export const AllUsersCard = () => {
               <Table variant="simple">
                 <Thead>
                   <Tr>
-                    <Th></Th>
+                    <Th />
                     <Th>ID</Th>
                     <Th>{convertLang({ ja: "ユーザID", en: "User ID" })}</Th>
                     <Th>{convertLang({ ja: "選択", en: "Select" })}</Th>

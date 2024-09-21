@@ -111,7 +111,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
           })}
         />
         <FormErrorMessage>
-          {errors.name && errors.name.message}
+          {errors.name?.message}
         </FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={Boolean(errors.mail)} mt="1rem">
@@ -138,7 +138,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
           })}
         />
         <FormErrorMessage>
-          {errors.mail && errors.mail.message}
+          {errors.mail?.message}
         </FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={Boolean(errors.url)} mt="1rem">
@@ -151,7 +151,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
           type="url"
           {...register("url")}
         />
-        <FormErrorMessage>{errors.url && errors.url.message}</FormErrorMessage>
+        <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
       </FormControl>
       {props.category && (
         <FormControl isInvalid={Boolean(errors.category)} mt="1rem">
@@ -168,7 +168,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             {...register("category")}
           />
           <FormErrorMessage>
-            {errors.category && errors.category.message}
+            {errors.category?.message}
           </FormErrorMessage>
         </FormControl>
       )}
@@ -181,7 +181,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
             {...register("custom_value")}
           />
           <FormErrorMessage>
-            {errors.custom_value && errors.custom_value.message}
+            {errors.custom_value?.message}
           </FormErrorMessage>
         </FormControl>
       )}
@@ -200,7 +200,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
           })}
         />
         <FormErrorMessage>
-          {errors.subject && errors.subject.message}
+          {errors.subject?.message}
         </FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={Boolean(errors.details)} mt="1rem">
@@ -219,7 +219,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
           })}
         />
         <FormErrorMessage>
-          {errors.details && errors.details.message}
+          {errors.details?.message}
         </FormErrorMessage>
       </FormControl>
       <Button

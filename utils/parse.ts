@@ -13,7 +13,7 @@ import type { Contact, Public, PublicBio } from "./types";
 export function parseDate(d: string, lang: string): string {
   if (d.length === 9) {
     return lang === "ja" ? "不明" : "Unknown";
-  } else if (d === "0001-01-01T00:00:00Z") {
+  }if (d === "0001-01-01T00:00:00Z") {
     return "-";
   }
 
@@ -63,23 +63,22 @@ export function parseAgo(d: string, lang: string): string {
     return lang === "ja"
       ? `${Math.floor(diffSec / 60)}分前`
       : `${Math.floor(diffSec / 60)} min ago`;
-  } else if (diffSec < 86400) {
+  }if (diffSec < 86400) {
     return lang === "ja"
       ? `${Math.floor(diffSec / 3600)}時間前`
       : `${Math.floor(diffSec / 3600)} hors ago`;
-  } else if (diffSec < 86400 * 7) {
+  }if (diffSec < 86400 * 7) {
     return lang === "ja"
       ? `${Math.floor(diffSec / 86400)}日前`
       : `${Math.floor(diffSec / 86400)} day ago`;
-  } else if (diffSec < 86400 * 30) {
+  }if (diffSec < 86400 * 30) {
     return lang === "ja"
       ? `${Math.floor(diffSec / (86400 * 7))}週間前`
       : `${Math.floor(diffSec / (86400 * 7))} week ago`;
-  } else {
+  }
     return lang === "ja"
       ? `${Math.floor(diffSec / (86400 * 30))}ヶ月以上前`
       : `over ${Math.floor(diffSec / (86400 * 30))} months ago`;
-  }
 }
 
 /**
@@ -151,7 +150,7 @@ export const getAge = (d: string): number => {
  * @param {Public} d - public data
  */
 export function consolePublic(d: Public) {
-  console.log("ID: " + chalk.bgHex("#086f83").white(d.user_id));
+  console.log(`ID: ${chalk.bgHex("#086f83").white(d.user_id)}`);
 }
 
 /**
@@ -208,7 +207,7 @@ export function sliceStr(str: string): string {
   }
 
   if (100 < str.length) {
-    return str.slice(0, 100) + "...";
+    return `${str.slice(0, 100)}...`;
   }
   return str;
 }
