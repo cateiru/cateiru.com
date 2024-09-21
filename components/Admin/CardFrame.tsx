@@ -1,5 +1,5 @@
 import { Box, useColorMode } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 
 export const CardFrame: React.FC<{ children: React.ReactNode }> = ({
   children,

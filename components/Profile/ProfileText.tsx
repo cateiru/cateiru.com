@@ -1,7 +1,7 @@
 import { Box, Text, Heading, Center } from "@chakra-ui/react";
 import { FaBirthdayCake } from "react-icons/fa";
 import { getAge, parseDate } from "../../utils/parse";
-import { Public } from "../../utils/types";
+import type { Public } from "../../utils/types";
 import useLanguage from "../useLanguage";
 
 const ProfileText: React.FC<{ data: Public }> = ({ data }) => {

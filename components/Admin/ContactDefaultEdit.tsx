@@ -24,10 +24,10 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import { FormProvider } from "react-hook-form";
-import { MultiLang } from "../../utils/config/lang";
-import { ContactDefault, ContactDefaultSchema } from "../../utils/types";
+import type { MultiLang } from "../../utils/config/lang";
+import { type ContactDefault, ContactDefaultSchema } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 import { useList } from "./useList";

@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { streamToPromise } from "sitemap";
 import { generateSitemap } from "../utils/sitemap";
 

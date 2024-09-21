@@ -28,15 +28,15 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import React from "react";
+import type React from "react";
 import { TbAdjustmentsAlt } from "react-icons/tb";
 import { TbCheck } from "react-icons/tb";
 import useSWR from "swr";
 import type { SWRResponse } from "swr";
-import { MultiLang } from "../../utils/config/lang";
+import type { MultiLang } from "../../utils/config/lang";
 import { parseDate } from "../../utils/parse";
-import { fetcher, SWRError } from "../../utils/swr";
-import { BioLoc, BioLocSchema, LocationArray } from "../../utils/types";
+import { fetcher, type SWRError } from "../../utils/swr";
+import { type BioLoc, BioLocSchema, type LocationArray } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 import { useList } from "./useList";

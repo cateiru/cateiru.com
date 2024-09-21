@@ -1,5 +1,5 @@
 import { Box, Button, SimpleGrid, useClipboard } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import { TbCheck } from "react-icons/tb";
 
 interface Props {

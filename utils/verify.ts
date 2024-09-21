@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
-import { NextRouter } from "next/router";
+import type { NextRouter } from "next/router";
 import { api } from "./api";
-import { User, UserSchema } from "./types";
+import { type User, UserSchema } from "./types";
 
 export class Verify {
   private isRedirect: boolean;

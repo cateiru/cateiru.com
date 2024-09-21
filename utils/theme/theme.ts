@@ -3,7 +3,7 @@ import {
   type ThemeConfig,
   defineStyleConfig,
 } from "@chakra-ui/react";
-import { ColorThemes } from "../types";
+import type { ColorThemes } from "../types";
 
 const config: ThemeConfig = {
   useSystemColorMode: false,

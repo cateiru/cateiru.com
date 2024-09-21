@@ -12,8 +12,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { api } from "../../utils/api";
-import { fetcher, SWRError } from "../../utils/swr";
-import { Notice } from "../../utils/types";
+import { fetcher, type SWRError } from "../../utils/swr";
+import type { Notice } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 interface Form {

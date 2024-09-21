@@ -8,8 +8,8 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import useSWR from "swr";
-import { fetcher, SWRError } from "../../utils/swr";
-import { UserData } from "../../utils/types";
+import { fetcher, type SWRError } from "../../utils/swr";
+import type { UserData } from "../../utils/types";
 import useLanguage from "../useLanguage";
 
 export const PreviewUserData = () => {

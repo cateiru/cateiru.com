@@ -9,7 +9,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { TbPhoto } from "react-icons/tb";
-import { PublicLink } from "../../utils/types";
+import type { PublicLink } from "../../utils/types";
 import useLanguage from "../useLanguage";
 
 export const CategoryCard: React.FC<{ links: PublicLink }> = ({ links }) => {

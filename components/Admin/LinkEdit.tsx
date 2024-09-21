@@ -31,13 +31,13 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import React from "react";
+import type React from "react";
 import { TbAdjustmentsAlt } from "react-icons/tb";
 import { TbLink, TbPhoto } from "react-icons/tb";
 import useSWR from "swr";
-import { MultiLang } from "../../utils/config/lang";
-import { fetcher, SWRError } from "../../utils/swr";
-import { Category, LinkCategory, LinkCategorySchema } from "../../utils/types";
+import type { MultiLang } from "../../utils/config/lang";
+import { fetcher, type SWRError } from "../../utils/swr";
+import { type Category, type LinkCategory, LinkCategorySchema } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 import { useList } from "./useList";

@@ -12,7 +12,7 @@ import EmojiPicker from "emoji-picker-react";
 import { Theme as EmojiTheme, EmojiStyle } from "emoji-picker-react";
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { MultiLang } from "../../utils/config/lang";
+import type { MultiLang } from "../../utils/config/lang";
 
 interface EmojiForm {
   emoji: string;

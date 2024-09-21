@@ -1,5 +1,5 @@
 import { Flex, Box } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 

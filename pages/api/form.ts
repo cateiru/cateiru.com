@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { Form } from "../../utils/form";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { Form } from "../../utils/form";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("OK");

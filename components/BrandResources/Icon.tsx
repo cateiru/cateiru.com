@@ -1,6 +1,6 @@
 import { Box, Button, Center, Heading, Image, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
-import React from "react";
+import type React from "react";
 import useLanguage from "../useLanguage";
 
 export const Icon = () => {

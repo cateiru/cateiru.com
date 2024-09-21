@@ -4,7 +4,7 @@ import { Head } from "../components/Common/Head";
 import Index from "../components/Index";
 import { consolePublic } from "../utils/parse";
 import { getPublicProfile } from "../utils/public";
-import { Public } from "../utils/types";
+import type { Public } from "../utils/types";
 
 const CACHE_TIME = 60; // 1 min
 

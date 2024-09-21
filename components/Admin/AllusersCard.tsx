@@ -18,8 +18,8 @@ import { useRecoilState } from "recoil";
 import useSWR from "swr";
 import { api } from "../../utils/api";
 import { UserState } from "../../utils/state/atoms";
-import { fetcher, SWRError } from "../../utils/swr";
-import { AllUsers } from "../../utils/types";
+import { fetcher, type SWRError } from "../../utils/swr";
+import type { AllUsers } from "../../utils/types";
 import useLanguage from "../useLanguage";
 import { CardFrame } from "./CardFrame";
 

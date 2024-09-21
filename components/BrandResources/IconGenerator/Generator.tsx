@@ -18,7 +18,7 @@ import React from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import useLanguage from "../../useLanguage";
-import { ColorPickerForm, ColorPickerFormType } from "./ColorPicker";
+import { ColorPickerForm, type ColorPickerFormType } from "./ColorPicker";
 import { PreviewImage } from "./Preview";
 import { Transform, getSize } from "./Transform";
 

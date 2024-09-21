@@ -1,5 +1,5 @@
 import React from "react";
-import { Public } from "../utils/types";
+import type { Public } from "../utils/types";
 import Bio from "./Bio/Bio";
 import ContactLink from "./Contact/ContactLink";
 import Products from "./Products/Products";

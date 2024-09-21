@@ -23,10 +23,10 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import { FormProvider } from "react-hook-form";
-import { MultiLang } from "../../utils/config/lang";
-import { Category, CategorySchema } from "../../utils/types";
+import type { MultiLang } from "../../utils/config/lang";
+import { type Category, CategorySchema } from "../../utils/types";
 import { Back } from "../Back";
 import { EmojiPick } from "../Form/EmojiPick";
 import useLanguage from "../useLanguage";

@@ -1,6 +1,6 @@
 import { Center, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
+import type React from "react";
 import useLanguage from "../useLanguage";
 
 const ContactLink: React.FC<{

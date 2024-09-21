@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import type { Task } from "gantt-task-react";
 import stc from "string-to-color";
-import { Contact, Public, PublicBio } from "./types";
+import type { Contact, Public, PublicBio } from "./types";
 
 /**
  * 日時をフォーマットする

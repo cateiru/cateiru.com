@@ -12,7 +12,7 @@ import {
 import { Gantt, ViewMode } from "gantt-task-react";
 import React from "react";
 import { getTasks, parseShotDate } from "../../utils/parse";
-import { Public } from "../../utils/types";
+import type { Public } from "../../utils/types";
 import { Section } from "../Common/Section";
 import useLanguage from "../useLanguage";
 

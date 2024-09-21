@@ -28,10 +28,10 @@ import React from "react";
 import { TbCheck } from "react-icons/tb";
 import useSWR from "swr";
 import { api } from "../../utils/api";
-import { MultiLang } from "../../utils/config/lang";
+import type { MultiLang } from "../../utils/config/lang";
 import { copyElement, parseAgo, parseDetailDate } from "../../utils/parse";
-import { fetcher, SWRError } from "../../utils/swr";
-import { Contact } from "../../utils/types";
+import { fetcher, type SWRError } from "../../utils/swr";
+import type { Contact } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 

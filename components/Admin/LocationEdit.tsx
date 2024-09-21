@@ -25,9 +25,9 @@ import {
   FormErrorMessage,
   Select,
 } from "@chakra-ui/react";
-import React from "react";
-import { MultiLang } from "../../utils/config/lang";
-import { Location, LocationSchema } from "../../utils/types";
+import type React from "react";
+import type { MultiLang } from "../../utils/config/lang";
+import { type Location, LocationSchema } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 import { useList } from "./useList";

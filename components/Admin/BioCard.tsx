@@ -13,8 +13,8 @@ import {
 import NextLink from "next/link";
 import useSWR from "swr";
 import { parseDate } from "../../utils/parse";
-import { fetcher, SWRError } from "../../utils/swr";
-import { BioLocArray } from "../../utils/types";
+import { fetcher, type SWRError } from "../../utils/swr";
+import type { BioLocArray } from "../../utils/types";
 import useLanguage from "../useLanguage";
 import { CardFrame } from "./CardFrame";
 

@@ -1,10 +1,10 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { Head } from "../../components/Common/Head";
 import { ProductPage } from "../../components/Products/ProductPage";
 import { getPublicProduct } from "../../utils/public";
-import { PublicProduct } from "../../utils/types";
+import type { PublicProduct } from "../../utils/types";
 
 const CACHE_TIME = 60; // 1 min
 
@@ -42,7 +42,7 @@ export const getStaticProps: GetStaticProps<Props, { id: string }> = async (
   }
 
   try {
-    const d = await getPublicProduct(parseInt(id));
+    const d = await getPublicProduct(Number.parseInt(id));
     return {
       props: {
         product: d,

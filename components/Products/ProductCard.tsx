@@ -7,9 +7,9 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import React from "react";
+import type React from "react";
 import { parseShotDate } from "../../utils/parse";
-import { PublicProduct } from "../../utils/types";
+import type { PublicProduct } from "../../utils/types";
 import useLanguage from "../useLanguage";
 
 export const ProductCard: React.FC<{ prod: PublicProduct }> = ({ prod }) => {

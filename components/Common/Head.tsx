@@ -1,7 +1,7 @@
 import { useColorMode } from "@chakra-ui/react";
 import NextHead from "next/head";
-import React from "react";
-import { MultiLang } from "../../utils/config/lang";
+import type React from "react";
+import type { MultiLang } from "../../utils/config/lang";
 import useLanguage from "../useLanguage";
 
 interface Props {

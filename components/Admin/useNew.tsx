@@ -8,8 +8,8 @@ import type {
   UseFormReturn,
 } from "react-hook-form";
 import { api } from "../../utils/api";
-import { MultiLang } from "../../utils/config/lang";
-import { UpdateHandler } from "./useList";
+import type { MultiLang } from "../../utils/config/lang";
+import type { UpdateHandler } from "./useList";
 
 interface Args<T, V extends FieldValues> {
   path: string;

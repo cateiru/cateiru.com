@@ -8,10 +8,10 @@ import {
   Text,
   useColorMode,
 } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import { TbBrandGithub, TbLink } from "react-icons/tb";
 import { parseShotDate } from "../../utils/parse";
-import { PublicProduct } from "../../utils/types";
+import type { PublicProduct } from "../../utils/types";
 import { Back } from "../Back";
 import Markdown from "../Markdown/Markdown";
 import useLanguage from "../useLanguage";

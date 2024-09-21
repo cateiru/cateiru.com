@@ -1,4 +1,4 @@
-import { ParsedUrlQuery } from "querystring";
+import type { ParsedUrlQuery } from "querystring";
 import {
   Center,
   Box,
@@ -14,7 +14,7 @@ import { api } from "../../utils/api";
 import { ContactDefaultSchema } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
-import { ContactForm, ContactFormProps } from "./ContactForm";
+import { ContactForm, type ContactFormProps } from "./ContactForm";
 import { PreviewUserData } from "./PreviewUserData";
 
 const Contact = () => {

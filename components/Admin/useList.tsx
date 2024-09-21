@@ -2,7 +2,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import type { KeyedMutator } from "swr";
 import useSWR from "swr";
-import { fetcher, SWRError } from "../../utils/swr";
+import { fetcher, type SWRError } from "../../utils/swr";
 
 type OperationType = "cre" | "upd" | "del";
 export type UpdateHandler<T> = (l: T, type: OperationType) => void;

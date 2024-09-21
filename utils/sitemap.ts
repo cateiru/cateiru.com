@@ -1,6 +1,6 @@
-import { createGzip, Gzip } from "zlib";
+import { createGzip, type Gzip } from "zlib";
 import {
-  SitemapItem,
+  type SitemapItem,
   SitemapStream,
   EnumChangefreq,
   streamToPromise,

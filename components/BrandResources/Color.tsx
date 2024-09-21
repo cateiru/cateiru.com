@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { TbCheck } from "react-icons/tb";
-import { MultiLang } from "../../utils/config/lang";
+import type { MultiLang } from "../../utils/config/lang";
 import { textColor } from "../../utils/theme/color";
 import { colorTheme } from "../../utils/theme/theme";
 import useLanguage from "../useLanguage";

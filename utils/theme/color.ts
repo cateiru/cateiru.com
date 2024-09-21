@@ -7,9 +7,9 @@
 export function complementary(color: string): string {
   color = color.replace("#", "");
 
-  const r = parseInt(color.substring(0, 2), 16);
-  const g = parseInt(color.substring(2, 4), 16);
-  const b = parseInt(color.substring(4, 6), 16);
+  const r = Number.parseInt(color.substring(0, 2), 16);
+  const g = Number.parseInt(color.substring(2, 4), 16);
+  const b = Number.parseInt(color.substring(4, 6), 16);
 
   const buf = Math.max(r, g, b) + Math.min(r, g, b);
 
@@ -28,7 +28,7 @@ export function complementary(color: string): string {
  * @returns {string} - 文字色
  */
 export function textColor(color: string): string {
-  const t = parseInt(color.replace("#", ""), 16);
+  const t = Number.parseInt(color.replace("#", ""), 16);
 
   return +(
     (299 * ((t >> 16) & 255) + 587 * ((t >> 8) & 255) + 114 * (255 & t)) /

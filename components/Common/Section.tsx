@@ -1,7 +1,7 @@
 import { Box, Center, Heading, useColorMode } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import { IoCaretDown } from "react-icons/io5";
-import { MultiLang } from "../../utils/config/lang";
+import type { MultiLang } from "../../utils/config/lang";
 import useLanguage from "../useLanguage";
 
 export const Section: React.FC<{

@@ -7,7 +7,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import { useForm } from "react-hook-form";
 import { api } from "../../utils/api";
 import useLanguage from "../useLanguage";

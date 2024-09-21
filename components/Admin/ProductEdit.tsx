@@ -29,11 +29,11 @@ import {
   Tr,
   useColorMode,
 } from "@chakra-ui/react";
-import React from "react";
+import type React from "react";
 import { TbLink, TbBrandGithub } from "react-icons/tb";
-import { MultiLang } from "../../utils/config/lang";
+import type { MultiLang } from "../../utils/config/lang";
 import { parseDate } from "../../utils/parse";
-import { Product, ProductSchema } from "../../utils/types";
+import { type Product, ProductSchema } from "../../utils/types";
 import { Back } from "../Back";
 import useLanguage from "../useLanguage";
 import { useList } from "./useList";

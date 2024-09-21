@@ -1,7 +1,7 @@
 import { backendApi } from "./api";
 import {
-  Public,
-  PublicProduct,
+  type Public,
+  type PublicProduct,
   PublicProductSchema,
   PublicSchema,
 } from "./types";

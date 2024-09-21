@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import useSWR from "swr";
-import { MultiLang } from "../../utils/config/lang";
-import { fetcher, SWRError } from "../../utils/swr";
-import { Notice } from "../../utils/types";
+import type { MultiLang } from "../../utils/config/lang";
+import { fetcher, type SWRError } from "../../utils/swr";
+import type { Notice } from "../../utils/types";
 import useLanguage from "../useLanguage";
 import { CardFrame } from "./CardFrame";
 
