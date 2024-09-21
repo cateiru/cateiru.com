@@ -26,7 +26,7 @@ export const ProductCard: React.FC<{ prod: PublicProduct }> = ({ prod }) => {
             ? "0px 1px 26px -3px #a0acc0"
             : "0px 1px 26px -3px #000"
         }
-        borderRadius="35px"
+        borderRadius="20"
         p="1rem"
         position="relative"
         _hover={{

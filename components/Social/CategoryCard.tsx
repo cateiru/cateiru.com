@@ -25,7 +25,7 @@ export const CategoryCard: React.FC<{ links: PublicLink }> = ({ links }) => {
           ? "0px 1px 26px -3px #a0acc0"
           : "0px 1px 26px -3px #000"
       }
-      borderRadius="56px"
+      borderRadius="20"
       p="1rem"
       position="relative"
     >
