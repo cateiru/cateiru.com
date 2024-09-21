@@ -13,8 +13,7 @@ next.config.js
 package.json
 tsconfig.json
 yarn.lock
-.eslintignore
-.eslintrc.json
+biome.json
 
 # ===== Ignore
 .github/**
