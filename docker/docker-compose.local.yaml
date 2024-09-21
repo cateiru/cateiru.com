@@ -31,6 +31,9 @@ services:
       dockerfile_inline: |
         FROM node:alpine
 
+        RUN apk update && apk add --no-cache curl
+        RUN npm i -g pnpm
+
         WORKDIR /app
     ports:
       - "3000:3000"
@@ -38,8 +41,15 @@ services:
       - NEXT_PUBLIC_API_DOMAIN=${NEXT_PUBLIC_API_DOMAIN:-http://localhost:8080}
       - NEXT_PUBLIC_BACKEND_API_DOMAIN=${NEXT_PUBLIC_BACKEND_API_DOMAIN:-http://backend_app:8080}
     volumes:
+      - cateirucom-next-cache:/app/.next
+      - cateirucom-node-modules:/app/node_modules
+      - cateirucom-pnpm-store:/app/.pnpm-store
       - ..:/app
     depends_on:
       - db
       - backend_app
-    command: sh -c "yarn --frozen-lockfile && yarn dev"
+    command: sh -c "pnpm i && pnpm dev"
+volumes:
+  cateirucom-next-cache:
+  cateirucom-node-modules:
+  cateirucom-pnpm-store:
