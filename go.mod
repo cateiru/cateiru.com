@@ -1,6 +1,6 @@
 module github.com/cateiru/cateiru.com
 
-go 1.19
+go 1.23
 
 require (
 	entgo.io/ent v0.11.10
