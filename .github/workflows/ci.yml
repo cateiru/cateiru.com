@@ -2,33 +2,32 @@
 
 name: ci
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [main]
   pull_request:
     branches: [main]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   next:
-    name: next build and lint
+    name: Next.js Lint, Format and Build
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
       TZ: "Asia/Tokyo"
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Install packages
-        run: yarn install
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: true
 
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
+
+      - name: Format
+        run: pnpm format
 
       - name: Build
-        run: yarn build
+        run: pnpm build
