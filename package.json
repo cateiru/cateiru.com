@@ -15,7 +15,12 @@
     "react-dom": "^19.1.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild", "sharp", "workerd"]
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -23,8 +28,9 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "autoprefixer": "^10.4.0",
+    "cssnano": "^7.1.4",
     "postcss": "^8.5.0",
+    "postcss-preset-env": "^11.2.0",
     "typescript": "^5.8.0",
     "wrangler": "^4.0.0"
   }
