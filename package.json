@@ -7,7 +7,9 @@
     "build": "next build",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "check": "biome check",
+    "check:fix": "biome check --fix"
   },
   "dependencies": {
     "next": "^15.3.1",
@@ -15,12 +17,7 @@
     "react-dom": "^19.1.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "esbuild",
-      "sharp",
-      "workerd"
-    ]
+    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild", "sharp", "workerd"]
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
