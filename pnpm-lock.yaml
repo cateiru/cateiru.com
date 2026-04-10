@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/line-seed-jp':
+        specifier: ^5.2.2
+        version: 5.2.2
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       next:
         specifier: ^15.3.1
         version: 15.5.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -1038,6 +1044,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@fontsource/line-seed-jp@5.2.2':
+    resolution: {integrity: sha512-uuwnt3JJWlbUsBbP97dEKvQSVP6RpXnTDAYjG9f4SO9aHVCap96Rz8RpMcYbz58PXkYBldWfXP5VhOHdvNZWcA==}
+
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
     engines: {node: '>=18'}
@@ -1647,6 +1656,9 @@ packages:
   chalk@5.6.2:
     resolution: {integrity: sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+
+  classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
@@ -4146,6 +4158,8 @@ snapshots:
   '@esbuild/win32-x64@0.27.3':
     optional: true
 
+  '@fontsource/line-seed-jp@5.2.2': {}
+
   '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.34.5':
@@ -4839,6 +4853,8 @@ snapshots:
   caniuse-lite@1.0.30001787: {}
 
   chalk@5.6.2: {}
+
+  classnames@2.5.1: {}
 
   client-only@0.0.1: {}
 

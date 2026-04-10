@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "@fontsource/line-seed-jp";
 
 export const metadata: Metadata = {
-  title: "cateiru.com",
-  description: "cateiru's personal website",
+  title: "cateiru",
+  description: "cateiru の公式サイト！",
 };
 
 export default function RootLayout({

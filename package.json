@@ -12,12 +12,19 @@
     "check:fix": "biome check --fix"
   },
   "dependencies": {
+    "@fontsource/line-seed-jp": "^5.2.2",
+    "classnames": "^2.5.1",
     "next": "^15.3.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild", "sharp", "workerd"]
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
