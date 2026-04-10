@@ -1,8 +1,8 @@
-import { Logo } from "@/components/Logo";
-import { LinkButton } from "@/components/LInkButton";
-import styles from "./page.module.css";
-import classNames from "classnames";
 import { Footer } from "@/components/Footer";
+import { LinkButton } from "@/components/LInkButton";
+import { Logo } from "@/components/Logo";
+import classNames from "classnames";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (
