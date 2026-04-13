@@ -1,36 +1,18 @@
 # https://cateiru.com
 
-## Edit SQL Schema
+This is my portfolio website. It is built using [Next.js](https://nextjs.org/) and hosted on [Cloudflare Workers](https://workers.cloudflare.com/).
 
-[edit schema using ent](./ent/schema)
+## Commands
 
-## Environments
-
-```env
-DB_USER=[database user name]
-DB_PASSWORD=[database password]
-MAILGUN_APIKEY=[mailgun api key]
-SSO_CLIENT_ID=[cateiru sso client id]
-SSO_TOKEN_SECRET=[cateiru sso token secret]
-NEXT_PUBLIC_API_DOMAIN=[api domain]
-NEXT_PUBLIC_BACKEND_API_DOMAIN=[backend api domain]
+```sh
+npm run dev # start development server
+npm run build # build for production
+npm run preview # preview production build
+npm run deploy # deploy to Cloudflare Workers
+npm run cf-typegen # generate TypeScript types for Cloudflare Workers
+pnpm run check # run type checking and linting
+pnpm run check:fix # run type checking and linting with auto-fix
 ```
-
-## Setup Local
-
-```bash
-./docker-compose up -d
-
-# migration
-go run ./scripts/main.go migration --mode local
-go run ./scripts/main.go migration --mode test
-
-# access to http://localhost:3000
-```
-
-## Scripts
-
-[see here](./docs/scripts.md)
 
 ## LICENSE
 
