@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+
 import "@fontsource/line-seed-jp";
+import "@fontsource/line-seed-jp/700.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://cateiru.com"),
