@@ -54,3 +54,13 @@
   width: 100%;
   z-index: 0;
 }
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100lvh;
+  background-color: #eef0f2;
+  z-index: -1;
+}
