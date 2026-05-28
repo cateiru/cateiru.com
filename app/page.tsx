@@ -1,12 +1,14 @@
 import { Footer } from "@/components/Footer";
 import { LinkButton } from "@/components/LInkButton";
 import { Logo } from "@/components/Logo";
+import { ScrollHint } from "@/components/ScrollHint";
 import classNames from "classnames";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <main className={styles.main}>
+      <ScrollHint />
       <div className={styles.page}>
         <div className={styles.flex_group}>
           <div className={styles.logo}>
