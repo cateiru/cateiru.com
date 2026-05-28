@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import "@fontsource/line-seed-jp";
@@ -33,6 +33,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://cateiru.com",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#eef0f2",
 };
 
 export default function RootLayout({
