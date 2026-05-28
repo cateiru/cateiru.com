@@ -21,8 +21,8 @@ export default function Home() {
           <LinkButton href="https://github.com/cateiru">GitHub</LinkButton>
           <LinkButton href="https://x.com/cateiru">X</LinkButton>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </main>
   );
 }

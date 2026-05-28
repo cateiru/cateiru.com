@@ -9,6 +9,7 @@
 
 .main {
   position: relative;
+  min-height: 200vh;
 }
 
 .logo {
@@ -27,10 +28,6 @@
   padding-bottom: 0.3rem;
 }
 
-.link_page {
-  background-color: #eef0f2;
-}
-
 .flex_group {
   display: flex;
   flex-direction: row;
@@ -44,4 +41,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
+  background-color: #fff;
+}
+
+.link_page {
+  background-color: #eef0f2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 0;
 }
