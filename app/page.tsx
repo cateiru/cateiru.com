@@ -4,11 +4,13 @@ import { Logo } from "@/components/Logo";
 import { ScrollHint } from "@/components/ScrollHint";
 import classNames from "classnames";
 import styles from "./page.module.css";
+import React from "react";
+import { BgColorProvider } from "@/components/BgColorProvider";
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className={styles.background} />
+      <BgColorProvider />
       <ScrollHint />
       <div className={styles.page}>
         <div className={styles.flex_group}>

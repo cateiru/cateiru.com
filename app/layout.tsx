@@ -33,6 +33,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://cateiru.com",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+  },
 };
 
 export const viewport: Viewport = {
