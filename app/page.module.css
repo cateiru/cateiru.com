@@ -12,30 +12,6 @@
   min-height: 200vh;
 }
 
-.logo {
-  width: 2.5rem;
-  height: 2.5rem;
-
-  &:hover {
-    animation: rotate 2s linear infinite;
-  }
-}
-
-.title {
-  font-size: 2.2rem;
-  font-weight: bold;
-
-  padding-bottom: 0.3rem;
-}
-
-.flex_group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
 .page {
   height: 100svh;
   display: flex;
@@ -44,6 +20,37 @@
   position: relative;
   z-index: 1;
   background-color: #fff;
+
+  .logo {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    &:hover {
+      animation: rotate 2s linear infinite;
+    }
+  }
+
+  .title {
+    font-size: 2.2rem;
+    font-weight: bold;
+
+    padding-bottom: 0.3rem;
+  }
+
+  .scroll_down {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .flex_group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
 }
 
 .link_page {
@@ -53,14 +60,4 @@
   left: 0;
   width: 100%;
   z-index: 0;
-}
-
-.background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100lvh;
-  background-color: #eef0f2;
-  z-index: -1;
 }

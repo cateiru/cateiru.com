@@ -2,16 +2,15 @@ import { BgColorProvider } from "@/components/BgColorProvider";
 import { Footer } from "@/components/Footer";
 import { LinkButton } from "@/components/LInkButton";
 import { Logo } from "@/components/Logo";
-import { ScrollHint } from "@/components/ScrollHint";
 import classNames from "classnames";
 import React from "react";
 import styles from "./page.module.css";
+import { ScrollDown } from "@/components/ScrollDown";
 
 export default function Home() {
   return (
     <main className={styles.main}>
       <BgColorProvider />
-      <ScrollHint />
       <div className={styles.page}>
         <div className={styles.flex_group}>
           <div className={styles.logo}>
@@ -19,6 +18,7 @@ export default function Home() {
           </div>
           <h1 className={styles.title}>cateiru</h1>
         </div>
+        <ScrollDown className={styles.scroll_down} />
       </div>
       <div className={classNames(styles.page, styles.link_page)}>
         <div className={styles.flex_group}>
