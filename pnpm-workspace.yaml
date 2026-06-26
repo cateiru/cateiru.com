@@ -1,5 +1,5 @@
 allowBuilds:
-  '@biomejs/biome': false
-  esbuild: false
-  sharp: false
-  workerd: false
+  "@biomejs/biome": true
+  esbuild: true
+  sharp: true
+  workerd: true
