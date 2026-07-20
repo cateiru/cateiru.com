@@ -1,0 +1,49 @@
+@keyframes blurFadeIn {
+  from {
+    filter: blur(16px);
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.main {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  animation: blurFadeIn 0.7s ease both;
+}
+
+.code {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.message {
+  color: #6b7280;
+}
+
+.link {
+  display: inline-block;
+  font-weight: bold;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #d7dde5;
+  }
+}
