@@ -6,5 +6,15 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "cache": {
+    "enabled": true
+  },
+  "routes": [
+    {
+      "pattern": "cateiru.com",
+      "zone_name": "cateiru.com",
+      "custom_domain": true
+    }
+  ]
 }
