@@ -11,11 +11,20 @@
     },
     {
       "groupName": "React",
-      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"]
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ]
     },
     {
       "groupName": "Cloudflare",
-      "matchPackageNames": ["wrangler", "@opennextjs/cloudflare", "@cloudflare/*"]
+      "matchPackageNames": [
+        "wrangler",
+        "@opennextjs/cloudflare",
+        "@cloudflare/*"
+      ]
     },
     {
       "groupName": "Biome",
