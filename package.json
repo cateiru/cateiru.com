@@ -15,7 +15,7 @@
   "dependencies": {
     "@fontsource/line-seed-jp": "^5.2.2",
     "classnames": "^2.5.1",
-    "next": "^15.3.1",
+    "next": "^16.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
