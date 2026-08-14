@@ -30,7 +30,7 @@
     "@types/node": "^26.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "cssnano": "^7.1.4",
+    "cssnano": "^8.0.0",
     "postcss": "^8.5.0",
     "postcss-preset-env": "^11.2.0",
     "typescript": "^5.8.0",
