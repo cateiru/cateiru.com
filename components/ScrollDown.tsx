@@ -8,6 +8,7 @@ type ScrollDownProps = {
 export const ScrollDown = ({ className }: ScrollDownProps) => {
   return (
     <div
+      role="img"
       aria-label="下にスクロール"
       className={classNames(styles.scroll_down, className)}
     />

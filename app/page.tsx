@@ -1,9 +1,9 @@
+import classNames from "classnames";
 import { BgColorProvider } from "@/components/BgColorProvider";
 import { Footer } from "@/components/Footer";
 import { LinkButton } from "@/components/LInkButton";
 import { Logo } from "@/components/Logo";
 import { ScrollDown } from "@/components/ScrollDown";
-import classNames from "classnames";
 import styles from "./page.module.css";
 
 export default function Home() {
