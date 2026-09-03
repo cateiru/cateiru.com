@@ -33,7 +33,7 @@
     "cssnano": "^8.0.0",
     "postcss": "^8.5.0",
     "postcss-preset-env": "^11.2.0",
-    "typescript": "^5.8.0",
+    "typescript": "^7.0.0",
     "wrangler": "^4.0.0"
   }
 }
