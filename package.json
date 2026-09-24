@@ -5,12 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "start": "next start",
     "typecheck": "tsc --noEmit",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "check": "biome check",
-    "check:fix": "biome check --fix"
+    "check:fix": "biome check --fix",
+    "vrt": "playwright test --config=playwright.vrt.config.ts",
+    "vrt:reg": "reg-suit run"
   },
   "dependencies": {
     "@fontsource/line-seed-jp": "^5.2.2",
@@ -27,12 +30,16 @@
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
     "@opennextjs/cloudflare": "latest",
+    "@playwright/test": "^1.63.0",
     "@types/node": "^26.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "cssnano": "^9.0.0",
     "postcss": "^8.5.0",
     "postcss-preset-env": "^11.2.0",
+    "reg-keygen-git-hash-plugin": "^0.14.5",
+    "reg-publish-s3-plugin": "^0.14.4",
+    "reg-suit": "^0.14.5",
     "typescript": "^7.0.0",
     "wrangler": "^4.0.0"
   }
