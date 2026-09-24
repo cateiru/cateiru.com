@@ -47,6 +47,10 @@ jobs:
       S3_BUCKET: cateiru-public-storage
       S3_PATH_PREFIX: cateiru.com/vrt
       REPORT_DOMAIN: storage.cateiru.dev
+      # フォークからの PR では OIDC トークンを取得できず、PR へのコメント権限もないため、
+      # AWS 認証以降 (比較・公開・結果の投稿) は push か同一リポジトリからの PR でのみ実行する。
+      # フォーク PR ではスクリーンショットの撮影までを行う
+      TRUSTED: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -85,6 +89,7 @@ jobs:
       # public-storage-cdk (https://github.com/cateiru/public-storage-cdk) が発行する
       # OIDC ロールを使う。cateiru/* の全リポジトリから AssumeRole 可能
       - name: Configure AWS credentials (public-storage-cdk)
+        if: ${{ env.TRUSTED == 'true' }}
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::211125784910:role/github-actions-public-storage
@@ -92,12 +97,14 @@ jobs:
           role-skip-session-tagging: true
 
       - name: Run reg-suit
+        if: ${{ env.TRUSTED == 'true' }}
         run: pnpm vrt:reg
 
       # reg-publish-s3-plugin 自体はオブジェクトタグ付けに対応していないため、
       # アップロード後に auto-expire タグを付け直す
       # (public-storage-cdk 側のライフサイクルルールがこのタグを180日後の自動削除対象にする)
       - name: Tag published snapshots as auto-expire
+        if: ${{ env.TRUSTED == 'true' }}
         run: |
           set -euo pipefail
           KEY="$(git rev-parse HEAD)"
@@ -112,6 +119,7 @@ jobs:
 
       # 比較結果 (.reg/out.json) から PR コメント用のメッセージを組み立てる
       - name: Build VRT summary comment
+        if: ${{ env.TRUSTED == 'true' }}
         id: vrt-summary
         run: |
           set -euo pipefail
@@ -149,7 +157,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Post VRT result to the pull request
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ env.TRUSTED == 'true' && github.event_name == 'pull_request' }}
         uses: hasura/comment-progress@v2.3.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -165,7 +173,7 @@ jobs:
         run: cat vrt-comment.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Fail if reg-suit detected visual differences
-        if: ${{ steps.vrt-summary.outputs.failed != '0' }}
+        if: ${{ env.TRUSTED == 'true' && steps.vrt-summary.outputs.failed != '0' }}
         run: |
           echo "::error::reg-suit detected ${{ steps.vrt-summary.outputs.failed }} visual difference(s). See the report URL in the PR comment or job summary posted above."
           exit 1
