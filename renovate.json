@@ -20,6 +20,7 @@
       "matchPackageNames": [
         "react",
         "react-dom",
+        "react-server-dom-webpack",
         "@types/react",
         "@types/react-dom"
       ]
