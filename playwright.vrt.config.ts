@@ -30,7 +30,7 @@ export default defineConfig({
   ],
   // 開発用オーバーレイなどが写り込まないよう、本番ビルドに対して撮影する
   webServer: {
-    command: `pnpm build && pnpm start --port ${PORT}`,
+    command: `pnpm build:vinext && pnpm start:vinext --port ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
