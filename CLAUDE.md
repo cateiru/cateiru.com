@@ -24,12 +24,6 @@ pnpm start:vinext
 # Cloudflare Workers へデプロイ（vinext）
 pnpm deploy:vinext
 
-# ローカルでのビルドプレビュー（OpenNext、legacy）
-pnpm preview
-
-# Cloudflare Workers へデプロイ（OpenNext、legacy）
-pnpm deploy
-
 # Lint / フォーマットチェック
 pnpm check
 
@@ -43,7 +37,7 @@ pnpm cf-typegen
 ## アーキテクチャ
 
 - **フレームワーク**: Next.js 16 (App Router)
-- **デプロイ先**: Cloudflare Workers（vinext 経由。OpenNext は legacy として併存）
+- **デプロイ先**: Cloudflare Workers（vinext 経由）
 - **Lint / フォーマット**: Biome（ESLint・Prettier の代替）
 - **CSS**: CSS Modules + PostCSS (postcss-preset-env)
 - **フォント**: `@fontsource/line-seed-jp`
@@ -51,8 +45,6 @@ pnpm cf-typegen
 ### デプロイフロー
 
 本番は Cloudflare Workers Builds でビルド・デプロイする。ビルドコマンドは `pnpm run build:vinext`、デプロイコマンドは `pnpm exec wrangler deploy --config dist/server/wrangler.json`、バージョンコマンドは `pnpm exec wrangler versions upload --config dist/server/wrangler.json`。`vite build` が `dist/server/wrangler.json` を生成し、実際のデプロイにはそちらを使う（ルートの `wrangler.jsonc` は vite / vinext の入力用）。
-
-OpenNext の経路は legacy として残している。`pnpm preview` / `pnpm deploy` は専用の `wrangler.opennext.jsonc`（エントリは `.open-next/worker.js`）を使う。
 
 ### コードスタイル
 

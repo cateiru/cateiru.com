@@ -8,9 +8,8 @@
     "enable_weak_ref"
   ],
   "preview_urls": true,
-  // assets は vite build 時に生成される dist/server/wrangler.json で上書きされる
+  // directory は vite build 時に生成される設定で上書きされるため、バインディングのみ指定する
   "assets": {
-    "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
   "cache": {

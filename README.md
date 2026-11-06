@@ -11,8 +11,6 @@ pnpm run build # build with Next.js
 pnpm run build:vinext # build with vinext (production build)
 pnpm run start:vinext # preview the vinext production build locally
 pnpm run deploy:vinext # deploy to Cloudflare Workers (vinext)
-pnpm run preview # preview production build (OpenNext, legacy)
-pnpm run deploy # deploy to Cloudflare Workers (OpenNext, legacy)
 pnpm run cf-typegen # generate TypeScript types for Cloudflare Workers
 pnpm run check # run lint and format checking
 pnpm run check:fix # run lint and format checking with auto-fix

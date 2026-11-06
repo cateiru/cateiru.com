@@ -7,8 +7,6 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "preview": "opennextjs-cloudflare build --config wrangler.opennext.jsonc && opennextjs-cloudflare preview --config wrangler.opennext.jsonc",
-    "deploy": "opennextjs-cloudflare build --config wrangler.opennext.jsonc && opennextjs-cloudflare deploy --config wrangler.opennext.jsonc",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "check": "biome check",
     "check:fix": "biome check --fix",
@@ -37,7 +35,6 @@
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
     "@cloudflare/vite-plugin": "^1.67.0",
-    "@opennextjs/cloudflare": "latest",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.0.0",
     "@types/react": "^19.0.0",

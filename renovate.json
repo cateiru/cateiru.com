@@ -27,11 +27,7 @@
     },
     {
       "groupName": "Cloudflare",
-      "matchPackageNames": [
-        "wrangler",
-        "@opennextjs/cloudflare",
-        "@cloudflare/*"
-      ]
+      "matchPackageNames": ["wrangler", "@cloudflare/*"]
     },
     {
       "groupName": "Biome",
