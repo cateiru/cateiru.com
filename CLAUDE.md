@@ -4,18 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 概要
 
-cateiru.com の個人サイト。Next.js 15 + React 19 で構築し、Cloudflare Workers にデプロイする静的サイト。
+cateiru.com の個人サイト。Next.js 16 + React 19 で構築し、本番は vinext 経由で Cloudflare Workers にデプロイする静的サイト。
 
 ## コマンド
 
 ```bash
-# 開発サーバー起動
+# 開発サーバー起動（Next.js）
 pnpm dev
 
-# ローカルでのビルドプレビュー（Cloudflare 向け）
+# 開発サーバー起動（vinext）
+pnpm dev:vinext
+
+# 本番ビルド（vinext）
+pnpm build:vinext
+
+# vinext の本番ビルドをローカルで確認
+pnpm start:vinext
+
+# Cloudflare Workers へデプロイ（vinext）
+pnpm deploy:vinext
+
+# ローカルでのビルドプレビュー（OpenNext、legacy）
 pnpm preview
 
-# Cloudflare Workers へデプロイ
+# Cloudflare Workers へデプロイ（OpenNext、legacy）
 pnpm deploy
 
 # Lint / フォーマットチェック
@@ -30,15 +42,17 @@ pnpm cf-typegen
 
 ## アーキテクチャ
 
-- **フレームワーク**: Next.js 15 (App Router)
-- **デプロイ先**: Cloudflare Workers（`@opennextjs/cloudflare` 経由）
+- **フレームワーク**: Next.js 16 (App Router)
+- **デプロイ先**: Cloudflare Workers（vinext 経由。OpenNext は legacy として併存）
 - **Lint / フォーマット**: Biome（ESLint・Prettier の代替）
 - **CSS**: CSS Modules + PostCSS (postcss-preset-env)
 - **フォント**: `@fontsource/line-seed-jp`
 
 ### デプロイフロー
 
-`opennextjs-cloudflare` が Next.js のビルド成果物を Cloudflare Workers 向けに変換する。ビルド後の成果物は `.open-next/` に出力される。`wrangler.jsonc` でワーカー名・静的アセットディレクトリを設定している。
+本番は Cloudflare Workers Builds でビルド・デプロイする。ビルドコマンドは `pnpm run build:vinext`、デプロイコマンドは `pnpm exec wrangler deploy --config dist/server/wrangler.json`、バージョンコマンドは `pnpm exec wrangler versions upload --config dist/server/wrangler.json`。`vite build` が `dist/server/wrangler.json` を生成し、実際のデプロイにはそちらを使う（ルートの `wrangler.jsonc` は vite / vinext の入力用）。
+
+OpenNext の経路は legacy として残している。`pnpm preview` / `pnpm deploy` は専用の `wrangler.opennext.jsonc`（エントリは `.open-next/worker.js`）を使う。
 
 ### コードスタイル
 
