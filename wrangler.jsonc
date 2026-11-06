@@ -1,9 +1,14 @@
 {
   "name": "cateiru-com",
-  "main": ".open-next/worker.js",
+  "main": "vinext/server/fetch-handler",
   "compatibility_date": "2024-09-23",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public",
+    "enable_weak_ref"
+  ],
   "preview_urls": true,
+  // assets は vite build 時に生成される dist/server/wrangler.json で上書きされる
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"

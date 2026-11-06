@@ -182,3 +182,5 @@ cloudflare-env.d.ts
 # VRT (reg-suit)
 /.reg/
 /vrt-screenshots/
+/dist/
+.vinext/
