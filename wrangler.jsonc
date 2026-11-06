@@ -8,6 +8,10 @@
     "enable_weak_ref"
   ],
   "preview_urls": true,
+  // directory は vite build 時に生成される設定で上書きされるため、バインディングのみ指定する
+  "assets": {
+    "binding": "ASSETS"
+  },
   "cache": {
     "enabled": true
   },
